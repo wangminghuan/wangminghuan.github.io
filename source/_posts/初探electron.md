@@ -5,7 +5,7 @@ tags: [桌面应用]
 ---
 ## Electron
 Electron通过将Chromium和Node.js合并到同一个运行时环境中，并将其打包为Mac，Windows和Linux系统下的应用来实现这一目的。Electron和nwjs其实是一个作者，中间的种种可以访问参考2来查看，很有意思的一件事。
-
+<!-- more -->
 ## 渲染进程和主进程
 
 Electron 中，入口是一个 js 文件（和 NW.js 不同，入口是 html 文件），运行这个入口文件（通常会是 package.json 里的 main 脚本）的进程称作主进程，在主进程使用 BrowserWindow 模块可以创建并管理 web 页面，也就是应用的 GUI。
@@ -74,9 +74,9 @@ remote 模块可以直接获取主进程中的模块。这种方式其实是第�
 
 但发现一个点，Electron将打包后的代码压缩加密为`.asar`文件，但是，这个加密文件是可以被解密的，开发electron-vue项目的同一个哥们，同时开源了一个可视化的解密工具：[asar-explorer](https://github.com/SimulatedGREG/asar-explorer)
 
-但打包出来的包依旧有点大，打包后的文件中的node_modules 暂时还未找到合适方案合并到dist/electron/render.js中
+但打包出来的包依旧有点大，打包后的文件中的node_modules 暂时还未找到合适方案合并到dist/electron/render.js中。
 
-![](https://i.imgur.com/MiGyn18.png)
+![](初探electron/1.png)
 ## 参考
 1. [Electron的应用结构](https://electronjs.org/docs/tutorial/application-architecture#main-and-renderer-processes)
 2. [nwjs和Electron的创始人的知乎回答](https://www.zhihu.com/question/36292298/answer/102418523)
