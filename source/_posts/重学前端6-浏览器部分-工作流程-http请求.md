@@ -17,7 +17,7 @@ categories: 重学前端
 6. 合成之后，再绘制到界面上。
 <!-- more -->
 
-![](https://i.imgur.com/1rn8Hm5.jpg)
+![](重学前端6-浏览器部分-工作流程-http请求/6-1.jpg)
 
 从 HTTP 请求回来，就产生了流式的数据，后续的 DOM 树构建、CSS 计算、渲染、合成、绘制，都是尽可能地流式处理前一步的产出：即不需要等到上一步骤完全结束，就开始处理上一步的输出，这样我们在浏览网页时，才会看到逐步出现的页面。
 ## 网络协议
@@ -34,13 +34,13 @@ categories: 重学前端
 五层结构只是OSI和TCP/IP的综合，实际应用还是TCP/IP的四层结构。为了方便可以把下两层称为网络接口层。
 
 ### 对比图
-![](https://i.imgur.com/ksPED3s.png)
+![](重学前端6-浏览器部分-工作流程-http请求/6-2.png)
 
-![](https://i.imgur.com/0mT1MUW.png)
+![](重学前端6-浏览器部分-工作流程-http请求/6-3.png)
 
 ## HTTP 协议
 因特网本身是基于TCP/IP模型的。用网络术语来说的话，HTTP(超文本传输协议)协议位于TCP的上层，是属于应用层的协议。HTTP 是纯粹的文本协议，它是规定了使用 TCP 协议来传输文本格式的一个应用层协议。HTTP协议大致分为以下部分：
-![](https://i.imgur.com/8PyDnjf.jpg)
+![](重学前端6-浏览器部分-工作流程-http请求/6-4.jpg)
 
 
 ### 1 请求方法
@@ -77,11 +77,11 @@ HTTP 头可以看作一个键值对。
 
 先来看看 Request Header:
 
-![](https://i.imgur.com/QEpJWGq.png)
+![](重学前端6-浏览器部分-工作流程-http请求/6-5.png)
 
 接下来看一下 Response Header:
 
-![](https://i.imgur.com/pMR2iD3.png)
+![](重学前端6-浏览器部分-工作流程-http请求/6-6.png)
 
 ### 4 HTTP Request Body
 http 请求的 body 是比较自由的，只要浏览器端发送的 body 服务端认可就可以了。一些常见的 body 格式是：

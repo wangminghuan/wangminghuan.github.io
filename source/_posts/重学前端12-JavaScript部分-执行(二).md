@@ -103,7 +103,7 @@ this 是执行上下文中很重要的一个组成部分。同一个函数调用
 ## 语句
 
 ### 分类
-![](https://static001.geekbang.org/resource/image/98/d5/98ce53be306344c018cddd6c083392d5.jpg)
+![](重学前端12-JavaScript部分-执行(二)/12-1.jpg)
 
 ### 在 try 中有 return 语句，finally 中的内容还会执行吗？
 

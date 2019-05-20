@@ -11,7 +11,7 @@ categories: 重学前端
 
 document 的 styleSheets 属性表示文档中的所有样式表，这是一个只读的列表，我们可以用方括号运算符下标访问样式表，也可以使用 item 方法来访问，它有 length 属性表示文档中的样式表数量。
 
-![](https://i.imgur.com/VwlsgwM.png)
+![](重学前端19-CSS部分-CSSDOM/19-1.png)
 <!-- more -->
 ### 操作
 
@@ -27,7 +27,7 @@ document 的 styleSheets 属性表示文档中的所有样式表，这是一个�
 
 更进一步，我们可以获取样式表中特定的规则（Rule），并且对它进行一定的操作，具体来说，就是使用它的 cssRules 属性来实现：
 
-![](https://i.imgur.com/FC6Eb3G.png)
+![](重学前端19-CSS部分-CSSDOM/19-2.png)
 
 在chrome上测试发现，link标签引入的css文件样式，cssRules无法读取，因此也无法操作（insertRule，removeRule等无效），只可以操作style标签内的内联样式。
 
@@ -96,7 +96,7 @@ CSSOM 还提供了一个非常重要的方法，来获取一个元素最终经�
 
 window 对象上提供了一些全局的尺寸信息，它是通过属性来提供的:
 
-![](https://i.imgur.com/EuSbTGG.png)
+![](重学前端19-CSS部分-CSSDOM/19-3.png)
 
 - window.innerHeight, window.innerWidth 这两个属性表示视口的大小。
 
@@ -122,29 +122,29 @@ window 对象上提供了一些全局的尺寸信息，它是通过属性来提�
 
 - getClientRects(): 返回一个列表，里面包含元素对应的每一个盒所占据的客户端矩形区域，这里每一个矩形区域可以用 x, y, width, height 来获取它的位置和尺寸。
 
-			document.getElementById("wrap").getClientRects()[0]
-            //结果：
-			{bottom: 342
-			height: 42
-			left: 0
-			right: 819
-			top: 300
-			width: 819
-			x: 0
-			y: 300}
+		document.getElementById("wrap").getClientRects()[0]
+		//结果：
+		{bottom: 342
+		height: 42
+		left: 0
+		right: 819
+		top: 300
+		width: 819
+		x: 0
+		y: 300}
 
 - getBoundingClientRect(): 这个 API 的设计更接近我们脑海中的元素盒的概念，它返回元素对应的所有盒的包裹的矩形区域，需要注意，这个 API 获取的区域会包括当 overflow 为 visible 时的子元素区域
 
-			document.getElementById("wrap").getBoundingClientRect()
-			//结果：
-			{bottom: 300
-			height: 0
-			left: 0
-			right: 819
-			top: 300
-			width: 819
-			x: 0
-			y: 300}
+		document.getElementById("wrap").getBoundingClientRect()
+		//结果：
+		{bottom: 300
+		height: 0
+		left: 0
+		right: 819
+		top: 300
+		width: 819
+		x: 0
+		y: 300}
 
 两个api通常情况下计算结果是一致的。
 
