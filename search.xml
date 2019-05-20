@@ -1,6 +1,314 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[重学前端28 - CSS部分-动画与交互]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF28-CSS%E9%83%A8%E5%88%86-%E5%8A%A8%E7%94%BB%E4%B8%8E%E4%BA%A4%E4%BA%92%2F</url>
+    <content type="text"><![CDATA[概述CSS 中跟动画相关的属性有两个：animation 和 transition。 animation 属性基本用法： @keyframes mykf { from {background: red;} to {background: yellow;} } div { animation:mykf 5s infinite; } 实际上 animation 分成六个部分： animation-name 动画的名称，这是一个 keyframes 类型的值（产生一种数据，用于定义动画关键帧）； animation-duration 动画的时长； animation-timing-function 动画的时间曲线； animation-delay 动画开始前的延迟； animation-iteration-count 动画的播放次数； animation-direction 动画的方向。 transition 属性它有四个部分： transition-property 要变换的属性； transition-duration 变换的时长； transition-timing-function 时间曲线； transition-delay 延迟。 实际上，有时候我们会把 transition 和 animation 组合，抛弃 animation 的 timing-function，以编排不同段用不同的曲线。 @keyframes mykf { 0% { top: 0; transition:top ease} 50% { top: 30px;transition:top ease-in } 75% { top: 10px;transition:top ease-out } 100% { top: 0; transition:top linear} } timing-function-动画的时间曲线CSS 的时间曲线选用的是（三次）贝塞尔曲线，贝塞尔曲线是一种被工业生产验证了很多年的曲线，它最大的特点就是“平滑”。时间曲线平滑，意味着较少突兀的变化，这是一般动画设计所追求的。 理论上，贝塞尔曲线可以通过分段的方式拟合任意曲线，但是有一些特殊的曲线，是可以用贝塞尔曲线完美拟合的，比如抛物线。]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>css</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端27 - 浏览器部分-手动整理所有API]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF27-%E6%B5%8F%E8%A7%88%E5%99%A8%E9%83%A8%E5%88%86-%E6%89%8B%E5%8A%A8%E6%95%B4%E7%90%86%E6%89%80%E6%9C%89API%2F</url>
+    <content type="text"></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>浏览器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端26 - 浏览器部分-捕获和冒泡]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF26-%E6%B5%8F%E8%A7%88%E5%99%A8%E9%83%A8%E5%88%86-%E6%8D%95%E8%8E%B7%E5%92%8C%E5%86%92%E6%B3%A1%2F</url>
+    <content type="text"><![CDATA[事件捕获和冒泡捕获过程是从外向内，冒泡过程是从内向外。 实际上点击事件来自触摸屏或者鼠标，鼠标点击并没有位置信息，但是一般操作系统会根据位移的累积计算出来，跟触摸屏一样，提供一个坐标给浏览器。那么，把这个坐标转换为具体的元素上事件的过程，就是捕获过程了。而冒泡过程，则是符合人类理解逻辑的：当你按电视机开关时，你也按到了电视机。 所以我们可以认为，捕获是计算机处理事件的逻辑，而冒泡是人类处理事件的逻辑。 addEventListener 有三个参数： 事件名称； 事件处理函数； 捕获还是冒泡 在现代浏览器中，建议默认不传第三个参数，因为冒泡是符合正常的人类心智模型的，大部分业务开发者不需要关心捕获过程。 焦点键盘事件是由焦点系统控制的，一般来说，操作系统也会提供一套焦点系统，但是现代浏览器一般都选择在自己的系统内覆盖原本的焦点系统。 焦点系统认为整个 UI 系统中，有且仅有一个“聚焦”的元素，所有的键盘事件的目标元素都是这个聚焦元素。 浏览器 API 还提供了 API 来操作焦点，如： document.body.focus(); document.body.blur(); 自定义事件var evt = new Event(&quot;look&quot;, {&quot;bubbles&quot;:true, &quot;cancelable&quot;:false}); document.dispatchEvent(evt); 这里使用 Event 构造器来创造了一个新的事件，然后调用 dispatchEvent 来在特定元素上触发。我们可以给这个 Event 添加自定义属性、方法]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>浏览器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端25 - HML部分-替换型元素]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF25-HML%E9%83%A8%E5%88%86-%E6%9B%BF%E6%8D%A2%E5%9E%8B%E5%85%83%E7%B4%A0%2F</url>
+    <content type="text"><![CDATA[script 标签script 标签是为数不多的既可以作为替换型标签，又可以不作为替换型标签的元素。 写法一： &lt;script type=&quot;text/javascript&quot;&gt; console.log(&quot;Hello world!&quot;); &lt;/script&gt; 写法二： &lt;script type=&quot;text/javascript&quot; src=&quot;my.js&quot;&gt;&lt;/script&gt; 上述两种写法是等效的，可以发现：凡是替换型元素，都是使用 src 属性来引用文件的，而链接型元素是使用 href 标签的 但是对于样式来说：style 标签并非替换型元素，不能使用 src 属性，这样，我们用 link 标签引入 CSS 文件，当然就是用 href。 img 标签我们最熟悉的替换型标签就是 img 标签。它的的作用是引入一张图片。这个标签是没有办法像 script 标签那样作为非替换型标签来使用的，它必须有 src 属性才有意义。 如果一定不想要引入独立文件，可以使用 data uri 作为图片的 src，这样，并没有产生独立的文件，客观上做到了和内联相同的结果，这是一个常用的技巧。 alt 属性这个属性很难被普通用户感知，对于视障用户非常重要，可以毫不夸张地讲，给 img 加上 alt 属性，已经做完了可访问性的一半。 srcset 和 sizesimg 标签还有一组重要的属性，那就是 srcset 和 sizes，这两个属性的作用是在不同的屏幕大小和特性下，使用不同的图片源： &lt;img srcset=&quot;elva-fairy-320w.jpg 320w, elva-fairy-480w.jpg 480w, elva-fairy-800w.jpg 800w&quot; sizes=&quot;(max-width: 320px) 280px, (max-width: 480px) 440px, 800px&quot; src=&quot;elva-fairy-800w.jpg&quot; alt=&quot;Elva dressed as a fairy&quot;&gt; 在不同的屏幕尺寸从1000到200缩小的过程中会依次加载：elva-fairy-800w.jpg, elva-fairy-480w.jpg, elva-fairy-320w.jpg。 但是其实更好的做法，是使用 picture 元素。 picture 标签picture 元素可以根据屏幕的条件为其中的 img 元素提供不同的源，它的基本用法如下： &lt;picture&gt; &lt;source srcset=&quot;https://zuhaowan.zuhaowan.com/v1/channel/img/bg_01.png&quot; media=&quot;(min-width: 600px)&quot;&gt; &lt;source srcset=&quot;https://zuhaowan.zuhaowan.com/v1/channel/img/bg_02.png&quot; media=&quot;(min-width: 300px) and (max-width: 600px)&quot; &gt; &lt;img src=&quot;https://zuhaowan.zuhaowan.com/v1/channel/img/first.png&quot;&gt; &lt;/picture&gt; 它跟 img 搭配 srcset 和 sizes 不同，它使用 source 元素来指定图片源，并且支持多个。这里的 media 属性是 media query，跟 CSS 的 @media 规则一致。 video标签在 HTML5 早期的设计中，video 标签跟 img 标签类似，也是使用 src 属性来引入源文件的，不过，考虑到了各家浏览器支持的视频格式不同，现在的 video 标签跟 picture 元素一样，也是提倡使用 source 的。 早期写法： &lt;video controls=&quot;controls&quot; src=&quot;movie.ogg&quot;&gt;&lt;/video&gt; 现代写法： &lt;video controls=&quot;controls&quot; &gt; &lt;source src=&quot;movie.webm&quot; type=&quot;video/webm&quot; &gt; &lt;source src=&quot;movie.ogg&quot; type=&quot;video/ogg&quot; &gt; &lt;source src=&quot;movie.mp4&quot; type=&quot;video/mp4&quot;&gt; You browser does not support video. &lt;/video&gt; source 标签除了支持 media 之外，还可以使用 type 来区分源文件的使用场景 对于更古老的浏览器，还可以在其中加入 object 或者 embed 标签 video中的trak标签track 是一种播放时序相关的标签，它最常见的用途就是字幕。track 标签中，必须使用 srclang 来指定语言，此外，track 具有 kind 属性，共有五种。 subtitles：就是字幕了，不一定是翻译，也可能是补充性说明 captions：报幕内容，可能包含演职员表等元信息，适合听障人士或者没有打开声音的人了解音频内容 descriptions：视频描述信息，适合视障人士或者没有视频播放功能的终端打开视频时了解视频内尔用 chapters：用于浏览器视频内容。 metadata：给代码提供的元信息，对普通用户不可见。 一个完整的 video 标签可能会包含多种 track 和多个 source，这些共同构成了一个视频播放所需的全部信息。 aduio标签与picture 和 video 两种标签一样，audio 也可以使用 source 元素来指定源文件： &lt;audio controls&gt; &lt;source src=&quot;song.mp3&quot; type=&quot;audio/mpeg&quot;&gt; &lt;source src=&quot;song.ogg&quot; type=&quot;audio/ogg&quot;&gt; &lt;p&gt;You browser does not support audio.&lt;/p&gt; &lt;/audio&gt; 同时也可以使用src属性，且兼容性要比video标签乐观 &lt;audio controls=&quot;controls&quot; src=&quot;audio.ogg&quot;&gt;&lt;/audio&gt; iframe标签这个标签能够嵌入一个完整的网页： &lt;iframe src=&quot;http://time.geekbang.org&quot;&gt;&lt;/iframe&gt; 但同时会带来很多安全问题，html5加入了一些新标准，在新标准中，为 iframe 加入了 sandbox 模式和 srcdoc 属性，这样，给 iframe 带来了一定的新场景： &lt;iframe sandbox=&quot;allow-scripts&quot; src=&quot;http://www.b.com/&quot;&gt;&lt;/iframe&gt; sandbox模式的加入可以解决跨域问题，同时对加载的页面加入各种限制，如是否允许脚本执行，是否允许表单提交等操作。 sandbox模式下子页面与父页面的交互完全被隔离开，无法进行任何相互操作。 引申：如何阻止自己的页面被iframe引用修改http响应头header(‘X-Frame-Options:Deny&apos;); 一劳永逸，非常靠谱 脚本检测try{ top.location.hostname; if (top.location.hostname != window.location.hostname) { top.location.href =window.location.href; } }catch(e){ top.location.href = window.location.href; } 代码解释： top 对象始终指向最高（最外）层的框架: top===window.top 在某些情况下，window.parent 有可能等于 top; 但在没有框架的情况下，parent 一定等于top （此时它们都等于 window ）: window.parent===top window.parent===window.top 被嵌套时，如果跨域，子页面执行 top.location.hostname会被block，进入catch逻辑； 如何主域相同，子域不同，可以在父页面和子页面都设置相同的docum.domain来解决跨域； 此时代码就会进入try逻辑，判断后发现hostname不一致，然后有进行了跳转； 但如果对方采用sandbox模式，且不允许js执行的话，该方法会失效； 参考文章 HTML5 iframe标签新属性 X-Frame-Options iFrame跨域解决办法]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>html</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端18 - CSS部分-文档流]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF18-CSS%E9%83%A8%E5%88%86-%E6%96%87%E6%A1%A3%E6%B5%81%2F</url>
+    <content type="text"><![CDATA[正常流的行为我们可以用一句话来描述正常流的排版行为，那就是：依次排列，排不下了换行。 当我们要把正常流中的一个盒或者文字排版，需要分成三种情况处理: 当遇到块级盒：排入块级格式化上下文。 当遇到行内级盒或者文字：首先尝试排入行内级格式化上下文，如果排不下，那么创建一个行盒，先将行盒排版（行盒是块级，所以到第一种情况），行盒会创建一个行内级格式化上下文。 遇到 float 盒：把盒的顶部跟当前行内级上下文上边缘对齐，然后根据 float 的方向把盒的对应边缘对到块级格式化上下文的边缘，之后重排当前行盒。 正常流实现的两种布局等分布局//css样式 .outer { width: 101px; /* 在某些浏览器中，因为像素计算精度问题，还是会出现换行，我们给 outer 添加一个特定宽度： */ font-size: 0; /* 解决换行和空格被 HTML 当作空格文本，跟 inline 盒混排了的问题。 */ } .inner { width: 33.33%; height: 300px; display: inline-block; outline: solid 1px blue; } .inner:last-child { margin-right: -5px; /* 解决某些旧版本浏览器中会出现换行的问题 */ } //html &lt;div class=&quot;outer&quot;&gt; &lt;div class=&quot;inner&quot;&gt;&lt;/div&gt; &lt;div class=&quot;inner&quot;&gt;&lt;/div&gt; &lt;div class=&quot;inner&quot;&gt;&lt;/div&gt; &lt;/div&gt; 自适应宽自适应宽（一个元素固定宽度，另一个元素填满父容器剩余宽度）是个经典的布局问题，我们现在就看一下如何使用正常流来解决： .outer { font-size: 0; } .fixed, .auto { outline: solid 1px red; display: inline-block; vertical-align: top; height: 300px; } .fixed { width: 200px; } .auto { width: 100%; margin-left: -200px; padding-left: 200px; box-sizing: border-box; } //html文件 &lt;div class=&quot;outer&quot;&gt; &lt;div class=&quot;fixed&quot;&gt;&lt;/div&gt; &lt;div class=&quot;auto&quot;&gt;&lt;/div&gt; &lt;/div&gt; BFC特点 BFC可以包含浮动元素（闭合浮动） BFC所确定的区域不会与外部浮动元素发生重叠 位于同一BFC下的相邻块级子元素在垂直方向上会发生margin重叠 位于不同BFC下的相邻元素之间不会发生margin重叠 将以上特点一言以蔽之，即BFC在页面上是一个封闭的区域，如同“结界”一般。即便是内部的浮动元素也无法脱离该区域。该区域内部的子元素无法影响区域外部，同时也不受外部影响。 如何触发/创建BFC满足下面任一条件即可： &lt;html>根元素 float的值不为none overflow的值为auto、scroll或hidden display的值为table-cell、table-caption或inline-block position的值为fixed或absolute BFC的常见用途闭合浮动#container { overflow: auto; /* 创建BFC */ } 阻止margin重叠发生重叠的代码： /* HTML代码 */ &lt;div id=&quot;box1&quot;&gt;我是box1&lt;/div&gt; &lt;div id=&quot;box2&quot;&gt;我是box2&lt;/div&gt; /* CSS代码 */ #box1 { margin-bottom: 20px; background-color: lightskyblue; } #box2 { margin-top: 20px; background-color: orange; } 创建BFC解决： /* HTML代码 */ &lt;div id=&quot;box1&quot;&gt;我是box1&lt;/div&gt; &lt;div id=&quot;bfc&quot;&gt; &lt;div id=&quot;box2&quot;&gt;我是box2&lt;/div&gt; &lt;/div&gt; /* CSS代码 */ #bfc { overflow: auto; /* 创建BFC */ } 自适应流体布局BFC最强大的用途其实是用于自适应流体布局，这是基于BFC所确定的区域不会与外部浮动元素发生重叠的特性实现的。 假设我们需要创建一个左侧宽度固定为200px，右侧宽度自适应的两列布局，一般情况下有如下解决方案： /* HTML代码 */ &lt;div id=&quot;layout&quot;&gt; &lt;div id=&quot;left&quot;&gt;&lt;/div&gt; &lt;div id=&quot;right&quot;&gt;&lt;/div&gt; &lt;/div&gt; /* CSS代码 */ #layout{ overflow: auto; /* 创建BFC闭合浮动 */ } #left { width: 200px; float: left; } #right { margin-left: 200px; } 创建BFC解决： #right { overflow: auto; /* 创建BFC */ } 参考文章 BFC的理解和运用]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>css</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端19 - CSS部分-CSSDOM]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF19-CSS%E9%83%A8%E5%88%86-CSSDOM%2F</url>
+    <content type="text"><![CDATA[CSSOM API 的基本用法一般来说，我们需要先获取文档中所有的样式表： document.styleSheets document 的 styleSheets 属性表示文档中的所有样式表，这是一个只读的列表，我们可以用方括号运算符下标访问样式表，也可以使用 item 方法来访问，它有 length 属性表示文档中的样式表数量。 操作我们虽然无法用 CSSOM API 来创建样式表，但是我们可以修改样式表中的内容（数字参数表示索引）。 document.styleSheets[0].insertRule(&quot;div {border:1px solid blue}&quot;,0) document.styleSheets[0].removeRule(5) 执行后，页面样式会发生对应变化，但并不会在style标签对应的位置真的插入样式代码。 cssRules属性更进一步，我们可以获取样式表中特定的规则（Rule），并且对它进行一定的操作，具体来说，就是使用它的 cssRules 属性来实现： 在chrome上测试发现，link标签引入的css文件样式，cssRules无法读取，因此也无法操作（insertRule，removeRule等无效），只可以操作style标签内的内联样式。 计算属性CSSOM 还提供了一个非常重要的方法，来获取一个元素最终经过 CSS 计算得到的属性： window.getComputedStyle(elt, pseudoElt); 其中第一个参数就是我们要获取属性的元素，第二个参数是可选的，用于选择伪元素。 CSSOM View窗口API窗口 API 用于操作浏览器窗口的位置、尺寸等（方法在window下调用）。 moveTo(x, y) 窗口移动到屏幕的特定坐标； moveBy(x, y) 窗口移动特定距离； resizeTo(x, y) 改变窗口大小到特定尺寸； resizeBy(x, y) 改变窗口大小特定尺寸。 还规定了 window.open() 的第三个参数： window.open(&quot;about:blank&quot;, &quot;_blank&quot; ,&quot;width=100,height=100,left=100,right=100&quot; ) 一些浏览器出于安全考虑没有实现，也不适用于移动端浏览器，简单了解即可 滚动 API视口滚动 API可视区域（视口）滚动行为由 window 对象上的一组 API 控制，我们先来了解一下： scrollX 是视口的属性，表示 X 方向上的当前滚动距离，有别名 pageXOffset； scrollY 是视口的属性，表示 Y 方向上的当前滚动距离，有别名 pageYOffset； scroll(x, y) 使得页面滚动到特定的位置，有别名 scrollTo，支持传入配置型参数 {top, left}； scrollBy(x, y) 使得页面滚动特定的距离，支持传入配置型参数 {top, left}。 通过这些属性和方法，我们可以读取视口的滚动位置和操纵视口滚动。不过，要想监听视口滚动事件，我们需要在 document 对象上绑定事件监听函数： document.addEventListener(&quot;scroll&quot;, function(event){ //...... }) 视口滚动 API 是页面的顶层容器的滚动，大部分移动端浏览器都会采用一些性能优化，它和元素滚动不完全一样。 元素滚动 API在 Element 类（参见 DOM 部分），为了支持滚动，加入了以下 API。 scrollTop 元素的属性，表示 Y 方向上的当前滚动距离。 scrollLeft 元素的属性，表示 X 方向上的当前滚动距离。 scrollWidth 元素的属性，表示元素内部的滚动内容的宽度，一般来说会大于等于元素宽度。 scrollHeight 元素的属性，表示元素内部的滚动内容的高度，一般来说会大于等于元素高度。 scroll(x, y) 使得元素滚动到特定的位置，有别名 scrollTo，支持传入配置型参数 {top, left}。 scrollBy(x, y) 使得元素滚动到特定的位置，支持传入配置型参数 {top, left}。 scrollIntoView(arg) 滚动元素所在的父元素，使得元素滚动到可见区域，可以通过 arg 来指定滚到中间、开始或者就近。 除此之外，可滚动的元素也支持 scroll 事件，我们在元素上监听它的事件即可： element.addEventListener(&quot;scroll&quot;, function(event){ //...... }) 布局 API全局尺寸信息window 对象上提供了一些全局的尺寸信息，它是通过属性来提供的: window.innerHeight, window.innerWidth 这两个属性表示视口的大小。 window.outerWidth, window.outerHeight 这两个属性表示浏览器窗口占据的大小，很多浏览器没有实现，一般来说这两个属性无关紧要。 window.devicePixelRatio 这个属性非常重要，表示物理像素和 CSS 像素单位的倍率关系，Retina 屏这个值是 2，后来也出现了一些 3 倍的 Android 屏。 window.screen （屏幕尺寸相关的信息） window.screen.width, window.screen.height 设备的屏幕尺寸。 window.screen.availWidth, window.screen.availHeight 设备屏幕的可渲染区域尺寸，一些 Android 机器会把屏幕的一部分预留做固定按钮，所以有这两个属性，实际上一般浏览器不会实现的这么细致。 window.screen.colorDepth, window.screen.pixelDepth 这两个属性是固定值 24，应该是为了以后预留。 以上比较有用的只有三个：innerHeight、innerWidth 和 devicePixelRatio 元素的布局信息首先应该从脑中消除“元素有宽高”这样的概念，有些元素可能产生多个盒，事实上，只有盒有宽和高，元素是没有的。 所以我们获取宽高的对象应该是“盒”，于是 CSSOM View 为 Element 类添加了两个方法： getClientRects(): 返回一个列表，里面包含元素对应的每一个盒所占据的客户端矩形区域，这里每一个矩形区域可以用 x, y, width, height 来获取它的位置和尺寸。 document.getElementById(&quot;wrap&quot;).getClientRects()[0] //结果： {bottom: 342 height: 42 left: 0 right: 819 top: 300 width: 819 x: 0 y: 300} getBoundingClientRect(): 这个 API 的设计更接近我们脑海中的元素盒的概念，它返回元素对应的所有盒的包裹的矩形区域，需要注意，这个 API 获取的区域会包括当 overflow 为 visible 时的子元素区域 document.getElementById(&quot;wrap&quot;).getBoundingClientRect() //结果： {bottom: 300 height: 0 left: 0 right: 819 top: 300 width: 819 x: 0 y: 300} 两个api通常情况下计算结果是一致的。 这两个 API 获取的矩形区域都是相对于视口的坐标，这意味着，这些区域都是受滚动影响的。 如果我们要获取相对坐标，或者包含滚动区域的坐标，需要一点小技巧： var offsetX = document.documentElement.getBoundingClientRect().x - element.getBoundingClientRect().x;]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>css</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端17 - HML部分-链接种类]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF17-HML%E9%83%A8%E5%88%86-%E9%93%BE%E6%8E%A5%E7%A7%8D%E7%B1%BB%2F</url>
+    <content type="text"><![CDATA[HTML中所有的链接种类链接是 HTML 中的一种机制，它是 HTML 文档和其它文档或者资源的连接关系，在 HTML 中，链接有两种类型。一种是超链接型标签，一种是外部资源链接。 一. link 标签1.1 超链接类 link 标签超链接型 link 标签是一种被动型链接，在用户不操作的情况下，它们不会被主动下载。 link 标签具有特定的 rel 属性，会成为特定类型的 link 标签。产生超链接的 link 标签包括：具有 rel=“canonical” 的 link、具有 rel=”alternate”的 link、具有 rel=“prev” rel=”next”的 link 等等。 canonical型 &lt;link rel=&quot;canonical&quot; href=&quot;...&quot;&gt; 这个标签提示页面它的主 URL，在网站中常常有多个 URL 指向同一页面的情况，搜索引擎访问这类页面时会去掉重复的页面，这个 link 会提示搜索引擎保留哪一个 URL。 alternate型 &lt;link rel=&quot;alternate&quot; href=&quot;...&quot;&gt; 这个标签提示页面它的变形形式，这个所谓的变形可能是当前页面内容的不同格式、不同语言或者为不同的设备设计的版本，这种 link 通常也是提供给搜索引擎来使用的。一个典型应用场景是，页面提供 rss 订阅时，可以用这样的 link 来引入(除了搜索引擎外，很多浏览器插件都能识别这样的 link。)： &lt;link rel=&quot;alternate&quot; type=&quot;application/rss+xml&quot; title=&quot;RSS&quot; href=&quot;...&quot;&gt; prev &amp; next型来告诉搜索引擎或者浏览器它的前一项和后一项，这有助于页面的批量展示。因为 next 型 link 告诉浏览器“这是很可能访问的下一个页面”，HTML 标准还建议对 next 型 link 做预处理。 其他超链类型 rel=“author” 链接到本页面的作者，一般是 mailto: 协议 rel=“help” 链接到本页面的帮助页 rel=“license” 链接到本页面的版权信息页 rel=“search” 链接到本页面的搜索页面（一般是站内提供搜索时使用） 1.2 外部资源类 link 标签外部资源型 link 标签会被主动下载，并且根据 rel 类型做不同的处理。外部资源型的标签包括：具有 icon 型的 link、预处理类 link、modulepreload 型的 link、stylesheet、pingback。 icon型 &lt;link rel=&quot;icon&quot; type=&quot;image/png&quot; sizes=&quot;32x32&quot; href=&quot;//static001.geekbang.org/static/icon/time/favicon-32x32.png&quot;&gt; 只有 icon 型 link 有有效的 sizes 属性，HTML 标准允许一个页面出现多个 icon 型 link，并且用 sizes 指定它适合的 icon 尺寸 预处理类 dns-prefetch 型 link 提前对一个域名做 dns 查询，这样的 link 里面的 href 实际上只有域名有意义。 preconnect 型 link 提前对一个服务器建立 tcp 连接。 prefetch 型 link 提前取 href 指定的 url 的内容。 preload 型 link 提前加载 href 指定的 url。 prerender 型 link 提前渲染 href 指定的 url。 modulepreload 型的 link 预处理类 link 标签就是允许我们控制浏览器，提前针对一些资源去做这些操作，以提高性能（当然如果你乱用的话，性能反而更差）。 modulepreload &lt;link rel=&quot;modulepreload&quot; href=&quot;app.js&quot;&gt; modulepreload 型 link 的作用是预先加载一个 JavaScript 的模块。这可以保证 JS 模块不必等到执行时才加载。这里的所谓加载，是指完成下载并放入内存，并不会执行对应的 JavaScript。 stylesheet &lt;link rel=&quot;stylesheet&quot; href=&quot;xxx.css&quot; type=&quot;text/css&quot;&gt; 基本用法是从一个 CSS 文件创建一个样式表。这里 type 属性可以没有，如果有，必须是”text/css”才会生效。 pingback这样的 link 表示本网页被引用时，应该使用的 pingback 地址，这个机制是一份独立的标准，遵守 pingback 协议的网站在引用本页面时，会向这个 pingback url 发送一个消息。 二. a 标签具有 href 的 a 标签跟一些 link 一样，会产生超链接，也就是在用户不操作的情况下，它们不会被主动下载的被动型链接。 a 标签也可以有 rel 属性，我们来简单了解一下，首先是跟 link 相同的一些 rel，包括下面的几种： alternate author help license next prev search 这些跟 link 语义完全一致，不同的是，a 标签产生的链接是会实际显示在网页中的，而 link 标签仅仅是元信息。 a 标签独有的 rel 类型： tag 表示本网页所属的标签； bookmark 到上级章节的链接。 a 标签还有一些辅助的 rel 类型，用于提示浏览器或者搜索引擎做一些处理： nofollow 此链接不会被搜索引擎索引； noopener 此链接打开的网页无法使用 opener 来获得当前页面的窗口； noreferrer 此链接打开的网页无法使用 referrer 来获得当前页面的 url； opener 打开的网页可以使用 window.opener 来访问当前页面的 window 对象，这是 a 标签的默认行为。 三. area 标签area 标签与 a 标签非常相似，不同的是，它不是文本型的链接，而是区域型的链接。area 标签支持的 rel 与 a 完全一样。area 是整个 html 规则中唯一支持非矩形热区的标签，它的 shape 属性支持三种类型：circle(圆形)，rect(矩形)，poly(多边形)]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>html</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端16 - HML部分-节点种类]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF16-HML%E9%83%A8%E5%88%86-%E8%8A%82%E7%82%B9%E7%A7%8D%E7%B1%BB%2F</url>
+    <content type="text"><![CDATA[DOMDOM API 大致会包含 4 个部分: 节点：DOM 树形结构中的节点相关 API。 事件：触发和监听事件相关 API。 Range：操作文字范围相关 API。 遍历：遍历 DOM 需要的 API。 节点的类型 要重点掌握的是：Document、Element、Text 节点。DocumentFragment 也非常有用，它常常被用来高性能地批量添加节点。 console.time(&quot;sort1&quot;); for (var i1 = 0; i1 &lt; 10000; i1++) { var p1 = document.createElement(&quot;p&quot;); var oTxt1 = document.createTextNode(&quot;段落&quot; +i1); p1.appendChild(oTxt1); document.getElementById(&quot;sort1&quot;).appendChild(p1); } console.timeEnd(&quot;sort1&quot;); console.time(&quot;sort2&quot;); var oFragment = document.createDocumentFragment(); for (var i2 = 0; i2 &lt; 10000; i2++) { var p2 = document.createElement(&quot;p&quot;); var oTxt2 = document.createTextNode(&quot;段落&quot; + i2); p2.appendChild(oTxt2); oFragment.appendChild(p2); } document.getElementById(&quot;sort2&quot;).appendChild(oFragment); console.timeEnd(&quot;sort2&quot;); 实测对比，运行相差最长5ms,有些情况下sort1执行时间小于sort2，有点迷~ NodeNode 是 DOM 树继承关系的根节点，它定义了 DOM 节点在 DOM 树上的操作 Node下属性： parentNode childNodes firstChild lastChild nextSibling previousSibling Node下方法： appendChild insertBefore removeChild replaceChild 创建Node： DOM 标准规定了节点必须从文档的 create 方法创建出来，不能够使用原生的 JavaScript 的 new 运算。于是 document 对象有这些方法。 createElement createTextNode createCDATASection createComment createProcessingInstruction createDocumentFragment createDocumentType Element 和 AttributeElement(元素)作为Node（节点）的子类，是大部分时候我们比较关注的。元素对应了 HTML 中的标签，它既有子节点，又有属性。所以 Element 子类中，有一系列操作属性的方法： getAttribute setAttribute removeAttribute hasAttribute 还可以把 Attribute 当作节点(IE6,7也是支持的)： getAttributeNode setAttributeNode 关于getAttributeNode：返回的是Attr类型的属性节点 document.getElementById(&quot;app&quot;).getAttributeNode(&quot;id&quot;).nodeValue===document.getElementById(&quot;app&quot;).getAttribute(&quot;id&quot;) 查找元素document 节点提供了查找元素的能力：。 querySelector querySelectorAll getElementById getElementsByName getElementsByTagName getElementsByClassName 我们需要注意，getElementById、getElementsByName、getElementsByTagName、getElementsByClassName，这几个 API 的性能高于 querySelector。而 getElementsByName、getElementsByTagName、getElementsByClassName 获取的集合并非数组，而是一个能够动态更新的集合。 遍历除了使用JavaScript 遍历整个树外，还可以通过DOM API 中的 NodeIterator 和 TreeWalker 来遍历树。 var iterator = document.createNodeIterator(document.body, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_COMMENT, null, false); 不常用，知道即可 RangeRange API 表示一个 HTML 上的范围，这个范围是以文字为最小单位的，所以 Range 不一定包含完整的节点，它可能是 Text 节点中的一段，也可以是头尾两个 Text 的一部分加上中间的元素。 我们通过 Range API 可以比节点 API 更精确地操作 DOM 树，凡是 节点 API 能做到的，Range API 都可以做到，而且可以做到更高性能，但是 Range API 使用起来比较麻烦，所以在实际项目中，并不常用，只有做底层框架和富文本编辑对它有强需求。 var range = new Range(), firstText = p.childNodes[1], secondText = em.firstChild range.setStart(firstText, 9) // do not forget the leading space range.setEnd(secondText, 4) 命名空间创建元素和属性相关的 API 都有带命名空间的版本： createElementNS createAttributeNS getAttributeNS setAttributeNS attributes.setNamedItemNS ... 在 HTML 场景中，需要考虑命名空间的场景不多。最主要的场景是 SVG。 SVGSVG 是使用 XML 来描述二维图形和绘图程序的语言。我们可以查看一个svg实例，关于命名空间的问题可以查看《Javascript高级程序设计》第12章 DOM2和DOM3,下面简要记录一些命名空间的相关内容： 命名空间有了XML命名空间的，不同 XML 文档的元素就可以混合在一起，共同构成格式良好的文档，而不必担心发生命名冲突（扩展阅读：XML,HTML以及XHTML的区别） 譬如，我们看一个混合 XHTML 和 SVG 语言的文档 &lt;html xmlns:h=&quot;http://www.w3.org/1999/xhtml&quot;&gt; &lt;head&gt; &lt;title&gt;Example XHTML page&lt;/title&gt; &lt;style&gt; @namespace svg url(http://www.w3.org/2000/svg); @namespace html url(http://www.w3.org/1999/xhtml); html|a { color: red; } svg|a { stroke: blue; stroke-width: 1; } &lt;/style&gt; &lt;/head&gt; &lt;body&gt; &lt;a&gt;I am HTML&lt;/a&gt; &lt;svg xmlns:s=&quot;http://www.w3.org/2000/svg&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 100 100&quot; style=&quot;width:100%; height:100%&quot;&gt; &lt;rect x=&quot;0&quot; y=&quot;0&quot; width=&quot;100&quot; height=&quot;100&quot; style=&quot;fill:red&quot; /&gt; &lt;a width=&quot;10&quot; height=&quot;10&quot;&gt;&lt;text x=&quot;0&quot; y=&quot;15&quot; fill=&quot;red&quot;&gt;I love SVG&lt;/text&gt;&lt;/a&gt; &lt;/svg&gt; &lt;/body&gt; &lt;/html&gt; 我们通过带有命名空间版本的DOM api访问得到的结果是(css中也有命名空间)： 参考文献 DOM：Attr类型 js便签笔记（4）——简单说说getAttributeNode()和setAttributeNode() SVG-简书]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>html</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端15 - CSS部分-伪类伪元素和优先级]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF15-CSS%E9%83%A8%E5%88%86-%E4%BC%AA%E7%B1%BB%E4%BC%AA%E5%85%83%E7%B4%A0%E5%92%8C%E4%BC%98%E5%85%88%E7%BA%A7%2F</url>
+    <content type="text"><![CDATA[选择器的优先级CSS 标准用一个三元组 (a, b, c) 来构成一个复杂选择器的优先级。 id 选择器的数目记为 a； 伪类选择器和 class 选择器的数目记为 b； 伪元素选择器和标签选择器数目记为 c； “*” 不影响优先级。 CSS 标准建议用一个足够大的进制，获取“ a-b-c ”来表示选择器优先级。 specificity = base * base * a + base * b + c 同一优先级的选择器遵循“后面的覆盖前面的”原则 行内属性的优先级永远高于 CSS 规则 !important优先级高于行内属性 伪元素伪元素本身不单单是一种选择规则，它还是一种机制。伪元素的语法跟伪类相似，但是实际产生的效果却是把不存在的元素硬选出来。 目前兼容性达到可用的伪元素有以下几种。 ::first-line ::first-letter ::before ::after ::first-line 和 ::first-letter二者是比较类似的伪元素，其中一个表示元素的第一行，一个表示元素的第一个字母。 //首字母变大并向左浮动（一个非常常见的排版方式） p::first-letter { text-transform: uppercase; font-size:2em; float:left; } CSS 标准规定了 first-line 必须出现在最内层的块级元素之内。 &lt;style&gt; div&gt;span#a { color:green; } div&gt;p#b { color:red; } div::first-line { color:blue; } &lt;/style&gt; &lt;div&gt; &lt;span id=&apos;a&apos;&gt;First paragraph(green)&lt;/span&gt;&lt;br /&gt; &lt;span&gt;Second paragraph&lt;/span&gt; &lt;/div&gt; &lt;div&gt; &lt;p id=&apos;b&apos;&gt;First paragraph(blue)&lt;/p&gt; &lt;p&gt;Second paragraph&lt;/p&gt; &lt;/div&gt; ::before 和 ::after 。这两个伪元素跟前面两个不同的是，它不是把已有的内容套上一个元素，而是真正的无中生有，造出一个元素。这两个伪元素所在的 CSS 规则必须指定 content 属性才会生效 参考文章 MDN-伪类和伪元素]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>css</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端14 - CSS部分-选择器整体结构]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF14-CSS%E9%83%A8%E5%88%86-%E9%80%89%E6%8B%A9%E5%99%A8%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%2F</url>
+    <content type="text"><![CDATA[简单选择器 类型选择器span {display:block} 命名空间：如果svg 和 html 中都有 a 元素，我们若要想区分选择 svg 中的 a 和 html 中的 a，就必须用带命名空间的类型选择器。 @namespace svg url(http://www.w3.org/2000/svg); @namespace html url(http://www.w3.org/1999/xhtml); html|a { color: red; } svg|a { stroke:blue; stroke-width:1; } 全体选择器* {margin:0} id 选择器与 class 选择器略 属性选择器[attribute] 用于选取带有指定属性的元素。[attribute=value] 用于选取带有指定属性和值的元素。[attribute~=value] 用于选取属性值中包含指定词汇的元素。[attribute|=value] 用于选取带有以指定值开头的属性值的元素，该值必须是整个单词。[attribute^=value] 匹配属性值以指定值开头的每个元素。[attribute$=value] 匹配属性值以指定值结尾的每个元素。[attribute*=value] 匹配属性值中包含指定值的每个元素。 伪类选择器伪类选择器有普通型和函数型两种,带括号的就是函数型 树结构关系伪类选择器 :root 伪类表示树的根元素，基本等同于html元素 在声明全局 CSS 变量时 :root 会很有用： :root { --main-color: hotpink; --pane-padding: 5px 42px; } :empty 伪类表示没有子节点的元素，选择每个没有任何子级的元素（包括文本节点）。 p:empty{ height: 20px; background:#ff0000; } :nth-child(n) ， :nth-of-type(n) p:nth-child(2) 选择每个p元素是其父级的第二个子元素 p:nth-of-type(2)：选择每个p元素是其父级的第二个p元素 :nth-last-child(n)，nth-last-of-type(n) 的区别仅仅是从后往前数。 :first-child 和 :last-child , :first-of-type 和 :last-of-type分别表示第一个和最后一个元素。 :only-child，only-of-type 唯一个子元素和唯一一个同类型子元素。 链接与行为伪类选择器:any-link 表示任意的链接，包括 a、area 和 link 标签都可能匹配到这个伪类。 :link 表示未访问过的链接， :visited 表示已经访问过的链接。 :hover 表示鼠标悬停在上的元素， :active 表示用户正在激活这个元素，如用户按下按钮，鼠标还未抬起时，这个按钮就处于激活状态 :focus 表示焦点落在这个元素之上。 :target 用于选中浏览器 URL 的 hash 部分所指示的元素。demo请访问：http://www.runoob.com/try/try.php?filename=trycss3_target 逻辑伪类选择器:not(x) 伪类:它匹配不符合参数选择器X描述的元素。X不能包含另外一个否定选择器(函数型伪类) :not(.cls){ color: aqua } css3 级标准中，not 只支持简单选择器，CSS4功能更强大，但目前还没有浏览器实现它。 参考文献 CSS 变量教程]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>css</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端20 - JavaScript部分-js词法]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF20-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%8D%E6%B3%95%2F</url>
+    <content type="text"><![CDATA[概述待补充~]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端21 - JavaScript部分-js语法一]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF21-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E4%B8%80%2F</url>
+    <content type="text"><![CDATA[概述待补充~]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端22 - JavaScript部分-js语法二]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF22-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E4%BA%8C%2F</url>
+    <content type="text"><![CDATA[概述待补充~]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端12 - JavaScript部分-执行(二)]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF12-JavaScript%E9%83%A8%E5%88%86-%E6%89%A7%E8%A1%8C(%E4%BA%8C)%2F</url>
+    <content type="text"><![CDATA[闭包闭包其实只是一个绑定了执行环境的函数，闭包与普通函数的区别是，它携带了执行的环境，就像人在外星中需要自带吸氧的装备一样，这个函数也带有在程序中生存的环境。 执行上下文JavaScript 标准把一段代码（包括函数），执行所需的所有信息定义为：“执行上下文”。 执行上下文在 ES2018 中，包含以下部分： lexical environment：词法环境，当获取变量或者 this 值时使用。 variable environment：变量环境，当声明变量时使用 code evaluation state：用于恢复代码执行位置。 Function：执行的任务是函数时使用，表示正在被执行的函数。 ScriptOrModule：执行的任务是脚本或者模块时使用，表示正在被执行的代码。 Realm：使用的基础库和内置对象实例。 Generator：仅生成器上下文有这个属性，表示当前生成器。 在js中任何语句的执行都会依赖特定的上下文。一旦上下文被切换，整个语句的效果可能都会发生改变。在 JavaScript，切换上下文最主要的场景是函数调用。 函数 补充:仅普通函数和类能够跟 new 搭配使用 1 普通函数用 function 关键字定义的函数。 function foo(){ // code } 2 箭头函数用 =&gt; 运算符定义的函数。 const foo = () =&gt; { // code } 3 方法在 class 中定义的函数。 class C { foo(){ //code } } 4 生成器函数用 function * 定义的函数。 function* foo(){ // code } 5 类用 class 定义的类，实际上也是函数。 class Foo { constructor(){ //code } } 6/7/8 异步函数：普通函数、箭头函数和生成器函数加上 async 关键字。 async function foo(){ // code } const foo = async () =&gt; { // code } async function foo*(){{ // code } 对普通变量而言，这些函数并没有本质区别，它们的一个行为差异在于 this 关键字。 this 关键字this 是执行上下文中很重要的一个组成部分。同一个函数调用方式不同，得到的 this 值也不同。 调用函数时使用的引用，决定了函数执行时刻的 this 值。实际上从运行时的角度来看，this 跟面向对象毫无关联，它是与函数调用时使用的表达式相关。 语句分类 在 try 中有 return 语句，finally 中的内容还会执行吗？代码一： function foo(){ try{ return 0; } catch(err) { } finally { console.log(&quot;a&quot;) } } console.log(foo()); finally执行了，并且函数有返回值 代码二： function foo(){ try{ return 0; } catch(err) { } finally { return 1; } } console.log(foo()); 返回值为1，try的返回值被 finally 擦写了 这个怪异的表现行为是由于 Javascript 的Completion Record机制来实现的（Completion Record用于描述异常、跳出等语句执行过程） Completion Record 表示一个语句执行完之后的结果，它有三个字段： [[type]] 表示完成的类型，有 break continue return throw 和 normal 几种类型； [[value]] 表示语句的返回值，如果语句没有，则是 empty； [[target]] 表示语句的目标，通常是一个 JavaScript 标签。 普通语句执行后，会得到 [[type]] 为 normal 的 Completion Record，JavaScript 引擎遇到这样的 Completion Record，会继续执行下一条语句。 在一个语句块中，，如果每一个语句都是 normal 类型，那么它会顺次执行。但是假如我们在语句块中插入了一条 return 语句，产生了一个非 normal 记录，那么整个语句块会成为非 normal。这个结构就保证了非 normal 的完成类型可以穿透复杂的语句嵌套结构，产生控制效果。 那么对于上述的例子：因为 finally 中的内容必须保证执行，所以 try/catch 执行完毕，即使得到的结果是非 normal 型的完成记录，也必须要执行 finally。而当 finally 执行也得到了非 normal 记录，则会使 finally 中的记录作为整个 try 结构的结果。 带标签的语句实际上，任何 JavaScript 语句是可以加标签的，在语句前加冒号即可： firstStatement: var i = 1; 一般情况下没什么用，break/continue 语句如果后跟了lable语句，就会跳到对应的label位置，一般用于多层嵌套循环的跳出 var num=0; outter: for(var i=0;i&lt;10;i++){ for(var j=0;j&lt;10;j++){ if(i==5&amp;&amp;j==5){ break outter; //退出内部循环，指向outter，即外循环，同时退出外循环 } num++; } } document.write(num); //55]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端13 - JavaScript部分-理解编译原理]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF13-JavaScript%E9%83%A8%E5%88%86-%E7%90%86%E8%A7%A3%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%2F</url>
+    <content type="text"><![CDATA[概述待补充~]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端24 - JavaScript部分-js语法四]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF24-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E5%9B%9B%2F</url>
+    <content type="text"><![CDATA[概述待补充~]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端23 - JavaScript部分-js语法三]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF23-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E4%B8%89%2F</url>
+    <content type="text"><![CDATA[概述待补充~]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端11 - JavaScript部分-执行(一)]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF11-JavaScript%E9%83%A8%E5%88%86-%E6%89%A7%E8%A1%8C(%E4%B8%80)%2F</url>
+    <content type="text"><![CDATA[概述由于我们这里主要讲 JavaScript 语言，那么采纳 JSC 引擎的术语，我们把宿主发起的任务称为宏观任务，把 JavaScript 引擎发起的任务称为微观任务。 宏观和微观任务JavaScript 引擎等待宿主环境分配宏观任务，在操作系统中，通常等待的行为都是一个事件循环，所以在 Node 术语中，也会把这个部分称为事件循环。 在底层的 C/C++ 代码中，这个事件循环是一个跑在独立线程中的循环，我们用伪代码来表示，大概是这样的： while(TRUE) { r = wait(); execute(r); } 可以看到，整个循环做的事情基本上就是反复“等待 - 执行” 这里每次的执行过程，其实都是一个宏观任务。我们可以大概理解：宏观任务的队列就相当于事件循环。 在宏观任务中，JavaScript 的 Promise 还会产生异步代码，JavaScript 必须保证这些异步代码在一个宏观任务中完成，因此，每个宏观任务中又包含了一个微观任务队列： promisePromise 永远在队列尾部添加微观任务。setTimeout 等宿主 API，则会添加宏观任务。 var r = new Promise(function (resolve, reject) { console.log(&quot;a&quot;); resolve() }); setTimeout(()=&gt;{ console.log(&quot;d&quot;) }) r.then(() =&gt; console.log(&quot;c&quot;)); console.log(&quot;b&quot;) //运行结果依次为：a,b,c,d 我们再看下面的代码 var r = new Promise(function (resolve, reject) { console.log(&quot;a&quot;); resolve() }); setTimeout(() =&gt; console.log(&quot;d&quot;), 0) var r1 = new Promise(function (resolve, reject) { resolve() }); r.then(() =&gt; { var begin = Date.now(); while (Date.now() - begin &lt; 1000); console.log(&quot;c1&quot;) new Promise(function (resolve, reject) { resolve() }).then(() =&gt; console.log(&quot;c2&quot;)) }); //执行结果：a, c1, c2 ,d 这里我们强制了 1 秒的执行耗时，这样，我们可以确保任务 c2 是在 d 之后被添加到任务队列。可以看到，即使耗时一秒的 c1 执行完毕，再 创建的 c2，仍然先于 d 执行了，这很好地解释了微任务优先的原理。 通过一系列的实验，我们可以总结一下如何分析异步执行的顺序： 首先我们分析有多少个宏任务； 在每个宏任务中，分析有多少个微任务； 根据调用次序，确定宏任务中的微任务执行次序； 根据宏任务的触发规则和调用次序，确定宏任务的执行次序； 确定整个顺序。 async/awaitasync函数返回的是 Promise 对象, 一旦遇到await就会先返回(可以通过await来等待一个Promise)，等到异步操作完成，再接着执行函数体内后面的语句。 function sleep(duration) { return new Promise(function(resolve, reject) { setTimeout(resolve,duration); }) } async function foo(){ console.log(&quot;a&quot;) await sleep(2000) console.log(&quot;b&quot;) } foo().then(()=&gt;{ console.log(&quot;foo over&quot;) }); //执行结果：a, b, foo over]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端10 - HTML部分-head内的标签]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF10-HTML%E9%83%A8%E5%88%86%20-%20head%E5%86%85%E7%9A%84%E6%A0%87%E7%AD%BE%2F</url>
+    <content type="text"><![CDATA[head 标签本身首先我们先来了解一下 head 标签，head 标签本身并不携带任何信息，它主要是作为盛放其它语义类标签的容器使用。 head 标签规定了自身必须是 html 标签中的第一个标签，它的内容必须包含一个 title； 1. title 标签title 标签表示文档的标题，从字面上就非常容易理解。 2. base 标签base 标签实际上是个历史遗留标签。它的作用是给页面上所有的 URL 相对地址提供一个基础。最多只有一个，它改变全局的链接地址，它是一个非常危险的标签，慎重使用。 3. meta 标签meta 标签是一组键值对，它是一种通用的元信息表示标签。在 head 中可以出现任意多个 meta 标签。一般的 meta 标签由 name 和 content 两个属性来定义。name 表示元信息的名，content 则用于表示元信息的值。 &lt;meta name=application-name content=&quot;lsForums&quot;&gt; meta标签的一些变体 3.1 具有 charset 属性的 meta从 HTML5 开始，为了简化写法，meta 标签新增了 charset 属性。添加了 charset 属性的 meta 标签无需再有 name 和 content。 &lt;meta charset=&quot;UTF-8&quot; &gt; charset 型 meta 标签非常关键，它描述了 HTML 文档自身的编码形式。因此，建议这个标签放在 head 的第一个。 3.2 具有 http-equiv 属性的 meta具有 http-equiv 属性的 meta 标签，表示执行一个命令，这样的 meta 标签可以不需要 name 属性了。 例如，下面一段代码，相当于添加了 content-type 这个 http 头，并且指定了 http 编码方式。 &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt; 除了 content-type，还有以下几种命令： content-language 指定内容的语言； default-style 指定默认样式表； refresh 刷新； set-cookie 模拟 http 头 set-cookie，设置 cookie； x-ua-compatible 模拟 http 头 x-ua-compatible，声明 ua 兼容性； content-security-policy 模拟 http 头 content-security-policy，声明内容安全策略。 name 为 viewport 的 meta meta 标签可以被自由定义，只要写入和读取的双方约定好 name 和 content 的格式就可以了 3.3 name 为 viewport 的 meta。这类 meta 的 name 属性为 viewport，它的 content 是一个复杂结构，是用逗号分隔的键值对，键值对的格式是 key=value。 &lt;meta name=&quot;viewport&quot; content=&quot;width=500, initial-scale=1&quot;&gt; 参数含义如下： width：页面宽度，可以取值具体的数字，也可以是 device-width，表示跟设备宽度相等。 height：页面高度，可以取值具体的数字，也可以是 device-height，表示跟设备高度相等。 initial-scale：初始缩放比例。 minimum-scale：最小缩放比例。 maximum-scale：最大缩放比例。 user-scalable：是否允许用户缩放。 对于已经做好了移动端适配的网页，应该把用户缩放功能禁止掉，宽度设为设备宽度，一个标准的 meta 如下： &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no&quot;&gt; 3.4 其它预定义的 meta在 HTML 标准中，还定义了一批 meta 标签的 name，可以视为一种有约定的 meta，可以简单了解一下:(name为如下值，content为对应值) application-name：如果页面是 Web application，用这个标签表示应用名称。 author: 页面作者。 description：页面描述，这个属性可能被用于搜索引擎或者其它场合。 generator: 生成页面所使用的工具，主要用于可视化编辑器，如果是手写 HTML 的网页，不需要加这个 meta。 keywords: 页面关键字，对于 SEO 场景非常关键。 referrer: 跳转策略，是一种安全考量。 theme-color: 页面风格颜色，实际并不会影响页面，但是浏览器可能据此调整页面之外的 UI（如窗口边框或者 tab 的颜色） 参考文章 标签中http-equiv属性的属性值X-UA-Compatible详解]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>html</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端9 - 浏览器部分-工作流程-渲染和绘制]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF9-%E6%B5%8F%E8%A7%88%E5%99%A8%E9%83%A8%E5%88%86-%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B-%E6%B8%B2%E6%9F%93%E5%92%8C%E7%BB%98%E5%88%B6%2F</url>
+    <content type="text"><![CDATA[渲染本文中出现的“渲染”一词，统一指的是它在图形学的意义，也就是把模型变成位图的过程。 浏览器中渲染这个过程，就是把每一个元素对应的盒变成位图。这里的元素包括 HTML 元素和伪元素，一个元素可能对应多个盒（比如 inline 元素，可能会分成多行）。每一个盒对应着一张位图。 合成渲染过程不会把子元素渲染到位图上面，合成的过程，就是为一些元素创建一个“合成后的位图”（我们把它称为合成层），把一部分子元素渲染到合成的位图上面。 目前，主流浏览器一般根据 position、transform 等属性来决定合成策略，来“猜测”这些元素未来可能发生变化。 但是，这样的猜测准确性有限，所以新的 CSS 标准中，规定了 will-change 属性，可以由业务代码来提示浏览器的合成策略，灵活运用这样的特性，可以大大提升合成策略的效果。 绘制绘制是把“位图最终绘制到屏幕上，变成肉眼可见的图像”的过程，不过，一般来说，浏览器并不需要用代码来处理这个过程，浏览器只需要把最终要显示的位图交给操作系统即可]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>浏览器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端8 - 浏览器部分-工作流程-排版]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF8-%E6%B5%8F%E8%A7%88%E5%99%A8%E9%83%A8%E5%88%86-%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B-%E6%8E%92%E7%89%88%2F</url>
+    <content type="text"><![CDATA[概述在现代浏览器中，仍然借用了这个概念，但是排版的内容更加复杂，包括文字、图片、图形、表格等等，我们把浏览器确定它们位置的过程，叫作排版。 正常流文字排版浏览器最基本的排版方案是正常流排版，它包含了顺次排布和折行等规则，这是一个跟我们提到的印刷排版类似的排版方案，也跟我们平时书写文字的方式一致，所以我们把它叫做正常流。在正常流的文字排版中，多数元素被当作长方形盒来排版，而只有 display 为 inline 的元素，是被拆成文本来排版的。 在正常流中，display 不为 inline 的元素或者伪元素，会以盒的形式跟文字一起排版。多数 display 属性都可以分成两部分：内部的排版和是否 inline，带有 inline- 前缀的盒，被称作行内级盒。 根据盒模型，一个盒具有 margin、border、padding、width/height 等属性，它在主轴方向占据的空间是由对应方向的这几个属性之和决定的，而 vertical-align 属性决定了盒在交叉轴方向的位置，同时也会影响实际行高。 所以，浏览器对行的排版，一般是先行内布局，再确定行的位置，根据行的位置计算出行内盒和文字的排版位置。 块级盒比较简单，它总是单独占据一整行，计算出交叉轴方向的高度即可。 绝对定位元素position 属性为 absolute 的元素，我们需要根据它的包含块来确定位置，这是完全跟正常流无关的一种独立排版模式，逐层找到其父级的 position 非 static 元素即可。 浮动元素排版float 元素非常特别，浏览器对 float 的处理是先排入正常流，再移动到排版宽度的最左 / 最右（这里实际上是主轴的最前和最后）。 移动之后，float 元素占据了一块排版的空间，因此，在数行之内，主轴方向的排版距离发生了变化，直到交叉轴方向的尺寸超过了浮动元素的交叉轴尺寸范围，主轴排版尺寸才会恢复。float 元素排布完成后，float 元素所在的行需要重新确定位置。 其它的排版CSS 的每一种排版都有一个很复杂的规定，实际实现形式也各不相同。比如如 flex 排版，支持了 flex 属性，flex 属性将每一行排版后的剩余空间平均分配给主轴方向的 width/height 属性。浏览器支持的每一种排版方式，都是按照对应的标准来实现的 延伸阅读文字排版的思路是“改变文字和盒的相对位置，把它放进特定的版面中”，软件界面的思路则是“改变盒的大小，使得它们的结构保持固定”。在早年的 CSS 中，“使盒按照外部尺寸变化”的能力非常弱。就出现了CSS 三大经典问题：垂直居中问题，两列等高问题，自适应宽问题。这是在其它 UI 系统中最为基本的问题，而到了 CSS 中，却变成了困扰工程师的三座大山。 flex 排版方式应运而生，这是一种典型的“根据外部容器决定内部尺寸”的思路，也是我们最常用的 Windows 和 Apple 窗口系统的设计思路，有了它，解决当年的 CSS 三大经典问题，便易如反掌(具体代码请参照35 | CSS Flex排版：为什么垂直居中这么难？)]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>浏览器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端7 - 浏览器部分-工作流程-css渲染]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF7-%E6%B5%8F%E8%A7%88%E5%99%A8%E9%83%A8%E5%88%86-%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B-css%E6%B8%B2%E6%9F%93%2F</url>
+    <content type="text"><![CDATA[解析代码HTML 的结构不算太复杂，我们日常开发需要的 90% 的“词”（指编译原理的术语 token，表示最小的有意义的单元），种类大约只有标签开始、属性、标签结束、注释、CDATA 节点几种。 构建 DOM 树接下来我们要把这些简单的词变成 DOM 树，这个过程我们是使用栈来实现的，(JavaScript 中的栈只要用数组就可以)。构建 DOM 树的流程大致如下： 栈顶元素就是当前节点； 遇到属性，就添加到当前节点； 遇到文本节点，如果当前节点是文本节点，则跟文本节点合并，否则入栈成为当前节点的子节点； 遇到注释节点，作为当前节点的子节点； 遇到 tag start 就入栈一个节点，当前节点就是这个节点的父节点； 遇到 tag end 就出栈一个节点（还可以检查是否匹配）。 css的渲染上述 DOM 的构建过程中，实际上信息是不全的，它只有节点和属性，不包含任何的样式信息。 首先要理解CSS 规则是 DOM 树构建好了以后，再进行选择并给它添加样式的。实际上，这个过程并不是这样的。 构建 DOM 的过程是：从父到子，从先到后，一个一个节点构造，并且挂载到 DOM 树上的，在这个过程中，我们依次拿到上一部构造好的元素，去检查它匹配到了哪些规则，再根据规则的优先级，做覆盖和调整。（所谓的选择器，应该被理解成“匹配器”才更合适。） 目前css选择器的各种符号如下： 空格: 后代，选中它的子节点和所有子节点的后代节点。 &gt;: 子代，选中它的子节点。 +：直接后继选择器，选中它的下一个相邻节点。 ~：后继，选中它之后所有的相邻节点。 ||：列，选中表格中的一列。 CSS选择器的出现顺序，必定跟构建 DOM 树的顺序一致。这是一个 CSS 设计的原则，即保证选择器在 DOM 树构建到当前节点时，已经可以准确判断是否匹配，不需要后续节点信息。这就决定未来也不可能会出现“父元素选择器”这种东西，因为父元素选择器要求根据当前节点的子节点，来判断当前节点是否被选中，而父节点会先于子节点构建。]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>浏览器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端6 - 浏览器部分-工作流程-http请求]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF6-%E6%B5%8F%E8%A7%88%E5%99%A8%E9%83%A8%E5%88%86-%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B-http%E8%AF%B7%E6%B1%82%2F</url>
+    <content type="text"><![CDATA[总流程一个 URL 变成一个屏幕上显示的网页的流程如下： 浏览器首先使用 HTTP 协议或者 HTTPS 协议，向服务端请求页面； 把请求回来的 HTML 代码经过解析，构建成 DOM 树； 计算 DOM 树上的 CSS 属性； 最后根据 CSS 属性对元素逐个进行渲染，得到内存中的位图； 一个可选的步骤是对位图进行合成，这会极大地增加后续绘制的速度； 合成之后，再绘制到界面上。 从 HTTP 请求回来，就产生了流式的数据，后续的 DOM 树构建、CSS 计算、渲染、合成、绘制，都是尽可能地流式处理前一步的产出：即不需要等到上一步骤完全结束，就开始处理上一步的输出，这样我们在浏览网页时，才会看到逐步出现的页面。 网络协议七层结构为了使不同计算机厂家生产的计算机能够相互通信，以便在更大的范围内建立计算机网络，国际标准化组织（ISO）在1978年提出了“开放系统互联参考模型”，即著名的OSI/RM模型。它将计算机网络体系结构的通信协议划分为七层。 四层结构但是由于OSI参考模型的过于庞大、复杂，所以出现了其他模型：TCP/IP协议栈是美国国防部高级研究计划局计算机网和其后继因特网使用的参考模型，并最终成为应用最广泛的模型。 五层结构五层结构只是OSI和TCP/IP的综合，实际应用还是TCP/IP的四层结构。为了方便可以把下两层称为网络接口层。 对比图 HTTP 协议因特网本身是基于TCP/IP模型的。用网络术语来说的话，HTTP(超文本传输协议)协议位于TCP的上层，是属于应用层的协议。HTTP 是纯粹的文本协议，它是规定了使用 TCP 协议来传输文本格式的一个应用层协议。HTTP协议大致分为以下部分： 1 请求方法http请求方法标识此次 HTTP 请求希望执行的操作类型。方法有以下几种定义： GET POST HEAD PUT 5DELECT CONNECT OPTIONS TRACE 浏览器通过地址栏访问页面都是 GET 方法。表单提交产生 POST 方法。 HEAD 则是跟 GET 类似，只返回请求头，多数由 JavaScript 发起。 PUT 和 DELETE 分别表示添加资源和删除资源，但是实际上这只是语义上的一种约定，并没有强约束。 CONNECT 现在多用于 HTTPS 和 WebSocket。 PUT 和 DELETE 分别表示添加资源和删除资源，但是实际上这只是语义上的一种约定，并没有强约束。 OPTIONS 和 TRACE 一般用于调试，多数线上服务都不支持。 2 状态码 对我们前端来说，1xx 系列的状态码是非常陌生的，原因是 1xx 的状态被浏览器 http 库直接处理掉了，不会让上层应用知晓。 2xx 系列的状态最熟悉的就是 200，这通常是网页请求成功的标志，也是大家最喜欢的状态码。 3xx 系列比较复杂，301 和 302 两个状态表示当前资源已经被转移，只不过一个是永久性转移，一个是临时性转移。实际上 301 更接近于一种报错，提示客户端下次别来了。304 又是一个每个前端必知必会的状态，产生这个状态的前提是：客户端本地已经有缓存的版本，并且在 Request 中告诉了服务端，当服务端通过时间或者 tag，发现没有更新的时候，就会返回一个不含 body 的 304 状态。 3 HTTP 头HTTP 头可以看作一个键值对。 先来看看 Request Header: 接下来看一下 Response Header: 4 HTTP Request Bodyhttp 请求的 body 是比较自由的，只要浏览器端发送的 body 服务端认可就可以了。一些常见的 body 格式是： application/json application/x-www-form-urlencoded multipart/form-data text/xml 我们使用 html 的 form 标签提交产生的 html 请求，默认会产生 application/x-www-form-urlencoded 的数据格式，当有文件上传时，则会使用 multipart/form-data。 5 HTTPSHTTPS 有两个作用，一是确定请求的目标服务端身份，二是保证传输的数据不会被网络中间节点窃听或者篡改。 HTTPS 是使用加密通道来传输 HTTP 的内容。但是 HTTPS 首先与服务端建立一条 TLS 加密通道。TLS 构建于 TCP 协议之上，它实际上是对传输的内容做一次加密，所以从传输内容上看，HTTPS 跟 HTTP 没有任何区别。 6 HTTP 2HTTP 2.0 最大的改进有两点，一是支持服务端推送，二是支持 TCP 连接复用。HTTP1.X的连接无法复用，这就会导致每次请求都经历三次握手和慢启动。 参考 一文读懂HTTP/2 及 HTTP/3特性]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>浏览器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端5 - CSS部分-@规则]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF5-CSS%E9%83%A8%E5%88%86-%40%E8%A7%84%E5%88%99%2F</url>
+    <content type="text"><![CDATA[css 规则CSS 的顶层样式表由两种规则组成的规则列表构成，一种被称为 at-rule，也就是 at 规则，另一种是 qualified rule，也就是普通规则。 at-ruleat-rule 由一个 @ 关键字和后续的一个区块组成，如果没有区块，则以分号结束。这些 at-rule 在开发中使用机会远远小于普通的规则，所以它的大部分内容，你可能会感觉很陌生。但是at 规则又是掌握 CSS 的一些高级特性所必须的内容。 @charset@charset 用于提示 CSS 文件使用的字符编码方式，它如果被使用，必须出现在最前面。这个规则只在给出语法解析阶段前使用，并不影响页面上的展示效果。 @charset &quot;utf-8&quot;; @import@import 用于引入一个 CSS 文件，除了 @charset 规则不会被引入，@import 可以引入另一个文件的全部内容。 @import &quot;mystyle.css&quot;; @import url(&quot;mystyle.css&quot;); @mediamedia 就是大名鼎鼎的 media query 使用的规则了，它能够对设备的类型进行一些判断。在 media 的区块内，是普通规则列表。 @media print { body { font-size: 10pt } } @page@page 规则用于在打印文档时修改某些CSS属性。页面是一种特殊的盒模型结构，除了页面本身，还可以设置它周围的盒。 @page:first{margin:100px;} ####@ counter-style @ key-frameskeyframes 产生一种数据，用于定义动画关键帧。 @keyframes diagonal-slide { from { left: 0; top: 0; } to { left: 100px; top: 100px; } } @fontfacefontface 用于定义一种字体，icon font 技术就是利用这个特性来实现的。 @font-face { font-family: Gentium; src: url(http://example.com/fonts/Gentium.woff); } p { font-family: Gentium, serif; } @supportsupport 检查环境的特性，它与 media 比较类似。 @namespace用于跟 XML 命名空间配合的一个规则，表示内部的 CSS 选择器全都带上特定命名空间。 @viewport用于设置视口的一些特性，不过兼容性目前不是很好，多数时候被 html 的 meta 代替。 其他除了以上这些，还有些目前不太推荐使用的 at 规则。 @color-profile 是 SVG1.0 引入的 CSS 特性，但是实现状况不怎么好。 @document 还没讨论清楚，被推迟到了 CSS4 中。 @font-feature-values 普通规则普通主要是由选择器和声明区块构成。声明区块又由属性和值构成： 选择器 声明列表 属性 值 值的类型 函数 选择器 complex-selector（复合选择器） combinator(组合器) 空格 + ~ || compound-selector(复合选择器) type-selector(类型选择器) subclass-selector（子类选择器） id class attribute pseudo-class(伪类) pseudo-element(伪元素) 知识点补充：css组合器 空格，后代选择器，选中它的子节点和所有子节点的后代节点。 div p{ color: red; } &lt;div&gt; &lt;p&gt;我是红色&lt;/p&gt; &lt;p&gt;我是红色&lt;/p&gt; &lt;section&gt;&lt;p&gt;我也是红色&lt;/p&gt;&lt;/section&gt; &lt;/div&gt; > ,子代选择器，选中它的子节点，只选中符合条件的子节点，不包含后代节点 div &gt; p{ color: red; } &lt;div&gt; &lt;p&gt;我是红色&lt;/p&gt; &lt;p&gt;我是红色&lt;/p&gt; &lt;section&gt;&lt;p&gt;我不是&lt;/p&gt;&lt;/section&gt; &lt;/div&gt; + ,直接后继选择器，选中它的下一个相邻节点。 div + p{ color: red; } div&gt; &lt;p&gt;我不是&lt;/p&gt; &lt;p&gt;我不是&lt;/p&gt; &lt;section&gt;&lt;p&gt;我不是&lt;/p&gt;&lt;/section&gt; &lt;/div&gt; &lt;p&gt;我是红色&lt;/p&gt; &lt;p&gt;我不是&lt;/p&gt; &lt;section&gt;&lt;p&gt;我不是&lt;/p&gt;&lt;/section&gt; ~ ,后继选择器，选中它之后所有的相邻节点。 div ~ p{ color: red; } &lt;div&gt; &lt;p&gt;我不是&lt;/p&gt; &lt;p&gt;我不是&lt;/p&gt; &lt;section&gt;&lt;p&gt;我不是&lt;/p&gt;&lt;/section&gt; &lt;/div&gt; &lt;p&gt;我是红色&lt;/p&gt; &lt;p&gt;我是红色&lt;/p&gt; &lt;section&gt;&lt;p&gt;我不是&lt;/p&gt;&lt;/section&gt; ||：列，选中表格中的一列。不太重要，可以忽略 声明：属性和值声明部分是一个由“属性: 值”组成的序列： 属性是由中划线、下划线、字母等组成的标识符，CSS 还支持使用反斜杠转义。我们需要注意的是：属性不允许使用连续的两个中划线开头，这样的属性会被认为是 CSS 变量。 //以双中划线开头的属性被当作变量，与之配合的则是 var 函数 :root { --main-color: #06c; --accent-color: #006; } /* The rest of the CSS file */ #foo h1 { color: var(--main-color); } 值：根据每个 CSS 属性可以取到不同的值，这里的值可能是字符串、标识符。 CSS 属性值可能是以下类型。 CSS 范围的关键字：initial，unset，inherit，任何属性都可以的关键字。 字符串：比如 content 属性。 URL：使用 url() 函数的 URL 值。 整数 / 实数：比如 flex 属性。 维度：单位的整数 / 实数，比如 width 属性。 百分比：大部分维度都支持。 颜色：比如 background-color 属性。 图片：比如 background-image 属性。 2D 位置：比如 background-position 属性。 函数：来自函数的值，比如 transform 属性。 CSS 支持一批特定的计算型函数： 1. 图片 filter blur() brightness() contrast() drop-shadow() grayscale() hue_rotate() invert() opacity() saturate() sepia() cross-fade() element() image-set() imagefunction() 2. 图形绘制 conic-gradient() linear-gradient() radial-gradient() repeating-linear-gradient() repeating-radial-gradient() shape() 3. 布局 calc() clamp() fit-content() max() min() minmax() repeat() 4. 变形/动画 transform matrix() matrix3d() perspective() rotate() rotate3d() rotateX() rotateY() rotateZ() scale() scale3d() scaleX() scaleY() scaleZ() skew() skewX() skewY() translate() translate3d() translateX() translateY() translateZ() 5. 环境与元素 var() env() attr()]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>css</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端4 - JavaScript部分-对象]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF4-JavaScript%E9%83%A8%E5%88%86-%E5%AF%B9%E8%B1%A1%2F</url>
+    <content type="text"><![CDATA[第一部分 面向对象与基于对象1. 什么是面向对象Object（对象）在英文中，是一切事物的总称，这和面向对象编程的抽象思维有互通之处。 在《面向对象分析与设计》这本书中，Grady Booch 替我们做了总结，他认为，从人类的认知角度来说，对象应该是下列事物之一： 一个可以触摸或者可以看见的东西； 人的智力可以理解的东西； 可以指导思考或行动（进行想象或施加动作）的东西。 有了对象的自然定义后，我们就可以描述编程语言中的对象了。在不同的编程语言中，设计者也利用各种不同的语言特性来抽象描述对象，最为成功的流派是使用“类”的方式来描述对象，这诞生了诸如 C++、Java 等流行的编程语言。而 JavaScript 早年却选择了一个更为冷门的方式：原型。 2. JavaScript对象的特征 对象具有唯一标识性：即使完全相同的两个对象，也并非同一个对象。 对象有状态：对象具有状态，同一对象可能处于不同状态之下。 对象具有行为：即对象的状态，可能因为它的行为产生变迁。 我们先来看第一个特征，对象具有唯一标识性。一般而言，各种语言的对象唯一标识性都是用内存地址来体现的， 对象具有唯一标识的内存地址，所以具有唯一的标识。 关于对象的第二个和第三个特征“状态和行为”，不同语言会使用不同的术语来抽象描述它们，比如 C++ 中称它们为“成员变量”和“成员函数”，Java 中则称它们为“属性”和“方法”。 在 JavaScript 中，将状态和行为统一抽象为“属性”，考虑到 JavaScript 中将函数设计成一种特殊对象，所以 JavaScript 中的行为和状态都能用属性来抽象。 var o = { d: 1, f() { console.log(this.d); } }; //o 是对象，d 是一个属性，而函数 f 也是一个属性。 在实现了对象基本特征的基础上, winter认为，JavaScript 中对象独有的特色是：对象具有高度的动态性，这是因为 JavaScript 赋予了使用者在运行时为对象添改状态和行为的能力。 var o = { a: 1 }; o.b = 2; console.log(o.a, o.b); //1 2 JavaScript 允许运行时向对象添加属性，这就跟绝大多数基于类的、静态的对象设计完全不同(如Java)。 3. JavaScript 对象的两类属性数据属性。它比较接近于其它语言的属性概念。数据属性具有四个特征: value：就是属性的值。 writable：决定属性能否被赋值。 enumerable：决定 for in 能否枚举该属性。 configurable：决定该属性能否被删除或者改变特征值。 在大多数情况下，我们只关心数据属性的值即可。我们可以使用Object.defineProperty来定义属性： var o = { a: 1 }; Object.defineProperty(o, &quot;b&quot;, { value: 2, writable: false, enumerable: false, configurable: true }); //a 和 b 都是数据属性，但特征值变化了 Object.getOwnPropertyDescriptor(o, &quot;a&quot;); // {value: 1, writable: true, enumerable: true, configurable: true} Object.getOwnPropertyDescriptor(o, &quot;b&quot;); // {value: 2, writable: false, enumerable: false, configurable: true} o.b = 3; console.log(o.b); // 2，b的值不会发生变化 访问器（getter/setter）属性，访问器属性也有四个特征: getter：函数或 undefined，在取属性值时被调用。 setter：函数或 undefined，在设置属性值时被调用。 enumerable：决定 for in 能否枚举该属性。 configurable：决定该属性能否被删除或者改变特征值。 访问器属性使得属性在读和写时执行代码，它允许使用者在写和读属性时，得到完全不同的值，它可以视为一种函数的语法糖。 const k={ get age(){ console.log(&quot;get&quot;) return 5 }, set age(val){ console.log(&quot;set:&quot;+val) } } k.age=2;// set:2 k.age;// 5 访问器属性跟数据属性不同，每次访问属性都会执行 getter 或者 setter 函数。 4. 结束语实际上 JavaScript 对象的运行时是一个“属性的集合”，属性以字符串或者 Symbol 为 key，以数据属性特征值或者访问器属性特征值为 value。 第二部分 原型与类1. 基于类和基于原型的差异第一部分提到过：在不同的编程语言中，设计者也利用各种不同的语言特性来抽象描述对象： 最为成功的流派是使用“类”的方式来描述对象，这诞生了诸如 C++、Java 等流行的编程语言。这个流派叫做基于类的编程语言。 还有一种就是基于原型的编程语言，它们利用原型来描述对象。我们的 JavaScript 就是其中代表。 “基于类”的编程提倡使用一个关注分类和类之间关系开发模型。在这类语言中，总是先有类，再从类去实例化一个对象。类与类之间又可能会形成继承、组合等关系。类又往往与语言的类型系统整合，形成一定编译时的能力。 而“基于原型”的编程看起来更为提倡程序员去关注一系列对象实例的行为，而后才去关心如何将这些对象，划分到最近的使用方式相似的原型对象，而不是将它们分成类。 JavaScript 并非第一个使用原型的语言，在它之前，self、kevo 等语言已经开始使用原型来描述对象了。原型系统的“复制操作”有两种实现思路： 一个是并不真的去复制一个原型对象，而是使得新对象持有一个原型的引用； 另一个是切实地复制对象，从此两个对象再无关联。 显然JavaScript选择的是第一种方案。 2. JavaScript的原型原型系统可以说相当简单，可以用两条概括： 如果所有对象都有私有字段 [[prototype]]，就是对象的原型； 读一个属性，如果对象本身没有，则会继续访问对象的原型，直到原型为空或者找到为止。 这个模型在ES的各个版本中并没有很大改变，但在ES6中提供了一系列的内置函数，可以更直接的访问操作原型。三个方法分别是： Object.create 根据指定的原型创建新对象，原型可以是 null； //关于Object.create的补充 ECMAScript 5 通过新增 Object.create() 方法规范化了原型式继承。 这个方法接收两个参数：一个用作新对象原型的对象和（可选的）一个为新对象定义额外属性的对象。 在传入一个参数的情况下，Object.create() 与 object() 方法的行为相同。 //object 方法如下： function object(o){ function F(){} F.prototype = o; return new F(); } Object.getPrototypeOf 获得一个对象的原型； Object.setPrototypeOf 设置一个对象的原型。 利用这三个方法，可以安全抛开类的思想，利用原型链来实现抽象和复用： var cat = { say(){ console.log(&quot;meow~&quot;); }, jump(){ console.log(&quot;jump&quot;); } } var tiger = Object.create(cat, { say:{ writable:true, configurable:true, enumerable:true, value:function(){ console.log(&quot;roar!&quot;); } } }) var anotherCat = Object.create(cat); anotherCat.say();//&quot;meow~&quot; var anotherTiger = Object.create(tiger); anotherTiger.say();//&quot;roar!&quot; 3. 早期版本中的类与原型在早期版本的 JavaScript 中，“类”的定义是一个私有属性 [[class]]，语言标准为内置类型诸如 Number、String、Date 等指定了 [[class]] 属性，以表示它们的类。语言使用者唯一可以访问 [[class]] 属性的方式是 Object.prototype.toString。 var o = new Object; var n = new Number; var s = new String; var b = new Boolean; var d = new Date; var arg = function(){ return arguments }(); var r = new RegExp; var f = new Function; var arr = new Array; var e = new Error; console.log([o, n, s, b, d, arg, r, f, arr, e].map(v =&gt; Object.prototype.toString.call(v))); //运行结果： //[&quot;[object Object]&quot;, &quot;[object Number]&quot;, &quot;[object String]&quot;, &quot;[object Boolean]&quot;, &quot;[object Date]&quot;, &quot;[object Arguments]&quot;, &quot;[object RegExp]&quot;, &quot;[object Function]&quot;, &quot;[object Array]&quot;, &quot;[object Error]&quot;] 在 ES3 和之前的版本，JS 中类的概念是相当弱的，它仅仅是运行时的一个字符串属性。在 ES5 开始，[[class]] 私有属性被 Symbol.toStringTag 代替，Object.prototype.toString 的意义从命名上不再跟 class 相关。我们甚至可以自定义 Object.prototype.toString 的行为: var o = { [Symbol.toStringTag]: &quot;MyObject&quot; }; console.log(Object.prototype.toString.call(o));//[object MyObject] console.log(o + &quot;&quot;);//[object MyObject] 对于Object类型,如果toString方法没有被改写过（如Number类型），通过加法也可以触发； 对于new运算符：它接受一个构造器和一组调用参数，实际上做了几件事： 以构造器的 prototype 属性（注意与私有字段 [[prototype]] 的区分）为原型，创建新对象； 将 this 和调用参数传给构造器，执行； 如果构造器返回的是对象，则返回，否则返回第一步创建的对象。 没有 Object.create、Object.setPrototypeOf 的早期版本中，new 运算是唯一一个可以指定 [[prototype]] 的方法，我们甚至可以用它来实现一个 Object.create 的不完整的 pollyfill，见以下代码（同上面object方法）： function object(o){ function F(){} F.prototype = o; return new F(); } 但是这个函数无法做到与原生的 Object.create 一致，一个是不支持第二个参数，另一个是不支持 null 作为原型，所以意义已经不大了。 4. ES6中的类与原型ES6 中加入了新特性 class，new 跟 function 搭配的怪异行为终于可以退休了。在任何场景，推荐使用 ES6 的语法来定义类，而令 function 回归原本的函数语义。 同时，ES6 中引入了 class 关键字，并且在标准中删除了所有 [[class]] 相关的私有属性描述，类的概念正式从属性升级成语言的基础设施，从此，基于类的编程方式成为了 JavaScript 的官方编程范式。 此外，最重要的是，类提供了继承能力（extends） 第三部分 JavaScript对象分类1. 分类我们可以把对象分为以下种类： 宿主对象（host Objects）：由 JavaScript 宿主环境提供的对象，它们的行为完全由宿主环境决定。 内置对象（Built-in Objects）：由 JavaScript 语言提供的对象 固有对象（Intrinsic Objects ）：由标准规定，随着 JavaScript 运行时创建而自动创建的对象实例。 原生对象（Native Objects）：可以由用户通过 Array、RegExp 等内置构造器或者特殊语法创建的对象。 普通对象（Ordinary Objects）：由{}语法、Object 构造器或者 class 关键字定义类创建的对象，它能够被原型继承。 这里主要介绍处理普通对象之外的其他对象 2 宿主对象JavaScript 宿主对象千奇百怪，但是前端最熟悉的无疑是浏览器环境中的宿主了。浏览器对象中有一个window全局对象，实际上，这个全局对象 window 上的属性，一部分来自 JavaScript 语言，一部分来自浏览器环境。 宿主对象也分为固有的和用户可创建的两种，比如 document.createElement 就可以创建一些 dom 对象。 宿主也会提供一些构造器，比如我们可以使用 new Image 来创建 img 元素，这些我们会在浏览器的 API 部分详细讲解。 3 内置对象-固有对象固有对象是由标准规定，随着 JavaScript 运行时创建而自动创建的对象实例。 可以点击这个链接查看固有对象。 4 内置对象-原生对象我们把 JavaScript 中，能够通过语言本身的构造器创建的对象称作原生对象。在 JavaScript 标准中，提供了 30 多个构造器。按照winter的理解，按照不同应用场景，可以把原生对象分成了以下几个种类： 通过这些构造器，我们可以用 new 运算创建新的对象，所以我们把这些对象称作原生对象。几乎所有这些构造器的能力都是无法用纯 JavaScript 代码实现的，它们也无法用 class/extend 语法来继承（作者说的不能继承是指无法完全一模一样，只能继承部分方法，具体可以参见原生构造函数的继承） 5 特殊行为的对象除了上面介绍的对象之外，在固有对象和原生对象中，有一些对象的行为跟正常对象有很大区别。 Array：Array 的 length 属性根据最大的下标自动发生变化。 Object.prototype：作为所有正常对象的默认原型，不能再给它设置原型了。 String：为了支持下标运算，String 的正整数属性访问会去字符串里查找。 Arguments：arguments 的非负整数型下标属性跟对应的变量联动。 模块的 namespace 对象：特殊的地方非常多，跟一般对象完全不一样，尽量只用于 import 吧。 类型数组和数组缓冲区：跟内存块相关联，下标运算比较特殊。 bind 后的 function：跟原来的函数相关联。 6 用对象来模拟函数与构造器：函数对象与构造器对象在 JavaScript 中，还有一个看待对象的不同视角，这就是用对象来模拟函数和构造器。 函数对象的定义是：具有 [[call]] 私有字段的对象; 构造器对象的定义是：具有私有字段 [[construct]] 的对象; 任何对象只需要实现 [[call]]，它就是一个函数对象，可以去作为函数被调用。而如果它能实现 [[construct]]，它就是一个构造器对象，可以作为构造器被调用。 用户用 function 关键字创建的函数必定同时是函数和构造器。不过，它们表现出来的行为效果却并不相同。 对于宿主和内置对象来说，它们实现 [[call]]（作为函数被调用）和 [[construct]]（作为构造器被调用）不总是一致的。比如内置对象 Date 在作为构造器调用时产生新的对象，作为函数时，则产生字符串，见以下代码： console.log(new Date,typeof new Date); // Tue Mar 05 2019 18:09:07 GMT+0800 (中国标准时间) &quot;object&quot; console.log( Date(),typeof Date()); // Tue Mar 05 2019 18:09:07 GMT+0800 (中国标准时间) string 而浏览器宿主环境中，提供的 Image 构造器，则根本不允许被作为函数调用。 console.log(new Image); console.log(Image());// 抛出错误 再比如基本类型（String、Number、Boolean），它们的构造器被当作函数调用，则产生类型转换的效果。 在 ES6 之后 =&gt; 语法创建的函数仅仅是函数，它们无法被当作构造器使用，见以下代码： new (a =&gt; 0) // error 对于用户使用 function 语法或者 Function 构造器创建的对象来说，[[call]] 和 [[construct]] 行为总是相似的，它们执行同一段代码。我们大致可以认为，它们 [[construct]] 的执行过程如下： 以 Object.protoype 为原型创建一个新对象； 以新对象为 this，执行函数的 [[call]]； 如果 [[call]] 的返回值是对象，那么，返回这个对象，否则返回第一步创建的新对象。 这样的规则造成了个有趣的现象，如果我们的构造器返回了一个新的对象，那么 new 创建的新对象就变成了一个构造函数之外完全无法访问的对象，这一定程度上可以实现“私有”。 function cls(){ this.a = 100; return { getValue:() =&gt; this.a } } var o = new cls(); o.getValue(); //100 //a 在外面永远无法访问到 7 JavaScript 全局对象的属性 三个值： Infinity、NaN、undefined。 九个函数： eval、isFinite、isNaN、parseFloat、parseInt、decodeURI、decodeURIComponent、 encodeURI、encodeURIComponent 一些构造器： Array、Date、RegExp、Promise、Proxy、Map、WeakMap、Set、WeapSet、 Function、Boolean、String、Number、Symbol、Object、Error、EvalError、 RangeError、ReferenceError、SyntaxError、TypeError 四个用于当作命名空间的对象： Atomics、JSON、Math、Reflect]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端3 - JavaScript部分-数据类型]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF3-JavaScript%E9%83%A8%E5%88%86-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%2F</url>
+    <content type="text"><![CDATA[概述根据最新的语言标准，js共有七种语言类型： Undefined Null Boolean String Number Object Symbol undefinedUndefined 类型表示未定义，它的类型只有一个值，就是 undefined。任何变量在赋值前是 Undefined 类型、值为 undefined，但是，因为 JavaScript 的代码 undefined 是一个变量，而并非是一个关键字(这是 JavaScript 语言公认的设计失误之一)，在低版本中可以被纂改： var undefinedBackup = undefined; undefined = 1; console.log(typeof undefinedBackup);// 显示&quot;undefined&quot; console.log(typeof undefined);// 在IE5.5~8中显示&quot;number&quot;，其他浏览器中则显示&quot;undefined&quot; 所以，我们为了避免无意中被篡改，我建议使用 void 0 来获取 undefined 值。 nullNull 类型也只有一个值，就是 null，它的语义表示空值，与 undefined 不同，null 表示的是：“定义了但是为空”。同时null 是 JavaScript 关键字，所以在任何代码中，你都可以放心用 null 关键字来获取 null 值。 StringString 用于表示文本数据。String 有最大长度是 2^53 - 1，这在一般开发中都是够用的，但这个所谓最大长度，并不完全是我们理解中的字符数。因为 String 的意义并非“字符串”，而是字符串的 UTF16 编码，我们字符串的操作 charAt、charCodeAt、length 等方法针对的都是 UTF16 编码。所以，字符串的最大长度，实际上是受字符串的编码长度影响的。 Boolean布尔类型有两个值：true和false，其他不做赘述。 NumberJavaScript 中有 +0 和 -0，在加法类运算中它们没有区别，但是除法的场合则需要特别留意区分，“忘记检测除以 -0，而得到负无穷大”的情况经常会导致错误，而区分 +0 和 -0 的方式，正是检测 1/x 是 Infinity 还是 -Infinity。 补充:ES6中增加了Object.is来判断两个数值是否相等（解决正负零和NaN的问题，其他等同于===） +0 === -0 //true NaN === NaN // false Object.is(+0, -0) // false Object.is(NaN, NaN) // true 因为 Number 类型基本符合 IEEE 754-2008 规定的双精度浮点数规则，所以对于浮点数运算会存在精度问题： console.log( 0.1 + 0.2 == 0.3);//false 但是 console.log( 0.3 + 0.2 == 0.5);//true 原因： 1. 因为十进制转二进制的小数部分的原则是乘2取整顺序表达，这边会发现0.1 0.2 0.3这三个数都不能有限表达，会产生无限位数。 2 .固定位数二进制无法表示无限循环序列（截断部分会进行进位或者舍去，这边会产生误差） 那么如何正确比较浮点数： console.log( Math.abs(0.1 + 0.2 - 0.3) &lt;= Number.EPSILON); //true Number.EPSILON表示js的最小精度 SymbolES5 的对象属性名都是字符串，很容易产生冲突。Symbol 是 ES6 中引入的新类型，它是一切非字符串的对象 key 的集合，在 ES6 规范中，整个对象系统被用 Symbol 重塑。 我们创建 Symbol 的方式是使用全局的 Symbol 函数。 ES6 规定，默认的 Iterator 接口部署在数据结构的Symbol.iterator属性上，所以可以通过Symbol.iterator来定义 for..of在对象上的行为。 ObjectObject 是 JavaScript 中最复杂的类型，也是 JavaScript 的核心机制之一。 在 JavaScript 中，对象的定义是“属性的集合”。属性分为数据属性和访问器属性，二者都是 key-value 结构，key 可以是字符串或者 Symbol 类型。 JavaScript 中的几个基本类型，都在对象类型中有一个“亲戚”（包装类型）。它们是： Number,String,Boolean,Symbol： Number、String 和 Boolean，三个构造器是两用的，当跟 new 搭配时，它们产生对象，当直接调用时，它们表示强制类型转换。 new String() instanceof String;//true new String instanceof String;//true, //参见《js高级程序设计》--3.4.7 Object 类型章节，new关键字后面构造函数可以省略括号，但是不推荐 new Boolean() instanceof Boolean;//true new Number() instanceof Number;//true // 补充：String() 和运算符 new 一起作为构造函数使用时，它返回一个新创建的 String 对象,存放的是字符串 s 或 s 的字符串表示。 // 当不用 new 运算符调用 String() 时，它只把 s 转换成原始的字符串，并返回转换后的值 当不用 new 运算符调用 String() 时，它只把 s 转换成原始的字符串，并返回转换后的值 Symbol 函数比较特殊，直接用 new 调用它会抛出错误，但它仍然是 Symbol 对象的构造器。 JavaScript 语言设计上试图模糊对象和基本类型之间的关系，我们日常代码可以把对象的方法在基本类型上使用，比如： console.log(&quot;abc&quot;.charAt(0)); //a 甚至我们在原型上添加方法，都可以应用于基本类型，比如以下代码，在 Symbol 原型上添加了 hello 方法，在任何 Symbol 类型变量都可以调用。 Symbol.prototype.hello = () =&gt; console.log(&quot;hello&quot;); var a = Symbol(&quot;a&quot;); console.log(typeof a); //symbol，a 并非对象 a.hello(); //hello，有效 类型转换 StringToNumberparseInt(&quot;1.1&quot;);//1 parseFloat(&quot;1.1&quot;);//1.1 Math.floor(&quot;1000&quot;);//1000 Math.round(&quot;1000&quot;);//1000 Math.ceil(&quot;1000&quot;);//1000 +&quot;1000&quot;;//1000 &quot;1000&quot;&gt;&gt;&gt;0;//1000 &quot;1000&quot;*1;//1000 Number(&quot;1000);//1000 NumberToString(2.2).toFixed();//&quot;2.2&quot; (2.2).toString();//&quot;2.2&quot; (2.2).toLocaleString();//&quot;2.2&quot; (2.2)+&apos;&apos;;//&quot;2.2&quot; String(2.2);//&quot;2.2&quot; 装箱转换每一种基本类型 Number、String、Boolean、Symbol 在对象中都有对应的类，所谓装箱转换，正是把基本类型转换为对应的对象。.运算符提供了装箱操作。 每一类装箱对象皆有私有的 Class 属性，这些属性可以用 Object.prototype.toString 获取： var symbolObject = Object(Symbol(&quot;a&quot;)); console.log(Object.prototype.toString.call(symbolObject)); //[object Symbol] 它可以准确识别对象对应的基本类型的方法，它比 instanceof 更加准确。 拆箱转换在 JavaScript 标准中，规定了 ToPrimitive 函数，它是对象类型到基本类型的转换（即，拆箱转换）。 对象到 String 和 Number 的转换都遵循“先拆箱再转换”的规则。通过拆箱转换，把对象变成基本类型，再从基本类型转换为对应的 String 或者 Number。 拆箱转换会尝试调用 valueOf 和 toString 来获得拆箱后的基本类型。如果 valueOf 和 toString 都不存在，或者没有返回基本类型，则会产生类型错误 TypeError。 var o = { valueOf : () =&gt; {console.log(&quot;valueOf&quot;); return {}}, toString : () =&gt; {console.log(&quot;toString&quot;); return {}} } o * 2 // valueOf // toString // TypeError 到 String 的拆箱转换会优先调用 toString。我们把刚才的运算从 o*2 换成 o + “”，那么你会看到调用顺序就变了： var o = { valueOf : () =&gt; {console.log(&quot;valueOf&quot;); return {}}, toString : () =&gt; {console.log(&quot;toString&quot;); return {}} } o + &quot;&quot; // toString // valueOf // TypeError 在 ES6 之后，还允许对象通过显式指定 @@toPrimitive Symbol 来覆盖原有的行为。 var o = { valueOf : () =&gt; {console.log(&quot;valueOf&quot;); return {}}, toString : () =&gt; {console.log(&quot;toString&quot;); return {}} } o[Symbol.toPrimitive] = () =&gt; {console.log(&quot;toPrimitive&quot;); return &quot;hello&quot;} console.log(o + &quot;&quot;) // toPrimitive // hello typeof事实上，“类型”在 JavaScript 中是一个有争议的概念。一方面，标准中规定了运行时数据类型； 另一方面，JS 语言中提供了 typeof 这样的运算，用来返回操作数的类型，但 typeof 的运算结果，与运行时类型的规定有很多不一致的地方。我们可以看下表来对照一下。 从一般语言使用者的角度来看，毫无疑问，我们应该按照 typeof 的结果去理解语言的类型系统。但 JS 之父本人也在多个场合表示过，typeof 的设计是有缺陷的，只是现在已经错过了修正它的时机。]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端2 - HTML部分-语义]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF2-HML%E9%83%A8%E5%88%86-%E8%AF%AD%E4%B9%89%2F</url>
+    <content type="text"><![CDATA[1 语义标签html属于标记形语言，标签语义化更接近我们平常说话的自然语言，并没有唯一的标准措辞，语义标签的使用也是一样。 语义化的三个明确的场景： 自然语言表达能力的补充； 文章标题摘要； 适合机器阅读的整体结构 HTML最初的设计场景就是“超文本”，早期HTML工作组的专家都是出版界书籍排版的专家。 实际上，HTML这种语言，并不像严谨的编程语言一样，有一条非此即彼的线。一些语义的使用其实会带来争议，所以我的建议是：你可以尽量只用自己熟悉的语义标签，并且只在有把握的场景引入语义标签。这样，我们才能保证语义标签不被滥用，造成更多的问题。]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>html</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端1 - 前端知识架构图]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF1-%E5%89%8D%E7%AB%AF%E7%9F%A5%E8%AF%86%E6%9E%B6%E6%9E%84%2F</url>
+    <content type="text"><![CDATA[概述对于任何计算机语言来说，必定是“用一定的词法和语法，表达一定语义，从而操作运行时。”的一个过程。而程序 = 算法 + 数据结构。 知识体系 参考文献 文法、语法和词法的解释]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>知识架构图</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[初探electron]]></title>
     <url>%2F%E5%88%9D%E6%8E%A2electron%2F</url>
     <content type="text"><![CDATA[ElectronElectron通过将Chromium和Node.js合并到同一个运行时环境中，并将其打包为Mac，Windows和Linux系统下的应用来实现这一目的。Electron和nwjs其实是一个作者，中间的种种可以访问参考2来查看，很有意思的一件事。 渲染进程和主进程Electron 中，入口是一个 js 文件（和 NW.js 不同，入口是 html 文件），运行这个入口文件（通常会是 package.json 里的 main 脚本）的进程称作主进程，在主进程使用 BrowserWindow 模块可以创建并管理 web 页面，也就是应用的 GUI。 const {BrowserWindow} = require(&apos;electron&apos;) // 主进程创建web页面 let someWindow = new BrowserWindow(winOpts) // 加载本地的文件 someWindow.loadURL(&apos;file://&apos; + __dirname + &apos;/index.html&apos;) 在主进程创建的一个个web页面也都运行着自己的进程，即渲染进程，渲染进程各自独立，各自管理自己的页面，可以想象是浏览器一个个的 tab。 每个 BrowserWindow 实例都在自己的渲染进程里运行页面。 当一个 BrowserWindow 实例被销毁后，相应的渲染进程也会被终止。 进程间的通信Web 页面因为安全限制，不能直接访问原生的GUI资源（比如dialog、电源监控，通知栏等），Electron 中也是一样，渲染进程如果想要进行原生的GUI操作，就必须和主进程通讯，请求相应的GUI操作。 Electron 提供了几种渲染进程和主进程通信的方式： 第一种是使用ipcMain和ipcRenderer模块在渲染进程中使用ipcRender模块向主进程发送消息，主进程中ipcMain接收消息，进行操作，如果还需要反馈，则通知渲染进程，渲染进程根据接收的内容执行相应的操作： // 渲染进程中 const {ipcRenderer} = require(&apos;electron&apos;) ipcRender.send(&apos;somemsg&apos;, data); ipcRender.on(&apos;replaymsg&apos;, (evt, otherData) =&gt; { console.log(otherData) }) // 主进程中 const {ipcMain} = require(&apos;electron&apos;) ipcMain.on(&apos;somemsg&apos;, (evt, data) =&gt; { console.log(data) evt.sender.send(&apos;replymsg&apos;, otherData); }); // 同时Electron 也提供了同步的方式 不过切忌用 ipc 传递大量的数据，会有很大的性能问题，严重会让你整个应用卡住。 第二种是直接在渲染进程使用remote模块remote 模块可以直接获取主进程中的模块。这种方式其实是第一种方式的简化。 // 在渲染进程打开提示对话框 const {dialog} = require(&apos;electron&apos;).remote dialog.showMessageBox({ opts }); 第三种是主进程向渲染进程发送消息this.webviewWindow.webContents.send(&apos;ping&apos;); 第四种是渲染进程之间的通信最简单的方法是使用浏览器中已经实现的 HTML5 API。 其中比较好的方案是用 Storage API， localStorage，sessionStorage 或者 IndexedDB。 你还可以用 Electron 内的 IPC 机制实现。将数据存在主进程的某个全局变量中，然后在多个渲染进程中使用 remote 模块来访问它。 // 在主进程中 global.sharedObject = { someProperty: &apos;default value&apos; }Copy // 在第一个页面中 require(&apos;electron&apos;).remote.getGlobal(&apos;sharedObject&apos;).someProperty = &apos;new value&apos;Copy // 在第二个页面中 console.log(require(&apos;electron&apos;).remote.getGlobal(&apos;sharedObject&apos;).someProperty) Electron + Vue参考electron-vue，但是项目的Electron版本默认是2.x的版本，有点老，升级成了最新版（5.0.1），修改了一些配置，使其可以在高版本正常运行：electron-vue-demo。 但发现一个点，Electron将打包后的代码压缩加密为.asar文件，但是，这个加密文件是可以被解密的，开发electron-vue项目的同一个哥们，同时开源了一个可视化的解密工具：asar-explorer 但打包出来的包依旧有点大，打包后的文件中的node_modules 暂时还未找到合适方案合并到dist/electron/render.js中。 参考 Electron的应用结构 nwjs和Electron的创始人的知乎回答 我眼中的Electron]]></content>

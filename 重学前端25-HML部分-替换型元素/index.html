@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":true,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="script 标签script 标签是为数不多的既可以作为替换型标签，又可以不作为替换型标签的元素。 写法一： &amp;lt;script type=&amp;quot;text/javascript&amp;quot;&amp;gt; console.log(&amp;quot;Hello world!&amp;quot;);     &amp;lt;/script&amp;gt; 写法二： &amp;lt;script type=&amp;quot;text/javas">
+<meta name="keywords" content="html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学前端25 - HML部分-替换型元素">
+<meta property="og:url" content="https://wangminghuan.github.io/重学前端25-HML部分-替换型元素/index.html">
+<meta property="og:site_name" content="WMH&#39;s Blog">
+<meta property="og:description" content="script 标签script 标签是为数不多的既可以作为替换型标签，又可以不作为替换型标签的元素。 写法一： &amp;lt;script type=&amp;quot;text/javascript&amp;quot;&amp;gt; console.log(&amp;quot;Hello world!&amp;quot;);     &amp;lt;/script&amp;gt; 写法二： &amp;lt;script type=&amp;quot;text/javas">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-05-20T10:18:31.328Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重学前端25 - HML部分-替换型元素">
+<meta name="twitter:description" content="script 标签script 标签是为数不多的既可以作为替换型标签，又可以不作为替换型标签的元素。 写法一： &amp;lt;script type=&amp;quot;text/javascript&amp;quot;&amp;gt; console.log(&amp;quot;Hello world!&amp;quot;);     &amp;lt;/script&amp;gt; 写法二： &amp;lt;script type=&amp;quot;text/javas">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://wangminghuan.github.io/重学前端25-HML部分-替换型元素/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>重学前端25 - HML部分-替换型元素 | WMH's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">WMH's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-主页">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>主页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-标签">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-分类">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-归档">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/重学前端25-HML部分-替换型元素/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WMH">
+      <meta itemprop="description" content="just code it">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WMH's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">重学前端25 - HML部分-替换型元素
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-20 17:04:00 / 修改时间：18:18:31" itemprop="dateCreated datePublished" datetime="2019-05-20T17:04:00+08:00">2019-05-20</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/重学前端/" itemprop="url" rel="index"><span itemprop="name">重学前端</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="script-标签"><a href="#script-标签" class="headerlink" title="script 标签"></a>script 标签</h2><p>script 标签是为数不多的既可以作为替换型标签，又可以不作为替换型标签的元素。</p>
+<p>写法一：</p>
+<pre><code>&lt;script type=&quot;text/javascript&quot;&gt;
+console.log(&quot;Hello world!&quot;);    
+&lt;/script&gt;
+</code></pre><p>写法二：</p>
+<pre><code>&lt;script type=&quot;text/javascript&quot; src=&quot;my.js&quot;&gt;&lt;/script&gt;
+</code></pre><p>上述两种写法是等效的，可以发现：<strong>凡是替换型元素，都是使用 src 属性来引用文件的，而链接型元素是使用 href 标签的</strong>  </p>
+<p>但是对于样式来说：style 标签并非替换型元素，不能使用 src 属性，这样，我们用 link 标签引入 CSS 文件，当然就是用 href。<br><a id="more"></a></p>
+<h2 id="img-标签"><a href="#img-标签" class="headerlink" title="img 标签"></a>img 标签</h2><p>我们最熟悉的替换型标签就是 img 标签。它的的作用是引入一张图片。这个标签是没有办法像 script 标签那样作为非替换型标签来使用的，它必须有 src 属性才有意义。   </p>
+<p>如果一定不想要引入独立文件，可以使用 data uri 作为图片的 src，这样，并没有产生独立的文件，客观上做到了和内联相同的结果，这是一个常用的技巧。</p>
+<h3 id="alt-属性"><a href="#alt-属性" class="headerlink" title="alt 属性"></a>alt 属性</h3><p>这个属性很难被普通用户感知，对于视障用户非常重要，可以毫不夸张地讲，给 img 加上 alt 属性，已经做完了可访问性的一半。</p>
+<h3 id="srcset-和-sizes"><a href="#srcset-和-sizes" class="headerlink" title="srcset 和 sizes"></a>srcset 和 sizes</h3><p>img 标签还有一组重要的属性，那就是 srcset 和 sizes，这两个属性的作用是在不同的屏幕大小和特性下，使用不同的图片源：</p>
+<pre><code>&lt;img srcset=&quot;elva-fairy-320w.jpg 320w,
+    elva-fairy-480w.jpg 480w,
+    elva-fairy-800w.jpg 800w&quot;
+  sizes=&quot;(max-width: 320px) 280px,
+   (max-width: 480px) 440px,
+   800px&quot;
+ src=&quot;elva-fairy-800w.jpg&quot; alt=&quot;Elva dressed as a fairy&quot;&gt;
+</code></pre><p>在不同的屏幕尺寸从1000到200缩小的过程中会依次加载：<code>elva-fairy-800w.jpg, elva-fairy-480w.jpg, elva-fairy-320w.jpg</code>。  </p>
+<p>但是其实更好的做法，是使用 picture 元素。</p>
+<h2 id="picture-标签"><a href="#picture-标签" class="headerlink" title="picture 标签"></a>picture 标签</h2><p>picture 元素可以根据屏幕的条件为其中的 img 元素提供不同的源，它的基本用法如下：</p>
+<pre><code>&lt;picture&gt;
+  &lt;source srcset=&quot;https://zuhaowan.zuhaowan.com/v1/channel/img/bg_01.png&quot; media=&quot;(min-width: 600px)&quot;&gt;
+  &lt;source srcset=&quot;https://zuhaowan.zuhaowan.com/v1/channel/img/bg_02.png&quot; media=&quot;(min-width: 300px) and (max-width: 600px)&quot; &gt;
+  &lt;img src=&quot;https://zuhaowan.zuhaowan.com/v1/channel/img/first.png&quot;&gt;
+&lt;/picture&gt;
+</code></pre><p>它跟 img 搭配 srcset 和 sizes 不同，它使用 source 元素来指定图片源，并且支持多个。这里的 media 属性是 media query，跟 CSS 的 @media 规则一致。</p>
+<h2 id="video标签"><a href="#video标签" class="headerlink" title="video标签"></a>video标签</h2><p>在 HTML5 早期的设计中，video 标签跟 img 标签类似，也是使用 src 属性来引入源文件的，不过，考虑到了各家浏览器支持的视频格式不同，现在的 video 标签跟 picture 元素一样，也是提倡使用 source 的。</p>
+<p>早期写法：</p>
+<pre><code>&lt;video controls=&quot;controls&quot; src=&quot;movie.ogg&quot;&gt;&lt;/video&gt;
+</code></pre><p>现代写法：</p>
+<pre><code>&lt;video controls=&quot;controls&quot; &gt;
+  &lt;source src=&quot;movie.webm&quot; type=&quot;video/webm&quot; &gt;
+  &lt;source src=&quot;movie.ogg&quot; type=&quot;video/ogg&quot; &gt;
+  &lt;source src=&quot;movie.mp4&quot; type=&quot;video/mp4&quot;&gt;
+  You browser does not support video.
+&lt;/video&gt;
+</code></pre><p><strong>source 标签除了支持 media 之外，还可以使用 type 来区分源文件的使用场景</strong></p>
+<p>对于更古老的浏览器，还可以在其中加入 object 或者 embed 标签</p>
+<h3 id="video中的trak标签"><a href="#video中的trak标签" class="headerlink" title="video中的trak标签"></a>video中的trak标签</h3><p>track 是一种播放时序相关的标签，它最常见的用途就是字幕。track 标签中，必须使用 srclang 来指定语言，此外，track 具有 kind 属性，共有五种。</p>
+<pre><code>subtitles：就是字幕了，不一定是翻译，也可能是补充性说明
+captions：报幕内容，可能包含演职员表等元信息，适合听障人士或者没有打开声音的人了解音频内容
+descriptions：视频描述信息，适合视障人士或者没有视频播放功能的终端打开视频时了解视频内尔用
+chapters：用于浏览器视频内容。
+metadata：给代码提供的元信息，对普通用户不可见。
+</code></pre><p>一个完整的 video 标签可能会包含多种 track 和多个 source，这些共同构成了一个视频播放所需的全部信息。</p>
+<h2 id="aduio标签"><a href="#aduio标签" class="headerlink" title="aduio标签"></a>aduio标签</h2><p>与picture 和 video 两种标签一样，audio 也可以使用 source 元素来指定源文件：</p>
+<pre><code>&lt;audio controls&gt;
+  &lt;source src=&quot;song.mp3&quot; type=&quot;audio/mpeg&quot;&gt;
+  &lt;source src=&quot;song.ogg&quot; type=&quot;audio/ogg&quot;&gt;
+  &lt;p&gt;You browser does not support audio.&lt;/p&gt;    
+&lt;/audio&gt;
+</code></pre><p>同时也可以使用src属性，且兼容性要比video标签乐观</p>
+<pre><code>&lt;audio controls=&quot;controls&quot; src=&quot;audio.ogg&quot;&gt;&lt;/audio&gt;
+</code></pre><h2 id="iframe标签"><a href="#iframe标签" class="headerlink" title="iframe标签"></a>iframe标签</h2><p>这个标签能够嵌入一个完整的网页：</p>
+<pre><code>&lt;iframe src=&quot;http://time.geekbang.org&quot;&gt;&lt;/iframe&gt;
+</code></pre><p>但同时会带来很多安全问题，html5加入了一些新标准，在新标准中，为 iframe 加入了 sandbox 模式和 srcdoc 属性，这样，给 iframe 带来了一定的新场景：</p>
+<pre><code>&lt;iframe sandbox=&quot;allow-scripts&quot; src=&quot;http://www.b.com/&quot;&gt;&lt;/iframe&gt;
+</code></pre><p>sandbox模式的加入可以解决跨域问题，同时对加载的页面加入各种限制，如是否允许脚本执行，是否允许表单提交等操作。</p>
+<p>sandbox模式下子页面与父页面的交互完全被隔离开，无法进行任何相互操作。</p>
+<h3 id="引申：如何阻止自己的页面被iframe引用"><a href="#引申：如何阻止自己的页面被iframe引用" class="headerlink" title="引申：如何阻止自己的页面被iframe引用"></a>引申：如何阻止自己的页面被iframe引用</h3><h4 id="修改http响应头"><a href="#修改http响应头" class="headerlink" title="修改http响应头"></a>修改http响应头</h4><pre><code>header(‘X-Frame-Options:Deny&apos;);
+</code></pre><p>一劳永逸，非常靠谱</p>
+<h4 id="脚本检测"><a href="#脚本检测" class="headerlink" title="脚本检测"></a>脚本检测</h4><pre><code>try{
+　　top.location.hostname;
+　　if (top.location.hostname != window.location.hostname) {
+　　　　top.location.href =window.location.href;
+　　}
+}catch(e){
+　　top.location.href = window.location.href;
+}
+</code></pre><p>代码解释：  </p>
+<p>top 对象始终指向最高（最外）层的框架:</p>
+<pre><code>top===window.top
+</code></pre><p>在某些情况下，window.parent 有可能等于 top;  </p>
+<p>但在没有框架的情况下，parent 一定等于top （此时它们都等于 window ）:</p>
+<pre><code>window.parent===top
+window.parent===window.top
+</code></pre><p>被嵌套时，如果跨域，子页面执行 top.location.hostname会被block，进入catch逻辑；</p>
+<p>如何主域相同，子域不同，可以在父页面和子页面都设置相同的<code>docum.domain</code>来解决跨域；</p>
+<p>此时代码就会进入try逻辑，判断后发现hostname不一致，然后有进行了跳转；</p>
+<p>但如果对方采用sandbox模式，且不允许js执行的话，该方法会失效；</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ol>
+<li><a href="http://www.w3school.com.cn/tags/tag_iframe.asp" target="_blank" rel="noopener">HTML5 iframe标签新属性</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/X-Frame-Options" target="_blank" rel="noopener">X-Frame-Options</a></li>
+<li><a href="https://www.cnblogs.com/boystar/p/6909214.html" target="_blank" rel="noopener">iFrame跨域解决办法</a></li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/html/" rel="tag"># html</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/重学前端18-CSS部分-文档流/" rel="next" title="重学前端18 - CSS部分-文档流">
+                <i class="fa fa-chevron-left"></i> 重学前端18 - CSS部分-文档流
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/重学前端26-浏览器部分-捕获和冒泡/" rel="prev" title="重学前端26 - 浏览器部分-捕获和冒泡">
+                重学前端26 - 浏览器部分-捕获和冒泡 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="WMH">
+            
+              <p class="site-author-name" itemprop="name">WMH</p>
+              <div class="site-description motion-element" itemprop="description">just code it</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wangminghuan" title="GitHub &rarr; https://github.com/wangminghuan" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:m.h.wang@foxmail.com" title="E-Mail &rarr; mailto:m.h.wang@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="http://www.mhwang.club:3000" title="WebSite &rarr; http://www.mhwang.club:3000" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>WebSite</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://weibo.com/u/1657970003?topnav=1&wvr=6&topsug=1&is_all=1" title="微博 &rarr; https://weibo.com/u/1657970003?topnav=1&wvr=6&topsug=1&is_all=1" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>微博</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#script-标签"><span class="nav-number">1.</span> <span class="nav-text">script 标签</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#img-标签"><span class="nav-number">2.</span> <span class="nav-text">img 标签</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#alt-属性"><span class="nav-number">2.1.</span> <span class="nav-text">alt 属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#srcset-和-sizes"><span class="nav-number">2.2.</span> <span class="nav-text">srcset 和 sizes</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#picture-标签"><span class="nav-number">3.</span> <span class="nav-text">picture 标签</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#video标签"><span class="nav-number">4.</span> <span class="nav-text">video标签</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#video中的trak标签"><span class="nav-number">4.1.</span> <span class="nav-text">video中的trak标签</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#aduio标签"><span class="nav-number">5.</span> <span class="nav-text">aduio标签</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iframe标签"><span class="nav-number">6.</span> <span class="nav-text">iframe标签</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#引申：如何阻止自己的页面被iframe引用"><span class="nav-number">6.1.</span> <span class="nav-text">引申：如何阻止自己的页面被iframe引用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#修改http响应头"><span class="nav-number">6.1.1.</span> <span class="nav-text">修改http响应头</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#脚本检测"><span class="nav-number">6.1.2.</span> <span class="nav-text">脚本检测</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文章"><span class="nav-number">7.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMH</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.1</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.1"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.1"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
