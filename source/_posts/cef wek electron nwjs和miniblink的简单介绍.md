@@ -95,3 +95,4 @@ Blink 其实是 WebKit 的分支，如同 WebKit 是 KHTML 的分支一样，Goo
 5. [全面了解浏览器（内核）发展史](https://www.jianshu.com/p/db1b230e3415)
 6. [浏览器野史 UserAgent列传](http://litten.me/2014/09/26/history-of-browser-useragent/)
 7. [主流浏览器内核及JS引擎](https://juejin.im/post/5ada727c518825670b33a584)
+8. [维护一个大型开源项目是怎样的体验?](https://www.zhihu.com/question/36292298)
