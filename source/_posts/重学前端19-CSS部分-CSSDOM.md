@@ -11,7 +11,7 @@ categories: 重学前端
 
 document 的 styleSheets 属性表示文档中的所有样式表，这是一个只读的列表，我们可以用方括号运算符下标访问样式表，也可以使用 item 方法来访问，它有 length 属性表示文档中的样式表数量。
 
-![](重学前端19-CSS部分-CSSDOM/19-1.png)
+重学前端19-CSS部分-CSSDOM
 <!-- more -->
 ### 操作
 
