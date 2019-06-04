@@ -96,18 +96,20 @@
 
 
 
-  <meta name="description" content="script 标签script 标签是为数不多的既可以作为替换型标签，又可以不作为替换型标签的元素。 写法一： &amp;lt;script type=&amp;quot;text/javascript&amp;quot;&amp;gt; console.log(&amp;quot;Hello world!&amp;quot;);     &amp;lt;/script&amp;gt; 写法二： &amp;lt;script type=&amp;quot;text/javas">
-<meta name="keywords" content="html">
+  <meta name="description" content="概述最常见的颜色相关的属性就是 color 和 backgroud-color。css中颜色表示有一下几种方式：    属性 版本 继承性 简介     HEX CSS1 无 CSS颜色值十六进制(HEX)表示,语法如：#rrggbb或#rgb   RGB CSS2 无 CSS2 颜色 RGB表示方式   RGBA CSS3 无 CSS3 颜色值RGBA表示方式   HSL CSS3 无 CSS3">
+<meta name="keywords" content="css">
 <meta property="og:type" content="article">
-<meta property="og:title" content="重学前端25 - HML部分-替换型元素">
-<meta property="og:url" content="https://wangminghuan.github.io/重学前端25-HML部分-替换型元素/index.html">
+<meta property="og:title" content="重学前端30-CSS部分-CSS颜色的绘制">
+<meta property="og:url" content="https://wangminghuan.github.io/重学前端30-CSS部分-CSS颜色的绘制/index.html">
 <meta property="og:site_name" content="WMH&#39;s Blog">
-<meta property="og:description" content="script 标签script 标签是为数不多的既可以作为替换型标签，又可以不作为替换型标签的元素。 写法一： &amp;lt;script type=&amp;quot;text/javascript&amp;quot;&amp;gt; console.log(&amp;quot;Hello world!&amp;quot;);     &amp;lt;/script&amp;gt; 写法二： &amp;lt;script type=&amp;quot;text/javas">
+<meta property="og:description" content="概述最常见的颜色相关的属性就是 color 和 backgroud-color。css中颜色表示有一下几种方式：    属性 版本 继承性 简介     HEX CSS1 无 CSS颜色值十六进制(HEX)表示,语法如：#rrggbb或#rgb   RGB CSS2 无 CSS2 颜色 RGB表示方式   RGBA CSS3 无 CSS3 颜色值RGBA表示方式   HSL CSS3 无 CSS3">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-05-20T10:18:31.328Z">
+<meta property="og:image" content="https://wangminghuan.github.io/重学前端30-CSS部分-CSS颜色的绘制/30-1.png">
+<meta property="og:updated_time" content="2019-06-04T10:35:25.131Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="重学前端25 - HML部分-替换型元素">
-<meta name="twitter:description" content="script 标签script 标签是为数不多的既可以作为替换型标签，又可以不作为替换型标签的元素。 写法一： &amp;lt;script type=&amp;quot;text/javascript&amp;quot;&amp;gt; console.log(&amp;quot;Hello world!&amp;quot;);     &amp;lt;/script&amp;gt; 写法二： &amp;lt;script type=&amp;quot;text/javas">
+<meta name="twitter:title" content="重学前端30-CSS部分-CSS颜色的绘制">
+<meta name="twitter:description" content="概述最常见的颜色相关的属性就是 color 和 backgroud-color。css中颜色表示有一下几种方式：    属性 版本 继承性 简介     HEX CSS1 无 CSS颜色值十六进制(HEX)表示,语法如：#rrggbb或#rgb   RGB CSS2 无 CSS2 颜色 RGB表示方式   RGBA CSS3 无 CSS3 颜色值RGBA表示方式   HSL CSS3 无 CSS3">
+<meta name="twitter:image" content="https://wangminghuan.github.io/重学前端30-CSS部分-CSS颜色的绘制/30-1.png">
 
 
 
@@ -115,7 +117,7 @@
 
   
   
-  <link rel="canonical" href="https://wangminghuan.github.io/重学前端25-HML部分-替换型元素/">
+  <link rel="canonical" href="https://wangminghuan.github.io/重学前端30-CSS部分-CSS颜色的绘制/">
 
 
 
@@ -125,7 +127,7 @@
   };
 </script>
 
-  <title>重学前端25 - HML部分-替换型元素 | WMH's Blog</title>
+  <title>重学前端30-CSS部分-CSS颜色的绘制 | WMH's Blog</title>
   
 
 
@@ -353,7 +355,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/重学前端25-HML部分-替换型元素/">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/重学前端30-CSS部分-CSS颜色的绘制/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WMH">
@@ -370,7 +372,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">重学前端25 - HML部分-替换型元素
+          <h1 class="post-title" itemprop="name headline">重学前端30-CSS部分-CSS颜色的绘制
 
               
             
@@ -396,12 +398,24 @@
                 
               
 
-              <time title="创建时间：2019-05-20 17:04:00 / 修改时间：18:18:31" itemprop="dateCreated datePublished" datetime="2019-05-20T17:04:00+08:00">2019-05-20</time>
+              <time title="创建时间：2019-05-29 17:24:01" itemprop="dateCreated datePublished" datetime="2019-05-29T17:24:01+08:00">2019-05-29</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-06-04 18:35:25" itemprop="dateModified" datetime="2019-06-04T18:35:25+08:00">2019-06-04</time>
               
             
           </span>
@@ -460,93 +474,114 @@
       
 
       
-        <h2 id="script-标签"><a href="#script-标签" class="headerlink" title="script 标签"></a>script 标签</h2><p>script 标签是为数不多的既可以作为替换型标签，又可以不作为替换型标签的元素。</p>
-<p>写法一：</p>
-<pre><code>&lt;script type=&quot;text/javascript&quot;&gt;
-console.log(&quot;Hello world!&quot;);    
-&lt;/script&gt;
-</code></pre><p>写法二：</p>
-<pre><code>&lt;script type=&quot;text/javascript&quot; src=&quot;my.js&quot;&gt;&lt;/script&gt;
-</code></pre><p>上述两种写法是等效的，可以发现：<strong>凡是替换型元素，都是使用 src 属性来引用文件的，而链接型元素是使用 href 标签的</strong>  </p>
-<p>但是对于样式来说：style 标签并非替换型元素，不能使用 src 属性，这样，我们用 link 标签引入 CSS 文件，当然就是用 href。<br><a id="more"></a></p>
-<h2 id="img-标签"><a href="#img-标签" class="headerlink" title="img 标签"></a>img 标签</h2><p>我们最熟悉的替换型标签就是 img 标签。它的的作用是引入一张图片。这个标签是没有办法像 script 标签那样作为非替换型标签来使用的，它必须有 src 属性才有意义。   </p>
-<p>如果一定不想要引入独立文件，可以使用 data uri 作为图片的 src，这样，并没有产生独立的文件，客观上做到了和内联相同的结果，这是一个常用的技巧。</p>
-<h3 id="alt-属性"><a href="#alt-属性" class="headerlink" title="alt 属性"></a>alt 属性</h3><p>这个属性很难被普通用户感知，对于视障用户非常重要，可以毫不夸张地讲，给 img 加上 alt 属性，已经做完了可访问性的一半。</p>
-<h3 id="srcset-和-sizes"><a href="#srcset-和-sizes" class="headerlink" title="srcset 和 sizes"></a>srcset 和 sizes</h3><p>img 标签还有一组重要的属性，那就是 srcset 和 sizes，这两个属性的作用是在不同的屏幕大小和特性下，使用不同的图片源：</p>
-<pre><code>&lt;img srcset=&quot;elva-fairy-320w.jpg 320w,
-    elva-fairy-480w.jpg 480w,
-    elva-fairy-800w.jpg 800w&quot;
-  sizes=&quot;(max-width: 320px) 280px,
-   (max-width: 480px) 440px,
-   800px&quot;
- src=&quot;elva-fairy-800w.jpg&quot; alt=&quot;Elva dressed as a fairy&quot;&gt;
-</code></pre><p>在不同的屏幕尺寸从1000到200缩小的过程中会依次加载：<code>elva-fairy-800w.jpg, elva-fairy-480w.jpg, elva-fairy-320w.jpg</code>。  </p>
-<p>但是其实更好的做法，是使用 picture 元素。</p>
-<h2 id="picture-标签"><a href="#picture-标签" class="headerlink" title="picture 标签"></a>picture 标签</h2><p>picture 元素可以根据屏幕的条件为其中的 img 元素提供不同的源，它的基本用法如下：</p>
-<pre><code>&lt;picture&gt;
-  &lt;source srcset=&quot;https://zuhaowan.zuhaowan.com/v1/channel/img/bg_01.png&quot; media=&quot;(min-width: 600px)&quot;&gt;
-  &lt;source srcset=&quot;https://zuhaowan.zuhaowan.com/v1/channel/img/bg_02.png&quot; media=&quot;(min-width: 300px) and (max-width: 600px)&quot; &gt;
-  &lt;img src=&quot;https://zuhaowan.zuhaowan.com/v1/channel/img/first.png&quot;&gt;
-&lt;/picture&gt;
-</code></pre><p>它跟 img 搭配 srcset 和 sizes 不同，它使用 source 元素来指定图片源，并且支持多个。这里的 media 属性是 media query，跟 CSS 的 @media 规则一致。</p>
-<h2 id="video标签"><a href="#video标签" class="headerlink" title="video标签"></a>video标签</h2><p>在 HTML5 早期的设计中，video 标签跟 img 标签类似，也是使用 src 属性来引入源文件的，不过，考虑到了各家浏览器支持的视频格式不同，现在的 video 标签跟 picture 元素一样，也是提倡使用 source 的。</p>
-<p>早期写法：</p>
-<pre><code>&lt;video controls=&quot;controls&quot; src=&quot;movie.ogg&quot;&gt;&lt;/video&gt;
-</code></pre><p>现代写法：</p>
-<pre><code>&lt;video controls=&quot;controls&quot; &gt;
-  &lt;source src=&quot;movie.webm&quot; type=&quot;video/webm&quot; &gt;
-  &lt;source src=&quot;movie.ogg&quot; type=&quot;video/ogg&quot; &gt;
-  &lt;source src=&quot;movie.mp4&quot; type=&quot;video/mp4&quot;&gt;
-  You browser does not support video.
-&lt;/video&gt;
-</code></pre><p><strong>source 标签除了支持 media 之外，还可以使用 type 来区分源文件的使用场景</strong></p>
-<p>对于更古老的浏览器，还可以在其中加入 object 或者 embed 标签</p>
-<h3 id="video中的trak标签"><a href="#video中的trak标签" class="headerlink" title="video中的trak标签"></a>video中的trak标签</h3><p>track 是一种播放时序相关的标签，它最常见的用途就是字幕。track 标签中，必须使用 srclang 来指定语言，此外，track 具有 kind 属性，共有五种。</p>
-<pre><code>subtitles：就是字幕了，不一定是翻译，也可能是补充性说明
-captions：报幕内容，可能包含演职员表等元信息，适合听障人士或者没有打开声音的人了解音频内容
-descriptions：视频描述信息，适合视障人士或者没有视频播放功能的终端打开视频时了解视频内尔用
-chapters：用于浏览器视频内容。
-metadata：给代码提供的元信息，对普通用户不可见。
-</code></pre><p>一个完整的 video 标签可能会包含多种 track 和多个 source，这些共同构成了一个视频播放所需的全部信息。</p>
-<h2 id="aduio标签"><a href="#aduio标签" class="headerlink" title="aduio标签"></a>aduio标签</h2><p>与picture 和 video 两种标签一样，audio 也可以使用 source 元素来指定源文件：</p>
-<pre><code>&lt;audio controls&gt;
-  &lt;source src=&quot;song.mp3&quot; type=&quot;audio/mpeg&quot;&gt;
-  &lt;source src=&quot;song.ogg&quot; type=&quot;audio/ogg&quot;&gt;
-  &lt;p&gt;You browser does not support audio.&lt;/p&gt;    
-&lt;/audio&gt;
-</code></pre><p>同时也可以使用src属性，且兼容性要比video标签乐观</p>
-<pre><code>&lt;audio controls=&quot;controls&quot; src=&quot;audio.ogg&quot;&gt;&lt;/audio&gt;
-</code></pre><h2 id="iframe标签"><a href="#iframe标签" class="headerlink" title="iframe标签"></a>iframe标签</h2><p>这个标签能够嵌入一个完整的网页：</p>
-<pre><code>&lt;iframe src=&quot;http://time.geekbang.org&quot;&gt;&lt;/iframe&gt;
-</code></pre><p>但同时会带来很多安全问题，html5加入了一些新标准，在新标准中，为 iframe 加入了 sandbox 模式和 srcdoc 属性，这样，给 iframe 带来了一定的新场景：</p>
-<pre><code>&lt;iframe sandbox=&quot;allow-scripts&quot; src=&quot;http://www.b.com/&quot;&gt;&lt;/iframe&gt;
-</code></pre><p>sandbox模式的加入可以解决跨域问题，同时对加载的页面加入各种限制，如是否允许脚本执行，是否允许表单提交等操作。</p>
-<p>sandbox模式下子页面与父页面的交互完全被隔离开，无法进行任何相互操作。</p>
-<h3 id="引申：如何阻止自己的页面被iframe引用"><a href="#引申：如何阻止自己的页面被iframe引用" class="headerlink" title="引申：如何阻止自己的页面被iframe引用"></a>引申：如何阻止自己的页面被iframe引用</h3><h4 id="修改http响应头"><a href="#修改http响应头" class="headerlink" title="修改http响应头"></a>修改http响应头</h4><pre><code>header(‘X-Frame-Options:Deny&apos;);
-</code></pre><p>一劳永逸，非常靠谱</p>
-<h4 id="脚本检测"><a href="#脚本检测" class="headerlink" title="脚本检测"></a>脚本检测</h4><pre><code>try{
-　　top.location.hostname;
-　　if (top.location.hostname != window.location.hostname) {
-　　　　top.location.href =window.location.href;
-　　}
-}catch(e){
-　　top.location.href = window.location.href;
-}
-</code></pre><p>代码解释：  </p>
-<p>top 对象始终指向最高（最外）层的框架:</p>
-<pre><code>top===window.top
-</code></pre><p>在某些情况下，window.parent 有可能等于 top;  </p>
-<p>但在没有框架的情况下，parent 一定等于top （此时它们都等于 window ）:</p>
-<pre><code>window.parent===top
-window.parent===window.top
-</code></pre><p>被嵌套时，如果跨域，子页面执行 top.location.hostname会被block，进入catch逻辑；</p>
-<p>如何主域相同，子域不同，可以在父页面和子页面都设置相同的<code>docum.domain</code>来解决跨域；</p>
-<p>此时代码就会进入try逻辑，判断后发现hostname不一致，然后有进行了跳转；</p>
-<p>但如果对方采用sandbox模式，且不允许js执行的话，该方法会失效；</p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>最常见的颜色相关的属性就是 color 和 backgroud-color。css中颜色表示有一下几种方式：</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>版本</th>
+<th>继承性</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HEX</td>
+<td>CSS1</td>
+<td>无</td>
+<td>CSS颜色值十六进制(HEX)表示,语法如：#rrggbb或#rgb</td>
+</tr>
+<tr>
+<td>RGB</td>
+<td>CSS2</td>
+<td>无</td>
+<td>CSS2 颜色 RGB表示方式</td>
+</tr>
+<tr>
+<td>RGBA</td>
+<td>CSS3</td>
+<td>无</td>
+<td>CSS3 颜色值RGBA表示方式</td>
+</tr>
+<tr>
+<td>HSL</td>
+<td>CSS3</td>
+<td>无</td>
+<td>CSS3 颜色值HSL表示方式</td>
+</tr>
+<tr>
+<td>HSLA</td>
+<td>CSS3</td>
+<td>无</td>
+<td>CSS3 颜色值HSLA表示方式</td>
+</tr>
+<tr>
+<td>Transparent</td>
+<td>CSS3</td>
+<td>无</td>
+<td>CSS3 颜色值透明(Transparent)表示方式(RGBA)</td>
+</tr>
+</tbody>
+</table>
+<a id="more"></a>
+<h2 id="RGB-颜色"><a href="#RGB-颜色" class="headerlink" title="RGB 颜色"></a>RGB 颜色</h2><p>我们在计算机中，最常见的颜色表示法是 RGB 颜色，它符合光谱三原色理论：红、绿、蓝三种颜色的光可以构成所有的颜色。 0 - 255 的数字表示每一种颜色，这正好占据了一个字节，每一个颜色就占据三个字节。 </p>
+<p>红绿蓝三种颜色的光混合起来就是白光，没有光就是黑暗，所以在 RGB 表示法中，三色数值最大表示白色，三色数值为 0 表示黑色。  </p>
+<h2 id="CMYK-颜色"><a href="#CMYK-颜色" class="headerlink" title="CMYK 颜色"></a>CMYK 颜色</h2><p>颜料显示颜色的原理是它吸收了所有别的颜色的光，只反射一种颜色，所以颜料三原色其实是红、绿、蓝的补色，也就是：品红、黄、青。</p>
+<p>在印刷行业，使用的就是这样的三原色（品红、黄、青）来调配油墨，这种颜色的表示法叫做 CMYK，它用一个四元组来表示颜色。</p>
+<p>为什么它比三原色多了一种？在印刷行业中，黑色颜料价格最低，而品红、黄、青颜料价格较贵，如果要用三原色调配黑色，经济上是不划算的，所以印刷时会单独指定黑色。</p>
+<p>对 CMYK 颜色表示法来说，同一种颜色会有多种表示方案，但是我们参考印刷行业的习惯，会尽量优先使用黑色。</p>
+<h2 id="HSL-颜色"><a href="#HSL-颜色" class="headerlink" title="HSL 颜色"></a>HSL 颜色</h2><p>HSL颜色模型用一个值来表示人类认知中的颜色，专业的术语叫做色相（H）。加上颜色的纯度（S）和明度（L），就构成了一种颜色的表示。它是一种语义化的颜色。当我们对一张图片改变色相时，人们感知到的是“图片的颜色变了”。相比RGB颜色。</p>
+<h2 id="RGBA"><a href="#RGBA" class="headerlink" title="RGBA"></a>RGBA</h2><p>RGBA 是代表 Red（红色）、Green（绿色）、Blue（蓝色）和 Alpha 的色彩空间。RGBA 颜色被用来表示带透明度的颜色，实际上，Alpha 通道类似一种颜色值的保留字。在 CSS 中，Alpha 通道被用于透明度，所以我们的颜色表示被称作 RGBA，而不是 RGBO（Opacity）。</p>
+<p>为了方便使用，CSS 还规定了名称型的颜色，它内置了大量（140 种）的颜色名称。不过这里我要挑出两个颜色来讲一讲：金（gold）和银（silver）。</p>
+<p>如果你使用过这两个颜色，你会发现，金（gold）和银（silver）的视觉表现跟我们想象中的金色和银色相差甚远。与其被叫做金色和银色，它们看起来更像是难看的暗黄色和浅灰色。</p>
+<p>为什么会这样呢？在人类天然的色彩认知中，实际上混杂了很多其它因素，金色和银色不仅仅是一种颜色，它还意味着一定的镜面反光程度，在同样的光照条件下，金属会呈现出更亮的色彩，这并非是用一个色值可以描述的，这就引出了接下来要讲的渐变。</p>
+<h2 id="渐变"><a href="#渐变" class="headerlink" title="渐变"></a>渐变</h2><p>在 CSS 中，background-image这样的属性，可以设为渐变。CSS 中支持两种渐变，一种是线性渐变，一种是放射性渐变：</p>
+<h3 id="线性渐变"><a href="#线性渐变" class="headerlink" title="线性渐变"></a>线性渐变</h3><pre><code>linear-gradient(direction, color-stop1, color-stop2, ...);
+</code></pre><p>direction 可以是方向，也可以是具体的角度：</p>
+<pre><code>to bottom
+to top
+to left
+to right
+to bottom left
+to bottom right
+to top left
+to top right
+120deg
+3.14rad
+</code></pre><p>color-stop 是一个颜色和一个区段：</p>
+<pre><code>rgba(255,0,0,0)
+orange
+yellow 10%
+green 20%
+lime 28px
+</code></pre><h3 id="放射性渐变"><a href="#放射性渐变" class="headerlink" title="放射性渐变"></a>放射性渐变</h3><pre><code>radial-gradient(shape size at position, start-color, ..., last-color);
+</code></pre><h2 id="形状"><a href="#形状" class="headerlink" title="形状"></a>形状</h2><p>CSS 中的很多属性还会产生形状，比如我们常见的属性：</p>
+<pre><code>border
+box-shadow
+border-radius
+</code></pre><p>这些产生形状的属性非常有趣，我们也能看到很多利用它们来产生的 CSS 黑魔法。winter建议把它们用于基本的用途，把 border 用于边框、把阴影用于阴影，把圆角用于圆角，所有其它的场景，都有一个更好的替代品：datauri+svg。</p>
+<h2 id="补充-svg-作为-dataURI"><a href="#补充-svg-作为-dataURI" class="headerlink" title="补充 svg 作为 dataURI"></a>补充 svg 作为 dataURI</h2><p>举个例子：</p>
+<pre><code>&lt;style&gt;
+.bg {
+  background: url(&quot;data:image/svg+xml;utf8,&lt;svg xmlns=&apos;http://www.w3.org/2000/svg&apos; width=&apos;30&apos; height=&apos;30&apos;&gt;&lt;circle cx=&apos;15&apos; cy=&apos;15&apos; r=&apos;10&apos; /&gt;&lt;/svg&gt;&quot;)  no-repeat;
+  background-size: 100% 100%;
+  height: 50px;
+  width: 50px;
+ }
+.img{
+    height: 50px;
+    width: 50px;
+    display: block;
+  }
+  &lt;/style&gt;
+
+  &lt;img class=&quot;img&quot; src=&quot;data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSczMCcgaGVpZ2h0PSczMCc+PGNpcmNsZSBjeD0nMTUnIGN5PScxNScgcj0nMTAnIC8+PC9zdmc+&quot;&gt;
+  &lt;div class=&quot;bg&quot;&gt;&lt;/div&gt;
+</code></pre><p>最终个效果：</p>
+<p><img src="/重学前端30-CSS部分-CSS颜色的绘制/30-1.png" alt></p>
 <h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ol>
-<li><a href="http://www.w3school.com.cn/tags/tag_iframe.asp" target="_blank" rel="noopener">HTML5 iframe标签新属性</a></li>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/X-Frame-Options" target="_blank" rel="noopener">X-Frame-Options</a></li>
-<li><a href="https://www.cnblogs.com/boystar/p/6909214.html" target="_blank" rel="noopener">iFrame跨域解决办法</a></li>
+<li><a href="https://youhaosuda.com/blog/43" target="_blank" rel="noopener">【译】在 dataURI 中使用 SVG 的最佳方法</a></li>
+<li><a href="https://segmentfault.com/a/1190000013237541" target="_blank" rel="noopener">关于SVG</a></li>
 </ol>
 
       
@@ -571,7 +606,7 @@ window.parent===window.top
       
         <div class="post-tags">
           
-            <a href="/tags/html/" rel="tag"># html</a>
+            <a href="/tags/css/" rel="tag"># css</a>
           
         </div>
       
@@ -584,8 +619,8 @@ window.parent===window.top
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/重学前端18-CSS部分-文档流/" rel="next" title="重学前端18 - CSS部分-文档流">
-                <i class="fa fa-chevron-left"></i> 重学前端18 - CSS部分-文档流
+              <a href="/重学前端29-HTML部分-html的语法/" rel="next" title="重学前端29-HTML部分-html的语法">
+                <i class="fa fa-chevron-left"></i> 重学前端29-HTML部分-html的语法
               </a>
             
           </div>
@@ -594,8 +629,8 @@ window.parent===window.top
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/重学前端26-浏览器部分-捕获和冒泡/" rel="prev" title="重学前端26 - 浏览器部分-捕获和冒泡">
-                重学前端26 - 浏览器部分-捕获和冒泡 <i class="fa fa-chevron-right"></i>
+              <a href="/前端脚手架开发指南/" rel="prev" title="前端脚手架开发指南">
+                前端脚手架开发指南 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -813,7 +848,7 @@ window.parent===window.top
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#script-标签"><span class="nav-number">1.</span> <span class="nav-text">script 标签</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#img-标签"><span class="nav-number">2.</span> <span class="nav-text">img 标签</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#alt-属性"><span class="nav-number">2.1.</span> <span class="nav-text">alt 属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#srcset-和-sizes"><span class="nav-number">2.2.</span> <span class="nav-text">srcset 和 sizes</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#picture-标签"><span class="nav-number">3.</span> <span class="nav-text">picture 标签</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#video标签"><span class="nav-number">4.</span> <span class="nav-text">video标签</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#video中的trak标签"><span class="nav-number">4.1.</span> <span class="nav-text">video中的trak标签</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#aduio标签"><span class="nav-number">5.</span> <span class="nav-text">aduio标签</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iframe标签"><span class="nav-number">6.</span> <span class="nav-text">iframe标签</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#引申：如何阻止自己的页面被iframe引用"><span class="nav-number">6.1.</span> <span class="nav-text">引申：如何阻止自己的页面被iframe引用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#修改http响应头"><span class="nav-number">6.1.1.</span> <span class="nav-text">修改http响应头</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#脚本检测"><span class="nav-number">6.1.2.</span> <span class="nav-text">脚本检测</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文章"><span class="nav-number">7.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RGB-颜色"><span class="nav-number">2.</span> <span class="nav-text">RGB 颜色</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CMYK-颜色"><span class="nav-number">3.</span> <span class="nav-text">CMYK 颜色</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HSL-颜色"><span class="nav-number">4.</span> <span class="nav-text">HSL 颜色</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RGBA"><span class="nav-number">5.</span> <span class="nav-text">RGBA</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#渐变"><span class="nav-number">6.</span> <span class="nav-text">渐变</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#线性渐变"><span class="nav-number">6.1.</span> <span class="nav-text">线性渐变</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#放射性渐变"><span class="nav-number">6.2.</span> <span class="nav-text">放射性渐变</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#形状"><span class="nav-number">7.</span> <span class="nav-text">形状</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#补充-svg-作为-dataURI"><span class="nav-number">8.</span> <span class="nav-text">补充 svg 作为 dataURI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文章"><span class="nav-number">9.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
             
 
           </div>
