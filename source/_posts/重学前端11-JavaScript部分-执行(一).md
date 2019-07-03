@@ -28,7 +28,7 @@ JavaScript 引擎等待宿主环境分配宏观任务，在操作系统中，通
 在宏观任务中，JavaScript 的 Promise 还会产生异步代码，JavaScript 必须保证这些异步代码在一个宏观任务中完成，因此，每个宏观任务中又包含了一个微观任务队列：
 
 
-![](重学前端11-JavaScript部分-执行(一)/11-1.jpg)
+![](11-1.jpg)
 
 ### promise
 Promise 永远在队列尾部添加微观任务。setTimeout 等宿主 API，则会添加宏观任务。

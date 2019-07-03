@@ -27,7 +27,7 @@ document 的 styleSheets 属性表示文档中的所有样式表，这是一个�
 
 更进一步，我们可以获取样式表中特定的规则（Rule），并且对它进行一定的操作，具体来说，就是使用它的 cssRules 属性来实现：
 
-![](重学前端19-CSS部分-CSSDOM/19-2.png)
+![](19-2.png)
 
 在chrome上测试发现，link标签引入的css文件样式，cssRules无法读取，因此也无法操作（insertRule，removeRule等无效），只可以操作style标签内的内联样式。
 
@@ -96,7 +96,7 @@ CSSOM 还提供了一个非常重要的方法，来获取一个元素最终经�
 
 window 对象上提供了一些全局的尺寸信息，它是通过属性来提供的:
 
-![](重学前端19-CSS部分-CSSDOM/19-3.png)
+![](19-3.png)
 
 - window.innerHeight, window.innerWidth 这两个属性表示视口的大小。
 
