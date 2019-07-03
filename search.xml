@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[async-await promise和setTimeout执行顺序]]></title>
+    <url>%2Fasync-await%20promise%E5%92%8CsetTimeout%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F%2F</url>
+    <content type="text"><![CDATA[概述简单记录下看到一道面试题而引发的一些思考。 题目async function async1() { console.log(&quot;async1 start&quot;); await async2(); console.log(&quot;async1 end&quot;); } async function async2() { console.log(&quot;async2&quot;); } console.log(&quot;script start&quot;); setTimeout(function() { console.log(&quot;setTimeout&quot;); }, 0); async1(); new Promise(function(resolve) { console.log(&quot;promise1&quot;); resolve(); }).then(function() { console.log(&quot;promise2&quot;); }); console.log(&quot;script end&quot;); 执行结果： script start async1 start--- async2 promise1 script end async1 end promise2 setTimeout 解释 主线程顺序执行，先输出 “script start” 没什么问题。 执行到setTimeout，这是一个异步任务，且为宏任务（macroTask），推入任务队列（queue）。继续执行主线程内代码。 接着执行async1函数，这是一个异步函数，执行过程与普通函数没区别，输出”async1 start”, 然后遇到了await。 await命令后面可以是 Promise 对象和原始类型的值（数值、字符串和布尔值，但这时会自动转成立即 resolved 的 Promise 对象）。此时会把async2函数转成 return new Pomise((resolve)=&gt;{console.log(&quot;async2&quot;);resolve(undefined)}),因此会输出”async2”,然后跳出async1函数，继续执行主线程内的代码，发起一个微任务（microTask），等到异步操作完成，再接着执行函数体内后面的语句。 继续执行遇到了一个promise对象，输出”promise1”后，再发起一个微任务（microTask），跳出对象，继续执行主进程内的代码 遇到console.log(&quot;script end&quot;),便输出”script end”,此时主进程代码执行完毕，主线程就会去读取“任务队列”，先执行微任务，再执行宏任务。 首先，进入async1函数，执行await后函数体内容，输出”async1 end” 然后，进入promise对象执行resole方法，输出”promise2” 最后，执行setTimeout宏任务,输出”setTimeout” 问题其实对于上述第7和8步的执行顺序是存在争议的（promise2 和 async1 end 的顺序），具体可参照参考文章的关于 async 函数的理解。chrome 71之前的版本，await 执行时要额外创建出两个 promise（有时会是多个），会导致promise2先于async1执行，但这种方式创建多个Promise对象的开销很大，所以chrome73进行了优化，所以按正常流程理解就好，无需太纠结于异步任务的执行顺序，且async2函数有没有通过async声明执行结果都一致。 延伸题目async function asyncTest1() { console.log(&apos;2&apos;); await console.log(&apos;3&apos;); } async function asyncTest2() { await console.log(&apos;4&apos;); console.log(&apos;5&apos;); } async function asyncTest3() { await new Promise(function (resolve) { console.log(&apos;6&apos;); resolve(); }).then(function () { console.log(&apos;7&apos;); }); console.log(&apos;8&apos;); } console.log(&apos;1&apos;); setTimeout(function () { console.log(&apos;9&apos;); new Promise(function (resolve) { console.log(&apos;10&apos;); resolve(); }).then(function () { console.log(&apos;11&apos;); }) asyncTest1(); }); asyncTest2(); asyncTest3(); new Promise(function (resolve) { console.log(&apos;12&apos;); resolve(); }).then(function () { console.log(&apos;13&apos;); }); 可以按上面思路分析一下执行结果： 1 4 6 12 5 7 13 8 9 10 2 3 11 参考 关于 async 函数的理解]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>note</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端31-HTML部分-ARIA]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF31-HTML%E9%83%A8%E5%88%86-ARIA%2F</url>
+    <content type="text"><![CDATA[概述我们平时写 HTML 语言，都习惯把关注点放到各种标签上，很少去深究它的语法。HTML 这样的语言，与 JavaScript 这样的语言有一些本质的不同。他不具备图灵完备性，为“标记语言（mark up language）”，它是纯文本的一种升级，“标记”一词的概念来自：编辑审稿时使用不同颜色笔所做的“标记”。 HTML 其实是 SGML （一种古老的标记语言）中规定的一种格式，但是实际的浏览器没有任何一个是通过 SGML 引擎来解析 HTML 的。今天的 HTML 仍然有 SGML 的不少影子，本次介绍的是 SGML 留给 HTML 的重要的遗产：基本语法和 DTD。 基本语法HTML 作为 SGML 的子集，它遵循 SGML 的基本语法：包括标签、转义等。 标签语法 开始标签：&lt;tagname&gt; 带属性的开始标签： &lt;tagname attributename=&quot;attributevalue&quot;&gt; 结束标签：&lt;/tagname&gt; 自闭合标签：&lt;tagname /&gt; 文本语法在 HTML 中，规定了两种文本语法，一种是普通的文本节点，另一种是 CDATA 文本节点。 文本节点看似是普通的文本，但是，其中有两种字符是必须做转义的：&lt; 和 &amp;。CDATA 也是一种文本，它存在的意义是语法上的意义：在 CDATA 节点内，不需要考虑多数的转义情况。只有字符组合 ]]&gt; 需要处理，这里不能使用转义，只能拆成两个 CDATA 节点。 注释语法注释语法以&lt;!--开头，以--&gt;结尾，注释的内容非常自由，除了--&gt;都没有问题。 DTD 语法（文档类型定义）SGML 的 DTD 语法十分复杂，但是对 HTML 来说，其实 DTD 的选项是有限的，具体参见第二部分。 ProcessingInstruction 语法（处理信息）ProcessingInstruction 多数情况下，是给机器看的。HTML 中规定了可以有 ProcessingInstruction，但是并没有规定它的具体内容，所以可以把它视为一种保留的扩展机制。对浏览器而言，ProcessingInstruction 的作用类似于注释。 关于DTDDTD 的全称是 Document Type Defination，也就是文档类型定义。SGML 用 DTD 来定义每一种文档类型，HTML 属于 SGML，在 HTML5 出现之前，HTML 都是使用符合 SGML 规定的 DTD。 HTML4.01 有三种 DTD。分别是严格模式、过渡模式和 frameset 模式。 严格模式的 DTD 规定了 HTML4.01 中需要的标签： &lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01//EN&quot; &quot;http://www.w3.org/TR/html4/strict.dtd&quot;&gt; 过渡模式的 DTD 除了 html4.01，还包含了一些被贬斥的标签，这些标签已经不再推荐使用了，但是过渡模式中仍保留了它们： &lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt; frameset 结构的网页如今已经很少见到了，它使用 frameset 标签把几个网页组合到一起： &lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01 Frameset//EN&quot; &quot;http://www.w3.org/TR/html4/frameset.dtd&quot;&gt; HTML4.01 又规定了 XHTML 语法，同样有三个版本： 版本一 &lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Strict//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd&quot;&gt; 版本二 &lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt; 版本三 &lt;!DOCTYPE html PUBLIC “-//W3C//DTD XHTML 1.0 Frameset//EN” “http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd&quot;&gt; 但是这些复杂的 DTD 写法并没有什么实际作用， 浏览器根本不会用 SGML 引擎解析它们，所以到了 HTML5，干脆放弃了 SGML 子集这项坚持，规定了一个简单的，大家都能记住的 DTD： &lt;!DOCTYPE html&gt; 但是，HTML5 也仍然保留了 HTML 语法和 XHTML 语法。 文本实体HTML4.01 的 DTD 里包含的 URL ，其实是可以访问的。 但是 W3C 警告说，禁止任何浏览器在解析网页的时候访问这个 URL，不然 W3C 的服务器会被压垮。 url里面的内容是符合 SGML 规范的 DTD，它规定了 HTML 包含了哪些标签、属性和文本实体。其中文本实体分布在三个文件中：HTMLsymbol.ent HTMLspecial.ent 和 HTMLlat1.ent, 了解即可。]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>html</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[前端脚手架开发指南]]></title>
     <url>%2F%E5%89%8D%E7%AB%AF%E8%84%9A%E6%89%8B%E6%9E%B6%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97%2F</url>
     <content type="text"><![CDATA[何谓脚手架？在前端工程化高度发展的当代，各种构建工具大行其道，webpack、gulp、rollup、fis等，这些构建工具的主要作用就是将前端代码工程化，实现代码编译，文件优化，模块分割，自动刷新，代码校验，自动发布等供嫩，我们在实际开发中，要根据自己的需求定制不同的配置，但是多数情况下，项目配置在不同的项目中改动不大，有些甚至不需要做任何修改。这个时候，开发不同的项目，我们需要将这些配置重新拷贝一遍，于是，为了减少重复性工作，脚手架的概念应运而生。 对于vue-cli,create-react-app,或者自己开发的工具， 脚手架的定位基本是一致的：创建项目初始文件 脚手架作用是：创建项目的初始文件，本质是方案的封装 编写一个脚手架基本流程考虑到模板项目可能需要经常更新，而脚手架可能更新不及时，所以我们通常不会将模板项目放到脚手架中，而是将其放在github（gitlab）上进行维护，项目创建时，拉取最新的代码，以保证最新创建的项目源码最新。下面是基本流程： 获取目录process.cwd() 是当前执行node命令时候的文件夹地址 ——工作目录，保证了文件在不同的目录下执行时，路径始终不变 __dirname 是被执行的js 文件的地址 ——文件所在目录 获取输入命令行参数const program = require(&apos;commander&apos;); console.log(program.args[0]) cli中交互式询问inquirer.prompt([{ type: &apos;input&apos;, message: &apos;请输入项目名称：&apos;, name: &apos;projectName&apos;, default: &quot;my-template-project&quot;, // 默认值 validate: function (val) { if (!val) { // 校验 return &quot;请输入有效项目名称！&quot;; } else { return true } } }, { type: &quot;confirm&quot;, message: &quot;是否使用监听？&quot;, name: &quot;watch&quot;, }, { type: &apos;list&apos;, message: &apos;请选择一种水果:&apos;, name: &apos;fruit&apos;, choices: [ &quot;Apple&quot;, &quot;Pear&quot;, &quot;Banana&quot; ], filter: function (val) { // 使用filter将回答变为小写 return val.toLowerCase(); } }, ]).then(result =&gt; { console.log(`你输入的项目名称是：${result.projectName}`) console.log(`你是否选择监听：${result.watch}`) console.log(`你选择的水果是：${result.fruit}`) }) 参考文章 小工具，大作用——前端脚手架开发指北 手把手教你写cli inquirer.js —— 一个用户与命令行交互的工具 不仅仅是复制粘贴 - 聊聊前端脚手架]]></content>
@@ -144,6 +166,28 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[重学前端12 - JavaScript部分-执行(二)]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF12-JavaScript%E9%83%A8%E5%88%86-%E6%89%A7%E8%A1%8C(%E4%BA%8C)%2F</url>
+    <content type="text"><![CDATA[闭包闭包其实只是一个绑定了执行环境的函数，闭包与普通函数的区别是，它携带了执行的环境，就像人在外星中需要自带吸氧的装备一样，这个函数也带有在程序中生存的环境。 执行上下文JavaScript 标准把一段代码（包括函数），执行所需的所有信息定义为：“执行上下文”。 执行上下文在 ES2018 中，包含以下部分： lexical environment：词法环境，当获取变量或者 this 值时使用。 variable environment：变量环境，当声明变量时使用 code evaluation state：用于恢复代码执行位置。 Function：执行的任务是函数时使用，表示正在被执行的函数。 ScriptOrModule：执行的任务是脚本或者模块时使用，表示正在被执行的代码。 Realm：使用的基础库和内置对象实例。 Generator：仅生成器上下文有这个属性，表示当前生成器。 在js中任何语句的执行都会依赖特定的上下文。一旦上下文被切换，整个语句的效果可能都会发生改变。在 JavaScript，切换上下文最主要的场景是函数调用。 函数 补充:仅普通函数和类能够跟 new 搭配使用 1 普通函数用 function 关键字定义的函数。 function foo(){ // code } 2 箭头函数用 =&gt; 运算符定义的函数。 const foo = () =&gt; { // code } 3 方法在 class 中定义的函数。 class C { foo(){ //code } } 4 生成器函数用 function * 定义的函数。 function* foo(){ // code } 5 类用 class 定义的类，实际上也是函数。 class Foo { constructor(){ //code } } 6/7/8 异步函数：普通函数、箭头函数和生成器函数加上 async 关键字。 async function foo(){ // code } const foo = async () =&gt; { // code } async function foo*(){{ // code } 对普通变量而言，这些函数并没有本质区别，它们的一个行为差异在于 this 关键字。 this 关键字this 是执行上下文中很重要的一个组成部分。同一个函数调用方式不同，得到的 this 值也不同。 调用函数时使用的引用，决定了函数执行时刻的 this 值。实际上从运行时的角度来看，this 跟面向对象毫无关联，它是与函数调用时使用的表达式相关。 语句分类 在 try 中有 return 语句，finally 中的内容还会执行吗？代码一： function foo(){ try{ return 0; } catch(err) { } finally { console.log(&quot;a&quot;) } } console.log(foo()); finally执行了，并且函数有返回值 代码二： function foo(){ try{ return 0; } catch(err) { } finally { return 1; } } console.log(foo()); 返回值为1，try的返回值被 finally 擦写了 这个怪异的表现行为是由于 Javascript 的Completion Record机制来实现的（Completion Record用于描述异常、跳出等语句执行过程） Completion Record 表示一个语句执行完之后的结果，它有三个字段： [[type]] 表示完成的类型，有 break continue return throw 和 normal 几种类型； [[value]] 表示语句的返回值，如果语句没有，则是 empty； [[target]] 表示语句的目标，通常是一个 JavaScript 标签。 普通语句执行后，会得到 [[type]] 为 normal 的 Completion Record，JavaScript 引擎遇到这样的 Completion Record，会继续执行下一条语句。 在一个语句块中，，如果每一个语句都是 normal 类型，那么它会顺次执行。但是假如我们在语句块中插入了一条 return 语句，产生了一个非 normal 记录，那么整个语句块会成为非 normal。这个结构就保证了非 normal 的完成类型可以穿透复杂的语句嵌套结构，产生控制效果。 那么对于上述的例子：因为 finally 中的内容必须保证执行，所以 try/catch 执行完毕，即使得到的结果是非 normal 型的完成记录，也必须要执行 finally。而当 finally 执行也得到了非 normal 记录，则会使 finally 中的记录作为整个 try 结构的结果。 带标签的语句实际上，任何 JavaScript 语句是可以加标签的，在语句前加冒号即可： firstStatement: var i = 1; 一般情况下没什么用，break/continue 语句如果后跟了lable语句，就会跳到对应的label位置，一般用于多层嵌套循环的跳出 var num=0; outter: for(var i=0;i&lt;10;i++){ for(var j=0;j&lt;10;j++){ if(i==5&amp;&amp;j==5){ break outter; //退出内部循环，指向outter，即外循环，同时退出外循环 } num++; } } document.write(num); //55]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端13 - JavaScript部分-理解编译原理]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF13-JavaScript%E9%83%A8%E5%88%86-%E7%90%86%E8%A7%A3%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%2F</url>
+    <content type="text"><![CDATA[概述待补充~]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[重学前端21 - JavaScript部分-js语法一]]></title>
     <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF21-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E4%B8%80%2F</url>
     <content type="text"><![CDATA[概述待补充~]]></content>
@@ -155,8 +199,8 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[重学前端22 - JavaScript部分-js语法二]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF22-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E4%BA%8C%2F</url>
+    <title><![CDATA[重学前端20 - JavaScript部分-js词法]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF20-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%8D%E6%B3%95%2F</url>
     <content type="text"><![CDATA[概述待补充~]]></content>
       <categories>
         <category>重学前端</category>
@@ -166,8 +210,8 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[重学前端20 - JavaScript部分-js词法]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF20-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%8D%E6%B3%95%2F</url>
+    <title><![CDATA[重学前端22 - JavaScript部分-js语法二]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF22-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E4%BA%8C%2F</url>
     <content type="text"><![CDATA[概述待补充~]]></content>
       <categories>
         <category>重学前端</category>
@@ -199,31 +243,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[重学前端13 - JavaScript部分-理解编译原理]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF13-JavaScript%E9%83%A8%E5%88%86-%E7%90%86%E8%A7%A3%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%2F</url>
-    <content type="text"><![CDATA[概述待补充~]]></content>
-      <categories>
-        <category>重学前端</category>
-      </categories>
-      <tags>
-        <tag>js</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[重学前端12 - JavaScript部分-执行(二)]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF12-JavaScript%E9%83%A8%E5%88%86-%E6%89%A7%E8%A1%8C(%E4%BA%8C)%2F</url>
-    <content type="text"><![CDATA[闭包闭包其实只是一个绑定了执行环境的函数，闭包与普通函数的区别是，它携带了执行的环境，就像人在外星中需要自带吸氧的装备一样，这个函数也带有在程序中生存的环境。 执行上下文JavaScript 标准把一段代码（包括函数），执行所需的所有信息定义为：“执行上下文”。 执行上下文在 ES2018 中，包含以下部分： lexical environment：词法环境，当获取变量或者 this 值时使用。 variable environment：变量环境，当声明变量时使用 code evaluation state：用于恢复代码执行位置。 Function：执行的任务是函数时使用，表示正在被执行的函数。 ScriptOrModule：执行的任务是脚本或者模块时使用，表示正在被执行的代码。 Realm：使用的基础库和内置对象实例。 Generator：仅生成器上下文有这个属性，表示当前生成器。 在js中任何语句的执行都会依赖特定的上下文。一旦上下文被切换，整个语句的效果可能都会发生改变。在 JavaScript，切换上下文最主要的场景是函数调用。 函数 补充:仅普通函数和类能够跟 new 搭配使用 1 普通函数用 function 关键字定义的函数。 function foo(){ // code } 2 箭头函数用 =&gt; 运算符定义的函数。 const foo = () =&gt; { // code } 3 方法在 class 中定义的函数。 class C { foo(){ //code } } 4 生成器函数用 function * 定义的函数。 function* foo(){ // code } 5 类用 class 定义的类，实际上也是函数。 class Foo { constructor(){ //code } } 6/7/8 异步函数：普通函数、箭头函数和生成器函数加上 async 关键字。 async function foo(){ // code } const foo = async () =&gt; { // code } async function foo*(){{ // code } 对普通变量而言，这些函数并没有本质区别，它们的一个行为差异在于 this 关键字。 this 关键字this 是执行上下文中很重要的一个组成部分。同一个函数调用方式不同，得到的 this 值也不同。 调用函数时使用的引用，决定了函数执行时刻的 this 值。实际上从运行时的角度来看，this 跟面向对象毫无关联，它是与函数调用时使用的表达式相关。 语句分类/12-1.jpg) 在 try 中有 return 语句，finally 中的内容还会执行吗？代码一： function foo(){ try{ return 0; } catch(err) { } finally { console.log(&quot;a&quot;) } } console.log(foo()); finally执行了，并且函数有返回值 代码二： function foo(){ try{ return 0; } catch(err) { } finally { return 1; } } console.log(foo()); 返回值为1，try的返回值被 finally 擦写了 这个怪异的表现行为是由于 Javascript 的Completion Record机制来实现的（Completion Record用于描述异常、跳出等语句执行过程） Completion Record 表示一个语句执行完之后的结果，它有三个字段： [[type]] 表示完成的类型，有 break continue return throw 和 normal 几种类型； [[value]] 表示语句的返回值，如果语句没有，则是 empty； [[target]] 表示语句的目标，通常是一个 JavaScript 标签。 普通语句执行后，会得到 [[type]] 为 normal 的 Completion Record，JavaScript 引擎遇到这样的 Completion Record，会继续执行下一条语句。 在一个语句块中，，如果每一个语句都是 normal 类型，那么它会顺次执行。但是假如我们在语句块中插入了一条 return 语句，产生了一个非 normal 记录，那么整个语句块会成为非 normal。这个结构就保证了非 normal 的完成类型可以穿透复杂的语句嵌套结构，产生控制效果。 那么对于上述的例子：因为 finally 中的内容必须保证执行，所以 try/catch 执行完毕，即使得到的结果是非 normal 型的完成记录，也必须要执行 finally。而当 finally 执行也得到了非 normal 记录，则会使 finally 中的记录作为整个 try 结构的结果。 带标签的语句实际上，任何 JavaScript 语句是可以加标签的，在语句前加冒号即可： firstStatement: var i = 1; 一般情况下没什么用，break/continue 语句如果后跟了lable语句，就会跳到对应的label位置，一般用于多层嵌套循环的跳出 var num=0; outter: for(var i=0;i&lt;10;i++){ for(var j=0;j&lt;10;j++){ if(i==5&amp;&amp;j==5){ break outter; //退出内部循环，指向outter，即外循环，同时退出外循环 } num++; } } document.write(num); //55]]></content>
-      <categories>
-        <category>重学前端</category>
-      </categories>
-      <tags>
-        <tag>js</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[重学前端11 - JavaScript部分-执行(一)]]></title>
     <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF11-JavaScript%E9%83%A8%E5%88%86-%E6%89%A7%E8%A1%8C(%E4%B8%80)%2F</url>
-    <content type="text"><![CDATA[概述由于我们这里主要讲 JavaScript 语言，那么采纳 JSC 引擎的术语，我们把宿主发起的任务称为宏观任务，把 JavaScript 引擎发起的任务称为微观任务。 宏观和微观任务JavaScript 引擎等待宿主环境分配宏观任务，在操作系统中，通常等待的行为都是一个事件循环，所以在 Node 术语中，也会把这个部分称为事件循环。 在底层的 C/C++ 代码中，这个事件循环是一个跑在独立线程中的循环，我们用伪代码来表示，大概是这样的： while(TRUE) { r = wait(); execute(r); } 可以看到，整个循环做的事情基本上就是反复“等待 - 执行” 这里每次的执行过程，其实都是一个宏观任务。我们可以大概理解：宏观任务的队列就相当于事件循环。 在宏观任务中，JavaScript 的 Promise 还会产生异步代码，JavaScript 必须保证这些异步代码在一个宏观任务中完成，因此，每个宏观任务中又包含了一个微观任务队列： /11-1.jpg) promisePromise 永远在队列尾部添加微观任务。setTimeout 等宿主 API，则会添加宏观任务。 var r = new Promise(function (resolve, reject) { console.log(&quot;a&quot;); resolve() }); setTimeout(()=&gt;{ console.log(&quot;d&quot;) }) r.then(() =&gt; console.log(&quot;c&quot;)); console.log(&quot;b&quot;) //运行结果依次为：a,b,c,d 我们再看下面的代码 var r = new Promise(function (resolve, reject) { console.log(&quot;a&quot;); resolve() }); setTimeout(() =&gt; console.log(&quot;d&quot;), 0) var r1 = new Promise(function (resolve, reject) { resolve() }); r.then(() =&gt; { var begin = Date.now(); while (Date.now() - begin &lt; 1000); console.log(&quot;c1&quot;) new Promise(function (resolve, reject) { resolve() }).then(() =&gt; console.log(&quot;c2&quot;)) }); //执行结果：a, c1, c2 ,d 这里我们强制了 1 秒的执行耗时，这样，我们可以确保任务 c2 是在 d 之后被添加到任务队列。可以看到，即使耗时一秒的 c1 执行完毕，再 创建的 c2，仍然先于 d 执行了，这很好地解释了微任务优先的原理。 通过一系列的实验，我们可以总结一下如何分析异步执行的顺序： 首先我们分析有多少个宏任务； 在每个宏任务中，分析有多少个微任务； 根据调用次序，确定宏任务中的微任务执行次序； 根据宏任务的触发规则和调用次序，确定宏任务的执行次序； 确定整个顺序。 async/awaitasync函数返回的是 Promise 对象, 一旦遇到await就会先返回(可以通过await来等待一个Promise)，等到异步操作完成，再接着执行函数体内后面的语句。 function sleep(duration) { return new Promise(function(resolve, reject) { setTimeout(resolve,duration); }) } async function foo(){ console.log(&quot;a&quot;) await sleep(2000) console.log(&quot;b&quot;) } foo().then(()=&gt;{ console.log(&quot;foo over&quot;) }); //执行结果：a, b, foo over]]></content>
+    <content type="text"><![CDATA[概述由于我们这里主要讲 JavaScript 语言，那么采纳 JSC 引擎的术语，我们把宿主发起的任务称为宏观任务，把 JavaScript 引擎发起的任务称为微观任务。 宏观和微观任务JavaScript 引擎等待宿主环境分配宏观任务，在操作系统中，通常等待的行为都是一个事件循环，所以在 Node 术语中，也会把这个部分称为事件循环。 在底层的 C/C++ 代码中，这个事件循环是一个跑在独立线程中的循环，我们用伪代码来表示，大概是这样的： while(TRUE) { r = wait(); execute(r); } 可以看到，整个循环做的事情基本上就是反复“等待 - 执行” 这里每次的执行过程，其实都是一个宏观任务。我们可以大概理解：宏观任务的队列就相当于事件循环。 在宏观任务中，JavaScript 的 Promise 还会产生异步代码，JavaScript 必须保证这些异步代码在一个宏观任务中完成，因此，每个宏观任务中又包含了一个微观任务队列： promisePromise 永远在队列尾部添加微观任务。setTimeout 等宿主 API，则会添加宏观任务。 var r = new Promise(function (resolve, reject) { console.log(&quot;a&quot;); resolve() }); setTimeout(()=&gt;{ console.log(&quot;d&quot;) }) r.then(() =&gt; console.log(&quot;c&quot;)); console.log(&quot;b&quot;) //运行结果依次为：a,b,c,d 我们再看下面的代码 var r = new Promise(function (resolve, reject) { console.log(&quot;a&quot;); resolve() }); setTimeout(() =&gt; console.log(&quot;d&quot;), 0) var r1 = new Promise(function (resolve, reject) { resolve() }); r.then(() =&gt; { var begin = Date.now(); while (Date.now() - begin &lt; 1000); console.log(&quot;c1&quot;) new Promise(function (resolve, reject) { resolve() }).then(() =&gt; console.log(&quot;c2&quot;)) }); //执行结果：a, c1, c2 ,d 这里我们强制了 1 秒的执行耗时，这样，我们可以确保任务 c2 是在 d 之后被添加到任务队列。可以看到，即使耗时一秒的 c1 执行完毕，再 创建的 c2，仍然先于 d 执行了，这很好地解释了微任务优先的原理。 通过一系列的实验，我们可以总结一下如何分析异步执行的顺序： 首先我们分析有多少个宏任务； 在每个宏任务中，分析有多少个微任务； 根据调用次序，确定宏任务中的微任务执行次序； 根据宏任务的触发规则和调用次序，确定宏任务的执行次序； 确定整个顺序。 async/awaitasync函数返回的是 Promise 对象, 一旦遇到await就会先返回(可以通过await来等待一个Promise)，等到异步操作完成，再接着执行函数体内后面的语句。 function sleep(duration) { return new Promise(function(resolve, reject) { setTimeout(resolve,duration); }) } async function foo(){ console.log(&quot;a&quot;) await sleep(2000) console.log(&quot;b&quot;) } foo().then(()=&gt;{ console.log(&quot;foo over&quot;) }); //执行结果：a, b, foo over]]></content>
       <categories>
         <category>重学前端</category>
       </categories>
