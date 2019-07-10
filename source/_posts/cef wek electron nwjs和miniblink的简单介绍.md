@@ -1,7 +1,7 @@
 ---
 title: 'cef wek electron nwjs和miniblink的简单介绍'
 date: 2019-05-16 16:37:42
-tags: [notes, 闲话前端]
+tags: [note, 闲话前端]
 categories: Chromium
 ---
 ## 概述
