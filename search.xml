@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[package-lock.json和yarn.lock文件的作用]]></title>
+    <url>%2Fpackage-lock-json%E5%92%8Cyarn-lock%E6%96%87%E4%BB%B6%E7%9A%84%E4%BD%9C%E7%94%A8%2F</url>
+    <content type="text"><![CDATA[概述在node项目中如果我们使用 npm install 或 yarn install 时会发现本地会生成一个package-lock.json 或 yarn.lock文件，这个文件到底是做什么用？ 官方解释根据官方文档解释基本如下： package-lock.json is automatically generated for any operations where npm modifies either the node_modules tree, or package.json. It describes the exact tree that was generated, such that subsequent installs are able to generate identical trees, regardless of intermediate dependency updates. 翻译一下：package-lock.json是当 node_modules 或 package.json 发生变化时自动生成的文件。这个文件主要功能是确定当前安装的包的依赖，以便后续重新安装的时候生成相同的依赖，而忽略项目开发过程中有些依赖已经发生的更新。 原因npm是一个用于管理package之间依赖关系的管理器，它允许开发者在pacakge.json中间标出自己项目对npm各库包的依赖。你可以选择以如下方式来标明自己所需要库包的版本，并且依赖版本管理非常宽松，默认生成的版本都是^写法，如：&quot;vue&quot;: &quot;^2.5.0&quot;。这里面的向上标号是向后（新）兼容的，如果vue的最新版本是超过2.5.0，并在大版本号（2）上相同，就允许下载最新版本的vue库包，例如实际上可能运行npm install时候下载的具体版本是2.6.1。同一个项目一天之内可能会 install 到不同版本的依赖。而依赖库包版本的不同，可能会导致其行为特征不同，甚至有时候会出现完全不兼容。 在受到 yarn.lock 的强烈冲击之后，npm 还是决定在 5.0.0+ 版本默认生成 package-lock.json。 作用npm5.0以后的版本就开始提供自动生成package-lock.json功能，为的是让开发者知道只要你保存了源文件，到一个新的机器上、或者新的下载源，只要按照这个package-lock.json所标示的具体版本下载依赖库包，就能确保所有库包与你上次安装的完全一样。 参考 package-lock.json官方文档 知乎-npm install 生成的package-lock.json是什么文件？有什么用？]]></content>
+      <categories>
+        <category>Nodejs</category>
+      </categories>
+      <tags>
+        <tag>note</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[EventLoop中异步任务的执行顺序]]></title>
     <url>%2FEventLoop%E4%B8%AD%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1%E7%9A%84%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F%2F</url>
     <content type="text"><![CDATA[概述从诞生最初，JavaScript就是单线程，这已经成了这门语言的核心特征，将来也不会改变。 为了利用多核CPU的计算能力，HTML5提出Web Worker标准，允许JavaScript脚本创建多个线程，但是子线程完全受主线程控制，且不得操作DOM。所以，这个新标准并没有改变JavaScript单线程的本质。 任务队列js中所有的任务可以分为两种：一种是同步任务（synchronous），另一种是异步任务（asynchronous）。 同步任务：在主线程上排队执行的任务，只有前一个任务执行完毕，才能执行后一个任务； 异步任务：不进入主线程、而进入”任务队列”（task queue）的任务，只有”任务队列”通知主线程，某个异步任务可以执行了，该任务才会进入主线程执行(被放入队列不会立刻执行其回调，而是等待当前执行栈中的所有任务都执行完毕，主线程处于闲置状态时，才会去执行任务队列)。 PS: 异步任务一定会有两个线程参加，但异步任务不是指两个线程执行任务。而是指某个线程中执行的两个动作，前一个动作立即执行，后一个动作在未来某个时刻执行的这种模式。譬如ajax请求，代码执行到发起请求的时候是同步的，但结果返回是在未来的某个时刻，所以这部分是异步的。 简单记录下看到一道面试题而引发的一些思考。 任务队列的执行机制如下： 所有同步任务都在主线程上执行，形成一个执行栈（stack）。 主线程之外，还存在一个”任务队列”（queue）。只要异步任务有了运行结果，就在”任务队列”之中放置一个事件。 一旦”执行栈”中的所有同步任务执行完毕，系统就会读取”任务队列”，看看里面有哪些事件。那些对应的异步任务，于是结束等待状态，进入执行栈，开始执行。 主线程不断重复上面的第三步。 只要主线程空了，就会去读取”任务队列”，这就是JavaScript的运行机制。这个过程会不断重复 Event Loop主线程从“任务队列”中读取事件，这个过程是循环不断的，所以整个机制运作机制又成为EventLoop（事件循环） 下图是EventLoop机制示意图（转引自Philip Roberts的演讲《Help, I’m stuck in an event-loop》）） 主进程运行的时候会产生 堆(heap) 和 栈(stack), 栈中的代码会调用各种API，他们在任务队列中加入各种事件（click,load,done等），只要栈中的代码执行完毕，主线程就会去读取“任务队列”，依次执行那些事件对应的回调函数。 宏任务（macroTask）和微任务（microTask）EventLoop循环过程中，因为异步任务之间并不相同，因此他们的执行优先级也有区别。不同的异步任务被分为两类：微任务（micro task）和宏任务（macro task）： 以下事件属于宏任务： setInterval() setTimeout() setImmediate() （nodejs中才有） 以下事件属于微任务 promise.then() process.nextTick() （nodejs中才有，且preocess.nextTick优先级大于promise.then） 微任务总会在下一个宏任务之前执行，在本身所属的宏任务结束后立即执行。如果在微任务执行期间微任务队列加入了新的微任务，会将新的微任务加入队列尾部，之后也会被执行。 nodejs的EventLoop与浏览器环境下的差异在node中，事件循环表现出的状态与浏览器中大致相同。不同的是node中有一套自己的模型。node中事件循环的实现是依靠的libuv引擎。 process.nextTick 和 setImmediateprocess.nextTick属于微任务，它指定的任务总是在下一个宏任务之前执行。 setImmediate属于宏任务。表示立即执行。但是它指定的任务执行顺序是不确定的： setTimeout(() =&gt; { console.log(&apos;timeout&apos;); }, 0); setImmediate(() =&gt; { console.log(&apos;immediate&apos;); }); 运行结果可能是immediate timeout，也可能是timeout immediate。但是，在一个I/O事件的回调中，可以准确判断两个方法回调的执行顺序：setImmediate先于setTimeout。 setTimeout(() =&gt; { setImmediate(() =&gt; { console.log(&apos;setImmediate&apos;); }); setTimeout(() =&gt; { console.log(&apos;setTimeout&apos;); }, 0); }, 0); 这种情况下setImmediate永远先于setTimeout。 可以做如下总结： 如果两者都在主模块中调用，那么执行先后取决于进程性能，也就是随机。 如果两者都不在主模块调用（被一个异步操作包裹），那么setImmediate的回调永远先执行。 相关试题题目一async function async1() { console.log(&quot;async1 start&quot;); await async2(); console.log(&quot;async1 end&quot;); } async function async2() { console.log(&quot;async2&quot;); } console.log(&quot;script start&quot;); setTimeout(function() { console.log(&quot;setTimeout&quot;); }, 0); async1(); new Promise(function(resolve) { console.log(&quot;promise1&quot;); resolve(); }).then(function() { console.log(&quot;promise2&quot;); }); console.log(&quot;script end&quot;); 执行结果： script start async1 start--- async2 promise1 script end async1 end promise2 setTimeout 解释 主线程顺序执行，先输出 “script start” 没什么问题。 执行到setTimeout，这是一个异步任务，且为宏任务（macroTask），推入任务队列（queue）。继续执行主线程内代码。 接着执行async1函数，这是一个异步函数，执行过程与普通函数没区别，输出”async1 start”, 然后遇到了await。 await命令后面可以是 Promise 对象和原始类型的值（数值、字符串和布尔值，但这时会自动转成立即 resolved 的 Promise 对象）。此时会把async2函数转成 return new Pomise((resolve)=&gt;{console.log(&quot;async2&quot;);resolve(undefined)}),因此会输出”async2”,然后跳出async1函数，继续执行主线程内的代码，发起一个微任务（microTask），等到异步操作完成，再接着执行函数体内后面的语句。 继续执行遇到了一个promise对象，输出”promise1”后，再发起一个微任务（microTask），跳出对象，继续执行主进程内的代码 遇到console.log(&quot;script end&quot;),便输出”script end”,此时主进程代码执行完毕，主线程就会去读取“任务队列”，先执行微任务，再执行宏任务。 首先，进入async1函数，执行await后函数体内容，输出”async1 end” 然后，进入promise对象执行resole方法，输出”promise2” 最后，执行setTimeout宏任务,输出”setTimeout” 问题其实对于上述第7和8步的执行顺序是存在争议的（promise2 和 async1 end 的顺序），具体可参照参考文章的关于 async 函数的理解。chrome 71之前的版本，await 执行时要额外创建出两个 promise（有时会是多个），会导致promise2先于async1执行，但这种方式创建多个Promise对象的开销很大，所以chrome73进行了优化，所以按正常流程理解就好，无需太纠结于异步任务的执行顺序，且async2函数有没有通过async声明执行结果都一致。 题目二async function asyncTest1() { console.log(&apos;2&apos;); await console.log(&apos;3&apos;); } async function asyncTest2() { await console.log(&apos;4&apos;); console.log(&apos;5&apos;); } async function asyncTest3() { await new Promise(function (resolve) { console.log(&apos;6&apos;); resolve(); }).then(function () { console.log(&apos;7&apos;); }); console.log(&apos;8&apos;); } console.log(&apos;1&apos;); setTimeout(function () { console.log(&apos;9&apos;); new Promise(function (resolve) { console.log(&apos;10&apos;); resolve(); }).then(function () { console.log(&apos;11&apos;); }) asyncTest1(); }); asyncTest2(); asyncTest3(); new Promise(function (resolve) { console.log(&apos;12&apos;); resolve(); }).then(function () { console.log(&apos;13&apos;); }); 可以按上面思路分析一下执行结果： 1 4 6 12 5 7 13 8 9 10 2 3 11 题目三console.log(&quot;start&quot;) setTimeout(function () { console.log(&apos;timeout1&apos;); process.nextTick(function () { console.log(&apos;timeout1_nextTick&apos;); }) new Promise(function (resolve) { console.log(&apos;timeout1_promise&apos;); resolve(); }).then(function () { console.log(&apos;timeout1_then&apos;) }) },0) setTimeout(() =&gt; { console.log(&apos;timeout2&apos;); process.nextTick(() =&gt; { console.log(&apos;timeout2_nextTick1&apos;); process.nextTick(() =&gt; { console.log(&apos;timeout2_nextTick2&apos;); }); }); process.nextTick(() =&gt; { console.log(&apos;timeout2_nextTick3&apos;); }); console.log(&apos;sync&apos;); setTimeout(() =&gt; { console.log(&apos;timeout2_2&apos;); }, 0); }, 0); 执行结果： start timeout1 timeout1_promise timeout1_nextTick timeout1_then timeout2 sync timeout2_nextTick1 timeout2_nextTick3 timeout2_nextTick2 timeout2_2 注意理解的是：微任务总会在下一个宏任务之前执行，宏任务内部的微任务执行完毕才会进入下一个宏任务执行；宏微任务内嵌套的微任务的执行顺序，timeout2_nextTick3 先于 timeout2_nextTick2执行。 参考 关于 async 函数的理解]]></content>
@@ -100,9 +111,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[重学前端18 - CSS部分-文档流]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF18-CSS%E9%83%A8%E5%88%86-%E6%96%87%E6%A1%A3%E6%B5%81%2F</url>
-    <content type="text"><![CDATA[正常流的行为我们可以用一句话来描述正常流的排版行为，那就是：依次排列，排不下了换行。 当我们要把正常流中的一个盒或者文字排版，需要分成三种情况处理: 当遇到块级盒：排入块级格式化上下文。 当遇到行内级盒或者文字：首先尝试排入行内级格式化上下文，如果排不下，那么创建一个行盒，先将行盒排版（行盒是块级，所以到第一种情况），行盒会创建一个行内级格式化上下文。 遇到 float 盒：把盒的顶部跟当前行内级上下文上边缘对齐，然后根据 float 的方向把盒的对应边缘对到块级格式化上下文的边缘，之后重排当前行盒。 正常流实现的两种布局等分布局//css样式 .outer { width: 101px; /* 在某些浏览器中，因为像素计算精度问题，还是会出现换行，我们给 outer 添加一个特定宽度： */ font-size: 0; /* 解决换行和空格被 HTML 当作空格文本，跟 inline 盒混排了的问题。 */ } .inner { width: 33.33%; height: 300px; display: inline-block; outline: solid 1px blue; } .inner:last-child { margin-right: -5px; /* 解决某些旧版本浏览器中会出现换行的问题 */ } //html &lt;div class=&quot;outer&quot;&gt; &lt;div class=&quot;inner&quot;&gt;&lt;/div&gt; &lt;div class=&quot;inner&quot;&gt;&lt;/div&gt; &lt;div class=&quot;inner&quot;&gt;&lt;/div&gt; &lt;/div&gt; 自适应宽自适应宽（一个元素固定宽度，另一个元素填满父容器剩余宽度）是个经典的布局问题，我们现在就看一下如何使用正常流来解决： .outer { font-size: 0; } .fixed, .auto { outline: solid 1px red; display: inline-block; vertical-align: top; height: 300px; } .fixed { width: 200px; } .auto { width: 100%; margin-left: -200px; padding-left: 200px; box-sizing: border-box; } //html文件 &lt;div class=&quot;outer&quot;&gt; &lt;div class=&quot;fixed&quot;&gt;&lt;/div&gt; &lt;div class=&quot;auto&quot;&gt;&lt;/div&gt; &lt;/div&gt; BFC特点 BFC可以包含浮动元素（闭合浮动） BFC所确定的区域不会与外部浮动元素发生重叠 位于同一BFC下的相邻块级子元素在垂直方向上会发生margin重叠 位于不同BFC下的相邻元素之间不会发生margin重叠 将以上特点一言以蔽之，即BFC在页面上是一个封闭的区域，如同“结界”一般。即便是内部的浮动元素也无法脱离该区域。该区域内部的子元素无法影响区域外部，同时也不受外部影响。 如何触发/创建BFC满足下面任一条件即可： &lt;html>根元素 float的值不为none overflow的值为auto、scroll或hidden display的值为table-cell、table-caption或inline-block position的值为fixed或absolute BFC的常见用途闭合浮动#container { overflow: auto; /* 创建BFC */ } 阻止margin重叠发生重叠的代码： /* HTML代码 */ &lt;div id=&quot;box1&quot;&gt;我是box1&lt;/div&gt; &lt;div id=&quot;box2&quot;&gt;我是box2&lt;/div&gt; /* CSS代码 */ #box1 { margin-bottom: 20px; background-color: lightskyblue; } #box2 { margin-top: 20px; background-color: orange; } 创建BFC解决： /* HTML代码 */ &lt;div id=&quot;box1&quot;&gt;我是box1&lt;/div&gt; &lt;div id=&quot;bfc&quot;&gt; &lt;div id=&quot;box2&quot;&gt;我是box2&lt;/div&gt; &lt;/div&gt; /* CSS代码 */ #bfc { overflow: auto; /* 创建BFC */ } 自适应流体布局BFC最强大的用途其实是用于自适应流体布局，这是基于BFC所确定的区域不会与外部浮动元素发生重叠的特性实现的。 假设我们需要创建一个左侧宽度固定为200px，右侧宽度自适应的两列布局，一般情况下有如下解决方案： /* HTML代码 */ &lt;div id=&quot;layout&quot;&gt; &lt;div id=&quot;left&quot;&gt;&lt;/div&gt; &lt;div id=&quot;right&quot;&gt;&lt;/div&gt; &lt;/div&gt; /* CSS代码 */ #layout{ overflow: auto; /* 创建BFC闭合浮动 */ } #left { width: 200px; float: left; } #right { margin-left: 200px; } 创建BFC解决： #right { overflow: auto; /* 创建BFC */ } 参考文章 BFC的理解和运用]]></content>
+    <title><![CDATA[重学前端19 - CSS部分-CSSDOM]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF19-CSS%E9%83%A8%E5%88%86-CSSDOM%2F</url>
+    <content type="text"><![CDATA[CSSOM API 的基本用法一般来说，我们需要先获取文档中所有的样式表： document.styleSheets document 的 styleSheets 属性表示文档中的所有样式表，这是一个只读的列表，我们可以用方括号运算符下标访问样式表，也可以使用 item 方法来访问，它有 length 属性表示文档中的样式表数量。 重学前端19-CSS部分-CSSDOM 操作我们虽然无法用 CSSOM API 来创建样式表，但是我们可以修改样式表中的内容（数字参数表示索引）。 document.styleSheets[0].insertRule(&quot;div {border:1px solid blue}&quot;,0) document.styleSheets[0].removeRule(5) 执行后，页面样式会发生对应变化，但并不会在style标签对应的位置真的插入样式代码。 cssRules属性更进一步，我们可以获取样式表中特定的规则（Rule），并且对它进行一定的操作，具体来说，就是使用它的 cssRules 属性来实现： 在chrome上测试发现，link标签引入的css文件样式，cssRules无法读取，因此也无法操作（insertRule，removeRule等无效），只可以操作style标签内的内联样式。 计算属性CSSOM 还提供了一个非常重要的方法，来获取一个元素最终经过 CSS 计算得到的属性： window.getComputedStyle(elt, pseudoElt); 其中第一个参数就是我们要获取属性的元素，第二个参数是可选的，用于选择伪元素。 CSSOM View窗口API窗口 API 用于操作浏览器窗口的位置、尺寸等（方法在window下调用）。 moveTo(x, y) 窗口移动到屏幕的特定坐标； moveBy(x, y) 窗口移动特定距离； resizeTo(x, y) 改变窗口大小到特定尺寸； resizeBy(x, y) 改变窗口大小特定尺寸。 还规定了 window.open() 的第三个参数： window.open(&quot;about:blank&quot;, &quot;_blank&quot; ,&quot;width=100,height=100,left=100,right=100&quot; ) 一些浏览器出于安全考虑没有实现，也不适用于移动端浏览器，简单了解即可 滚动 API视口滚动 API可视区域（视口）滚动行为由 window 对象上的一组 API 控制，我们先来了解一下： scrollX 是视口的属性，表示 X 方向上的当前滚动距离，有别名 pageXOffset； scrollY 是视口的属性，表示 Y 方向上的当前滚动距离，有别名 pageYOffset； scroll(x, y) 使得页面滚动到特定的位置，有别名 scrollTo，支持传入配置型参数 {top, left}； scrollBy(x, y) 使得页面滚动特定的距离，支持传入配置型参数 {top, left}。 通过这些属性和方法，我们可以读取视口的滚动位置和操纵视口滚动。不过，要想监听视口滚动事件，我们需要在 document 对象上绑定事件监听函数： document.addEventListener(&quot;scroll&quot;, function(event){ //...... }) 视口滚动 API 是页面的顶层容器的滚动，大部分移动端浏览器都会采用一些性能优化，它和元素滚动不完全一样。 元素滚动 API在 Element 类（参见 DOM 部分），为了支持滚动，加入了以下 API。 scrollTop 元素的属性，表示 Y 方向上的当前滚动距离。 scrollLeft 元素的属性，表示 X 方向上的当前滚动距离。 scrollWidth 元素的属性，表示元素内部的滚动内容的宽度，一般来说会大于等于元素宽度。 scrollHeight 元素的属性，表示元素内部的滚动内容的高度，一般来说会大于等于元素高度。 scroll(x, y) 使得元素滚动到特定的位置，有别名 scrollTo，支持传入配置型参数 {top, left}。 scrollBy(x, y) 使得元素滚动到特定的位置，支持传入配置型参数 {top, left}。 scrollIntoView(arg) 滚动元素所在的父元素，使得元素滚动到可见区域，可以通过 arg 来指定滚到中间、开始或者就近。 除此之外，可滚动的元素也支持 scroll 事件，我们在元素上监听它的事件即可： element.addEventListener(&quot;scroll&quot;, function(event){ //...... }) 布局 API全局尺寸信息window 对象上提供了一些全局的尺寸信息，它是通过属性来提供的: window.innerHeight, window.innerWidth 这两个属性表示视口的大小。 window.outerWidth, window.outerHeight 这两个属性表示浏览器窗口占据的大小，很多浏览器没有实现，一般来说这两个属性无关紧要。 window.devicePixelRatio 这个属性非常重要，表示物理像素和 CSS 像素单位的倍率关系，Retina 屏这个值是 2，后来也出现了一些 3 倍的 Android 屏。 window.screen （屏幕尺寸相关的信息） window.screen.width, window.screen.height 设备的屏幕尺寸。 window.screen.availWidth, window.screen.availHeight 设备屏幕的可渲染区域尺寸，一些 Android 机器会把屏幕的一部分预留做固定按钮，所以有这两个属性，实际上一般浏览器不会实现的这么细致。 window.screen.colorDepth, window.screen.pixelDepth 这两个属性是固定值 24，应该是为了以后预留。 以上比较有用的只有三个：innerHeight、innerWidth 和 devicePixelRatio 元素的布局信息首先应该从脑中消除“元素有宽高”这样的概念，有些元素可能产生多个盒，事实上，只有盒有宽和高，元素是没有的。 所以我们获取宽高的对象应该是“盒”，于是 CSSOM View 为 Element 类添加了两个方法： getClientRects(): 返回一个列表，里面包含元素对应的每一个盒所占据的客户端矩形区域，这里每一个矩形区域可以用 x, y, width, height 来获取它的位置和尺寸。 document.getElementById(&quot;wrap&quot;).getClientRects()[0] //结果： {bottom: 342 height: 42 left: 0 right: 819 top: 300 width: 819 x: 0 y: 300} getBoundingClientRect(): 这个 API 的设计更接近我们脑海中的元素盒的概念，它返回元素对应的所有盒的包裹的矩形区域，需要注意，这个 API 获取的区域会包括当 overflow 为 visible 时的子元素区域 document.getElementById(&quot;wrap&quot;).getBoundingClientRect() //结果： {bottom: 300 height: 0 left: 0 right: 819 top: 300 width: 819 x: 0 y: 300} 两个api通常情况下计算结果是一致的。 这两个 API 获取的矩形区域都是相对于视口的坐标，这意味着，这些区域都是受滚动影响的。 如果我们要获取相对坐标，或者包含滚动区域的坐标，需要一点小技巧： var offsetX = document.documentElement.getBoundingClientRect().x - element.getBoundingClientRect().x;]]></content>
       <categories>
         <category>重学前端</category>
       </categories>
@@ -111,9 +122,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[重学前端19 - CSS部分-CSSDOM]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF19-CSS%E9%83%A8%E5%88%86-CSSDOM%2F</url>
-    <content type="text"><![CDATA[CSSOM API 的基本用法一般来说，我们需要先获取文档中所有的样式表： document.styleSheets document 的 styleSheets 属性表示文档中的所有样式表，这是一个只读的列表，我们可以用方括号运算符下标访问样式表，也可以使用 item 方法来访问，它有 length 属性表示文档中的样式表数量。 重学前端19-CSS部分-CSSDOM 操作我们虽然无法用 CSSOM API 来创建样式表，但是我们可以修改样式表中的内容（数字参数表示索引）。 document.styleSheets[0].insertRule(&quot;div {border:1px solid blue}&quot;,0) document.styleSheets[0].removeRule(5) 执行后，页面样式会发生对应变化，但并不会在style标签对应的位置真的插入样式代码。 cssRules属性更进一步，我们可以获取样式表中特定的规则（Rule），并且对它进行一定的操作，具体来说，就是使用它的 cssRules 属性来实现： 在chrome上测试发现，link标签引入的css文件样式，cssRules无法读取，因此也无法操作（insertRule，removeRule等无效），只可以操作style标签内的内联样式。 计算属性CSSOM 还提供了一个非常重要的方法，来获取一个元素最终经过 CSS 计算得到的属性： window.getComputedStyle(elt, pseudoElt); 其中第一个参数就是我们要获取属性的元素，第二个参数是可选的，用于选择伪元素。 CSSOM View窗口API窗口 API 用于操作浏览器窗口的位置、尺寸等（方法在window下调用）。 moveTo(x, y) 窗口移动到屏幕的特定坐标； moveBy(x, y) 窗口移动特定距离； resizeTo(x, y) 改变窗口大小到特定尺寸； resizeBy(x, y) 改变窗口大小特定尺寸。 还规定了 window.open() 的第三个参数： window.open(&quot;about:blank&quot;, &quot;_blank&quot; ,&quot;width=100,height=100,left=100,right=100&quot; ) 一些浏览器出于安全考虑没有实现，也不适用于移动端浏览器，简单了解即可 滚动 API视口滚动 API可视区域（视口）滚动行为由 window 对象上的一组 API 控制，我们先来了解一下： scrollX 是视口的属性，表示 X 方向上的当前滚动距离，有别名 pageXOffset； scrollY 是视口的属性，表示 Y 方向上的当前滚动距离，有别名 pageYOffset； scroll(x, y) 使得页面滚动到特定的位置，有别名 scrollTo，支持传入配置型参数 {top, left}； scrollBy(x, y) 使得页面滚动特定的距离，支持传入配置型参数 {top, left}。 通过这些属性和方法，我们可以读取视口的滚动位置和操纵视口滚动。不过，要想监听视口滚动事件，我们需要在 document 对象上绑定事件监听函数： document.addEventListener(&quot;scroll&quot;, function(event){ //...... }) 视口滚动 API 是页面的顶层容器的滚动，大部分移动端浏览器都会采用一些性能优化，它和元素滚动不完全一样。 元素滚动 API在 Element 类（参见 DOM 部分），为了支持滚动，加入了以下 API。 scrollTop 元素的属性，表示 Y 方向上的当前滚动距离。 scrollLeft 元素的属性，表示 X 方向上的当前滚动距离。 scrollWidth 元素的属性，表示元素内部的滚动内容的宽度，一般来说会大于等于元素宽度。 scrollHeight 元素的属性，表示元素内部的滚动内容的高度，一般来说会大于等于元素高度。 scroll(x, y) 使得元素滚动到特定的位置，有别名 scrollTo，支持传入配置型参数 {top, left}。 scrollBy(x, y) 使得元素滚动到特定的位置，支持传入配置型参数 {top, left}。 scrollIntoView(arg) 滚动元素所在的父元素，使得元素滚动到可见区域，可以通过 arg 来指定滚到中间、开始或者就近。 除此之外，可滚动的元素也支持 scroll 事件，我们在元素上监听它的事件即可： element.addEventListener(&quot;scroll&quot;, function(event){ //...... }) 布局 API全局尺寸信息window 对象上提供了一些全局的尺寸信息，它是通过属性来提供的: window.innerHeight, window.innerWidth 这两个属性表示视口的大小。 window.outerWidth, window.outerHeight 这两个属性表示浏览器窗口占据的大小，很多浏览器没有实现，一般来说这两个属性无关紧要。 window.devicePixelRatio 这个属性非常重要，表示物理像素和 CSS 像素单位的倍率关系，Retina 屏这个值是 2，后来也出现了一些 3 倍的 Android 屏。 window.screen （屏幕尺寸相关的信息） window.screen.width, window.screen.height 设备的屏幕尺寸。 window.screen.availWidth, window.screen.availHeight 设备屏幕的可渲染区域尺寸，一些 Android 机器会把屏幕的一部分预留做固定按钮，所以有这两个属性，实际上一般浏览器不会实现的这么细致。 window.screen.colorDepth, window.screen.pixelDepth 这两个属性是固定值 24，应该是为了以后预留。 以上比较有用的只有三个：innerHeight、innerWidth 和 devicePixelRatio 元素的布局信息首先应该从脑中消除“元素有宽高”这样的概念，有些元素可能产生多个盒，事实上，只有盒有宽和高，元素是没有的。 所以我们获取宽高的对象应该是“盒”，于是 CSSOM View 为 Element 类添加了两个方法： getClientRects(): 返回一个列表，里面包含元素对应的每一个盒所占据的客户端矩形区域，这里每一个矩形区域可以用 x, y, width, height 来获取它的位置和尺寸。 document.getElementById(&quot;wrap&quot;).getClientRects()[0] //结果： {bottom: 342 height: 42 left: 0 right: 819 top: 300 width: 819 x: 0 y: 300} getBoundingClientRect(): 这个 API 的设计更接近我们脑海中的元素盒的概念，它返回元素对应的所有盒的包裹的矩形区域，需要注意，这个 API 获取的区域会包括当 overflow 为 visible 时的子元素区域 document.getElementById(&quot;wrap&quot;).getBoundingClientRect() //结果： {bottom: 300 height: 0 left: 0 right: 819 top: 300 width: 819 x: 0 y: 300} 两个api通常情况下计算结果是一致的。 这两个 API 获取的矩形区域都是相对于视口的坐标，这意味着，这些区域都是受滚动影响的。 如果我们要获取相对坐标，或者包含滚动区域的坐标，需要一点小技巧： var offsetX = document.documentElement.getBoundingClientRect().x - element.getBoundingClientRect().x;]]></content>
+    <title><![CDATA[重学前端18 - CSS部分-文档流]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF18-CSS%E9%83%A8%E5%88%86-%E6%96%87%E6%A1%A3%E6%B5%81%2F</url>
+    <content type="text"><![CDATA[正常流的行为我们可以用一句话来描述正常流的排版行为，那就是：依次排列，排不下了换行。 当我们要把正常流中的一个盒或者文字排版，需要分成三种情况处理: 当遇到块级盒：排入块级格式化上下文。 当遇到行内级盒或者文字：首先尝试排入行内级格式化上下文，如果排不下，那么创建一个行盒，先将行盒排版（行盒是块级，所以到第一种情况），行盒会创建一个行内级格式化上下文。 遇到 float 盒：把盒的顶部跟当前行内级上下文上边缘对齐，然后根据 float 的方向把盒的对应边缘对到块级格式化上下文的边缘，之后重排当前行盒。 正常流实现的两种布局等分布局//css样式 .outer { width: 101px; /* 在某些浏览器中，因为像素计算精度问题，还是会出现换行，我们给 outer 添加一个特定宽度： */ font-size: 0; /* 解决换行和空格被 HTML 当作空格文本，跟 inline 盒混排了的问题。 */ } .inner { width: 33.33%; height: 300px; display: inline-block; outline: solid 1px blue; } .inner:last-child { margin-right: -5px; /* 解决某些旧版本浏览器中会出现换行的问题 */ } //html &lt;div class=&quot;outer&quot;&gt; &lt;div class=&quot;inner&quot;&gt;&lt;/div&gt; &lt;div class=&quot;inner&quot;&gt;&lt;/div&gt; &lt;div class=&quot;inner&quot;&gt;&lt;/div&gt; &lt;/div&gt; 自适应宽自适应宽（一个元素固定宽度，另一个元素填满父容器剩余宽度）是个经典的布局问题，我们现在就看一下如何使用正常流来解决： .outer { font-size: 0; } .fixed, .auto { outline: solid 1px red; display: inline-block; vertical-align: top; height: 300px; } .fixed { width: 200px; } .auto { width: 100%; margin-left: -200px; padding-left: 200px; box-sizing: border-box; } //html文件 &lt;div class=&quot;outer&quot;&gt; &lt;div class=&quot;fixed&quot;&gt;&lt;/div&gt; &lt;div class=&quot;auto&quot;&gt;&lt;/div&gt; &lt;/div&gt; BFC特点 BFC可以包含浮动元素（闭合浮动） BFC所确定的区域不会与外部浮动元素发生重叠 位于同一BFC下的相邻块级子元素在垂直方向上会发生margin重叠 位于不同BFC下的相邻元素之间不会发生margin重叠 将以上特点一言以蔽之，即BFC在页面上是一个封闭的区域，如同“结界”一般。即便是内部的浮动元素也无法脱离该区域。该区域内部的子元素无法影响区域外部，同时也不受外部影响。 如何触发/创建BFC满足下面任一条件即可： &lt;html>根元素 float的值不为none overflow的值为auto、scroll或hidden display的值为table-cell、table-caption或inline-block position的值为fixed或absolute BFC的常见用途闭合浮动#container { overflow: auto; /* 创建BFC */ } 阻止margin重叠发生重叠的代码： /* HTML代码 */ &lt;div id=&quot;box1&quot;&gt;我是box1&lt;/div&gt; &lt;div id=&quot;box2&quot;&gt;我是box2&lt;/div&gt; /* CSS代码 */ #box1 { margin-bottom: 20px; background-color: lightskyblue; } #box2 { margin-top: 20px; background-color: orange; } 创建BFC解决： /* HTML代码 */ &lt;div id=&quot;box1&quot;&gt;我是box1&lt;/div&gt; &lt;div id=&quot;bfc&quot;&gt; &lt;div id=&quot;box2&quot;&gt;我是box2&lt;/div&gt; &lt;/div&gt; /* CSS代码 */ #bfc { overflow: auto; /* 创建BFC */ } 自适应流体布局BFC最强大的用途其实是用于自适应流体布局，这是基于BFC所确定的区域不会与外部浮动元素发生重叠的特性实现的。 假设我们需要创建一个左侧宽度固定为200px，右侧宽度自适应的两列布局，一般情况下有如下解决方案： /* HTML代码 */ &lt;div id=&quot;layout&quot;&gt; &lt;div id=&quot;left&quot;&gt;&lt;/div&gt; &lt;div id=&quot;right&quot;&gt;&lt;/div&gt; &lt;/div&gt; /* CSS代码 */ #layout{ overflow: auto; /* 创建BFC闭合浮动 */ } #left { width: 200px; float: left; } #right { margin-left: 200px; } 创建BFC解决： #right { overflow: auto; /* 创建BFC */ } 参考文章 BFC的理解和运用]]></content>
       <categories>
         <category>重学前端</category>
       </categories>
@@ -166,30 +177,8 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[重学前端13 - JavaScript部分-理解编译原理]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF13-JavaScript%E9%83%A8%E5%88%86-%E7%90%86%E8%A7%A3%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%2F</url>
-    <content type="text"><![CDATA[概述待补充~]]></content>
-      <categories>
-        <category>重学前端</category>
-      </categories>
-      <tags>
-        <tag>js</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[重学前端20 - JavaScript部分-js词法]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF20-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%8D%E6%B3%95%2F</url>
-    <content type="text"><![CDATA[概述待补充~]]></content>
-      <categories>
-        <category>重学前端</category>
-      </categories>
-      <tags>
-        <tag>js</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[重学前端21 - JavaScript部分-js语法一]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF21-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E4%B8%80%2F</url>
+    <title><![CDATA[重学前端22 - JavaScript部分-js语法二]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF22-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E4%BA%8C%2F</url>
     <content type="text"><![CDATA[概述待补充~]]></content>
       <categories>
         <category>重学前端</category>
@@ -210,8 +199,8 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[重学前端24 - JavaScript部分-js语法四]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF24-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E5%9B%9B%2F</url>
+    <title><![CDATA[重学前端21 - JavaScript部分-js语法一]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF21-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E4%B8%80%2F</url>
     <content type="text"><![CDATA[概述待补充~]]></content>
       <categories>
         <category>重学前端</category>
@@ -221,8 +210,8 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[重学前端22 - JavaScript部分-js语法二]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF22-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E4%BA%8C%2F</url>
+    <title><![CDATA[重学前端24 - JavaScript部分-js语法四]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF24-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E5%9B%9B%2F</url>
     <content type="text"><![CDATA[概述待补充~]]></content>
       <categories>
         <category>重学前端</category>
@@ -235,6 +224,28 @@
     <title><![CDATA[重学前端12 - JavaScript部分-执行(二)]]></title>
     <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF12-JavaScript%E9%83%A8%E5%88%86-%E6%89%A7%E8%A1%8C(%E4%BA%8C)%2F</url>
     <content type="text"><![CDATA[闭包闭包其实只是一个绑定了执行环境的函数，闭包与普通函数的区别是，它携带了执行的环境，就像人在外星中需要自带吸氧的装备一样，这个函数也带有在程序中生存的环境。 执行上下文JavaScript 标准把一段代码（包括函数），执行所需的所有信息定义为：“执行上下文”。 执行上下文在 ES2018 中，包含以下部分： lexical environment：词法环境，当获取变量或者 this 值时使用。 variable environment：变量环境，当声明变量时使用 code evaluation state：用于恢复代码执行位置。 Function：执行的任务是函数时使用，表示正在被执行的函数。 ScriptOrModule：执行的任务是脚本或者模块时使用，表示正在被执行的代码。 Realm：使用的基础库和内置对象实例。 Generator：仅生成器上下文有这个属性，表示当前生成器。 在js中任何语句的执行都会依赖特定的上下文。一旦上下文被切换，整个语句的效果可能都会发生改变。在 JavaScript，切换上下文最主要的场景是函数调用。 函数 补充:仅普通函数和类能够跟 new 搭配使用 1 普通函数用 function 关键字定义的函数。 function foo(){ // code } 2 箭头函数用 =&gt; 运算符定义的函数。 const foo = () =&gt; { // code } 3 方法在 class 中定义的函数。 class C { foo(){ //code } } 4 生成器函数用 function * 定义的函数。 function* foo(){ // code } 5 类用 class 定义的类，实际上也是函数。 class Foo { constructor(){ //code } } 6/7/8 异步函数：普通函数、箭头函数和生成器函数加上 async 关键字。 async function foo(){ // code } const foo = async () =&gt; { // code } async function foo*(){{ // code } 对普通变量而言，这些函数并没有本质区别，它们的一个行为差异在于 this 关键字。 this 关键字this 是执行上下文中很重要的一个组成部分。同一个函数调用方式不同，得到的 this 值也不同。 调用函数时使用的引用，决定了函数执行时刻的 this 值。实际上从运行时的角度来看，this 跟面向对象毫无关联，它是与函数调用时使用的表达式相关。 语句分类 在 try 中有 return 语句，finally 中的内容还会执行吗？代码一： function foo(){ try{ return 0; } catch(err) { } finally { console.log(&quot;a&quot;) } } console.log(foo()); finally执行了，并且函数有返回值 代码二： function foo(){ try{ return 0; } catch(err) { } finally { return 1; } } console.log(foo()); 返回值为1，try的返回值被 finally 擦写了 这个怪异的表现行为是由于 Javascript 的Completion Record机制来实现的（Completion Record用于描述异常、跳出等语句执行过程） Completion Record 表示一个语句执行完之后的结果，它有三个字段： [[type]] 表示完成的类型，有 break continue return throw 和 normal 几种类型； [[value]] 表示语句的返回值，如果语句没有，则是 empty； [[target]] 表示语句的目标，通常是一个 JavaScript 标签。 普通语句执行后，会得到 [[type]] 为 normal 的 Completion Record，JavaScript 引擎遇到这样的 Completion Record，会继续执行下一条语句。 在一个语句块中，，如果每一个语句都是 normal 类型，那么它会顺次执行。但是假如我们在语句块中插入了一条 return 语句，产生了一个非 normal 记录，那么整个语句块会成为非 normal。这个结构就保证了非 normal 的完成类型可以穿透复杂的语句嵌套结构，产生控制效果。 那么对于上述的例子：因为 finally 中的内容必须保证执行，所以 try/catch 执行完毕，即使得到的结果是非 normal 型的完成记录，也必须要执行 finally。而当 finally 执行也得到了非 normal 记录，则会使 finally 中的记录作为整个 try 结构的结果。 带标签的语句实际上，任何 JavaScript 语句是可以加标签的，在语句前加冒号即可： firstStatement: var i = 1; 一般情况下没什么用，break/continue 语句如果后跟了lable语句，就会跳到对应的label位置，一般用于多层嵌套循环的跳出 var num=0; outter: for(var i=0;i&lt;10;i++){ for(var j=0;j&lt;10;j++){ if(i==5&amp;&amp;j==5){ break outter; //退出内部循环，指向outter，即外循环，同时退出外循环 } num++; } } document.write(num); //55]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端20 - JavaScript部分-js词法]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF20-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%8D%E6%B3%95%2F</url>
+    <content type="text"><![CDATA[概述待补充~]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端13 - JavaScript部分-理解编译原理]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF13-JavaScript%E9%83%A8%E5%88%86-%E7%90%86%E8%A7%A3%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%2F</url>
+    <content type="text"><![CDATA[概述待补充~]]></content>
       <categories>
         <category>重学前端</category>
       </categories>
@@ -379,7 +390,7 @@
         <category>Chromium</category>
       </categories>
       <tags>
-        <tag>notes</tag>
+        <tag>note</tag>
         <tag>闲话前端</tag>
       </tags>
   </entry>
