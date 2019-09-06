@@ -352,6 +352,434 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/从浏览器API看WEB标准/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WMH">
+      <meta itemprop="description" content="just code it">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WMH's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/从浏览器API看WEB标准/" class="post-title-link" itemprop="url">从浏览器API看WEB标准</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-06 10:19:22 / 修改时间：15:34:31" itemprop="dateCreated datePublished" datetime="2019-09-06T10:19:22+08:00">2019-09-06</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="浏览器下所有API"><a href="#浏览器下所有API" class="headerlink" title="浏览器下所有API"></a>浏览器下所有API</h2><p>大部分的浏览器 API 属于 Window 对象（或者说全局对象）,以windows下chrome 为例(Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36”), 运行 <code>Object.getOwnPropertyNames(window)</code>, 得到909个API。</p>
+<p>对这些api进一步梳理得到：  </p>
+<p>W3C 标准下的 API：</p>
+<ul>
+<li>Web Audio API</li>
+<li>Web Cryptography API</li>
+<li>Media Source Extensions</li>
+<li>The Screen Orientation API</li>
+<li>Network Information API</li>
+<li>Web MIDI (Musical Instrument Digital Interface ) API</li>
+<li>IndexedDB API</li>
+<li>Gamepad API</li>
+<li>DeviceOrientation Event</li>
+<li>Web App Manifest</li>
+<li>WebVTT: The Web Video Text Tracks Format</li>
+<li>Touch Events</li>
+<li>Scalable Vector Graphics (SVG)</li>
+<li>Resize Observer API</li>
+<li>Intersection Observer</li>
+<li>Mutation Observer</li>
+<li>Cooperative Scheduling of Background Tasks</li>
+<li>Service Worker API</li>
+<li>Payment Request API</li>
+<li>Presentation API</li>
+<li>Web Authentication API</li>
+</ul>
+<p>WICG 标准下的 API：</p>
+<ul>
+<li>Input Device Capabilitie</li>
+<li>Web Bluetooth API</li>
+<li>WebUSB API</li>
+</ul>
+<p>ECMA 标准下的 API：</p>
+<ul>
+<li>JavaScript 全局变量</li>
+<li>ECMAScript 2018 Internationalization API</li>
+</ul>
+<p>WHATWG 标准下的 API：</p>
+<ul>
+<li>Streams</li>
+<li>Encoding</li>
+<li>URL</li>
+</ul>
+<p>Khronos 标准下的 API：</p>
+<ul>
+<li>WebGL</li>
+</ul>
+<p>未标准化的 API：</p>
+<ul>
+<li>Web Background Synchronization</li>
+<li>WebRTC API</li>
+<li>Document Object Model XPath</li>
+<li>Visual Viewport API</li>
+<li>Performance Timeline API</li>
+</ul>
+<p>浏览器环境的 API，正是这样复杂的环境。我们平时编程面对的环境也是这样一个环境。</p>
+<h2 id="目前web领域相关标准制定组织"><a href="#目前web领域相关标准制定组织" class="headerlink" title="目前web领域相关标准制定组织"></a>目前web领域相关标准制定组织</h2><ul>
+<li>W3C：万维网联盟，创建于1994年。</li>
+<li>ECMA:欧洲计算机制造联合会, 制定JavaScript标准的ECMA 的39号技术委员会（ECMA TC39）</li>
+<li>WICG：Web Platform Incubator Community Group Web平台孵化器社区组，浏览器厂商也有参与，研究实验一些前沿功能。</li>
+<li>Khronos：多个国家和行业领导者创立，致力于发展开放标准的应用程序接口 API ，以实现在多种平台和终端设备上的富媒体创作、加速和回放。</li>
+<li>WHATWG： Web Hypertext Application Technology Working Group web超文本技术工作小组(2004年，数个浏览器厂商在无法忍受W3C罔顾现实情况意图抛弃HTML的时候，脱离W3C建立了该小组)。在2019年5月8日，<a href="https://www.w3.org/blog/news/archives/7753" target="_blank" rel="noopener">W3C 和 WHATWG 达成协议</a>：W3C 将不再独立发布与 DOM 和 HTML 直接相关的规范，而是与 WHATWG 合作，将 WHATWG 的审核草稿转为 W3C 推荐规范；同时 WHATWG 将负责维护 HTML 和 DOM 的现行标准。</li>
+</ul>
+<h2 id="关于JS的小知识"><a href="#关于JS的小知识" class="headerlink" title="关于JS的小知识"></a>关于JS的小知识</h2><ol>
+<li>1995年5月，Brendan Eich 只用了10天，就设计完成了这种语言的第一版。它是一个大杂烩，语法有多个来源： </li>
+</ol>
+<ul>
+<li>基本语法：借鉴 C 语言和 Java 语言。  </li>
+<li>数据结构：借鉴 Java 语言，包括将值分成原始值和对象两大类。  </li>
+<li>函数的用法：借鉴 Scheme 语言和 Awk 语言，将函数当作第一等公民，并引入闭包。  </li>
+<li>原型继承模型：借鉴 Self 语言（Smalltalk 的一种变种）。  </li>
+<li>正则表达式：借鉴 Perl 语言。  </li>
+<li>字符串和数组处理：借鉴 Python 语言。 </li>
+</ul>
+<ol start="2">
+<li>1996年11月，Netscape 公司决定将 JavaScript 提交给国际标准化组织 ECMA希望 JavaScript 能够成为国际标准，以此抵抗微软。ECMA 的39号技术委员会（Technical Committee 39）负责制定和审核这个标准（也是就github上ECMA TC39 的名称来源），1997年7月，ECMA 组织发布262号标准文件（ECMA-262）的第一版，之后<a href="https://github.com/tc39/ecma262" target="_blank" rel="noopener">ECMA-262</a>，一直就是JavaScript的标准文件名称了。</li>
+<li>ECMAScript 只用来标准化 JavaScript 这种语言的基本语法结构，与部署环境相关的标准都由其他标准规定，比如 DOM 的标准就是由 W3C组织（World Wide Web Consortium）制定的。</li>
+<li>2015 年 6 月，发布了ES6 的第一个版本（正式名称就是《ECMAScript 2015 标准》），并规定标准在每年的 6 月份正式发布一次，作为当年的正式版本。接下来的时间，就在这个版本的基础上做改动，直到下一年的 6 月份，草案就自然变成了新一年的版本。这样一来，就不需要以前的版本号了，只要用年份标记就可以了。2016 年 6 月发布了ES2016标准，2017 年 6 月发布 ES2017 标准。</li>
+<li>ES6 既是一个历史名词，也是一个泛指，含义是 5.1 版以后的 JavaScript 的下一代标准，涵盖了 ES2015、ES2016、ES2017 等等.</li>
+</ol>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ol>
+<li><a href="https://kangax.github.io/compat-table/es6/" target="_blank" rel="noopener">ES6 的支持进度</a></li>
+<li><a href="https://wangdoc.com/javascript/basic/history.html" target="_blank" rel="noopener">JavaScript 语言的历史</a></li>
+<li><a href="http://yanhaijing.com/es5/ECMAScript%E8%A7%84%E8%8C%83-%E7%AC%AC%E4%B8%89%E7%89%88_%E4%B8%AD%E6%96%87%E7%89%88.pdf" target="_blank" rel="noopener">ECMAScript 3 中文版 pdf</a></li>
+<li><a href="http://www.ecma-international.org/ecma-262/5.1/index.html" target="_blank" rel="noopener">ecma-international ecma 262 5.1（英）</a></li>
+<li><a href="https://whatwg-cn.github.io/html/" target="_blank" rel="noopener">html标准-中文翻译</a></li>
+<li><a href="https://www.w3.org/Style/CSS/" target="_blank" rel="noopener">css标准</a></li>
+<li><a href="https://github.com/whatwg/" target="_blank" rel="noopener">whatwg github</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/Fetch-and-XMLHttpRequest/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WMH">
+      <meta itemprop="description" content="just code it">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WMH's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/Fetch-and-XMLHttpRequest/" class="post-title-link" itemprop="url">Fetch and XMLHttpRequest</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-05 15:16:31" itemprop="dateCreated datePublished" datetime="2019-09-05T15:16:31+08:00">2019-09-05</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-09-06 17:45:50" itemprop="dateModified" datetime="2019-09-06T17:45:50+08:00">2019-09-06</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文小探一下Fetch相关内容<br></p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/Fetch-and-XMLHttpRequest/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/npm audit 指令/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -397,12 +825,24 @@
                 
               
 
-              <time title="创建时间：2019-07-18 15:27:24 / 修改时间：16:42:42" itemprop="dateCreated datePublished" datetime="2019-07-18T15:27:24+08:00">2019-07-18</time>
+              <time title="创建时间：2019-07-18 15:27:24" itemprop="dateCreated datePublished" datetime="2019-07-18T15:27:24+08:00">2019-07-18</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-09-06 15:33:55" itemprop="dateModified" datetime="2019-09-06T15:33:55+08:00">2019-09-06</time>
               
             
           </span>
@@ -1815,345 +2255,11 @@ found 10 vulnerabilities (6 moderate, 4 high)
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/重学前端27-浏览器部分-手动整理所有API/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="WMH">
-      <meta itemprop="description" content="just code it">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WMH's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/重学前端27-浏览器部分-手动整理所有API/" class="post-title-link" itemprop="url">重学前端27 - 浏览器部分-手动整理所有API</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-05-20 17:08:00 / 修改时间：18:18:09" itemprop="dateCreated datePublished" datetime="2019-05-20T17:08:00+08:00">2019-05-20</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/重学前端/" itemprop="url" rel="index"><span itemprop="name">重学前端</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/重学前端26-浏览器部分-捕获和冒泡/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="WMH">
-      <meta itemprop="description" content="just code it">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WMH's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/重学前端26-浏览器部分-捕获和冒泡/" class="post-title-link" itemprop="url">重学前端26 - 浏览器部分-捕获和冒泡</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-05-20 17:06:00 / 修改时间：18:18:21" itemprop="dateCreated datePublished" datetime="2019-05-20T17:06:00+08:00">2019-05-20</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/重学前端/" itemprop="url" rel="index"><span itemprop="name">重学前端</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="事件捕获和冒泡"><a href="#事件捕获和冒泡" class="headerlink" title="事件捕获和冒泡"></a>事件捕获和冒泡</h2><p>捕获过程是从外向内，冒泡过程是从内向外。</p>
-<p>实际上点击事件来自触摸屏或者鼠标，鼠标点击并没有位置信息，但是一般操作系统会根据位移的累积计算出来，跟触摸屏一样，提供一个坐标给浏览器。那么，把这个坐标转换为具体的元素上事件的过程，就是捕获过程了。而冒泡过程，则是符合人类理解逻辑的：当你按电视机开关时，你也按到了电视机。</p>
-<p>所以我们可以认为，捕获是计算机处理事件的逻辑，而冒泡是人类处理事件的逻辑。</p>
-<p>addEventListener 有三个参数：</p>
-<pre><code>事件名称；
-事件处理函数；
-捕获还是冒泡
-</code></pre><p>在现代浏览器中，建议默认不传第三个参数，因为冒泡是符合正常的人类心智模型的，大部分业务开发者不需要关心捕获过程。<br></p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/重学前端26-浏览器部分-捕获和冒泡/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2197,7 +2303,7 @@ found 10 vulnerabilities (6 moderate, 4 high)
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-count">41</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2222,7 +2328,9 @@ found 10 vulnerabilities (6 moderate, 4 high)
                     
                       
                     
-                    <span class="site-state-item-count">4</span>
+                      
+                    
+                    <span class="site-state-item-count">5</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
