@@ -12,15 +12,15 @@ categories: 重学前端
 head 标签规定了自身必须是 html 标签中的第一个标签，它的内容必须包含一个 title；
 
 <!-- more -->
-### 1. title 标签
+### title 标签
 
 title 标签表示文档的标题，从字面上就非常容易理解。
 
-### 2. base 标签
+### base 标签
 
 base 标签实际上是个历史遗留标签。它的作用是给页面上所有的 URL 相对地址提供一个基础。最多只有一个，它改变全局的链接地址，它是一个非常危险的标签，慎重使用。
 
-### 3. meta 标签
+###  meta 标签
 
 meta 标签是一组键值对，它是一种通用的元信息表示标签。在 head 中可以出现任意多个 meta 标签。一般的 meta 标签由 name 和 content 两个属性来定义。name 表示元信息的名，content 则用于表示元信息的值。
 
@@ -28,7 +28,7 @@ meta 标签是一组键值对，它是一种通用的元信息表示标签。在
 
 **meta标签的一些变体**
 
-#### 3.1 具有 charset 属性的 meta
+#### 具有 charset 属性的 meta
 
 从 HTML5 开始，为了简化写法，meta 标签新增了 charset 属性。添加了 charset 属性的 meta 标签无需再有 name 和 content。
 	
@@ -36,7 +36,7 @@ meta 标签是一组键值对，它是一种通用的元信息表示标签。在
 
 charset 型 meta 标签非常关键，它描述了 HTML 文档自身的编码形式。因此，建议这个标签放在 head 的第一个。
 
-#### 3.2 具有 http-equiv 属性的 meta
+#### 具有 http-equiv 属性的 meta
 
 具有 http-equiv 属性的 meta 标签，表示执行一个命令，这样的 meta 标签可以不需要 name 属性了。
 
@@ -56,7 +56,7 @@ charset 型 meta 标签非常关键，它描述了 HTML 文档自身的编码形
 	name 为 viewport 的 meta
 meta 标签可以被自由定义，只要写入和读取的双方约定好 name 和 content 的格式就可以了
 
-#### 3.3 name 为 viewport 的 meta。
+#### name 为 viewport 的 meta。
 
 这类 meta 的 name 属性为 viewport，它的 content 是一个复杂结构，是用逗号分隔的键值对，键值对的格式是 key=value。
 	
@@ -76,7 +76,7 @@ meta 标签可以被自由定义，只要写入和读取的双方约定好 name 
 	
 	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
 
-#### 3.4 其它预定义的 meta
+#### 其它预定义的 meta
 
 在 HTML 标准中，还定义了一批 meta 标签的 name，可以视为一种有约定的 meta，可以简单了解一下:(name为如下值，content为对应值)
 

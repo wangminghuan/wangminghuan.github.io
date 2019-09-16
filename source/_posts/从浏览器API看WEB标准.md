@@ -4,8 +4,22 @@ date: 2019-09-06 10:19:22
 tags: [浏览器]
 categories: web
 ---
+## 客户端JavaScript中的API
+客户端JavaScript中有很多可用的API — 他们本身并不是JavaScript语言的一部分，却建立在JavaScript语言核心的顶部（window），为使用JavaScript代码提供额外的超强能力。他们通常分为两类：
 
-## 浏览器下所有API
+- 浏览器API：内置于Web浏览器中，能从浏览器和电脑周边环境中提取数据，并用来做有用的复杂的事情 。如:Geolocation API
+- 第三方API: 缺省情况下不会内置于浏览器中，是在某些情况下执行后挂载在全局window下
+
+## 常见的浏览器API
+
+- 操作文档的API内置于浏览器中。最明显的例子是DOM
+- 从服务器获取数据的API: 如：XMLHttpRequest和Fetch API。
+- 用于绘制和操作图形的API:如：Canvas和WebGL
+- 音频和视频API，如：HTMLMediaElement
+- 设备API：Geolocation API
+- 客户端存储API： Web Storage API 和 IndexedDB API
+
+## 浏览器下所有API整理
 大部分的浏览器 API 属于 Window 对象（或者说全局对象）,以windows下chrome 为例(Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36"), 运行 `Object.getOwnPropertyNames(window)`, 得到909个API。
 
 对这些api进一步梳理得到：  
@@ -91,3 +105,4 @@ Khronos 标准下的 API：
 5. [html标准-中文翻译](https://whatwg-cn.github.io/html/)
 6. [css标准](https://www.w3.org/Style/CSS/)
 7. [whatwg github](https://github.com/whatwg/)
+8. [MSDN - webAPI](https://developer.mozilla.org/zh-CN/docs/Learn/JavaScript/Client-side_web_APIs/Introduction)

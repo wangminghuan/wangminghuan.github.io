@@ -77,7 +77,7 @@ Fetch API不同于XMLHttpRequest,他是一种全新设计的api用于发起获�
 
 1. 没有abort方法，请求发出后无法阻止，不支持超时控制。
 2. fetch没有办法原生监测请求的进度，而XHR可以。
-2. 无论请求返回时400，还是200，均会进入resolve处理，catch内捕获到的是resolve内发生的异常，譬如`Response.json()`的报错，所以，需要在resolve内判断`Response.status`或`Response.ok`来监测请求状态是否正常。
+3. 无论请求返回时400，还是200，均会进入resolve处理，catch内捕获到的是resolve内发生的异常，譬如`Response.json()`的报错，所以，需要在resolve内判断`Response.status`或`Response.ok`来监测请求状态是否正常。
 
 
 ## 参考

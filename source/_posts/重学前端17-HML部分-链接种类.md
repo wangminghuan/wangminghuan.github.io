@@ -13,7 +13,7 @@ categories: 重学前端
 <!-- more -->
 ### 一. link 标签
 
-#### 1.1 超链接类 link 标签
+####  超链接类 link 标签
 超链接型 link 标签是一种被动型链接，在用户不操作的情况下，它们不会被主动下载。
 
 link 标签具有特定的 rel 属性，会成为特定类型的 link 标签。产生超链接的 link 标签包括：具有 rel=“canonical” 的 link、具有 rel="alternate"的 link、具有 rel=“prev” rel="next"的 link 等等。
@@ -41,7 +41,7 @@ link 标签具有特定的 rel 属性，会成为特定类型的 link 标签。�
 		rel=“license” 链接到本页面的版权信息页
 		rel=“search” 链接到本页面的搜索页面（一般是站内提供搜索时使用）
 
-#### 1.2 外部资源类 link 标签
+####  外部资源类 link 标签
 外部资源型 link 标签会被主动下载，并且根据 rel 类型做不同的处理。外部资源型的标签包括：具有 icon 型的 link、预处理类 link、modulepreload 型的 link、stylesheet、pingback。
 
 - icon型
