@@ -96,18 +96,18 @@
 
 
 
-  <meta name="description" content="浏览器下所有API大部分的浏览器 API 属于 Window 对象（或者说全局对象）,以windows下chrome 为例(Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36”), 运行 Object.getOwnPro">
+  <meta name="description" content="客户端JavaScript中的API客户端JavaScript中有很多可用的API — 他们本身并不是JavaScript语言的一部分，却建立在JavaScript语言核心的顶部（window），为使用JavaScript代码提供额外的超强能力。他们通常分为两类：  浏览器API：内置于Web浏览器中，能从浏览器和电脑周边环境中提取数据，并用来做有用的复杂的事情 。如:Geolocation AP">
 <meta name="keywords" content="浏览器">
 <meta property="og:type" content="article">
 <meta property="og:title" content="从浏览器API看WEB标准">
 <meta property="og:url" content="https://wangminghuan.github.io/从浏览器API看WEB标准/index.html">
 <meta property="og:site_name" content="WMH&#39;s Blog">
-<meta property="og:description" content="浏览器下所有API大部分的浏览器 API 属于 Window 对象（或者说全局对象）,以windows下chrome 为例(Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36”), 运行 Object.getOwnPro">
+<meta property="og:description" content="客户端JavaScript中的API客户端JavaScript中有很多可用的API — 他们本身并不是JavaScript语言的一部分，却建立在JavaScript语言核心的顶部（window），为使用JavaScript代码提供额外的超强能力。他们通常分为两类：  浏览器API：内置于Web浏览器中，能从浏览器和电脑周边环境中提取数据，并用来做有用的复杂的事情 。如:Geolocation AP">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-09-06T07:34:31.590Z">
+<meta property="og:updated_time" content="2019-09-16T06:52:25.297Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从浏览器API看WEB标准">
-<meta name="twitter:description" content="浏览器下所有API大部分的浏览器 API 属于 Window 对象（或者说全局对象）,以windows下chrome 为例(Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36”), 运行 Object.getOwnPro">
+<meta name="twitter:description" content="客户端JavaScript中的API客户端JavaScript中有很多可用的API — 他们本身并不是JavaScript语言的一部分，却建立在JavaScript语言核心的顶部（window），为使用JavaScript代码提供额外的超强能力。他们通常分为两类：  浏览器API：内置于Web浏览器中，能从浏览器和电脑周边环境中提取数据，并用来做有用的复杂的事情 。如:Geolocation AP">
 
 
 
@@ -396,12 +396,24 @@
                 
               
 
-              <time title="创建时间：2019-09-06 10:19:22 / 修改时间：15:34:31" itemprop="dateCreated datePublished" datetime="2019-09-06T10:19:22+08:00">2019-09-06</time>
+              <time title="创建时间：2019-09-06 10:19:22" itemprop="dateCreated datePublished" datetime="2019-09-06T10:19:22+08:00">2019-09-06</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-09-16 14:52:25" itemprop="dateModified" datetime="2019-09-16T14:52:25+08:00">2019-09-16</time>
               
             
           </span>
@@ -460,7 +472,20 @@
       
 
       
-        <h2 id="浏览器下所有API"><a href="#浏览器下所有API" class="headerlink" title="浏览器下所有API"></a>浏览器下所有API</h2><p>大部分的浏览器 API 属于 Window 对象（或者说全局对象）,以windows下chrome 为例(Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36”), 运行 <code>Object.getOwnPropertyNames(window)</code>, 得到909个API。</p>
+        <h2 id="客户端JavaScript中的API"><a href="#客户端JavaScript中的API" class="headerlink" title="客户端JavaScript中的API"></a>客户端JavaScript中的API</h2><p>客户端JavaScript中有很多可用的API — 他们本身并不是JavaScript语言的一部分，却建立在JavaScript语言核心的顶部（window），为使用JavaScript代码提供额外的超强能力。他们通常分为两类：</p>
+<ul>
+<li>浏览器API：内置于Web浏览器中，能从浏览器和电脑周边环境中提取数据，并用来做有用的复杂的事情 。如:Geolocation API</li>
+<li>第三方API: 缺省情况下不会内置于浏览器中，是在某些情况下执行后挂载在全局window下</li>
+</ul>
+<h2 id="常见的浏览器API"><a href="#常见的浏览器API" class="headerlink" title="常见的浏览器API"></a>常见的浏览器API</h2><ul>
+<li>操作文档的API内置于浏览器中。最明显的例子是DOM</li>
+<li>从服务器获取数据的API: 如：XMLHttpRequest和Fetch API。</li>
+<li>用于绘制和操作图形的API:如：Canvas和WebGL</li>
+<li>音频和视频API，如：HTMLMediaElement</li>
+<li>设备API：Geolocation API</li>
+<li>客户端存储API： Web Storage API 和 IndexedDB API</li>
+</ul>
+<h2 id="浏览器下所有API整理"><a href="#浏览器下所有API整理" class="headerlink" title="浏览器下所有API整理"></a>浏览器下所有API整理</h2><p>大部分的浏览器 API 属于 Window 对象（或者说全局对象）,以windows下chrome 为例(Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36”), 运行 <code>Object.getOwnPropertyNames(window)</code>, 得到909个API。</p>
 <p>对这些api进一步梳理得到：  </p>
 <p>W3C 标准下的 API：</p>
 <ul>
@@ -548,6 +573,7 @@
 <li><a href="https://whatwg-cn.github.io/html/" target="_blank" rel="noopener">html标准-中文翻译</a></li>
 <li><a href="https://www.w3.org/Style/CSS/" target="_blank" rel="noopener">css标准</a></li>
 <li><a href="https://github.com/whatwg/" target="_blank" rel="noopener">whatwg github</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Learn/JavaScript/Client-side_web_APIs/Introduction" target="_blank" rel="noopener">MSDN - webAPI</a></li>
 </ol>
 
       
@@ -594,6 +620,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/浏览器数据库-IndexedDB/" rel="prev" title="浏览器数据库 IndexedDB">
+                浏览器数据库 IndexedDB <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -664,7 +694,7 @@
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">41</span>
+                    <span class="site-state-item-count">43</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -812,7 +842,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#浏览器下所有API"><span class="nav-number">1.</span> <span class="nav-text">浏览器下所有API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#目前web领域相关标准制定组织"><span class="nav-number">2.</span> <span class="nav-text">目前web领域相关标准制定组织</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于JS的小知识"><span class="nav-number">3.</span> <span class="nav-text">关于JS的小知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文章"><span class="nav-number">4.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端JavaScript中的API"><span class="nav-number">1.</span> <span class="nav-text">客户端JavaScript中的API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见的浏览器API"><span class="nav-number">2.</span> <span class="nav-text">常见的浏览器API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#浏览器下所有API整理"><span class="nav-number">3.</span> <span class="nav-text">浏览器下所有API整理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#目前web领域相关标准制定组织"><span class="nav-number">4.</span> <span class="nav-text">目前web领域相关标准制定组织</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于JS的小知识"><span class="nav-number">5.</span> <span class="nav-text">关于JS的小知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文章"><span class="nav-number">6.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
             
 
           </div>
