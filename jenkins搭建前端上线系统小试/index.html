@@ -121,7 +121,7 @@
 <meta property="og:image" content="https://wangminghuan.github.io/jenkins搭建前端上线系统小试/14.png">
 <meta property="og:image" content="https://wangminghuan.github.io/jenkins搭建前端上线系统小试/17.png">
 <meta property="og:image" content="https://wangminghuan.github.io/jenkins搭建前端上线系统小试/18.png">
-<meta property="og:updated_time" content="2019-09-26T07:52:21.469Z">
+<meta property="og:updated_time" content="2019-09-26T08:04:58.677Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="jenkins搭建前端上线系统小试">
 <meta name="twitter:description" content="概述一次在跟同事讨论中忽然萌生了自己手动搭建一套上线系统的想法，第一次上手，所以选用了业内比较成熟的方案-jenkins。之前只是用过jenkins进行过一些操作，并未自己从0到1完成搭建，本文记录下自己整个过程中的遇到的一些问题与解决方案。">
@@ -431,7 +431,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-09-26 15:52:21" itemprop="dateModified" datetime="2019-09-26T15:52:21+08:00">2019-09-26</time>
+                <time title="修改时间：2019-09-26 16:04:58" itemprop="dateModified" datetime="2019-09-26T16:04:58+08:00">2019-09-26</time>
               
             
           </span>
@@ -560,7 +560,12 @@ Registry - 仓库
 <p>触发器中我们选择hook，push之后，自动触发构建</p>
 <p><img src="/jenkins搭建前端上线系统小试/12.png" alt></p>
 <p>此处在github中也要做对应配置才可出发hook功能：<br><img src="/jenkins搭建前端上线系统小试/16.png" alt></p>
-<p>接下来我们配置拉去完代码后需要执行的脚本，centos上我们选择shell脚本：</p>
+<p>也可以自定义配置，譬如，push 与 merge时触发，选择Let me select individual events，勾选以下选项：</p>
+<pre><code>Deployments
+Deployment statuses
+Pull requests
+Pushes
+</code></pre><p>接下来我们配置拉去完代码后需要执行的脚本，centos上我们选择shell脚本：</p>
 <p><img src="/jenkins搭建前端上线系统小试/14.png" alt></p>
 <p>至此，一个简单的配置已经完毕，可以进行自动构建测试了！！</p>
 <h3 id="doker-模式下遇到的问题"><a href="#doker-模式下遇到的问题" class="headerlink" title="doker 模式下遇到的问题"></a>doker 模式下遇到的问题</h3><p>我们随便改一点东西，向master分支push代码，触发构建；构建任务正常触发，但执行到shell脚本时却出现了异常：</p>
