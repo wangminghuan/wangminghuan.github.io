@@ -144,6 +144,13 @@ docker的安装还是比较简单的，参照[阿里云官方文档](https://hel
 此处在github中也要做对应配置才可出发hook功能：
 ![](16.png)
 
+也可以自定义配置，譬如，push 与 merge时触发，选择Let me select individual events，勾选以下选项：
+
+    Deployments
+    Deployment statuses
+    Pull requests
+    Pushes
+
 接下来我们配置拉去完代码后需要执行的脚本，centos上我们选择shell脚本：
 
 ![](14.png)
