@@ -236,13 +236,13 @@ nodejs文件夹存在，但执行 `bin/node -v` 报错，提示 : No such file o
     npm install
     echo "开始打包..."
     npm run build
-
-    cd ${WORKSPACE%/*}
-    cd vue-build-project
-    cp -r ./dist  /home/upload-upyun/vue-build-project
+    
+    base="/home/upload-upyun"
+    dest="vue-build-project"
+    cp -r ./dist  ${base}/${dest}
     echo "开始上传..."
-    node /home/upload-upyun/index.js vue-build-project
-    rm -rf /home/upload-upyun/vue-build-project
+    node  ${base}/index.js ${dest}
+    rm -rf ${base}/${dest}
   
 `/home/upload-upyun/index.js` 内容如下：
 
@@ -339,6 +339,28 @@ nodejs文件夹存在，但执行 `bin/node -v` 报错，提示 : No such file o
 ![](18.png)
 
 所以，都是贫穷惹的祸~
+
+## 根据git diff 选择性上传文件
+
+有些情况下，我们只需要上传变动的文件，并不需要上传所有文件，此时shell部分可以这样编写：
+
+    diff=`git diff --name-only HEAD~1 HEAD~0`
+    base="/home/upload-upyun"
+    dest="static-demo"
+    rm -rf ${base}/${dest}
+    # 创建目标文件夹
+    mkdir -p ${base}/${dest}
+    # 循环复制变动文件(被删除文件忽略，只做新增与覆盖)
+    for line in $diff
+    do 
+    if [ -f $line ];then
+      cp --parents -afv $line ${base}/${dest}
+    fi
+    done
+
+    echo "开始上传..."
+    node  ${base}/index.js ${dest}
+    rm -rf ${base}/${dest}
 
 ## jenkins的其他安装方式
 也可以通过以下方式安装Jenkins，本文不再尝试，效果与rpm方式理论应该等同，具体可参照:
