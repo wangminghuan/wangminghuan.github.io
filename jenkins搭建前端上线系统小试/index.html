@@ -121,7 +121,18 @@
 <meta property="og:image" content="https://wangminghuan.github.io/jenkins搭建前端上线系统小试/14.png">
 <meta property="og:image" content="https://wangminghuan.github.io/jenkins搭建前端上线系统小试/17.png">
 <meta property="og:image" content="https://wangminghuan.github.io/jenkins搭建前端上线系统小试/18.png">
-<meta property="og:updated_time" content="2019-09-26T08:04:58.677Z">
+<meta property="og:image" content="https://wangminghuan.github.io/jenkins搭建前端上线系统小试/20.png">
+<meta property="og:image" content="https://wangminghuan.github.io/jenkins搭建前端上线系统小试/21.png">
+<meta property="og:image" content="https://wangminghuan.github.io/jenkins搭建前端上线系统小试/22.png">
+<meta property="og:image" content="https://wangminghuan.github.io/jenkins搭建前端上线系统小试/24.png">
+<meta property="og:image" content="https://wangminghuan.github.io/jenkins搭建前端上线系统小试/25.png">
+<meta property="og:image" content="https://wangminghuan.github.io/jenkins搭建前端上线系统小试/26.png">
+<meta property="og:image" content="https://wangminghuan.github.io/jenkins搭建前端上线系统小试/27.png">
+<meta property="og:image" content="https://wangminghuan.github.io/jenkins搭建前端上线系统小试/28.png">
+<meta property="og:image" content="https://wangminghuan.github.io/jenkins搭建前端上线系统小试/31.png">
+<meta property="og:image" content="https://wangminghuan.github.io/jenkins搭建前端上线系统小试/29.png">
+<meta property="og:image" content="https://wangminghuan.github.io/jenkins搭建前端上线系统小试/30.png">
+<meta property="og:updated_time" content="2019-09-30T09:46:13.883Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="jenkins搭建前端上线系统小试">
 <meta name="twitter:description" content="概述一次在跟同事讨论中忽然萌生了自己手动搭建一套上线系统的想法，第一次上手，所以选用了业内比较成熟的方案-jenkins。之前只是用过jenkins进行过一些操作，并未自己从0到1完成搭建，本文记录下自己整个过程中的遇到的一些问题与解决方案。">
@@ -431,7 +442,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-09-26 16:04:58" itemprop="dateModified" datetime="2019-09-26T16:04:58+08:00">2019-09-26</time>
+                <time title="修改时间：2019-09-30 17:46:13" itemprop="dateModified" datetime="2019-09-30T17:46:13+08:00">2019-09-30</time>
               
             
           </span>
@@ -620,8 +631,9 @@ echo &quot;开始上传...&quot;
 node  ${base}/index.js ${dest}
 rm -rf ${base}/${dest}
 </code></pre><p><code>/home/upload-upyun/index.js</code> 内容如下：</p>
-<pre><code>const argPath=(process.argv.splice(2))[0];//通过透传参数获取文件夹目录
-const uploadFolder=argPath?argPath:&apos;&apos;;
+<pre><code>const argPath=(process.argv.splice(2));//通过透传参数获取文件夹目录
+const uploadFolder=(argPath[0]?argPath[0]:&apos;&apos;).replace(/^--/g,&apos;&apos;);
+const rootPath=(argPath[1]?argPath[1]:&apos;&apos;).replace(/^--/g,&apos;&apos;); //静态资源服务器的上传根路径
 const fs=require(&quot;fs&quot;);
 const path=require(&quot;path&quot;);
 const upyun = require(&quot;upyun/dist/upyun.common&quot;);
@@ -642,7 +654,7 @@ const ypyConf={
     &quot;serviceName&quot; : &quot;xxx&quot;,
     &quot;operatorName&quot; : &quot;xxx&quot;,
     &quot;password&quot; :&quot;xxx&quot;,
-    &quot;remotePath&quot; &quot;xxx&quot;,
+    &quot;remotePath&quot; rootPath,
 };
 
   // 需要填写本地路径，云存储路径
@@ -717,13 +729,134 @@ fi
 done
 
 echo &quot;开始上传...&quot;
-node  ${base}/index.js ${dest}
+node  ${base}/index.js --${dest}
 rm -rf ${base}/${dest}
 </code></pre><h2 id="jenkins的其他安装方式"><a href="#jenkins的其他安装方式" class="headerlink" title="jenkins的其他安装方式"></a>jenkins的其他安装方式</h2><p>也可以通过以下方式安装Jenkins，本文不再尝试，效果与rpm方式理论应该等同，具体可参照:</p>
 <ol>
 <li>yum进行安装：<a href="https://blog.csdn.net/lazycheerup/article/details/83928548" target="_blank" rel="noopener">jenkins yum 安装</a></li>
 <li>war包安装：<a href="https://blog.51cto.com/bigboss/2129358" target="_blank" rel="noopener">WAR包方式安装Jenkins</a></li>
 </ol>
+<h2 id="Generic-Webhook-Trigger-Plugin"><a href="#Generic-Webhook-Trigger-Plugin" class="headerlink" title="Generic Webhook Trigger Plugin"></a>Generic Webhook Trigger Plugin</h2><p>上述的webhook是通过github-plugin 进行触发，但对于其他git托管，如腾讯云，阿里云，码云等其他第三方git服务提供平台，并没有对应的插件，此时，就轮到 <code>Generic Webhook Trigger Plugin</code> 插件登场：  </p>
+<p>首先，进行安装，过程省略。安装完毕后在项目配置页面可以看到多出一个配置：</p>
+<p><img src="/jenkins搭建前端上线系统小试/20.png" alt></p>
+<p>我们需要拿到webhook的地址，根据官方文档可以知道，我们需要拿到Jenkins管理员的API token, 进入管理用户页面，选择admin生成一个：</p>
+<p><img src="/jenkins搭建前端上线系统小试/21.png" alt></p>
+<p>最终得到的webhook地址为：<code>http://xxx:8080/generic-webhook-trigger/invoke?token=11d85c3af55e018axxxxxx</code>, 这里我们以腾讯云为例，配置下webhook:</p>
+<p><img src="/jenkins搭建前端上线系统小试/22.png" alt></p>
+<p>我们再回到项目配置页面，需要对该插件做一些配置, 默认我们配置好webhook后，所有配置过该webhook的页面，所有项目与分支的任意一个变动都可以触发所有项目的构建，这显然不是我想要的，我们需要做一些区分，参照<a href="https://blog.csdn.net/xlgen157387/article/details/76216351" target="_blank" rel="noopener">此文章</a>：  </p>
+<ol>
+<li>区分分支</li>
+</ol>
+<p><img src="/jenkins搭建前端上线系统小试/24.png" alt></p>
+<ol start="2">
+<li>区分项目（不同服务提供商字段会有差异，腾讯云是在repository下）</li>
+</ol>
+<p><img src="/jenkins搭建前端上线系统小试/25.png" alt></p>
+<ol start="3">
+<li>配置token</li>
+</ol>
+<p><img src="/jenkins搭建前端上线系统小试/26.png" alt></p>
+<ol start="4">
+<li>过滤字段匹配项目（此处为每个项目特有配置，区分好项目与分支）</li>
+</ol>
+<p><img src="/jenkins搭建前端上线系统小试/27.png" alt></p>
+<p>我们手动构建一次可以看到webhook返回结果如下：</p>
+<pre><code>{
+  &quot;ref&quot;: &quot;refs/heads/dev&quot;,
+  &quot;before&quot;: &quot;6b53d96f0ee3dc5b1b60d389105d330641ac1612&quot;,
+  &quot;after&quot;: &quot;9370030232017ff649a070ae6bf1bdd7522a037c&quot;,
+  &quot;created&quot;: false,
+  &quot;deleted&quot;: false,
+  &quot;compare&quot;: &quot;\u003ca href\u003d\u0027https://coding.net/u/wangminghuan/p/jenkins-autoupload\u0027 target\u003d\u0027_blank\u0027\u003ejenkins-autoupload\u003c/a\u003e/git/compare/6b53d96f0ee3d...9370030232017&quot;,
+  &quot;commits&quot;: [{
+    &quot;id&quot;: &quot;9370030232017ff649a070ae6bf1bdd7522a037c&quot;,
+    &quot;distinct&quot;: false,
+    &quot;message&quot;: &quot;fix:添加文件\n&quot;,
+    &quot;timestamp&quot;: 1569831379000,
+    &quot;url&quot;: &quot;\u003ca href\u003d\u0027https://coding.net/u/wangminghuan/p/jenkins-autoupload\u0027 target\u003d\u0027_blank\u0027\u003ejenkins-autoupload\u003c/a\u003e/git/commit/9370030232017ff649a070ae6bf1bdd7522a037c&quot;,
+    &quot;author&quot;: {
+      &quot;name&quot;: &quot;wangminghuan&quot;,
+      &quot;email&quot;: &quot;m.h.wang@foxmail.com&quot;,
+      &quot;username&quot;: &quot;wangminghuan&quot;
+    },
+    &quot;committer&quot;: {
+      &quot;name&quot;: &quot;wangminghuan&quot;,
+      &quot;email&quot;: &quot;m.h.wang@foxmail.com&quot;,
+      &quot;username&quot;: &quot;wangminghuan&quot;
+    },
+    &quot;added&quot;: [&quot;dofun.png&quot;],
+    &quot;removed&quot;: [],
+    &quot;modified&quot;: []
+  }],
+  &quot;head_commit&quot;: {
+    &quot;id&quot;: &quot;9370030232017ff649a070ae6bf1bdd7522a037c&quot;,
+    &quot;distinct&quot;: false,
+    &quot;message&quot;: &quot;fix:添加文件\n&quot;,
+    &quot;timestamp&quot;: 1569831379000,
+    &quot;url&quot;: &quot;\u003ca href\u003d\u0027https://coding.net/u/wangminghuan/p/jenkins-autoupload\u0027 target\u003d\u0027_blank\u0027\u003ejenkins-autoupload\u003c/a\u003e/git/commit/9370030232017ff649a070ae6bf1bdd7522a037c&quot;,
+    &quot;author&quot;: {
+      &quot;name&quot;: &quot;wangminghuan&quot;,
+      &quot;email&quot;: &quot;m.h.wang@foxmail.com&quot;,
+      &quot;username&quot;: &quot;wangminghuan&quot;
+    },
+    &quot;committer&quot;: {
+      &quot;name&quot;: &quot;wangminghuan&quot;,
+      &quot;email&quot;: &quot;m.h.wang@foxmail.com&quot;,
+      &quot;username&quot;: &quot;wangminghuan&quot;
+    },
+    &quot;added&quot;: [&quot;dofun.png&quot;],
+    &quot;removed&quot;: [],
+    &quot;modified&quot;: []
+  },
+  &quot;pusher&quot;: {
+    &quot;name&quot;: &quot;王明欢&quot;,
+    &quot;email&quot;: &quot;m.h.wang@foxmail.com&quot;,
+    &quot;username&quot;: &quot;wangminghuan&quot;
+  },
+  &quot;sender&quot;: {
+    &quot;id&quot;: 2222972,
+    &quot;login&quot;: &quot;wangminghuan&quot;,
+    &quot;avatar_url&quot;: &quot;https://coding-net-production-static-ci.codehub.cn/e4ed6f51-7033-4c66-bb1c-d567795c88a9.jpg?imageMogr2/auto-orient/format/jpeg/cut/!640x640x0x0&quot;,
+    &quot;url&quot;: &quot;https://dev.tencent.com/api/user/key/wangminghuan&quot;,
+    &quot;html_url&quot;: &quot;https://dev.tencent.com/u/wangminghuan&quot;,
+    &quot;name&quot;: &quot;王明欢&quot;,
+    &quot;name_pinyin&quot;: &quot;|wmh|wangminghuan&quot;
+  },
+  &quot;repository&quot;: {
+    &quot;id&quot;: 4733490,
+    &quot;name&quot;: &quot;jenkins-autoupload&quot;,
+    &quot;full_name&quot;: &quot;wangminghuan/jenkins-autoupload&quot;,
+    &quot;owner&quot;: {
+      &quot;id&quot;: 2222972,
+      &quot;login&quot;: &quot;wangminghuan&quot;,
+      &quot;avatar_url&quot;: &quot;https://coding-net-production-static-ci.codehub.cn/e4ed6f51-7033-4c66-bb1c-d567795c88a9.jpg?imageMogr2/auto-orient/format/jpeg/cut/!640x640x0x0&quot;,
+      &quot;url&quot;: &quot;https://dev.tencent.com/api/user/key/wangminghuan&quot;,
+      &quot;html_url&quot;: &quot;https://dev.tencent.com/u/wangminghuan&quot;,
+      &quot;name&quot;: &quot;王明欢&quot;,
+      &quot;name_pinyin&quot;: &quot;|wmh|wangminghuan&quot;
+    },
+    &quot;private&quot;: true,
+    &quot;html_url&quot;: &quot;\u003ca href\u003d\u0027https://dev.tencent.com/u/wangminghuan/p/jenkins-autoupload\u0027 target\u003d\u0027_blank\u0027\u003ejenkins-autoupload\u003c/a\u003e&quot;,
+    &quot;description&quot;: &quot;测试jenkins自动化部署上传&quot;,
+    &quot;fork&quot;: false,
+    &quot;url&quot;: &quot;https://dev.tencent.com/api/user/wangminghuan/project/jenkins-autoupload&quot;,
+    &quot;created_at&quot;: 1568866930000,
+    &quot;updated_at&quot;: 1568866930000,
+    &quot;clone_url&quot;: &quot;https://git.dev.tencent.com/wangminghuan/jenkins-autoupload.git&quot;,
+    &quot;ssh_url&quot;: &quot;git@git.dev.tencent.com:wangminghuan/jenkins-autoupload.git&quot;,
+    &quot;default_branch&quot;: &quot;master&quot;
+  }
+}
+</code></pre><p>至此，配置基本完毕。</p>
+<h2 id="权限部分配置"><a href="#权限部分配置" class="headerlink" title="权限部分配置"></a>权限部分配置</h2><p>通过插件 <code>Role-based Authorization Strategy</code> 配置完成，安装完插件，重启Jenkins，会发现配置页面多一个选项：</p>
+<p><img src="/jenkins搭建前端上线系统小试/28.png" alt></p>
+<p>首先需要在全局安全配置页面将授权策略改为：Role-Based Strategy</p>
+<p><img src="/jenkins搭建前端上线系统小试/31.png" alt></p>
+<p>进入 Manage Role 选项，配置用户角色与所在组角色权限</p>
+<p><img src="/jenkins搭建前端上线系统小试/29.png" alt></p>
+<p>进入 Assign Roles 选项，为用户分配角色（首先需要在用户管理板块创建用户）</p>
+<p><img src="/jenkins搭建前端上线系统小试/30.png" alt></p>
+<p>具体可参考<a href="https://www.cnblogs.com/peng-lan/p/9809644.html" target="_blank" rel="noopener">jenkins配置用户角色权限，根据不同权限显示视图、Job</a></p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>docker安装方式比较傻瓜，而且整个插件安装的过程都比较快，但是因为docker就像一个封闭的黑盒，很多东西与系统是隔离开的（废话，设计初衷就是这样），导致我这个菜鸟遇到问题想不到好的解决方案。嗯，还是RPM用起来更顺手一些，遇到问题基本还能应对。最后，不差钱的，请上大内存服务器~</p>
 <h2 id="可能用到的linux命令"><a href="#可能用到的linux命令" class="headerlink" title="可能用到的linux命令"></a>可能用到的linux命令</h2><pre><code># 启动docker
 systemctl start docker
@@ -1018,7 +1151,7 @@ sudo tail -f /var/log/jenkins/jenkins.log  查看日志
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#准备知识"><span class="nav-number">2.</span> <span class="nav-text">准备知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方案一：-docker安装"><span class="nav-number">3.</span> <span class="nav-text">方案一： docker安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#centos上安装docker"><span class="nav-number">3.1.</span> <span class="nav-text">centos上安装docker</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于-docker"><span class="nav-number">3.2.</span> <span class="nav-text">关于 docker</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#前端为什么需要使用-Docker？"><span class="nav-number">3.2.1.</span> <span class="nav-text">前端为什么需要使用 Docker？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Docker-中的三个概念"><span class="nav-number">3.2.2.</span> <span class="nav-text">Docker 中的三个概念</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#docker-安装jenkins"><span class="nav-number">3.3.</span> <span class="nav-text">docker 安装jenkins</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jenkins-配置nodejs"><span class="nav-number">3.4.</span> <span class="nav-text">jenkins 配置nodejs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jenkins-github-配置项目"><span class="nav-number">3.5.</span> <span class="nav-text">jenkins + github 配置项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#doker-模式下遇到的问题"><span class="nav-number">3.6.</span> <span class="nav-text">doker 模式下遇到的问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RPM方式安装jenkins"><span class="nav-number">4.</span> <span class="nav-text">RPM方式安装jenkins</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装java环境"><span class="nav-number">4.1.</span> <span class="nav-text">安装java环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#下载rpm包："><span class="nav-number">4.2.</span> <span class="nav-text">下载rpm包：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装jenkins"><span class="nav-number">4.3.</span> <span class="nav-text">安装jenkins</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动jenkins"><span class="nav-number">4.4.</span> <span class="nav-text">启动jenkins</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#node调用centos全局配置"><span class="nav-number">4.5.</span> <span class="nav-text">node调用centos全局配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#完善整个构建流程"><span class="nav-number">4.6.</span> <span class="nav-text">完善整个构建流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最终构建效果"><span class="nav-number">4.7.</span> <span class="nav-text">最终构建效果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#遇到的问题"><span class="nav-number">5.</span> <span class="nav-text">遇到的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#根据git-diff-选择性上传文件"><span class="nav-number">6.</span> <span class="nav-text">根据git diff 选择性上传文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jenkins的其他安装方式"><span class="nav-number">7.</span> <span class="nav-text">jenkins的其他安装方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可能用到的linux命令"><span class="nav-number">9.</span> <span class="nav-text">可能用到的linux命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">10.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#准备知识"><span class="nav-number">2.</span> <span class="nav-text">准备知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方案一：-docker安装"><span class="nav-number">3.</span> <span class="nav-text">方案一： docker安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#centos上安装docker"><span class="nav-number">3.1.</span> <span class="nav-text">centos上安装docker</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于-docker"><span class="nav-number">3.2.</span> <span class="nav-text">关于 docker</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#前端为什么需要使用-Docker？"><span class="nav-number">3.2.1.</span> <span class="nav-text">前端为什么需要使用 Docker？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Docker-中的三个概念"><span class="nav-number">3.2.2.</span> <span class="nav-text">Docker 中的三个概念</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#docker-安装jenkins"><span class="nav-number">3.3.</span> <span class="nav-text">docker 安装jenkins</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jenkins-配置nodejs"><span class="nav-number">3.4.</span> <span class="nav-text">jenkins 配置nodejs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jenkins-github-配置项目"><span class="nav-number">3.5.</span> <span class="nav-text">jenkins + github 配置项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#doker-模式下遇到的问题"><span class="nav-number">3.6.</span> <span class="nav-text">doker 模式下遇到的问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RPM方式安装jenkins"><span class="nav-number">4.</span> <span class="nav-text">RPM方式安装jenkins</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装java环境"><span class="nav-number">4.1.</span> <span class="nav-text">安装java环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#下载rpm包："><span class="nav-number">4.2.</span> <span class="nav-text">下载rpm包：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装jenkins"><span class="nav-number">4.3.</span> <span class="nav-text">安装jenkins</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动jenkins"><span class="nav-number">4.4.</span> <span class="nav-text">启动jenkins</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#node调用centos全局配置"><span class="nav-number">4.5.</span> <span class="nav-text">node调用centos全局配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#完善整个构建流程"><span class="nav-number">4.6.</span> <span class="nav-text">完善整个构建流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最终构建效果"><span class="nav-number">4.7.</span> <span class="nav-text">最终构建效果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#遇到的问题"><span class="nav-number">5.</span> <span class="nav-text">遇到的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#根据git-diff-选择性上传文件"><span class="nav-number">6.</span> <span class="nav-text">根据git diff 选择性上传文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jenkins的其他安装方式"><span class="nav-number">7.</span> <span class="nav-text">jenkins的其他安装方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Generic-Webhook-Trigger-Plugin"><span class="nav-number">8.</span> <span class="nav-text">Generic Webhook Trigger Plugin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#权限部分配置"><span class="nav-number">9.</span> <span class="nav-text">权限部分配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">10.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可能用到的linux命令"><span class="nav-number">11.</span> <span class="nav-text">可能用到的linux命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">12.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
