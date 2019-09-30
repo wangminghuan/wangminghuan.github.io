@@ -253,8 +253,9 @@ nodejs文件夹存在，但执行 `bin/node -v` 报错，提示 : No such file o
   
 `/home/upload-upyun/index.js` 内容如下：
 
-    const argPath=(process.argv.splice(2))[0];//通过透传参数获取文件夹目录
-    const uploadFolder=argPath?argPath:'';
+    const argPath=(process.argv.splice(2));//通过透传参数获取文件夹目录
+    const uploadFolder=(argPath[0]?argPath[0]:'').replace(/^--/g,'');
+    const rootPath=(argPath[1]?argPath[1]:'').replace(/^--/g,''); //静态资源服务器的上传根路径
     const fs=require("fs");
     const path=require("path");
     const upyun = require("upyun/dist/upyun.common");
@@ -275,7 +276,7 @@ nodejs文件夹存在，但执行 `bin/node -v` 报错，提示 : No such file o
         "serviceName" : "xxx",
         "operatorName" : "xxx",
         "password" :"xxx",
-        "remotePath" "xxx",
+        "remotePath" rootPath,
     };
 
       // 需要填写本地路径，云存储路径
@@ -366,7 +367,7 @@ nodejs文件夹存在，但执行 `bin/node -v` 报错，提示 : No such file o
     done
 
     echo "开始上传..."
-    node  ${base}/index.js ${dest}
+    node  ${base}/index.js --${dest}
     rm -rf ${base}/${dest}
 
 ## jenkins的其他安装方式
@@ -374,6 +375,151 @@ nodejs文件夹存在，但执行 `bin/node -v` 报错，提示 : No such file o
 
 1. yum进行安装：[jenkins yum 安装](https://blog.csdn.net/lazycheerup/article/details/83928548)
 2. war包安装：[WAR包方式安装Jenkins](https://blog.51cto.com/bigboss/2129358)
+
+## Generic Webhook Trigger Plugin
+
+上述的webhook是通过github-plugin 进行触发，但对于其他git托管，如腾讯云，阿里云，码云等其他第三方git服务提供平台，并没有对应的插件，此时，就轮到 `Generic Webhook Trigger Plugin` 插件登场：  
+
+首先，进行安装，过程省略。安装完毕后在项目配置页面可以看到多出一个配置：
+
+![](20.png)
+
+我们需要拿到webhook的地址，根据官方文档可以知道，我们需要拿到Jenkins管理员的API token, 进入管理用户页面，选择admin生成一个：
+
+![](21.png)
+
+最终得到的webhook地址为：`http://xxx:8080/generic-webhook-trigger/invoke?token=11d85c3af55e018axxxxxx`, 这里我们以腾讯云为例，配置下webhook:
+
+![](22.png)
+
+我们再回到项目配置页面，需要对该插件做一些配置, 默认我们配置好webhook后，所有配置过该webhook的页面，所有项目与分支的任意一个变动都可以触发所有项目的构建，这显然不是我想要的，我们需要做一些区分，参照[此文章](https://blog.csdn.net/xlgen157387/article/details/76216351)：  
+
+1. 区分分支
+
+![](24.png)
+
+2. 区分项目（不同服务提供商字段会有差异，腾讯云是在repository下）
+
+![](25.png)
+
+3. 配置token
+
+![](26.png)
+
+4. 过滤字段匹配项目（此处为每个项目特有配置，区分好项目与分支）
+
+![](27.png)
+
+我们手动构建一次可以看到webhook返回结果如下：
+
+    {
+      "ref": "refs/heads/dev",
+      "before": "6b53d96f0ee3dc5b1b60d389105d330641ac1612",
+      "after": "9370030232017ff649a070ae6bf1bdd7522a037c",
+      "created": false,
+      "deleted": false,
+      "compare": "\u003ca href\u003d\u0027https://coding.net/u/wangminghuan/p/jenkins-autoupload\u0027 target\u003d\u0027_blank\u0027\u003ejenkins-autoupload\u003c/a\u003e/git/compare/6b53d96f0ee3d...9370030232017",
+      "commits": [{
+        "id": "9370030232017ff649a070ae6bf1bdd7522a037c",
+        "distinct": false,
+        "message": "fix:添加文件\n",
+        "timestamp": 1569831379000,
+        "url": "\u003ca href\u003d\u0027https://coding.net/u/wangminghuan/p/jenkins-autoupload\u0027 target\u003d\u0027_blank\u0027\u003ejenkins-autoupload\u003c/a\u003e/git/commit/9370030232017ff649a070ae6bf1bdd7522a037c",
+        "author": {
+          "name": "wangminghuan",
+          "email": "m.h.wang@foxmail.com",
+          "username": "wangminghuan"
+        },
+        "committer": {
+          "name": "wangminghuan",
+          "email": "m.h.wang@foxmail.com",
+          "username": "wangminghuan"
+        },
+        "added": ["dofun.png"],
+        "removed": [],
+        "modified": []
+      }],
+      "head_commit": {
+        "id": "9370030232017ff649a070ae6bf1bdd7522a037c",
+        "distinct": false,
+        "message": "fix:添加文件\n",
+        "timestamp": 1569831379000,
+        "url": "\u003ca href\u003d\u0027https://coding.net/u/wangminghuan/p/jenkins-autoupload\u0027 target\u003d\u0027_blank\u0027\u003ejenkins-autoupload\u003c/a\u003e/git/commit/9370030232017ff649a070ae6bf1bdd7522a037c",
+        "author": {
+          "name": "wangminghuan",
+          "email": "m.h.wang@foxmail.com",
+          "username": "wangminghuan"
+        },
+        "committer": {
+          "name": "wangminghuan",
+          "email": "m.h.wang@foxmail.com",
+          "username": "wangminghuan"
+        },
+        "added": ["dofun.png"],
+        "removed": [],
+        "modified": []
+      },
+      "pusher": {
+        "name": "王明欢",
+        "email": "m.h.wang@foxmail.com",
+        "username": "wangminghuan"
+      },
+      "sender": {
+        "id": 2222972,
+        "login": "wangminghuan",
+        "avatar_url": "https://coding-net-production-static-ci.codehub.cn/e4ed6f51-7033-4c66-bb1c-d567795c88a9.jpg?imageMogr2/auto-orient/format/jpeg/cut/!640x640x0x0",
+        "url": "https://dev.tencent.com/api/user/key/wangminghuan",
+        "html_url": "https://dev.tencent.com/u/wangminghuan",
+        "name": "王明欢",
+        "name_pinyin": "|wmh|wangminghuan"
+      },
+      "repository": {
+        "id": 4733490,
+        "name": "jenkins-autoupload",
+        "full_name": "wangminghuan/jenkins-autoupload",
+        "owner": {
+          "id": 2222972,
+          "login": "wangminghuan",
+          "avatar_url": "https://coding-net-production-static-ci.codehub.cn/e4ed6f51-7033-4c66-bb1c-d567795c88a9.jpg?imageMogr2/auto-orient/format/jpeg/cut/!640x640x0x0",
+          "url": "https://dev.tencent.com/api/user/key/wangminghuan",
+          "html_url": "https://dev.tencent.com/u/wangminghuan",
+          "name": "王明欢",
+          "name_pinyin": "|wmh|wangminghuan"
+        },
+        "private": true,
+        "html_url": "\u003ca href\u003d\u0027https://dev.tencent.com/u/wangminghuan/p/jenkins-autoupload\u0027 target\u003d\u0027_blank\u0027\u003ejenkins-autoupload\u003c/a\u003e",
+        "description": "测试jenkins自动化部署上传",
+        "fork": false,
+        "url": "https://dev.tencent.com/api/user/wangminghuan/project/jenkins-autoupload",
+        "created_at": 1568866930000,
+        "updated_at": 1568866930000,
+        "clone_url": "https://git.dev.tencent.com/wangminghuan/jenkins-autoupload.git",
+        "ssh_url": "git@git.dev.tencent.com:wangminghuan/jenkins-autoupload.git",
+        "default_branch": "master"
+      }
+    }
+
+至此，配置基本完毕。
+
+## 权限部分配置
+通过插件 `Role-based Authorization Strategy` 配置完成，安装完插件，重启Jenkins，会发现配置页面多一个选项：
+
+![](28.png)
+
+首先需要在全局安全配置页面将授权策略改为：Role-Based Strategy
+
+![](31.png)
+
+
+进入 Manage Role 选项，配置用户角色与所在组角色权限
+
+![](29.png)
+
+进入 Assign Roles 选项，为用户分配角色（首先需要在用户管理板块创建用户）
+
+![](30.png)
+
+具体可参考[jenkins配置用户角色权限，根据不同权限显示视图、Job](https://www.cnblogs.com/peng-lan/p/9809644.html)
 
 ## 总结
 
