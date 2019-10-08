@@ -1,9 +1,10 @@
 ---
-title: EventLoop中异步任务的执行顺序
-date: 2019-07-03 12:44:00
+title: Nodejs系列-2-EventLoop
+date: 2019-10-08 09:48:35
 tags: [note]
-categories: JavaScript
+categories: Nodejs
 ---
+
 ## 概述
 从诞生最初，JavaScript就是单线程，这已经成了这门语言的核心特征，将来也不会改变。
 
@@ -92,6 +93,44 @@ setImmediate属于宏任务。表示立即执行。但是它指定的任务执�
 
 1. 如果两者都在主模块中调用，那么执行先后取决于进程性能，也就是随机。
 2. 如果两者都不在主模块调用（被一个异步操作包裹），那么setImmediate的回调永远先执行。
+
+### libuv引擎中的事件循环的模型
+
+	   ┌───────────────────────┐
+	┌─>│        timers         │
+	│  └──────────┬────────────┘
+	│  ┌──────────┴────────────┐
+	│  │     I/O callbacks     │
+	│  └──────────┬────────────┘
+	│  ┌──────────┴────────────┐
+	│  │     idle, prepare     │
+	│  └──────────┬────────────┘      ┌───────────────┐
+	│  ┌──────────┴────────────┐      │   incoming:   │
+	│  │         poll          │<──connections───     │
+	│  └──────────┬────────────┘      │   data, etc.  │
+	│  ┌──────────┴────────────┐      └───────────────┘
+	│  │        check          │
+	│  └──────────┬────────────┘
+	│  ┌──────────┴────────────┐
+	└──┤    close callbacks    │
+       └───────────────────────┘
+
+node中的事件循环的顺序：
+
+外部输入数据-->轮询阶段(poll)-->检查阶段(check)-->关闭事件回调阶段(close callback)-->定时器检测阶段(timer)-->I/O事件回调阶段(I/O callbacks)-->闲置阶段(idle, prepare)-->轮询阶段...
+
+nodejs每一轮事件循环的六个阶段：
+
+- timers: 这个阶段执行定时器队列中的回调如 setTimeout() 和 setInterval()。
+- I/O callbacks: 这个阶段执行几乎所有的回调。但是不包括close事件，定时器和setImmediate()的回调。
+- idle, prepare: 这个阶段仅在内部使用，可以不必理会。
+- poll: 等待新的I/O事件，node在一些特殊情况下会阻塞在这里。
+- check: setImmediate()的回调会在这个阶段执行。
+- close callbacks: 例如socket.on('close', ...)这种close事件的回调。
+
+贴一张其他讲解中的nodejs下eventLoop的流程图
+
+![](./1-3.png)
 
 ## 相关试题
 
@@ -246,6 +285,10 @@ chrome 71之前的版本，await 执行时要额外创建出两个 promise（有
     timeout2_2
 
  注意理解的是：微任务总会在下一个宏任务之前执行，宏任务内部的微任务执行完毕才会进入下一个宏任务执行；宏微任务内嵌套的微任务的执行顺序，timeout2_nextTick3 先于 timeout2_nextTick2执行。
-## 参考
+ 
+## 参考文章
 
-1. [关于 async 函数的理解](https://juejin.im/post/5c0f73e4518825689f1b5e6c)
+- [关于 async 函数的理解](https://juejin.im/post/5c0f73e4518825689f1b5e6c)
+- [JavaScript 运行机制详解：再谈Event Loop](http://www.ruanyifeng.com/blog/2014/10/event-loop.html)
+- [详解JavaScript中的Event Loop（事件循环）机制](https://zhuanlan.zhihu.com/p/33058983)
+- [前端基础进阶（十二）：深入核心，详解事件循环机制](https://www.jianshu.com/p/12b9f73c5a4f)

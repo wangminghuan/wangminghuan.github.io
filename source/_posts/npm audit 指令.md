@@ -1,5 +1,4 @@
 ---
-layout: npm
 title: npm audit 指令
 date: 2019-07-18 15:27:24
 tags: [note]

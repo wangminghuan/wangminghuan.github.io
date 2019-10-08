@@ -1,7 +1,8 @@
 ---
 title: ArrayBuffer TypedArray和DataView
 date: 2019-09-12 17:29:21
-tags:
+tags: [二进制数据]
+categories: JavaScript
 ---
 ##  概述
 ArrayBuffer对象、TypedArray视图和DataView视图是 JavaScript 操作二进制数据的一个接口。这些对象早就存在，属于独立的规格（2011 年 2 月发布），ES6 将它们纳入了 ECMAScript 规格，并且增加了新的方法。它们都是以数组的语法处理二进制数据，所以统称为二进制数组。
