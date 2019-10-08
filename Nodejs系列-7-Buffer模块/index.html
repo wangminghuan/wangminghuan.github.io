@@ -96,21 +96,18 @@
 
 
 
-  <meta name="description" content="概述从诞生最初，JavaScript就是单线程，这已经成了这门语言的核心特征，将来也不会改变。 为了利用多核CPU的计算能力，HTML5提出Web Worker标准，允许JavaScript脚本创建多个线程，但是子线程完全受主线程控制，且不得操作DOM。所以，这个新标准并没有改变JavaScript单线程的本质。">
+  <meta name="description" content="Buffer是用于操作二进制数据的类。">
 <meta name="keywords" content="note">
 <meta property="og:type" content="article">
-<meta property="og:title" content="EventLoop中异步任务的执行顺序">
-<meta property="og:url" content="https://wangminghuan.github.io/EventLoop中异步任务的执行顺序/index.html">
+<meta property="og:title" content="Nodejs系列-7-Buffer模块">
+<meta property="og:url" content="https://wangminghuan.github.io/Nodejs系列-7-Buffer模块/index.html">
 <meta property="og:site_name" content="WMH&#39;s Blog">
-<meta property="og:description" content="概述从诞生最初，JavaScript就是单线程，这已经成了这门语言的核心特征，将来也不会改变。 为了利用多核CPU的计算能力，HTML5提出Web Worker标准，允许JavaScript脚本创建多个线程，但是子线程完全受主线程控制，且不得操作DOM。所以，这个新标准并没有改变JavaScript单线程的本质。">
+<meta property="og:description" content="Buffer是用于操作二进制数据的类。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://wangminghuan.github.io/EventLoop中异步任务的执行顺序/1-1.png">
-<meta property="og:image" content="https://wangminghuan.github.io/EventLoop中异步任务的执行顺序/1-2.png">
-<meta property="og:updated_time" content="2019-07-04T03:44:07.373Z">
+<meta property="og:updated_time" content="2019-10-08T07:46:36.272Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="EventLoop中异步任务的执行顺序">
-<meta name="twitter:description" content="概述从诞生最初，JavaScript就是单线程，这已经成了这门语言的核心特征，将来也不会改变。 为了利用多核CPU的计算能力，HTML5提出Web Worker标准，允许JavaScript脚本创建多个线程，但是子线程完全受主线程控制，且不得操作DOM。所以，这个新标准并没有改变JavaScript单线程的本质。">
-<meta name="twitter:image" content="https://wangminghuan.github.io/EventLoop中异步任务的执行顺序/1-1.png">
+<meta name="twitter:title" content="Nodejs系列-7-Buffer模块">
+<meta name="twitter:description" content="Buffer是用于操作二进制数据的类。">
 
 
 
@@ -118,7 +115,7 @@
 
   
   
-  <link rel="canonical" href="https://wangminghuan.github.io/EventLoop中异步任务的执行顺序/">
+  <link rel="canonical" href="https://wangminghuan.github.io/Nodejs系列-7-Buffer模块/">
 
 
 
@@ -128,7 +125,7 @@
   };
 </script>
 
-  <title>EventLoop中异步任务的执行顺序 | WMH's Blog</title>
+  <title>Nodejs系列-7-Buffer模块 | WMH's Blog</title>
   
 
 
@@ -356,7 +353,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/EventLoop中异步任务的执行顺序/">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/Nodejs系列-7-Buffer模块/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WMH">
@@ -373,7 +370,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">EventLoop中异步任务的执行顺序
+          <h1 class="post-title" itemprop="name headline">Nodejs系列-7-Buffer模块
 
               
             
@@ -399,24 +396,12 @@
                 
               
 
-              <time title="创建时间：2019-07-03 12:44:00" itemprop="dateCreated datePublished" datetime="2019-07-03T12:44:00+08:00">2019-07-03</time>
+              <time title="创建时间：2019-10-08 15:37:52 / 修改时间：15:46:36" itemprop="dateCreated datePublished" datetime="2019-10-08T15:37:52+08:00">2019-10-08</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-07-04 11:44:07" itemprop="dateModified" datetime="2019-07-04T11:44:07+08:00">2019-07-04</time>
               
             
           </span>
@@ -433,7 +418,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Nodejs/" itemprop="url" rel="index"><span itemprop="name">Nodejs</span></a></span>
 
                 
                 
@@ -475,191 +460,40 @@
       
 
       
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>从诞生最初，JavaScript就是单线程，这已经成了这门语言的核心特征，将来也不会改变。</p>
-<p>为了利用多核CPU的计算能力，HTML5提出Web Worker标准，允许JavaScript脚本创建多个线程，但是子线程完全受主线程控制，且不得操作DOM。所以，这个新标准并没有改变JavaScript单线程的本质。<br><a id="more"></a></p>
-<h2 id="任务队列"><a href="#任务队列" class="headerlink" title="任务队列"></a>任务队列</h2><p>js中所有的任务可以分为两种：一种是同步任务（synchronous），另一种是异步任务（asynchronous）。</p>
-<p>同步任务：在主线程上排队执行的任务，只有前一个任务执行完毕，才能执行后一个任务； 异步任务：不进入主线程、而进入”任务队列”（task queue）的任务，只有”任务队列”通知主线程，某个异步任务可以执行了，该任务才会进入主线程执行(被放入队列不会立刻执行其回调，而是等待当前执行栈中的所有任务都执行完毕，主线程处于闲置状态时，才会去执行任务队列)。</p>
-<p>PS: 异步任务一定会有两个线程参加，但异步任务不是指两个线程执行任务。而是指某个线程中执行的两个动作，前一个动作立即执行，后一个动作在未来某个时刻执行的这种模式。譬如ajax请求，代码执行到发起请求的时候是同步的，但结果返回是在未来的某个时刻，所以这部分是异步的。</p>
-<p>简单记录下看到一道面试题而引发的一些思考。</p>
-<p>任务队列的执行机制如下：</p>
-<p>所有同步任务都在主线程上执行，形成一个执行栈（stack）。</p>
-<p>主线程之外，还存在一个”任务队列”（queue）。只要异步任务有了运行结果，就在”任务队列”之中放置一个事件。</p>
-<p>一旦”执行栈”中的所有同步任务执行完毕，系统就会读取”任务队列”，看看里面有哪些事件。那些对应的异步任务，于是结束等待状态，进入执行栈，开始执行。</p>
-<p>主线程不断重复上面的第三步。</p>
-<p>只要主线程空了，就会去读取”任务队列”，这就是JavaScript的运行机制。这个过程会不断重复<br><img src="/EventLoop中异步任务的执行顺序/./1-1.png" alt></p>
-<h2 id="Event-Loop"><a href="#Event-Loop" class="headerlink" title="Event Loop"></a>Event Loop</h2><p>主线程从“任务队列”中读取事件，这个过程是循环不断的，所以整个机制运作机制又成为EventLoop（事件循环）</p>
-<p>下图是EventLoop机制示意图（转引自Philip Roberts的演讲《Help, I’m stuck in an event-loop》））</p>
-<p><img src="/EventLoop中异步任务的执行顺序/./1-2.png" alt></p>
-<p>主进程运行的时候会产生 堆(heap) 和 栈(stack), 栈中的代码会调用各种API，他们在任务队列中加入各种事件（click,load,done等），只要栈中的代码执行完毕，主线程就会去读取“任务队列”，依次执行那些事件对应的回调函数。</p>
-<h2 id="宏任务（macroTask）和微任务（microTask）"><a href="#宏任务（macroTask）和微任务（microTask）" class="headerlink" title="宏任务（macroTask）和微任务（microTask）"></a>宏任务（macroTask）和微任务（microTask）</h2><p>EventLoop循环过程中，因为异步任务之间并不相同，因此他们的执行优先级也有区别。不同的异步任务被分为两类：微任务（micro task）和宏任务（macro task）：</p>
-<p>以下事件属于宏任务：</p>
-<pre><code>setInterval()
-setTimeout()
-setImmediate() （nodejs中才有）
-</code></pre><p>以下事件属于微任务</p>
-<pre><code>promise.then()
-process.nextTick() （nodejs中才有，且preocess.nextTick优先级大于promise.then）
-</code></pre><p>微任务总会在下一个宏任务之前执行，在本身所属的宏任务结束后立即执行。如果在微任务执行期间微任务队列加入了新的微任务，会将新的微任务加入队列尾部，之后也会被执行。</p>
-<h2 id="nodejs的EventLoop与浏览器环境下的差异"><a href="#nodejs的EventLoop与浏览器环境下的差异" class="headerlink" title="nodejs的EventLoop与浏览器环境下的差异"></a>nodejs的EventLoop与浏览器环境下的差异</h2><p>在node中，事件循环表现出的状态与浏览器中大致相同。不同的是node中有一套自己的模型。node中事件循环的实现是依靠的libuv引擎。</p>
-<p>process.nextTick 和 setImmediate<br>process.nextTick属于微任务，它指定的任务总是在下一个宏任务之前执行。</p>
-<p>setImmediate属于宏任务。表示立即执行。但是它指定的任务执行顺序是不确定的：</p>
-<pre><code>setTimeout(() =&gt; {
-console.log(&apos;timeout&apos;);
-}, 0);
-
-setImmediate(() =&gt; {
-    console.log(&apos;immediate&apos;);
-});
-</code></pre><p>运行结果可能是immediate timeout，也可能是timeout immediate。但是，在一个I/O事件的回调中，可以准确判断两个方法回调的执行顺序：setImmediate先于setTimeout。</p>
-<pre><code>setTimeout(() =&gt; {
-  setImmediate(() =&gt; {
-    console.log(&apos;setImmediate&apos;);
-  });
-  setTimeout(() =&gt; {
-    console.log(&apos;setTimeout&apos;);
-  }, 0);
-}, 0);
-</code></pre><p>这种情况下setImmediate永远先于setTimeout。  </p>
-<p>可以做如下总结：</p>
-<ol>
-<li>如果两者都在主模块中调用，那么执行先后取决于进程性能，也就是随机。</li>
-<li>如果两者都不在主模块调用（被一个异步操作包裹），那么setImmediate的回调永远先执行。</li>
-</ol>
-<h2 id="相关试题"><a href="#相关试题" class="headerlink" title="相关试题"></a>相关试题</h2><h3 id="题目一"><a href="#题目一" class="headerlink" title="题目一"></a>题目一</h3><pre><code>async function async1() {
-  console.log(&quot;async1 start&quot;);
-  await async2();
-  console.log(&quot;async1 end&quot;);
-}
-
-async function async2() {
-  console.log(&quot;async2&quot;);
-}
-
-console.log(&quot;script start&quot;);
-
-setTimeout(function() {
-  console.log(&quot;setTimeout&quot;);
-}, 0);
-
-async1();
-
-new Promise(function(resolve) {
-  console.log(&quot;promise1&quot;);
-  resolve();
-}).then(function() {
-  console.log(&quot;promise2&quot;);
-});
-
-console.log(&quot;script end&quot;);
-</code></pre><p>执行结果：</p>
-<pre><code>script start
-async1 start---
-async2
-promise1
-script end
-async1 end
-promise2
-setTimeout
-</code></pre><h3 id="解释"><a href="#解释" class="headerlink" title="解释"></a>解释</h3><ol>
-<li>主线程顺序执行，先输出 “script start” 没什么问题。</li>
-<li>执行到setTimeout，这是一个异步任务，且为宏任务（macroTask），推入任务队列（queue）。继续执行主线程内代码。</li>
-<li>接着执行async1函数，这是一个异步函数，执行过程与普通函数没区别，输出”async1 start”, 然后遇到了await。</li>
-<li>await命令后面可以是 Promise 对象和原始类型的值（数值、字符串和布尔值，但这时会自动转成立即 resolved 的 Promise 对象）。此时会把async2函数转成 <code>return new Pomise((resolve)=&gt;{console.log(&quot;async2&quot;);resolve(undefined)})</code>,因此会输出”async2”,然后跳出async1函数，继续执行主线程内的代码，发起一个微任务（microTask），等到异步操作完成，再接着执行函数体内后面的语句。</li>
-<li>继续执行遇到了一个promise对象，输出”promise1”后，再发起一个微任务（microTask），跳出对象，继续执行主进程内的代码</li>
-<li>遇到<code>console.log(&quot;script end&quot;)</code>,便输出”script end”,此时主进程代码执行完毕，主线程就会去读取“任务队列”，先执行微任务，再执行宏任务。</li>
-<li>首先，进入async1函数，执行await后函数体内容，输出”async1 end”</li>
-<li>然后，进入promise对象执行resole方法，输出”promise2”</li>
-<li>最后，执行setTimeout宏任务,输出”setTimeout”</li>
-</ol>
-<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>其实对于上述第7和8步的执行顺序是存在争议的（promise2 和 async1 end 的顺序），具体可参照参考文章的<a href="https://juejin.im/post/5c0f73e4518825689f1b5e6c" target="_blank" rel="noopener">关于 async 函数的理解</a>。<br>chrome 71之前的版本，await 执行时要额外创建出两个 promise（有时会是多个），会导致promise2先于async1执行，但这种方式创建多个Promise对象的开销很大，所以chrome73进行了优化，所以按正常流程理解就好，无需太纠结于异步任务的执行顺序，且async2函数有没有通过async声明执行结果都一致。</p>
-<h3 id="题目二"><a href="#题目二" class="headerlink" title="题目二"></a>题目二</h3><pre><code>async function asyncTest1() {
-  console.log(&apos;2&apos;);
-  await console.log(&apos;3&apos;);
-}
-async function asyncTest2() {
-  await console.log(&apos;4&apos;);
-  console.log(&apos;5&apos;);
-}
-async function asyncTest3() {
-  await new Promise(function (resolve) {
-    console.log(&apos;6&apos;);
-    resolve();
-  }).then(function () {
-    console.log(&apos;7&apos;);
-  });
-  console.log(&apos;8&apos;);
-}
-
-console.log(&apos;1&apos;);
-
-setTimeout(function () {
-  console.log(&apos;9&apos;);
-  new Promise(function (resolve) {
-    console.log(&apos;10&apos;);
-    resolve();
-  }).then(function () {
-    console.log(&apos;11&apos;);
-  })
-  asyncTest1();
-});
-
-asyncTest2();
-
-asyncTest3();
-
-new Promise(function (resolve) {
-  console.log(&apos;12&apos;);
-  resolve();
-}).then(function () {
-  console.log(&apos;13&apos;);
-});
-</code></pre><p>可以按上面思路分析一下执行结果：</p>
-<pre><code>1  4  6  12  5  7  13  8  9  10  2  3  11
-</code></pre><h3 id="题目三"><a href="#题目三" class="headerlink" title="题目三"></a>题目三</h3><pre><code>console.log(&quot;start&quot;)
-setTimeout(function () {
-  console.log(&apos;timeout1&apos;);
-  process.nextTick(function () {
-    console.log(&apos;timeout1_nextTick&apos;);
-  })
-  new Promise(function (resolve) {
-    console.log(&apos;timeout1_promise&apos;);
-    resolve();
-  }).then(function () {
-    console.log(&apos;timeout1_then&apos;)
-  })
-},0)
-
-setTimeout(() =&gt; {
-  console.log(&apos;timeout2&apos;);
-  process.nextTick(() =&gt; {
-      console.log(&apos;timeout2_nextTick1&apos;);
-      process.nextTick(() =&gt; {
-          console.log(&apos;timeout2_nextTick2&apos;);
-      });
-  });
-  process.nextTick(() =&gt; {
-      console.log(&apos;timeout2_nextTick3&apos;);
-  });
-  console.log(&apos;sync&apos;);
-  setTimeout(() =&gt; {
-      console.log(&apos;timeout2_2&apos;);
-  }, 0);
-}, 0);
-</code></pre><p>执行结果：</p>
-<pre><code>start
-timeout1
-timeout1_promise
-timeout1_nextTick
-timeout1_then
-timeout2
-sync
-timeout2_nextTick1
-timeout2_nextTick3
-timeout2_nextTick2
-timeout2_2
-</code></pre><p> 注意理解的是：微任务总会在下一个宏任务之前执行，宏任务内部的微任务执行完毕才会进入下一个宏任务执行；宏微任务内嵌套的微任务的执行顺序，timeout2_nextTick3 先于 timeout2_nextTick2执行。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
-<li><a href="https://juejin.im/post/5c0f73e4518825689f1b5e6c" target="_blank" rel="noopener">关于 async 函数的理解</a></li>
+        <p>Buffer是用于操作二进制数据的类。  </p>
+<a id="more"></a>
+<p>JavaScript 语言没有用于读取或操作二进制数据流的机制。 Buffer 类是作为 Node.js API 的一部分引入的，用于在 TCP 流、文件系统操作、以及其他上下文中与八位字节流进行交互.</p>
+<p>Buffer 类在 Node.js 中是一个全局变量，因此无需使用 require，因此无需使用 require(‘buffer’).Buffer。</p>
+<pre><code>var bf=new Buffer([1,2,3,4,10]);
+console.log(bf); 
+//&lt;Buffer 01 02 03 04 0a&gt; 返回一个长度是5字节的数组（以16进制打印出来，1字节=8位）
+console.log(bf.length);//5
+</code></pre><p>Buffer实例一旦创建，长度无法修改。</p>
+<h2 id="常用方法"><a href="#常用方法" class="headerlink" title="常用方法"></a>常用方法</h2><blockquote>
+<p>buf为实例方法，Buffer为对象方法。</p>
+</blockquote>
+<ul>
+<li>buf.fill(value[, offset[, end]][, encoding])<br>填充数据，可以设置起始点和编码方式</li>
+<li><p>buf.write(string[, offset[, length]][, encoding])</p>
+</li>
+<li><p>buf.includes(value[, byteOffset][, encoding])</p>
+</li>
+<li><p>buf.indexOf(value[, byteOffset][, encoding])</p>
+</li>
+<li><p>buf.equals(otherBuffer)<br>比较两个buffer是否相等（数值是否相等，而非比较引用地址）</p>
+</li>
+<li>buf.copy(target[, targetStart[, sourceStart[, sourceEnd]]])<br>拷贝一个buffer</li>
+<li>buf.compare(target[, targetStart[, targetEnd[, sourceStart[, sourceEnd]]]])<br>比较两个buffer大小</li>
+<li>Buffer.alloc(size[, fill[, encoding]])<br>分配一个大小为 size 字节的新建的 Buffer 。 如果 fill 为 undefined ，则该 Buffer 会用 0 填充，encoding默认为 ‘utf8’<br>Buffer也有下标，可以通过 buf[index] 进行操作<br>length：字节长度（非字符长度）</li>
+<li>Buffer.byteLength(string[, encoding])<br>数据的字节长度（js中字符串长度获取的是字符长度）</li>
+<li>Buffer.compare(buf1, buf2)  </li>
+<li>Buffer.concat(list[, totalLength])</li>
+<li>Buffer.from(array)</li>
+<li>Buffer.isBuffer(obj)</li>
+<li>Buffer.isEncoding(encoding)<br>ascii、utf8、utf16le、ucs2、base64、latin1、binary、hex</li>
+</ul>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ol>
+<li><a href="http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html" target="_blank" rel="noopener">字符编码笔记：ASCII，Unicode 和 UTF-8</a> </li>
 </ol>
 
       
@@ -697,8 +531,8 @@ timeout2_2
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/重学前端31-HTML部分-ARIA/" rel="next" title="重学前端31-HTML部分-ARIA">
-                <i class="fa fa-chevron-left"></i> 重学前端31-HTML部分-ARIA
+              <a href="/Nodejs系列-6-Steam模块/" rel="next" title="Nodejs系列-6-Steam模块">
+                <i class="fa fa-chevron-left"></i> Nodejs系列-6-Steam模块
               </a>
             
           </div>
@@ -706,10 +540,6 @@ timeout2_2
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/package-lock-json和yarn-lock文件的作用/" rel="prev" title="package-lock.json和yarn.lock文件的作用">
-                package-lock.json和yarn.lock文件的作用 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -780,7 +610,7 @@ timeout2_2
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">44</span>
+                    <span class="site-state-item-count">50</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -842,7 +672,9 @@ timeout2_2
                     
                       
                     
-                    <span class="site-state-item-count">9</span>
+                      
+                    
+                    <span class="site-state-item-count">10</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -928,7 +760,7 @@ timeout2_2
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#任务队列"><span class="nav-number">2.</span> <span class="nav-text">任务队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Event-Loop"><span class="nav-number">3.</span> <span class="nav-text">Event Loop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#宏任务（macroTask）和微任务（microTask）"><span class="nav-number">4.</span> <span class="nav-text">宏任务（macroTask）和微任务（microTask）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nodejs的EventLoop与浏览器环境下的差异"><span class="nav-number">5.</span> <span class="nav-text">nodejs的EventLoop与浏览器环境下的差异</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关试题"><span class="nav-number">6.</span> <span class="nav-text">相关试题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目一"><span class="nav-number">6.1.</span> <span class="nav-text">题目一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解释"><span class="nav-number">6.2.</span> <span class="nav-text">解释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题"><span class="nav-number">6.3.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#题目二"><span class="nav-number">6.4.</span> <span class="nav-text">题目二</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#题目三"><span class="nav-number">6.5.</span> <span class="nav-text">题目三</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#常用方法"><span class="nav-number">1.</span> <span class="nav-text">常用方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文章"><span class="nav-number">2.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
             
 
           </div>
