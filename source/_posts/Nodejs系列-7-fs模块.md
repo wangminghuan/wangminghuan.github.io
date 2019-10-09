@@ -8,6 +8,29 @@ categories: Nodejs
 fs模块提供了一些与文件系统进行交互的 API，所有文件系统操作都具有同步和异步的形式。
 <!-- more -->
 
+## readFile()，readFileSync()
+readFile方法用于异步读取数据。
+
+## writeFile()，writeFileSync()
+writeFile方法用于异步写入文件。
+
+## mkdir()，mkdirSync()，
+mkdir方法用于新建目录
+
+## readdir()，readdirSync()
+readdir方法用于读取目录，返回一个所包含的文件和子目录的数组
+
+## stat(), statSync()
+stat方法的参数是一个文件或目录，它产生一个对象，该对象包含了该文件或目录的具体信息。我们往往通过该方法，判断正在处理的到底是一个文件，还是一个目录。
+
+## watchfile()，unwatchfile()
+watchfile方法监听一个文件，如果该文件发生变化，就会自动触发回调函数。
+
+## fs.existsSync() 
+用来判断给定路径是否存在:如果路径存在，则返回 true，否则返回 false。
+
+fs.exists() 已废弃，但 
+
 ## fs.ReadStream 类
 成功调用 fs.createReadStream() 将会返回一个新的 fs.ReadStream 对象。
 
