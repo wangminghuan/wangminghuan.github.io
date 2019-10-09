@@ -552,6 +552,33 @@ docker安装方式比较傻瓜，而且整个插件安装的过程都比较快�
 
     # 查看jenkins日志
     sudo tail -f /var/log/jenkins/jenkins.log  查看日志
+## 补充：增加swap分区解决阿里云内存不足
+发现可以扩展Swap分区，即交换区，系统在物理内存（这里应该是运行内存）不够时，与Swap进行交换，来解决内存不足的问题。设置步奏如下：
+
+1. 首先创建用于交换分区的文件，并设置交换分区文件
+
+        dd if=/dev/zero of=/var/swap bs=1024 count=4096000
+
+2. 创建 swap 文件
+
+        mkswap /var/swap
+    
+3. 加载这个文件
+
+        swapon /var/swap
+执行以上命令可能会出现：“不安全的权限 0644，建议使用 0600”提示，其实已经激活了，可以忽略，修改权限：
+
+        chmod -R 0600 /var/swap
+4. 设置系统启动时自动挂载分区
+
+        echo "/var/swap swap swap defaults 0 0" >> /etc/fstab
+5. 确定系统对SWAP分区的使用原则，当swappiness内容的值为0时，表示最大限度地使用物理内存，物理内存使用完毕后，才会使用SWAP分区。当swappiness内容的值为100时，表示积极地使用SWAP分区，并且把内存中的数据及时地置换到SWAP分区。liunx默认为60，此处我们设置为默认大小60
+
+        echo 60 > /proc/sys/vm/swappiness
+
+再次运用构建命令，查看内存变化，会发现swap区已经得到了利用：
+
+![](32.png)
 
 ## 参考
 - [Systemd 入门教程：实战篇](https://www.cnblogs.com/zwcry/p/9602756.html)

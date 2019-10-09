@@ -25,7 +25,7 @@ Web 页面因为安全限制，不能直接访问原生的GUI资源（比如dial
 
 Electron 提供了几种渲染进程和主进程通信的方式：
 
-##### 第一种是使用ipcMain和ipcRenderer模块
+### 第一种是使用ipcMain和ipcRenderer模块
 
 在渲染进程中使用ipcRender模块向主进程发送消息，主进程中ipcMain接收消息，进行操作，如果还需要反馈，则通知渲染进程，渲染进程根据接收的内容执行相应的操作：
 
@@ -44,17 +44,17 @@ Electron 提供了几种渲染进程和主进程通信的方式：
 	// 同时Electron 也提供了同步的方式
 不过切忌用 ipc 传递大量的数据，会有很大的性能问题，严重会让你整个应用卡住。
 
-##### 第二种是直接在渲染进程使用remote模块
+### 第二种是直接在渲染进程使用remote模块
 remote 模块可以直接获取主进程中的模块。这种方式其实是第一种方式的简化。
 
 	// 在渲染进程打开提示对话框
 	const {dialog} = require('electron').remote
 	dialog.showMessageBox({ opts });
 
-##### 第三种是主进程向渲染进程发送消息
+### 第三种是主进程向渲染进程发送消息
 
 	this.webviewWindow.webContents.send('ping');
-##### 第四种是渲染进程之间的通信
+### 第四种是渲染进程之间的通信
 
 最简单的方法是使用浏览器中已经实现的 HTML5 API。 其中比较好的方案是用 Storage API， localStorage，sessionStorage 或者 IndexedDB。
 
@@ -77,6 +77,7 @@ remote 模块可以直接获取主进程中的模块。这种方式其实是第�
 但打包出来的包依旧有点大，打包后的文件中的node_modules 暂时还未找到合适方案合并到dist/electron/render.js中。
 
 ![](1.png)
+
 ## 参考
 1. [Electron的应用结构](https://electronjs.org/docs/tutorial/application-architecture#main-and-renderer-processes)
 2. [nwjs和Electron的创始人的知乎回答](https://www.zhihu.com/question/36292298/answer/102418523)

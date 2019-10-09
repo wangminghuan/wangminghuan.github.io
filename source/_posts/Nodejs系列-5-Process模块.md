@@ -31,7 +31,7 @@ process.argv 属性返回一个数组，其中包含当启动 Node.js 进程时�
 
 process.exit() 方法以退出状态 code 指示 Node.js 同步地终止进程。 如果省略 code，则使用成功代码 0
 
-### process.pwd()
+### process.cwd()
 方法返回 Node.js 进程的当前工作目录。
 
 	console.log(`当前工作目录是: ${process.cwd()}`);
