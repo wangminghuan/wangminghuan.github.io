@@ -9,12 +9,15 @@ Buffer是用于操作二进制数据的类。
 <!-- more -->
 JavaScript 语言没有用于读取或操作二进制数据流的机制。 Buffer 类是作为 Node.js API 的一部分引入的，用于在 TCP 流、文件系统操作、以及其他上下文中与八位字节流进行交互.
 
-Buffer 类在 Node.js 中是一个全局变量，因此无需使用 require，因此无需使用 require('buffer').Buffer。
+Buffer 类在 Node.js 中是一个全局变量，因此无需使用 require，因此无需使用 require('buffer').Buffer。ps: `new Buffer` 已废弃
 
-	var bf=new Buffer([1,2,3,4,10]);
+	var bf=Buffer.from([1,2,3,4,10]);
 	console.log(bf); 
-	//<Buffer 01 02 03 04 0a> 返回一个长度是5字节的数组（以16进制打印出来，1字节=8位）
+	// <Buffer 01 02 03 04 0a> 返回一个字节长度为5的Buffer，以16进制打印出来，1字节=8位
+  // 转换成二进制来表示的话是这样： <Buffer 00000001 00000010 00000011 00000100 00001010> 
 	console.log(bf.length);//5
+
+每个字节能表达的大小为0-255, 其他整数会通过 ＆ 255 操作强制转换到此范围。  
 
 Buffer实例一旦创建，长度无法修改。
 
@@ -74,6 +77,29 @@ Buffer实例一旦创建，长度无法修改。
 - 判断Buffer支持的字符编码方式
       Buffer.isEncoding(encoding)  
       encoding可选值有：ascii、utf8、utf16le、ucs2、base64、latin1、binary、hex
+
+## 补充
+js弱类型语言，所以很少涉及到进制之前的转换，再补充一边相关内容，防止遗忘：
+
+### ECMAScript-Numer类型
+ECMAScript中的基本数据类型Numer，最基本的数值字面量格式是十进制，除了以十进制表示外，整数还可以通过八进制（以8为基础）或十六进制（以16为基数）的字面值来表示。其中，八进制字面值的第一位必须是零（0），然后是八进制数字序列（0~7），十六进制字面值的前两位必须是0x，后跟任何十六进制数字（0~9及A~F）。其中字母A~F可以大写，也可以小写：
+
+    var octalNum1 = 070;  // 八进制的56
+    var hexNum1 = 0xA;    // 十六进制的10
+
+### 位/字节/字
+
+- 位（bit）:计算机中的最小单位，逻辑0或1就是一个位
+- 字节（byte）:有8位组成一个字节
+- 字（word）：16位为一个字，32位为双字
+
+C/C++语言中数据类型：大小（字节）
+
+    double 8
+    float 4
+    long 4
+    int 2 （32位或64位系统下int的长度为4字节）
+    char 1
 
 ## 参考文章
 1. [字符编码笔记：ASCII，Unicode 和 UTF-8](http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html) 
