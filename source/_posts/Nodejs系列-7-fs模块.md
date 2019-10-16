@@ -156,23 +156,256 @@ mkdir方法用于新建目录
 
 创建 /tmp/a/apple 目录，无论是否存在 /tmp 和 /tmp/a 目录。
 
+`mkdirSync`与`mkdir`类似
 
 ## fs.readdir && fs.readdirSync
 readdir方法用于读取目录，返回一个所包含的文件和子目录的数组
+   
+    fs.readdir(path[, options], callback)
+
+参数解释：
+    - path <string> | <Buffer> | <URL>
+    - options <string> | <Object>
+      encoding <string> 默认值: 'utf8'。
+      withFileTypes <boolean> 默认值: false。
+    - callback <Function>
+      err <Error>
+      files <string[]> | <Buffer[]> | <fs.Dirent[]>
+例子，读取文本的static文件夹：
+
+      fs.readdir("./static",(err,files)=>{
+        if (err) {
+          console.log(err);
+          return;
+        }
+        console.log(files)
+      })
+
+运行结果：
+
+       [ 'css', 'img', 'index.html', 'js' ]
+
+`readdirSync`与`readdir`类似
 
 ## fs.stat && fs.statSync
 stat方法的参数是一个文件或目录，它产生一个对象，该对象包含了该文件或目录的具体信息。我们往往通过该方法，判断正在处理的到底是一个文件，还是一个目录。
 
-## fs.watchfile && fs.unwatchfile
-watchfile方法监听一个文件，如果该文件发生变化，就会自动触发回调函数。
+    fs.stat(path[, options], callback)
+
+参数解释：
+    - path <string> | <Buffer> | <URL>
+    - options <Object>
+      bigint <boolean> 返回的 fs.Stats 对象中的数值是否应为 bigint 型。默认值: false。
+      callback <Function>
+    - err <Error>
+      stats <fs.Stats>
+我们将上述例子中获取到的static进行遍历，获取对应文件的stat
+
+      fs.readdir("./static",(err,files)=>{
+        if (err) {
+          console.log(err);
+          return;
+        }
+        files.map((file)=>{
+          fs.stat(path.join(__dirname,"static", file),(err,stats)=>{
+              if (err) {
+                console.log(err);
+                return;
+              }
+            if (stats.isFile()) {
+              console.log("%s is file", file);
+            }else if (stats.isDirectory ()) {
+              console.log("%s is a directory", file);
+            }
+          });
+          
+        }) 
+      })
+
+运行结果：
+
+      css is a directory
+      img is a directory
+      index.html is file
+      js is a directory
+
+利用`fs.statSync` 与 `fs.readdirSync` 可以封装一个常用功能：遍历目录下的所有文件
+       
+      /**
+      *
+      * @desc 遍历目录下的所有文件
+      * @param {p}:要遍历目录路径
+      */
+      let localFileArr=[];
+      function readPathSync (p) {
+        const stat = fs.statSync(p)
+        if (stat.isDirectory()) {
+          const ls = fs.readdirSync(p).map(file => path.join(p, file))
+          for (let i = 0; i < ls.length; i++) {
+            arguments.callee(ls[i])
+          }
+        } else {
+          localFileArr.push(p)
+        }
+      }
+
+运行
+
+      readPathSync(path.join(__dirname,"static")); 
+      
+可以得到static文件夹下的所有文件
+
+    [ 'C:\\Users\\wmh\\Desktop\\nodejs\\static\\css\\fonts\\element-icons.535877f.woff',
+      'C:\\Users\\wmh\\Desktop\\nodejs\\static\\css\\style.css',
+      'C:\\Users\\wmh\\Desktop\\nodejs\\static\\img\\1.png',
+      'C:\\Users\\wmh\\Desktop\\nodejs\\static\\img\\2.png',
+      'C:\\Users\\wmh\\Desktop\\nodejs\\static\\index.html',
+      'C:\\Users\\wmh\\Desktop\\nodejs\\static\\js\\app.js' ]
 
 ## fs.existsSync
 用来判断给定路径是否存在:如果路径存在，则返回 true，否则返回 false。
 
+    fs.existsSync(path)
 
+注意：`fs.exists` **已废弃！！！**
 
- `fs.exists` **已废弃**
+## fs.copyFile && fs.copyFileSync
 
+拷贝文件到指定路径，V8.5+版本支持
+
+    fs.copyFile(src, dest[, flags], callback)
+
+参数解释：
+
+    - src <string> | <Buffer> | <URL> 要拷贝的源文件名。
+    - dest <string> | <Buffer> | <URL> 拷贝操作的目标文件名。
+    - flags <number> 用于拷贝操作的修饰符。默认值: 0。
+    - callback <Function>
+
+例子：
+
+    fs.copyFile("./static/index.html","./test/test.html",()=>{
+      console.log("拷贝完成")
+    })
+因为拷贝时目标地址目录必须存在，所有一般使用过程中，我们需要做下处理：
+
+利用`fs.existsSync`、 `mkdirSync`与 `fs.readdirSync` 可以封装一个常用功能：拷贝目录下所有文件
+
+    /**
+    * @desc 拷贝原目录下所有文件到目标目录
+    * @param {*} src 原目录
+    * @param {*} dest 目标目录
+    */
+    function copySync (src, dest) {
+      const stat = fs.statSync(src)
+      if (stat.isDirectory()) {
+        //原地址是一个文件夹，判断目标文件夹是否存在
+        if (!fs.existsSync(dest)) fs.mkdirSync(dest)
+        const ls = fs.readdirSync(src).map(file => path.join(src, file))
+        for (let i = 0; i < ls.length; i++) {
+          arguments.callee(ls[i], path.join(dest, path.basename(ls[i])))
+        }
+      } else {
+        //path.dirname() 方法返回 path 的目录名
+        //原地址是一个文件，先判断目标地址文件所在目录是否存在
+        if (!fs.existsSync(path.dirname(dest))) fs.mkdirSync(path.dirname(dest))
+        fs.copyFileSync(src, dest)
+      }
+    }
+
+执行：
+
+    copySync(path.join(__dirname,"static"),path.join(__dirname,"_static"))
+
+完成文件夹拷贝
+
+## fs.unlink && fs.unlinkSync
+删除文件，当删除路径不是文件时，同步模式下会报错，所以，一般使用时与stat配合使用
+    
+     fs.unlink(path, callback)
+
+例子：
+
+    fs.unlink("./static/js",(err)=>{
+      if(err){
+        console.log('删除失败')
+        return
+      }
+      console.log("删除成功")
+    })
+
+## fs.rmdir && fs.rmdirSync
+删除文件夹(必须为空文件夹)，当删除路径不是文件夹时，同步模式下会报错，所以，一般使用时与stat配合使用(V12 新增了option选项)
+
+    fs.rmdir(path, callback)
+
+参数说明：
+
+    - path <string> | <Buffer> | <URL>
+    - callback <Function>
+      err <Error>
+
+利用`fs.unlinkSync` 与 `fs.rmdirSync` 可以封装一个常用功能：删除目录下所有文件
+
+     /**
+      *
+      * @desc 删除目录下所有文件
+      * @param {p}:要删除的目录地址
+      */
+    function removeSync (p) {
+      const stat = fs.statSync(p)
+      if (stat.isDirectory()) {
+        const ls = fs.readdirSync(p).map(file => path.join(p, file))
+        for (let i = 0; i < ls.length; i++) {
+          arguments.callee(ls[i])
+        }
+        fs.rmdirSync(p)
+      } else {
+        fs.unlinkSync(p)
+      }
+    }
+
+运行：
+    
+     removeSync(path.join(__dirname,"static"))
+
+static目录被删除
+
+## fs.watchfile && fs.unwatchfile
+watchfile方法监听一个文件，如果该文件发生变化，就会自动触发回调函数。
+
+    fs.watchFile(filename[, options], listener)
+
+参数说明：
+
+    - filename <string> | <Buffer> | <URL>
+    - options <Object>
+      persistent <boolean> 默认值: true。
+      interval <integer> 默认值: 5007。
+    - listener <Function>
+      current <fs.Stats>
+      previous <fs.Stats>
+
+每当访问文件时都会调用 listener 回调，例子:
+
+    fs.watchFile('./demo.txt',  (curr, prev)=> {
+      console.log('the current mtime is: ' + curr.mtime);
+      console.log('the previous mtime was: ' + prev.mtime);
+    });
+
+    fs.writeFile('./demo.txt', "My Name is Tom", function (err) {
+      if (err) throw err;
+
+      console.log("file write complete");   
+    });
+
+运行结果：
+
+    file write complete
+    the current mtime is: Wed Oct 16 2019 18:48:30 GMT+0800 (GMT+08:00)
+    the previous mtime was: Wed Oct 09 2019 18:08:38 GMT+0800 (GMT+08:00)
+
+`unwatchfile`方法用于解除对文件的监听。
 
 ## fs.ReadStream 类
 
