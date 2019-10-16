@@ -105,7 +105,7 @@
 <meta property="og:description" content="process 对象是一个全局变量，它提供有关当前 Node.js 进程的信息并对其进行控制。 作为一个全局变量，它始终可供 Node.js 应用程序使用，无需使用 require()。 它也可以使用 require() 显式地访问。、">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://wangminghuan.github.io/Nodejs系列-5-Process模块/1.png">
-<meta property="og:updated_time" content="2019-10-08T07:54:43.193Z">
+<meta property="og:updated_time" content="2019-10-09T02:57:18.190Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Nodejs系列-5-Process模块">
 <meta name="twitter:description" content="process 对象是一个全局变量，它提供有关当前 Node.js 进程的信息并对其进行控制。 作为一个全局变量，它始终可供 Node.js 应用程序使用，无需使用 require()。 它也可以使用 require() 显式地访问。、">
@@ -398,12 +398,24 @@
                 
               
 
-              <time title="创建时间：2019-10-08 15:37:03 / 修改时间：15:54:43" itemprop="dateCreated datePublished" datetime="2019-10-08T15:37:03+08:00">2019-10-08</time>
+              <time title="创建时间：2019-10-08 15:37:03" itemprop="dateCreated datePublished" datetime="2019-10-08T15:37:03+08:00">2019-10-08</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-10-09 10:57:18" itemprop="dateModified" datetime="2019-10-09T10:57:18+08:00">2019-10-09</time>
               
             
           </span>
@@ -472,7 +484,7 @@
 <pre><code>process.env.NODE_ENV === &apos;production&apos;
 </code></pre><p>我们也可以为不同的机器设置不同的环境变量来区分测试和生产环境</p>
 <h3 id="process-exit"><a href="#process-exit" class="headerlink" title="process.exit()"></a>process.exit()</h3><p>process.exit() 方法以退出状态 code 指示 Node.js 同步地终止进程。 如果省略 code，则使用成功代码 0</p>
-<h3 id="process-pwd"><a href="#process-pwd" class="headerlink" title="process.pwd()"></a>process.pwd()</h3><p>方法返回 Node.js 进程的当前工作目录。</p>
+<h3 id="process-cwd"><a href="#process-cwd" class="headerlink" title="process.cwd()"></a>process.cwd()</h3><p>方法返回 Node.js 进程的当前工作目录。</p>
 <pre><code>console.log(`当前工作目录是: ${process.cwd()}`);
 </code></pre><h3 id="标准输入输出流"><a href="#标准输入输出流" class="headerlink" title="标准输入输出流"></a>标准输入输出流</h3><p><code>process.stdout</code> and <code>process.stderr</code> 与 Node.js 中其他 streams 在重要的方面是不同的。<code>console.log()</code> 和 <code>console.error()</code> 内部分别是由它们实现的。</p>
 <h4 id="process-stdout"><a href="#process-stdout" class="headerlink" title="process.stdout"></a>process.stdout</h4><pre><code>process.stdout.write(&quot;hello world&quot;,&apos;utf-8&apos;,()=&gt;{
@@ -612,7 +624,7 @@ process.stdin.on(&apos;data&apos;, (chunk) =&gt; {
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">50</span>
+                    <span class="site-state-item-count">51</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -721,7 +733,7 @@ process.stdin.on(&apos;data&apos;, (chunk) =&gt; {
                   
                     
                   
-                  <a href="http://www.mhwang.club:3000" title="WebSite &rarr; http://www.mhwang.club:3000" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>WebSite</a>
+                  <a href="https://blog.mhwang.club" title="WebSite &rarr; https://blog.mhwang.club" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>WebSite</a>
                 </span>
               
                 <span class="links-of-author-item">
@@ -762,7 +774,7 @@ process.stdin.on(&apos;data&apos;, (chunk) =&gt; {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#常用属性和方法"><span class="nav-number">1.</span> <span class="nav-text">常用属性和方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#process-argv"><span class="nav-number">1.1.</span> <span class="nav-text">process.argv</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#process-env"><span class="nav-number">1.2.</span> <span class="nav-text">process.env</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#process-exit"><span class="nav-number">1.3.</span> <span class="nav-text">process.exit()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#process-pwd"><span class="nav-number">1.4.</span> <span class="nav-text">process.pwd()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标准输入输出流"><span class="nav-number">1.5.</span> <span class="nav-text">标准输入输出流</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#process-stdout"><span class="nav-number">1.5.1.</span> <span class="nav-text">process.stdout</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#process-stdin"><span class="nav-number">1.5.2.</span> <span class="nav-text">process.stdin</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#常用属性和方法"><span class="nav-number">1.</span> <span class="nav-text">常用属性和方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#process-argv"><span class="nav-number">1.1.</span> <span class="nav-text">process.argv</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#process-env"><span class="nav-number">1.2.</span> <span class="nav-text">process.env</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#process-exit"><span class="nav-number">1.3.</span> <span class="nav-text">process.exit()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#process-cwd"><span class="nav-number">1.4.</span> <span class="nav-text">process.cwd()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标准输入输出流"><span class="nav-number">1.5.</span> <span class="nav-text">标准输入输出流</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#process-stdout"><span class="nav-number">1.5.1.</span> <span class="nav-text">process.stdout</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#process-stdin"><span class="nav-number">1.5.2.</span> <span class="nav-text">process.stdin</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

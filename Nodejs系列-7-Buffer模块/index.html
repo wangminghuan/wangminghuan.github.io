@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="WMH&#39;s Blog">
 <meta property="og:description" content="Buffer是用于操作二进制数据的类。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-08T07:46:36.272Z">
+<meta property="og:updated_time" content="2019-10-12T09:25:52.612Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Nodejs系列-7-Buffer模块">
 <meta name="twitter:description" content="Buffer是用于操作二进制数据的类。">
@@ -396,12 +396,24 @@
                 
               
 
-              <time title="创建时间：2019-10-08 15:37:52 / 修改时间：15:46:36" itemprop="dateCreated datePublished" datetime="2019-10-08T15:37:52+08:00">2019-10-08</time>
+              <time title="创建时间：2019-10-08 15:37:52" itemprop="dateCreated datePublished" datetime="2019-10-08T15:37:52+08:00">2019-10-08</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-10-12 17:25:52" itemprop="dateModified" datetime="2019-10-12T17:25:52+08:00">2019-10-12</time>
               
             
           </span>
@@ -463,36 +475,80 @@
         <p>Buffer是用于操作二进制数据的类。  </p>
 <a id="more"></a>
 <p>JavaScript 语言没有用于读取或操作二进制数据流的机制。 Buffer 类是作为 Node.js API 的一部分引入的，用于在 TCP 流、文件系统操作、以及其他上下文中与八位字节流进行交互.</p>
-<p>Buffer 类在 Node.js 中是一个全局变量，因此无需使用 require，因此无需使用 require(‘buffer’).Buffer。</p>
-<pre><code>var bf=new Buffer([1,2,3,4,10]);
+<p>Buffer 类在 Node.js 中是一个全局变量，因此无需使用 require，因此无需使用 require(‘buffer’).Buffer。ps: <code>new Buffer</code> 已废弃</p>
+<pre><code>var bf=Buffer.from([1,2,3,4,10]);
 console.log(bf); 
-//&lt;Buffer 01 02 03 04 0a&gt; 返回一个长度是5字节的数组（以16进制打印出来，1字节=8位）
-console.log(bf.length);//5
-</code></pre><p>Buffer实例一旦创建，长度无法修改。</p>
+// &lt;Buffer 01 02 03 04 0a&gt; 返回一个字节长度为5的Buffer，以16进制打印出来，1字节=8位
+</code></pre><p>  // 转换成二进制来表示的话是这样： <buffer 00000001 00000010 00000011 00000100 00001010><br>    console.log(bf.length);//5</buffer></p>
+<p>每个字节能表达的大小为0-255, 其他整数会通过 ＆ 255 操作强制转换到此范围。  </p>
+<p>Buffer实例一旦创建，长度无法修改。</p>
 <h2 id="常用方法"><a href="#常用方法" class="headerlink" title="常用方法"></a>常用方法</h2><blockquote>
 <p>buf为实例方法，Buffer为对象方法。</p>
 </blockquote>
 <ul>
-<li>buf.fill(value[, offset[, end]][, encoding])<br>填充数据，可以设置起始点和编码方式</li>
-<li><p>buf.write(string[, offset[, length]][, encoding])</p>
-</li>
-<li><p>buf.includes(value[, byteOffset][, encoding])</p>
-</li>
-<li><p>buf.indexOf(value[, byteOffset][, encoding])</p>
-</li>
-<li><p>buf.equals(otherBuffer)<br>比较两个buffer是否相等（数值是否相等，而非比较引用地址）</p>
-</li>
-<li>buf.copy(target[, targetStart[, sourceStart[, sourceEnd]]])<br>拷贝一个buffer</li>
-<li>buf.compare(target[, targetStart[, targetEnd[, sourceStart[, sourceEnd]]]])<br>比较两个buffer大小</li>
-<li>Buffer.alloc(size[, fill[, encoding]])<br>分配一个大小为 size 字节的新建的 Buffer 。 如果 fill 为 undefined ，则该 Buffer 会用 0 填充，encoding默认为 ‘utf8’<br>Buffer也有下标，可以通过 buf[index] 进行操作<br>length：字节长度（非字符长度）</li>
-<li>Buffer.byteLength(string[, encoding])<br>数据的字节长度（js中字符串长度获取的是字符长度）</li>
-<li>Buffer.compare(buf1, buf2)  </li>
-<li>Buffer.concat(list[, totalLength])</li>
-<li>Buffer.from(array)</li>
-<li>Buffer.isBuffer(obj)</li>
-<li>Buffer.isEncoding(encoding)<br>ascii、utf8、utf16le、ucs2、base64、latin1、binary、hex</li>
+<li><p>填充数据，可以设置起始点和编码方式</p>
+<pre><code>buf.fill(value[, offset[, end]][, encoding])  
+</code></pre></li>
+<li><p>要写入 buf 的字符串，可以设置起始点，长度和编码方式</p>
+<pre><code>buf.write(string[, offset[, length]][, encoding])
+</code></pre></li>
+<li><p>查找目标值是否存在</p>
+<pre><code>buf.includes(value[, byteOffset][, encoding])
+</code></pre></li>
+<li><p>查找索引</p>
+<pre><code>buf.indexOf(value[, byteOffset][, encoding])
+</code></pre></li>
+<li><p>比较两个buffer是否相等（数值是否相等，而非比较引用地址）</p>
+<pre><code>buf.equals(otherBuffer)
+</code></pre></li>
+<li><p>拷贝一个buffer </p>
+<pre><code>buf.copy(target[, targetStart[, sourceStart[, sourceEnd]]])
+</code></pre></li>
+<li><p>比较两个buffer大小 </p>
+<pre><code>buf.compare(target[, targetStart[, targetEnd[, sourceStart[, sourceEnd]]]])
+</code></pre></li>
+<li><p>分配一个大小为 size 字节的新建的 Buffer 。</p>
+<pre><code>Buffer.alloc(size[, fill[, encoding]])  
+如果 fill 为 undefined ，则该 Buffer 会用 0 填充，encoding默认为 &apos;utf8&apos;
+Buffer也有下标，可以通过 buf[index] 进行操作
+length：字节长度（非字符长度）
+</code></pre></li>
+<li><p>返回字符串的实际字节长度（js中字符串长度获取的是字符长度）</p>
+<pre><code>Buffer.byteLength(string[, encoding])  
+</code></pre></li>
+<li><p>比较两个buf的大小</p>
+<pre><code>Buffer.compare(buf1, buf2)  
+</code></pre></li>
+<li><p>返回一个合并了 list 中所有 Buffer 实例的新 Buffer</p>
+<pre><code>Buffer.concat(list[, totalLength])
+</code></pre></li>
+<li><p>使用八位字节数组 array 分配一个新的 Buffer。</p>
+<pre><code>Buffer.from(array)
+</code></pre></li>
+<li><p>判断对象是否是一个 Buffer</p>
+<pre><code>Buffer.isBuffer(obj)
+</code></pre></li>
+<li><p>判断Buffer支持的字符编码方式</p>
+<pre><code>Buffer.isEncoding(encoding)  
+encoding可选值有：ascii、utf8、utf16le、ucs2、base64、latin1、binary、hex
+</code></pre></li>
 </ul>
-<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ol>
+<h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p>js弱类型语言，所以很少涉及到进制之前的转换，再补充一边相关内容，防止遗忘：</p>
+<h3 id="ECMAScript-Numer类型"><a href="#ECMAScript-Numer类型" class="headerlink" title="ECMAScript-Numer类型"></a>ECMAScript-Numer类型</h3><p>ECMAScript中的基本数据类型Numer，最基本的数值字面量格式是十进制，除了以十进制表示外，整数还可以通过八进制（以8为基础）或十六进制（以16为基数）的字面值来表示。其中，八进制字面值的第一位必须是零（0），然后是八进制数字序列（0~7），十六进制字面值的前两位必须是0x，后跟任何十六进制数字（0~9及A~F）。其中字母A~F可以大写，也可以小写：</p>
+<pre><code>var octalNum1 = 070;  // 八进制的56
+var hexNum1 = 0xA;    // 十六进制的10
+</code></pre><h3 id="位-字节-字"><a href="#位-字节-字" class="headerlink" title="位/字节/字"></a>位/字节/字</h3><ul>
+<li>位（bit）:计算机中的最小单位，逻辑0或1就是一个位</li>
+<li>字节（byte）:有8位组成一个字节</li>
+<li>字（word）：16位为一个字，32位为双字</li>
+</ul>
+<p>C/C++语言中数据类型：大小（字节）</p>
+<pre><code>double 8
+float 4
+long 4
+int 2 （32位或64位系统下int的长度为4字节）
+char 1
+</code></pre><h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ol>
 <li><a href="http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html" target="_blank" rel="noopener">字符编码笔记：ASCII，Unicode 和 UTF-8</a> </li>
 </ol>
 
@@ -540,6 +596,10 @@ console.log(bf.length);//5
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Nodejs系列-7-fs模块/" rel="prev" title="Nodejs系列-7-fs模块">
+                Nodejs系列-7-fs模块 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -610,7 +670,7 @@ console.log(bf.length);//5
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">50</span>
+                    <span class="site-state-item-count">51</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -719,7 +779,7 @@ console.log(bf.length);//5
                   
                     
                   
-                  <a href="http://www.mhwang.club:3000" title="WebSite &rarr; http://www.mhwang.club:3000" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>WebSite</a>
+                  <a href="https://blog.mhwang.club" title="WebSite &rarr; https://blog.mhwang.club" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>WebSite</a>
                 </span>
               
                 <span class="links-of-author-item">
@@ -760,7 +820,7 @@ console.log(bf.length);//5
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#常用方法"><span class="nav-number">1.</span> <span class="nav-text">常用方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文章"><span class="nav-number">2.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#常用方法"><span class="nav-number">1.</span> <span class="nav-text">常用方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#补充"><span class="nav-number">2.</span> <span class="nav-text">补充</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ECMAScript-Numer类型"><span class="nav-number">2.1.</span> <span class="nav-text">ECMAScript-Numer类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#位-字节-字"><span class="nav-number">2.2.</span> <span class="nav-text">位/字节/字</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文章"><span class="nav-number">3.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
             
 
           </div>

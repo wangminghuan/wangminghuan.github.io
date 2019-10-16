@@ -105,7 +105,7 @@
 <meta property="og:description" content="ElectronElectron通过将Chromium和Node.js合并到同一个运行时环境中，并将其打包为Mac，Windows和Linux系统下的应用来实现这一目的。Electron和nwjs其实是一个作者，中间的种种可以访问参考2来查看，很有意思的一件事。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://wangminghuan.github.io/初探electron/1.png">
-<meta property="og:updated_time" content="2019-07-03T03:53:25.345Z">
+<meta property="og:updated_time" content="2019-10-09T07:32:04.595Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初探electron">
 <meta name="twitter:description" content="ElectronElectron通过将Chromium和Node.js合并到同一个运行时环境中，并将其打包为Mac，Windows和Linux系统下的应用来实现这一目的。Electron和nwjs其实是一个作者，中间的种种可以访问参考2来查看，很有意思的一件事。">
@@ -415,7 +415,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-03 11:53:25" itemprop="dateModified" datetime="2019-07-03T11:53:25+08:00">2019-07-03</time>
+                <time title="修改时间：2019-10-09 15:32:04" itemprop="dateModified" datetime="2019-10-09T15:32:04+08:00">2019-10-09</time>
               
             
           </span>
@@ -467,7 +467,7 @@ someWindow.loadURL(&apos;file://&apos; + __dirname + &apos;/index.html&apos;)
 <p>每个 BrowserWindow 实例都在自己的渲染进程里运行页面。 当一个 BrowserWindow 实例被销毁后，相应的渲染进程也会被终止。</p>
 <h2 id="进程间的通信"><a href="#进程间的通信" class="headerlink" title="进程间的通信"></a>进程间的通信</h2><p>Web 页面因为安全限制，不能直接访问原生的GUI资源（比如dialog、电源监控，通知栏等），Electron 中也是一样，渲染进程如果想要进行原生的GUI操作，就必须和主进程通讯，请求相应的GUI操作。  </p>
 <p>Electron 提供了几种渲染进程和主进程通信的方式：</p>
-<h5 id="第一种是使用ipcMain和ipcRenderer模块"><a href="#第一种是使用ipcMain和ipcRenderer模块" class="headerlink" title="第一种是使用ipcMain和ipcRenderer模块"></a>第一种是使用ipcMain和ipcRenderer模块</h5><p>在渲染进程中使用ipcRender模块向主进程发送消息，主进程中ipcMain接收消息，进行操作，如果还需要反馈，则通知渲染进程，渲染进程根据接收的内容执行相应的操作：</p>
+<h3 id="第一种是使用ipcMain和ipcRenderer模块"><a href="#第一种是使用ipcMain和ipcRenderer模块" class="headerlink" title="第一种是使用ipcMain和ipcRenderer模块"></a>第一种是使用ipcMain和ipcRenderer模块</h3><p>在渲染进程中使用ipcRender模块向主进程发送消息，主进程中ipcMain接收消息，进行操作，如果还需要反馈，则通知渲染进程，渲染进程根据接收的内容执行相应的操作：</p>
 <pre><code>// 渲染进程中
 const {ipcRenderer} = require(&apos;electron&apos;)
 ipcRender.send(&apos;somemsg&apos;, data);
@@ -482,12 +482,12 @@ ipcMain.on(&apos;somemsg&apos;, (evt, data) =&gt; {
 });
 // 同时Electron 也提供了同步的方式
 </code></pre><p>不过切忌用 ipc 传递大量的数据，会有很大的性能问题，严重会让你整个应用卡住。</p>
-<h5 id="第二种是直接在渲染进程使用remote模块"><a href="#第二种是直接在渲染进程使用remote模块" class="headerlink" title="第二种是直接在渲染进程使用remote模块"></a>第二种是直接在渲染进程使用remote模块</h5><p>remote 模块可以直接获取主进程中的模块。这种方式其实是第一种方式的简化。</p>
+<h3 id="第二种是直接在渲染进程使用remote模块"><a href="#第二种是直接在渲染进程使用remote模块" class="headerlink" title="第二种是直接在渲染进程使用remote模块"></a>第二种是直接在渲染进程使用remote模块</h3><p>remote 模块可以直接获取主进程中的模块。这种方式其实是第一种方式的简化。</p>
 <pre><code>// 在渲染进程打开提示对话框
 const {dialog} = require(&apos;electron&apos;).remote
 dialog.showMessageBox({ opts });
-</code></pre><h5 id="第三种是主进程向渲染进程发送消息"><a href="#第三种是主进程向渲染进程发送消息" class="headerlink" title="第三种是主进程向渲染进程发送消息"></a>第三种是主进程向渲染进程发送消息</h5><pre><code>this.webviewWindow.webContents.send(&apos;ping&apos;);
-</code></pre><h5 id="第四种是渲染进程之间的通信"><a href="#第四种是渲染进程之间的通信" class="headerlink" title="第四种是渲染进程之间的通信"></a>第四种是渲染进程之间的通信</h5><p>最简单的方法是使用浏览器中已经实现的 HTML5 API。 其中比较好的方案是用 Storage API， localStorage，sessionStorage 或者 IndexedDB。</p>
+</code></pre><h3 id="第三种是主进程向渲染进程发送消息"><a href="#第三种是主进程向渲染进程发送消息" class="headerlink" title="第三种是主进程向渲染进程发送消息"></a>第三种是主进程向渲染进程发送消息</h3><pre><code>this.webviewWindow.webContents.send(&apos;ping&apos;);
+</code></pre><h3 id="第四种是渲染进程之间的通信"><a href="#第四种是渲染进程之间的通信" class="headerlink" title="第四种是渲染进程之间的通信"></a>第四种是渲染进程之间的通信</h3><p>最简单的方法是使用浏览器中已经实现的 HTML5 API。 其中比较好的方案是用 Storage API， localStorage，sessionStorage 或者 IndexedDB。</p>
 <p>你还可以用 Electron 内的 IPC 机制实现。将数据存在主进程的某个全局变量中，然后在多个渲染进程中使用 remote 模块来访问它。</p>
 <pre><code>// 在主进程中
 global.sharedObject = {
@@ -625,7 +625,7 @@ console.log(require(&apos;electron&apos;).remote.getGlobal(&apos;sharedObject&ap
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">50</span>
+                    <span class="site-state-item-count">51</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -734,7 +734,7 @@ console.log(require(&apos;electron&apos;).remote.getGlobal(&apos;sharedObject&ap
                   
                     
                   
-                  <a href="http://www.mhwang.club:3000" title="WebSite &rarr; http://www.mhwang.club:3000" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>WebSite</a>
+                  <a href="https://blog.mhwang.club" title="WebSite &rarr; https://blog.mhwang.club" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>WebSite</a>
                 </span>
               
                 <span class="links-of-author-item">
@@ -775,7 +775,7 @@ console.log(require(&apos;electron&apos;).remote.getGlobal(&apos;sharedObject&ap
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Electron"><span class="nav-number">1.</span> <span class="nav-text">Electron</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#渲染进程和主进程"><span class="nav-number">2.</span> <span class="nav-text">渲染进程和主进程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程间的通信"><span class="nav-number">3.</span> <span class="nav-text">进程间的通信</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第一种是使用ipcMain和ipcRenderer模块"><span class="nav-number">3.0.0.1.</span> <span class="nav-text">第一种是使用ipcMain和ipcRenderer模块</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二种是直接在渲染进程使用remote模块"><span class="nav-number">3.0.0.2.</span> <span class="nav-text">第二种是直接在渲染进程使用remote模块</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第三种是主进程向渲染进程发送消息"><span class="nav-number">3.0.0.3.</span> <span class="nav-text">第三种是主进程向渲染进程发送消息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第四种是渲染进程之间的通信"><span class="nav-number">3.0.0.4.</span> <span class="nav-text">第四种是渲染进程之间的通信</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#Electron-Vue"><span class="nav-number">4.</span> <span class="nav-text">Electron + Vue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Electron"><span class="nav-number">1.</span> <span class="nav-text">Electron</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#渲染进程和主进程"><span class="nav-number">2.</span> <span class="nav-text">渲染进程和主进程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程间的通信"><span class="nav-number">3.</span> <span class="nav-text">进程间的通信</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一种是使用ipcMain和ipcRenderer模块"><span class="nav-number">3.1.</span> <span class="nav-text">第一种是使用ipcMain和ipcRenderer模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二种是直接在渲染进程使用remote模块"><span class="nav-number">3.2.</span> <span class="nav-text">第二种是直接在渲染进程使用remote模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三种是主进程向渲染进程发送消息"><span class="nav-number">3.3.</span> <span class="nav-text">第三种是主进程向渲染进程发送消息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第四种是渲染进程之间的通信"><span class="nav-number">3.4.</span> <span class="nav-text">第四种是渲染进程之间的通信</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Electron-Vue"><span class="nav-number">4.</span> <span class="nav-text">Electron + Vue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
