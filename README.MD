@@ -11,6 +11,7 @@ source分支下为博客源码，master分支为打包后的博客。
     hexo deploy #部署到GitHub
     hexo help  # 查看帮助
     hexo version  #查看Hexo的版本
+    hexo clean  #清除缓存
 #### 缩写：
 
     hexo n == hexo new

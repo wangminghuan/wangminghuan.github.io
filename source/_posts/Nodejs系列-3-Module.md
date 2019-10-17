@@ -1,5 +1,5 @@
 ---
-title: Nodejs系列-3-模块化
+title: Nodejs系列-3-Module
 date: 2019-10-08 09:51:36
 tags: [note]
 categories: Nodejs

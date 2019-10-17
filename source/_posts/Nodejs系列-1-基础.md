@@ -124,40 +124,6 @@ Node.js 自身也使用 repl 模块为执行 JavaScript 代码提供交互接口
 运行结果：
 
 ![](5.png)
-## NodeJs中的全局(global)对象
-类似浏览器全局对象 window，但是 node（ECMAScript） 环境中是没有window的（本质上，浏览器的window 其实就是扩展自ECMAScript中的 global）
-
-### 日志打印
-
-    console对象
-
-### 文件路径类
-当前文件（模块）所在目录
-
-    __dirname
-
-当前文件（模块）的文件名称（包含文件绝对路径）
-
-    __filename
-
-### 定时器类
-
-    setTimeout()/clearTimeout()
-    setInterval()/clearInterval()
-    setImmediate()/clearImmediate()
-
-### 模块对象类
-
-    module
-    exports
-    require
-
-### 进程类
-    process
-
-### 文件buffer
-
-    Buffer	
 
 ## 参考文章
 - [JavaScript、Node.js与V8的关系](https://segmentfault.com/a/1190000014722508)

@@ -480,11 +480,44 @@ watchfile方法监听一个文件，如果该文件发生变化，就会自动�
     写入结束，触发close
 
 ## fs.Stats 类
-		fs.stat(path[, options], callback)
+从 fs.stat()、fs.lstat() 和 fs.fstat() 及其同步的方法返回的对象都属于fs.Stats 类, 对象提供了关于文件的信息：
 
-## fs.FSWatcher 类
-		fs.watch(filename[, options][, listener])
-		fs.watchFile(filename[, options], listener)
+
+    Stats {
+      dev: 1217250464,
+      mode: 33206,
+      nlink: 1,
+      uid: 0,
+      gid: 0,
+      rdev: 0,
+      blksize: undefined,
+      ino: 1970324836979001,
+      size: 264,
+      blocks: undefined,
+      atimeMs: 1571293841813.9216,
+      mtimeMs: 1571293801942.3247,
+      ctimeMs: 1571293801942.3247,
+      birthtimeMs: 1571220882907.5747,
+      atime: 2019-10-17T06:30:41.814Z,
+      mtime: 2019-10-17T06:30:01.942Z,
+      ctime: 2019-10-17T06:30:01.942Z,
+      birthtime: 2019-10-16T10:14:42.908Z }
+      
+上图结果为Stats类型下的属性，还有一些方法：
+
+    stats.isBlockDevice() #如果 fs.Stats 对象描述块设备，则返回 true。
+
+    stats.isCharacterDevice() #如果 fs.Stats 对象描述字符设备，则返回 true。
+
+    stats.isDirectory()  #如果 fs.Stats 对象描述文件系统目录，则返回 true。
+
+    stats.isFile() #如果 fs.Stats 对象描述常规文件，则返回 true。
+
+    stats.isFIFO() #如果 fs.Stats 对象描述先进先出（FIFO）管道，则返回 true。
+
+    stats.isSocket() #如果 fs.Stats 对象描述套接字，则返回 true。
+
+    stats.isSymbolicLink() #如果 fs.Stats 对象描述符号链接，则返回 true。此方法仅在使用 fs.lstat() 时有效。
 
 ## 参考
 - [fs 模块-- JavaScript 标准参考教程（alpha）](http://javascript.ruanyifeng.com/nodejs/fs.html)
