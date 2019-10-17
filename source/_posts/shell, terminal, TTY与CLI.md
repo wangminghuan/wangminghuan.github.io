@@ -1,6 +1,6 @@
 ---
 title: 'shell,terminal,TTY与CLI'
-date: 2019-10-17 16:07:51
+date: 2019-10-17 19:07:51
 tags: [shell.bash]
 categories: 计算机相关
 ---

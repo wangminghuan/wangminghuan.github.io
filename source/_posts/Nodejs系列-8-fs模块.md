@@ -1,5 +1,5 @@
 ---
-title: Nodejs系列-7-fs模块
+title: Nodejs系列-8-fs模块
 date: 2019-10-09 15:34:01
 tags: [note]
 categories: Nodejs
