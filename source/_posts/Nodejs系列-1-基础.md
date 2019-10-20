@@ -499,7 +499,160 @@ http.ServerResponse是返回给客户端的信息，决定了用户最终看到�
 
 上述例子均有调用。
 
-## Net 模块与 http 模块
+
+
+## TCP与UDP
+
+二者均为传输层协议，但又有一些不同之处。
+
+### TCP 协议
+
+  - 可靠的、面向连接的协议、传输效率低
+  - 效率要求相对低，但对准确性要求相对高的场景
+  - 文件传输、接受邮件、远程登录
+
+### UDP 协议
+
+  - 不可靠的、无连接的服务、传输效率高
+  - 效率要求相对高，对准确性要求相对低的场景
+  - 在线视频、网络语音电话
+
+## dgram（数据报）模块
+dgram模块提供了 UDP 数据包 socket 的实现
+
+### 创建scoket实例
+
+      new dgram.Socket()
+      dgram.createSocket(type[, callback]) //type: 'udp4' 或 'udp6' 
+
+### scoket实例下方法
+- 绑定（监听）端口
+        server.bind([port][, address][, callback])
+        - prot: 未指定则由系统分配
+        - address: 默认 0.0.0.0，表示所有地址/IP
+        - callback: 绑定成功后的回调
+- 发送数据
+         server.send(msg, port, [address])
+         - msg: 发送的数据（字符串/Buffer）
+
+- 关闭服务
+      server.close()
+
+- 可监听事件
+      - close
+      - error
+      - listening
+      - message
+
+
+
+## 例子
+ 
+### service 部分
+    const dgram = require('dgram');
+    const serverSocket = dgram.createSocket('udp4');    //udp4 => ipv4
+
+    serverSocket.on('listening', () => {
+        console.log('服务器开启成功，等待数据：');
+    });
+
+    // 当接收到数据的时候出发
+    serverSocket.on('message', data => {
+        console.log('接收到了数据：', data.toString());
+    })
+
+    /**
+    * 监听指定的地址以及端口
+    */
+    serverSocket.bind(8080, '127.0.0.1');
+
+### client 部分
+
+    const dgram = require('dgram');
+
+    const clientSocket = dgram.createSocket('udp4');
+
+    /**
+    * 发送数据
+    * UDP，无连接协议，不需要连接到服务器，然后再发数据
+    */
+
+    clientSocket.send('hello', 8080, '127.0.0.1');
+## net 模块
+
+net 模块提供了创建基于流的 TCP 或 IPC 服务器(`net.createServer`)和客户端(`net.createConnection`) 的异步网络 API
+
+## 创建
+
+### 服务端创建
+
+  new net.Server()
+  net.createServer([port[, host]])
+
+  server.listen(端口, [ip])
+    - 端口：
+    -	ip：默认为0.0.0.0，表示所有
+
+### 客户端 创建
+    new net.Socket()
+		net.createConnection(port[, host][, connectListener])
+
+## 例子
+
+### service 部分
+
+      const net = require('net');
+      const server = net.createServer( () => {
+          // 这个函数其实就是connection事件绑定的函数
+      });
+      // 当有客户端连接的时候触发
+      server.on('connection', socket => {
+          // socket => 当前连接的 socket 对象
+          console.log('连接建立了');
+          socket.on('data', data => {
+              socket.write('show me the money');
+              console.log(data.toString(), socket.remoteAddress, socket.remotePort);
+          });
+
+      });
+      // 0.0.0.0 : * 通配
+      server.listen(8080, '0.0.0.0');
+
+### client 部分
+
+      const net = require('net');
+
+      /**
+      * 创建客户端与udp不同
+      *  net.Socket 类
+      * 
+      *  1. new net.Socket()
+      *  2. net.createConnection()
+      */
+
+      // 要连接的目标主机的地址以及端口号
+      const clientSocket = net.createConnection(8080, '127.0.0.1');
+      clientSocket.write('hello');
+
+      // 监听数据传输
+      clientSocket.on('data', data => {
+          console.log('服务器返回：', data.toString());
+      });
+
+      // 当数据包接收完成的时候触发
+      clientSocket.on('end', () => {
+          console.log( '数据包接收完成' );
+      });
+
+## 数据包
+在数据传输过程中不仅仅只有主体数据（你要发送的主要内容），还包括了一些其他的数据信息，比如发送端的IP、端口等，以方便接受者对数据进行处理与回复。 
+
+如果发送的数据比较大的话，还会对发送的数据进行分包，每一个包中包含有一部分主体数据以及上面提到的额外信息，接收方在接收到数据以后会数据包进行整合等一系列操作。  
+
+这种传输规则就是数据传输协议中的规定，不同的协议对传输规则有不同的规定。
+
+
+## net 模块与 http 模块
 
 NodeJs的net 模块用于创建基于流的 TCP 或 IPC 的服务器，而http模块主要是用来创建HTTP服务; TPC/IP协议是传输层协议，主要解决数据如何在网络中传输，而HTTP是应用层协议,日常中接触的更多。关于网络协议部分具体的可参考[重学前端6-浏览器部分-工作流程-请求/](https://blog.mhwang.club/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF6-%E6%B5%8F%E8%A7%88%E5%99%A8%E9%83%A8%E5%88%86-%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B-%E8%AF%B7%E6%B1%82/)
 
