@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="WMH&#39;s Blog">
 <meta property="og:description" content="流（stream）是 Node.js 中处理流式数据的抽象接口。 stream 模块用于构建实现了流接口的对象。 Node.js 提供了多种流对象。 例如，HTTP 服务器的请求和 process.stdout 都是流的实例。 流可以是可读的、可写的、或者可读可写的。 所有的流都是 EventEmitter 的实例。 使用时，需要require引入;">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-08T07:42:04.511Z">
+<meta property="og:updated_time" content="2019-10-21T01:02:47.296Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Nodejs系列-6-Steam模块">
 <meta name="twitter:description" content="流（stream）是 Node.js 中处理流式数据的抽象接口。 stream 模块用于构建实现了流接口的对象。 Node.js 提供了多种流对象。 例如，HTTP 服务器的请求和 process.stdout 都是流的实例。 流可以是可读的、可写的、或者可读可写的。 所有的流都是 EventEmitter 的实例。 使用时，需要require引入;">
@@ -396,12 +396,24 @@
                 
               
 
-              <time title="创建时间：2019-10-08 15:37:36 / 修改时间：15:42:04" itemprop="dateCreated datePublished" datetime="2019-10-08T15:37:36+08:00">2019-10-08</time>
+              <time title="创建时间：2019-10-08 15:37:36" itemprop="dateCreated datePublished" datetime="2019-10-08T15:37:36+08:00">2019-10-08</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-10-21 09:02:47" itemprop="dateModified" datetime="2019-10-21T09:02:47+08:00">2019-10-21</time>
               
             
           </span>
@@ -464,30 +476,32 @@
 <p>Node.js 提供了多种流对象。 例如，HTTP 服务器的请求和 process.stdout 都是流的实例。</p>
 <p>流可以是可读的、可写的、或者可读可写的。 所有的流都是 EventEmitter 的实例。</p>
 <p>使用时，需要require引入;<br><a id="more"></a></p>
-<h2 id="流的基本类型"><a href="#流的基本类型" class="headerlink" title="流的基本类型"></a>流的基本类型</h2><pre><code>Writable - 可写入数据的流（例如 fs.createWriteStream()）
-Readable - 可读取数据的流（例如 fs.createReadStream()）
-Duplex - 可读又可写的流（例如 net.Socket）         
-Transform - 在读写过程中可以修改或转换数据的 Duplex 流（例如 zlib.createDeflate()）
-</code></pre><h3 id="Writable方法"><a href="#Writable方法" class="headerlink" title="Writable方法"></a>Writable方法</h3><pre><code>.write(chunk[, encoding][, callback])
-.end([chunk][, encoding][, callback])
-.setDefaultEncoding(encoding)
-</code></pre><h3 id="Writable事件"><a href="#Writable事件" class="headerlink" title="Writable事件:"></a>Writable事件:</h3><pre><code>&apos;close&apos; 事件
-&apos;drain&apos; 事件
-&apos;error&apos; 事件
-&apos;finish&apos; 事件
-&apos;pipe&apos; 事件
-&apos;unpipe&apos; 事件
-</code></pre><h3 id="Readable方法"><a href="#Readable方法" class="headerlink" title="Readable方法"></a>Readable方法</h3><pre><code>.setEncoding(encoding)
-.read([size])
-.pipe(destination[, options])
-.pause()
-.resume()
-</code></pre><h3 id="Readable事件"><a href="#Readable事件" class="headerlink" title="Readable事件"></a>Readable事件</h3><pre><code>&apos;close&apos; 事件
-&apos;data&apos; 事件
-&apos;end&apos; 事件
-&apos;error&apos; 事件
-&apos;readable&apos; 事件
-</code></pre><p>Node.js 中许多的对象都是提供了流的实现：fs文件操作、net、dgram、http、https等。</p>
+<h2 id="流的基本类型"><a href="#流的基本类型" class="headerlink" title="流的基本类型"></a>流的基本类型</h2><ul>
+<li>Writable - 可写入数据的流（例如 fs.createWriteStream()）</li>
+<li>Readable - 可读取数据的流（例如 fs.createReadStream()）</li>
+<li>Duplex - 可读又可写的流（例如 net.Socket）         </li>
+<li>Transform - 在读写过程中可以修改或转换数据的 Duplex 流（例如 zlib.createDeflate()）</li>
+</ul>
+<h2 id="stream-Writable-类"><a href="#stream-Writable-类" class="headerlink" title="stream.Writable 类"></a>stream.Writable 类</h2><h3 id="常用方法"><a href="#常用方法" class="headerlink" title="常用方法"></a>常用方法</h3><pre><code>- writable.write(chunk[, encoding][, callback])
+- writable.end([chunk][, encoding][, callback])
+- writable.setDefaultEncoding(encoding)
+</code></pre><h3 id="常用事件"><a href="#常用事件" class="headerlink" title="常用事件"></a>常用事件</h3><pre><code>- &apos;close&apos; 事件
+- &apos;drain&apos; 事件
+- &apos;error&apos; 事件
+- &apos;finish&apos; 事件
+- &apos;pipe&apos; 事件
+- &apos;unpipe&apos; 事件
+</code></pre><h2 id="stream-Readable-类"><a href="#stream-Readable-类" class="headerlink" title="stream.Readable 类"></a>stream.Readable 类</h2><h3 id="常用方法-1"><a href="#常用方法-1" class="headerlink" title="常用方法"></a>常用方法</h3><pre><code>- readable.setEncoding(encoding)
+- readable.read([size])
+- readable..pipe(destination[, options])
+- readable.pause()
+- readable.resume()
+</code></pre><h3 id="常用事件-1"><a href="#常用事件-1" class="headerlink" title="常用事件"></a>常用事件</h3><pre><code>- &apos;close&apos; 事件
+- &apos;data&apos; 事件
+- &apos;end&apos; 事件
+- &apos;error&apos; 事件
+- &apos;readable&apos; 事件
+</code></pre><h2 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h2><p>Node.js 中许多的对象都是提供了流的实现：fs文件操作、net、dgram、http、https等,这些模块在数据传输中会产生可消费的流对象，可写流，可读流或可读可写流，此时我们按自己的需求对数据流进行对应的操作即可。</p>
 <p>stream 模块主要用于开发者创建新类型的流实例。 对于以消费流对象为主的开发者，极少需要直接使用 stream 模块。</p>
 
       
@@ -608,7 +622,7 @@ Transform - 在读写过程中可以修改或转换数据的 Duplex 流（例如
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">51</span>
+                    <span class="site-state-item-count">59</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -635,7 +649,9 @@ Transform - 在读写过程中可以修改或转换数据的 Duplex 流（例如
                     
                       
                     
-                    <span class="site-state-item-count">5</span>
+                      
+                    
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -672,7 +688,9 @@ Transform - 在读写过程中可以修改或转换数据的 Duplex 流（例如
                     
                       
                     
-                    <span class="site-state-item-count">10</span>
+                      
+                    
+                    <span class="site-state-item-count">11</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -758,7 +776,7 @@ Transform - 在读写过程中可以修改或转换数据的 Duplex 流（例如
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#流的基本类型"><span class="nav-number">1.</span> <span class="nav-text">流的基本类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Writable方法"><span class="nav-number">1.1.</span> <span class="nav-text">Writable方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Writable事件"><span class="nav-number">1.2.</span> <span class="nav-text">Writable事件:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Readable方法"><span class="nav-number">1.3.</span> <span class="nav-text">Readable方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Readable事件"><span class="nav-number">1.4.</span> <span class="nav-text">Readable事件</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#流的基本类型"><span class="nav-number">1.</span> <span class="nav-text">流的基本类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stream-Writable-类"><span class="nav-number">2.</span> <span class="nav-text">stream.Writable 类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常用方法"><span class="nav-number">2.1.</span> <span class="nav-text">常用方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用事件"><span class="nav-number">2.2.</span> <span class="nav-text">常用事件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stream-Readable-类"><span class="nav-number">3.</span> <span class="nav-text">stream.Readable 类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常用方法-1"><span class="nav-number">3.1.</span> <span class="nav-text">常用方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用事件-1"><span class="nav-number">3.2.</span> <span class="nav-text">常用事件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结束语"><span class="nav-number">4.</span> <span class="nav-text">结束语</span></a></li></ol></div>
             
 
           </div>

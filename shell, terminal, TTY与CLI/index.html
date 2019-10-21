@@ -96,18 +96,20 @@
 
 
 
-  <meta name="description" content="fs模块提供了一些与文件系统进行交互的 API，所有文件系统操作都具有同步和异步的形式。作为nodejs开发中最常用的模块之一，下面我们介绍一些常见API用法。">
-<meta name="keywords" content="note">
+  <meta name="description" content="作为计算机非科班出身人员，经常会看到shell,terminal,TTY与CLI 这写名字，本文做下对应解释，以防后用">
+<meta name="keywords" content="shell.bash">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Nodejs系列-7-fs模块">
-<meta property="og:url" content="https://wangminghuan.github.io/Nodejs系列-7-fs模块/index.html">
+<meta property="og:title" content="shell,terminal,TTY与CLI">
+<meta property="og:url" content="https://wangminghuan.github.io/shell, terminal, TTY与CLI/index.html">
 <meta property="og:site_name" content="WMH&#39;s Blog">
-<meta property="og:description" content="fs模块提供了一些与文件系统进行交互的 API，所有文件系统操作都具有同步和异步的形式。作为nodejs开发中最常用的模块之一，下面我们介绍一些常见API用法。">
+<meta property="og:description" content="作为计算机非科班出身人员，经常会看到shell,terminal,TTY与CLI 这写名字，本文做下对应解释，以防后用">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-16T10:51:32.215Z">
+<meta property="og:image" content="https://wangminghuan.github.io/shell,%20terminal,%20TTY与CLI/1.png">
+<meta property="og:updated_time" content="2019-10-17T10:36:02.573Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Nodejs系列-7-fs模块">
-<meta name="twitter:description" content="fs模块提供了一些与文件系统进行交互的 API，所有文件系统操作都具有同步和异步的形式。作为nodejs开发中最常用的模块之一，下面我们介绍一些常见API用法。">
+<meta name="twitter:title" content="shell,terminal,TTY与CLI">
+<meta name="twitter:description" content="作为计算机非科班出身人员，经常会看到shell,terminal,TTY与CLI 这写名字，本文做下对应解释，以防后用">
+<meta name="twitter:image" content="https://wangminghuan.github.io/shell,%20terminal,%20TTY与CLI/1.png">
 
 
 
@@ -115,7 +117,7 @@
 
   
   
-  <link rel="canonical" href="https://wangminghuan.github.io/Nodejs系列-7-fs模块/">
+  <link rel="canonical" href="https://wangminghuan.github.io/shell, terminal, TTY与CLI/">
 
 
 
@@ -125,7 +127,7 @@
   };
 </script>
 
-  <title>Nodejs系列-7-fs模块 | WMH's Blog</title>
+  <title>shell,terminal,TTY与CLI | WMH's Blog</title>
   
 
 
@@ -353,7 +355,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/Nodejs系列-7-fs模块/">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/shell, terminal, TTY与CLI/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WMH">
@@ -370,7 +372,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Nodejs系列-7-fs模块
+          <h1 class="post-title" itemprop="name headline">shell,terminal,TTY与CLI
 
               
             
@@ -396,24 +398,12 @@
                 
               
 
-              <time title="创建时间：2019-10-09 15:34:01" itemprop="dateCreated datePublished" datetime="2019-10-09T15:34:01+08:00">2019-10-09</time>
+              <time title="创建时间：2019-10-17 19:07:51 / 修改时间：18:36:02" itemprop="dateCreated datePublished" datetime="2019-10-17T19:07:51+08:00">2019-10-17</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-10-16 18:51:32" itemprop="dateModified" datetime="2019-10-16T18:51:32+08:00">2019-10-16</time>
               
             
           </span>
@@ -430,7 +420,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Nodejs/" itemprop="url" rel="index"><span itemprop="name">Nodejs</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/计算机相关/" itemprop="url" rel="index"><span itemprop="name">计算机相关</span></a></span>
 
                 
                 
@@ -472,359 +462,24 @@
       
 
       
-        <p>fs模块提供了一些与文件系统进行交互的 API，所有文件系统操作都具有同步和异步的形式。作为nodejs开发中最常用的模块之一，下面我们介绍一些常见API用法。<br><a id="more"></a></p>
-<h2 id="fs-readFile-amp-amp-fs-readFileSync"><a href="#fs-readFile-amp-amp-fs-readFileSync" class="headerlink" title="fs.readFile &amp;&amp; fs.readFileSync"></a>fs.readFile &amp;&amp; fs.readFileSync</h2><p>readFile方法用于异步读取数据。</p>
-<pre><code>fs.readFile(path[, options], callback)
-</code></pre><p>参数解释：</p>
-<pre><code>- path: 文件路径（相对或绝对），相对路径是相对于当前进程（process.cwd()）所在的路径
-- options &lt;Object&gt; | &lt;string&gt;
-    encoding &lt;string&gt; | &lt;null&gt; 默认值: null。
-    flag &lt;string&gt; 参阅支持的文件系统标志。默认值: &apos;r&apos;。
-- callback &lt;Function&gt;
-</code></pre><p>示例：</p>
-<pre><code>const fs= require(&quot;fs&quot;);
-fs.readFile(&quot;demo.text&quot;,&quot;utf8&quot;,(err,data)=&gt;{
-  if (err) {
-    console.log(err)
-    return;
-  };
-  console.log(data);
-})
-</code></pre><p>运行结果：</p>
-<pre><code>My name is Jack!
-</code></pre><p>如果不指定编码方式，返回的是Buffer数据：</p>
-<pre><code>&lt;Buffer 89 50 4e 47 0d 0a 1a 0a 00 00 00 0d 49 48 44 52 00 00 01 c9 00 00 00 ff 08 06 00 00 00 9a 6b 2d 75 00 00 03 bc 49 44 41 54 78 9c ed d5 a1 11 c0 20 00 ... &gt;
-</code></pre><p><code>readFileSync</code>与<code>readFile</code>类似，只是执行过程换成了同步模式。</p>
-<h2 id="fs-writeFile-amp-amp-fs-writeFileSync"><a href="#fs-writeFile-amp-amp-fs-writeFileSync" class="headerlink" title="fs.writeFile &amp;&amp; fs.writeFileSync"></a>fs.writeFile &amp;&amp; fs.writeFileSync</h2><p>writeFile方法用于写入文件。</p>
-<pre><code>fs.writeFile(file, data[, options], callback)
-</code></pre><p>参数解释：</p>
-<pre><code>- file &lt;string&gt; | &lt;Buffer&gt; | &lt;URL&gt; | &lt;integer&gt; 文件名或文件描述符。
-- data &lt;string&gt; | &lt;Buffer&gt; | &lt;TypedArray&gt; | &lt;DataView&gt;
-- options &lt;Object&gt; | &lt;string&gt;
-  encoding &lt;string&gt; | &lt;null&gt; 默认值: &apos;utf8&apos;。
-  mode &lt;integer&gt; 默认值: 0o666。
-  flag &lt;string&gt; 参阅支持的文件系统标志。默认值: &apos;w&apos;。
-- callback &lt;Function&gt;
-</code></pre><p>例子1，写入数据为字符串时，需指定字符编码，缺省时为utf8</p>
-<pre><code>fs.writeFile(&quot;./demo-1.txt&quot;,&quot;My job is coding&quot;,&quot;utf8&quot;,(err)=&gt;{
-  if(err){
-    console.log(&quot;写入失败&quot;)
-    return;
-  }
-  console.log(&quot;写入成功&quot;)
-})
-</code></pre><p>例子2, 写入数据为二进制数据时，encoding 选项会被忽略, 我们将一个图片的base64字符串保存到本地</p>
-<pre><code>const base64Img=&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAE0lEQVQImWN8Eyz6nwEImBigAAAkPwJXo01dBgAAAABJRU5ErkJggg==&quot;
-const base64Data = base64Img.replace(/^data:image\/\w+;base64,/, &quot;&quot;);//过滤掉标识
-const data=Buffer.from(base64Data, &apos;base64&apos;);
-fs.writeFile(&quot;./red.png&quot;,data,(err)=&gt;{
-  if(err){
-    console.log(&quot;写入失败&quot;)
-    return;
-  }
-  console.log(&quot;写入成功&quot;)
-})
-</code></pre><p>我们将一个gif图写入本地,图片二进制数据参见：<a href="http://www.matthewflickinger.com/lab/whatsinagif/bits_and_bytes.asp" target="_blank" rel="noopener">点我访问</a></p>
-<pre><code>const arr=[0x47,0x49,0x46,0x38,0x39,0x61,0x0A,0x00,0x0A,0x00,0x91,0x00,0x00,0xFF,0xFF,0xFF,0xFF,0x00,0x00,0x00,0x00,0xFF,0x00,0x00,0x00,0x21,0xF9,0x04,0x00,0x00,0x00,0x00,0x00,0x2C,0x00,0x00,0x00,0x00,0x0A,0x00,0x0A,0x00,0x00,0x02,0x16,0x8C,0x2D,0x99,0x87,0x2A,0x1C,0xDC,0x33,0xA0,0x02,0x75,0xEC,0x95,0xFA,0xA8,0xDE,0x60,0x8C,0x04,0x91,0x4C,0x01,0x00,0x3B];
-const data=Buffer.from(arr);
-fs.writeFile(&quot;./red.gif&quot;,data,(err)=&gt;{
-  if(err){
-    console.log(&quot;写入失败&quot;);
-    return;
-  }
-  console.log(&quot;写入成功&quot;)
-})
-</code></pre><h3 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h3><p>在文件描述符的情况下，文件不会被替换！ 数据不一定写入到文件的开头，文件的原始数据可以保留在新写入的数据之前和/或之后，行为几乎与直接调用 <code>fs.write</code> 类似：</p>
-<pre><code>fs.open(&apos;./demo-1.txt&apos;, &apos;a+&apos;, (err,fd)=&gt;{
-  if(err){
-    console.log(&quot;打开失败&quot;)
-  }
-  fs.writeFileSync(fd,&quot;锄禾日当午;&quot;)
-  fs.writeFileSync(fd,&quot;汗滴禾下土&quot;)
-  fs.close(fd,function(err){
-    if(err){
-      console.log(&quot;关闭失败&quot;)
-      return;
-    }
-    console.log(&apos;file closed&apos;);
-  })
-})
-</code></pre><p>运行结果：</p>
-<pre><code>锄禾日当午;汗滴禾下土
-</code></pre><p>下面例子也可以实现同样的功能：</p>
-<pre><code>fs.writeFileSync(&quot;./demo-1.txt&quot;,&quot;;&quot;+new Date().getTime().toString(),{
-  flag:&quot;a+&quot;
-})
-fs.writeFileSync(&quot;./demo-1.txt&quot;,&quot;;&quot;+new Date().getTime().toString(),{
-  flag:&quot;a+&quot;
-})
-</code></pre><p>运行结果：</p>
-<pre><code>;1570873714714;1570873714715
-</code></pre><p><code>writeFileSync</code>与<code>writeFile</code>类似</p>
-<h2 id="fs-mkdir-amp-amp-fs-mkdirSync"><a href="#fs-mkdir-amp-amp-fs-mkdirSync" class="headerlink" title="fs.mkdir &amp;&amp; fs.mkdirSync"></a>fs.mkdir &amp;&amp; fs.mkdirSync</h2><p>mkdir方法用于新建目录</p>
-<pre><code>fs.mkdir(path[, options], callback)
-</code></pre><p>参数解释：</p>
-<pre><code>- path &lt;string&gt; | &lt;Buffer&gt; | &lt;URL&gt;
-- options &lt;Object&gt; | &lt;integer&gt;
-  recursive &lt;boolean&gt; 默认值: false。
-  mode &lt;integer&gt; Windows 上不支持。默认值: 0o777。
-- callback &lt;Function&gt;
-</code></pre><p>例子：</p>
-<pre><code>fs.mkdir(&apos;./tmp/a/apple&apos;, { recursive: true }, (err) =&gt; {
-  if (err) {
-    console.log(&quot;创建失败&quot;);
-    return;
-  }
-  console.log(&quot;创建成功&quot;)
-});
-</code></pre><p>创建 /tmp/a/apple 目录，无论是否存在 /tmp 和 /tmp/a 目录。</p>
-<p><code>mkdirSync</code>与<code>mkdir</code>类似</p>
-<h2 id="fs-readdir-amp-amp-fs-readdirSync"><a href="#fs-readdir-amp-amp-fs-readdirSync" class="headerlink" title="fs.readdir &amp;&amp; fs.readdirSync"></a>fs.readdir &amp;&amp; fs.readdirSync</h2><p>readdir方法用于读取目录，返回一个所包含的文件和子目录的数组</p>
-<pre><code>fs.readdir(path[, options], callback)
-</code></pre><p>参数解释：</p>
-<pre><code>- path &lt;string&gt; | &lt;Buffer&gt; | &lt;URL&gt;
-- options &lt;string&gt; | &lt;Object&gt;
-  encoding &lt;string&gt; 默认值: &apos;utf8&apos;。
-  withFileTypes &lt;boolean&gt; 默认值: false。
-- callback &lt;Function&gt;
-  err &lt;Error&gt;
-  files &lt;string[]&gt; | &lt;Buffer[]&gt; | &lt;fs.Dirent[]&gt;
-</code></pre><p>例子，读取文本的static文件夹：</p>
-<pre><code>fs.readdir(&quot;./static&quot;,(err,files)=&gt;{
-  if (err) {
-    console.log(err);
-    return;
-  }
-  console.log(files)
-})
-</code></pre><p>运行结果：</p>
-<pre><code>[ &apos;css&apos;, &apos;img&apos;, &apos;index.html&apos;, &apos;js&apos; ]
-</code></pre><p><code>readdirSync</code>与<code>readdir</code>类似</p>
-<h2 id="fs-stat-amp-amp-fs-statSync"><a href="#fs-stat-amp-amp-fs-statSync" class="headerlink" title="fs.stat &amp;&amp; fs.statSync"></a>fs.stat &amp;&amp; fs.statSync</h2><p>stat方法的参数是一个文件或目录，它产生一个对象，该对象包含了该文件或目录的具体信息。我们往往通过该方法，判断正在处理的到底是一个文件，还是一个目录。</p>
-<pre><code>fs.stat(path[, options], callback)
-</code></pre><p>参数解释：</p>
-<pre><code>- path &lt;string&gt; | &lt;Buffer&gt; | &lt;URL&gt;
-- options &lt;Object&gt;
-  bigint &lt;boolean&gt; 返回的 fs.Stats 对象中的数值是否应为 bigint 型。默认值: false。
-  callback &lt;Function&gt;
-- err &lt;Error&gt;
-  stats &lt;fs.Stats&gt;
-</code></pre><p>我们将上述例子中获取到的static进行遍历，获取对应文件的stat</p>
-<pre><code>fs.readdir(&quot;./static&quot;,(err,files)=&gt;{
-  if (err) {
-    console.log(err);
-    return;
-  }
-  files.map((file)=&gt;{
-    fs.stat(path.join(__dirname,&quot;static&quot;, file),(err,stats)=&gt;{
-        if (err) {
-          console.log(err);
-          return;
-        }
-      if (stats.isFile()) {
-        console.log(&quot;%s is file&quot;, file);
-      }else if (stats.isDirectory ()) {
-        console.log(&quot;%s is a directory&quot;, file);
-      }
-    });
-
-  }) 
-})
-</code></pre><p>运行结果：</p>
-<pre><code>css is a directory
-img is a directory
-index.html is file
-js is a directory
-</code></pre><p>利用<code>fs.statSync</code> 与 <code>fs.readdirSync</code> 可以封装一个常用功能：遍历目录下的所有文件</p>
-<pre><code>/**
-*
-* @desc 遍历目录下的所有文件
-* @param {p}:要遍历目录路径
-*/
-let localFileArr=[];
-function readPathSync (p) {
-  const stat = fs.statSync(p)
-  if (stat.isDirectory()) {
-    const ls = fs.readdirSync(p).map(file =&gt; path.join(p, file))
-    for (let i = 0; i &lt; ls.length; i++) {
-      arguments.callee(ls[i])
-    }
-  } else {
-    localFileArr.push(p)
-  }
-}
-</code></pre><p>运行</p>
-<pre><code>readPathSync(path.join(__dirname,&quot;static&quot;)); 
-</code></pre><p>可以得到static文件夹下的所有文件</p>
-<pre><code>[ &apos;C:\\Users\\wmh\\Desktop\\nodejs\\static\\css\\fonts\\element-icons.535877f.woff&apos;,
-  &apos;C:\\Users\\wmh\\Desktop\\nodejs\\static\\css\\style.css&apos;,
-  &apos;C:\\Users\\wmh\\Desktop\\nodejs\\static\\img\\1.png&apos;,
-  &apos;C:\\Users\\wmh\\Desktop\\nodejs\\static\\img\\2.png&apos;,
-  &apos;C:\\Users\\wmh\\Desktop\\nodejs\\static\\index.html&apos;,
-  &apos;C:\\Users\\wmh\\Desktop\\nodejs\\static\\js\\app.js&apos; ]
-</code></pre><h2 id="fs-existsSync"><a href="#fs-existsSync" class="headerlink" title="fs.existsSync"></a>fs.existsSync</h2><p>用来判断给定路径是否存在:如果路径存在，则返回 true，否则返回 false。</p>
-<pre><code>fs.existsSync(path)
-</code></pre><p>注意：<code>fs.exists</code> <strong>已废弃！！！</strong></p>
-<h2 id="fs-copyFile-amp-amp-fs-copyFileSync"><a href="#fs-copyFile-amp-amp-fs-copyFileSync" class="headerlink" title="fs.copyFile &amp;&amp; fs.copyFileSync"></a>fs.copyFile &amp;&amp; fs.copyFileSync</h2><p>拷贝文件到指定路径，V8.5+版本支持</p>
-<pre><code>fs.copyFile(src, dest[, flags], callback)
-</code></pre><p>参数解释：</p>
-<pre><code>- src &lt;string&gt; | &lt;Buffer&gt; | &lt;URL&gt; 要拷贝的源文件名。
-- dest &lt;string&gt; | &lt;Buffer&gt; | &lt;URL&gt; 拷贝操作的目标文件名。
-- flags &lt;number&gt; 用于拷贝操作的修饰符。默认值: 0。
-- callback &lt;Function&gt;
-</code></pre><p>例子：</p>
-<pre><code>fs.copyFile(&quot;./static/index.html&quot;,&quot;./test/test.html&quot;,()=&gt;{
-  console.log(&quot;拷贝完成&quot;)
-})
-</code></pre><p>因为拷贝时目标地址目录必须存在，所有一般使用过程中，我们需要做下处理：</p>
-<p>利用<code>fs.existsSync</code>、 <code>mkdirSync</code>与 <code>fs.readdirSync</code> 可以封装一个常用功能：拷贝目录下所有文件</p>
-<pre><code>/**
-* @desc 拷贝原目录下所有文件到目标目录
-* @param {*} src 原目录
-* @param {*} dest 目标目录
-*/
-function copySync (src, dest) {
-  const stat = fs.statSync(src)
-  if (stat.isDirectory()) {
-    //原地址是一个文件夹，判断目标文件夹是否存在
-    if (!fs.existsSync(dest)) fs.mkdirSync(dest)
-    const ls = fs.readdirSync(src).map(file =&gt; path.join(src, file))
-    for (let i = 0; i &lt; ls.length; i++) {
-      arguments.callee(ls[i], path.join(dest, path.basename(ls[i])))
-    }
-  } else {
-    //path.dirname() 方法返回 path 的目录名
-    //原地址是一个文件，先判断目标地址文件所在目录是否存在
-    if (!fs.existsSync(path.dirname(dest))) fs.mkdirSync(path.dirname(dest))
-    fs.copyFileSync(src, dest)
-  }
-}
-</code></pre><p>执行：</p>
-<pre><code>copySync(path.join(__dirname,&quot;static&quot;),path.join(__dirname,&quot;_static&quot;))
-</code></pre><p>完成文件夹拷贝</p>
-<h2 id="fs-unlink-amp-amp-fs-unlinkSync"><a href="#fs-unlink-amp-amp-fs-unlinkSync" class="headerlink" title="fs.unlink &amp;&amp; fs.unlinkSync"></a>fs.unlink &amp;&amp; fs.unlinkSync</h2><p>删除文件，当删除路径不是文件时，同步模式下会报错，所以，一般使用时与stat配合使用</p>
-<pre><code>fs.unlink(path, callback)
-</code></pre><p>例子：</p>
-<pre><code>fs.unlink(&quot;./static/js&quot;,(err)=&gt;{
-  if(err){
-    console.log(&apos;删除失败&apos;)
-    return
-  }
-  console.log(&quot;删除成功&quot;)
-})
-</code></pre><h2 id="fs-rmdir-amp-amp-fs-rmdirSync"><a href="#fs-rmdir-amp-amp-fs-rmdirSync" class="headerlink" title="fs.rmdir &amp;&amp; fs.rmdirSync"></a>fs.rmdir &amp;&amp; fs.rmdirSync</h2><p>删除文件夹(必须为空文件夹)，当删除路径不是文件夹时，同步模式下会报错，所以，一般使用时与stat配合使用(V12 新增了option选项)</p>
-<pre><code>fs.rmdir(path, callback)
-</code></pre><p>参数说明：</p>
-<pre><code>- path &lt;string&gt; | &lt;Buffer&gt; | &lt;URL&gt;
-- callback &lt;Function&gt;
-  err &lt;Error&gt;
-</code></pre><p>利用<code>fs.unlinkSync</code> 与 <code>fs.rmdirSync</code> 可以封装一个常用功能：删除目录下所有文件</p>
-<pre><code> /**
-  *
-  * @desc 删除目录下所有文件
-  * @param {p}:要删除的目录地址
-  */
-function removeSync (p) {
-  const stat = fs.statSync(p)
-  if (stat.isDirectory()) {
-    const ls = fs.readdirSync(p).map(file =&gt; path.join(p, file))
-    for (let i = 0; i &lt; ls.length; i++) {
-      arguments.callee(ls[i])
-    }
-    fs.rmdirSync(p)
-  } else {
-    fs.unlinkSync(p)
-  }
-}
-</code></pre><p>运行：</p>
-<pre><code>removeSync(path.join(__dirname,&quot;static&quot;))
-</code></pre><p>static目录被删除</p>
-<h2 id="fs-watchfile-amp-amp-fs-unwatchfile"><a href="#fs-watchfile-amp-amp-fs-unwatchfile" class="headerlink" title="fs.watchfile &amp;&amp; fs.unwatchfile"></a>fs.watchfile &amp;&amp; fs.unwatchfile</h2><p>watchfile方法监听一个文件，如果该文件发生变化，就会自动触发回调函数。</p>
-<pre><code>fs.watchFile(filename[, options], listener)
-</code></pre><p>参数说明：</p>
-<pre><code>- filename &lt;string&gt; | &lt;Buffer&gt; | &lt;URL&gt;
-- options &lt;Object&gt;
-  persistent &lt;boolean&gt; 默认值: true。
-  interval &lt;integer&gt; 默认值: 5007。
-- listener &lt;Function&gt;
-  current &lt;fs.Stats&gt;
-  previous &lt;fs.Stats&gt;
-</code></pre><p>每当访问文件时都会调用 listener 回调，例子:</p>
-<pre><code>fs.watchFile(&apos;./demo.txt&apos;,  (curr, prev)=&gt; {
-  console.log(&apos;the current mtime is: &apos; + curr.mtime);
-  console.log(&apos;the previous mtime was: &apos; + prev.mtime);
-});
-
-fs.writeFile(&apos;./demo.txt&apos;, &quot;My Name is Tom&quot;, function (err) {
-  if (err) throw err;
-
-  console.log(&quot;file write complete&quot;);   
-});
-</code></pre><p>运行结果：</p>
-<pre><code>file write complete
-the current mtime is: Wed Oct 16 2019 18:48:30 GMT+0800 (GMT+08:00)
-the previous mtime was: Wed Oct 09 2019 18:08:38 GMT+0800 (GMT+08:00)
-</code></pre><p><code>unwatchfile</code>方法用于解除对文件的监听。</p>
-<h2 id="fs-ReadStream-类"><a href="#fs-ReadStream-类" class="headerlink" title="fs.ReadStream 类"></a>fs.ReadStream 类</h2><p>我们经常用到的<code>fs.readFile</code>方法可以满足多数场景，但对于大文件，譬如超过10M文件的读取，<code>fs.readFile</code>就不是最优选择了，因为该方法将数据一次性全部读取到内存中,会造成系统的假死或引发其他问题，此时，我们需要使用<code>fs.ReadStream</code>类来处理数据；类似大文件场景下，对于写入数据，我们选择<code>fs.createWriteStream</code>类来处理：</p>
-<p>成功调用 fs.createReadStream() 将会返回一个新的 fs.ReadStream 对象。</p>
-<pre><code>fs.createReadStream(path[, options])
-</code></pre><p>我们读取本地一个文本文件：</p>
-<pre><code>const fs = require(&quot;fs&quot;);
-const path = require(&quot;path&quot;);
-
-let filename = path.resolve(&apos;demo.txt&apos;);
-let readStream = fs.createReadStream(filename,{encoding:&apos;utf8&apos;});
-readStream.on(&quot;open&quot;,(data)=&gt;{
-    console.log(&apos;打开了,触发open&apos;,data)
-})
-readStream.on(&quot;ready&quot;,()=&gt;{
-  console.log(&apos;ReadStream已经ready,触发ready&apos;)
-})
-readStream.on(&quot;data&quot;,(data)=&gt;{
-    console.log(&quot;数据来了！&quot;);
-    console.log(&quot;已经读取的字节数&quot;,readStream.bytesRead);
-})
-readStream.on(&quot;close&quot;,(data)=&gt;{
-    console.log(&apos;读取结束，触发close&apos;)
-})
-console.log(&quot;读取文件路径为：&quot;+readStream.path)
-</code></pre><p>运行结果：</p>
-<pre><code>读取文件路径为：C:\Users\wmh\Desktop\nodejs\demo.txt
-打开了,触发open 3
-ReadStream已经ready,触发ready
-数据来了！
-已经读取的字节数 11
-读取结束，触发close
-</code></pre><h2 id="fs-WriteStream-类"><a href="#fs-WriteStream-类" class="headerlink" title="fs.WriteStream 类"></a>fs.WriteStream 类</h2><p>成功调用 fs.createWriteStream() 将会返回一个新的 fs.WriteStream 对象。</p>
-<pre><code>fs.createWriteStream(path[, options])
-</code></pre><p>我们在上面例子的基础上，改为写入模式：</p>
-<pre><code>const fs = require(&quot;fs&quot;);
-const path = require(&quot;path&quot;);
-
-let filename = path.resolve(&apos;demo.txt&apos;);
-let writeStream = fs.createWriteStream(filename,{encoding:&apos;utf8&apos;});
-writeStream.on(&quot;open&quot;,(data)=&gt;{
-    console.log(&apos;打开了,触发open&apos;,data)
-})
-writeStream.on(&quot;ready&quot;,()=&gt;{
-  console.log(&apos;触发ready&apos;)
-})
-writeStream.on(&quot;close&quot;,(data)=&gt;{
-    console.log(&apos;写入结束，触发close&apos;)
-})
-console.log(&quot;写入文件路径为：&quot;+writeStream.path)
-writeStream.write(&quot;My name is Jack!&quot;)
-writeStream.end();
-</code></pre><p>运行结果：</p>
-<pre><code>写入文件路径为：C:\Users\wmh\Desktop\nodejs\demo.txt
-打开了,触发open 3
-触发ready
-写入结束，触发close
-</code></pre><h2 id="fs-Stats-类"><a href="#fs-Stats-类" class="headerlink" title="fs.Stats 类"></a>fs.Stats 类</h2><pre><code>fs.stat(path[, options], callback)
-</code></pre><h2 id="fs-FSWatcher-类"><a href="#fs-FSWatcher-类" class="headerlink" title="fs.FSWatcher 类"></a>fs.FSWatcher 类</h2><pre><code>fs.watch(filename[, options][, listener])
-fs.watchFile(filename[, options], listener)
-</code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="http://javascript.ruanyifeng.com/nodejs/fs.html" target="_blank" rel="noopener">fs 模块– JavaScript 标准参考教程（alpha）</a></li>
+        <p>作为计算机非科班出身人员，经常会看到shell,terminal,TTY与CLI 这写名字，本文做下对应解释，以防后用</p>
+<a id="more"></a>
+<h2 id="命令行界面（CLI-command-line-interpreter）"><a href="#命令行界面（CLI-command-line-interpreter）" class="headerlink" title="命令行界面（CLI-command-line interpreter）"></a>命令行界面（CLI-command-line interpreter）</h2><p>命令行界面， 是使用文本命令与计算机进行交互的用户界面，通俗来讲，就是你看过的那种满屏幕都是字符的界面。在熟记命令的前提下，使用命令行界面往往要比使用图形用户界面效率高得多。</p>
+<h2 id="shell"><a href="#shell" class="headerlink" title="shell"></a>shell</h2><p>大家都知道，操作系统有一个叫做 内核 (Kernel) 的东西，它处于系统的底层，是不能让普通用户随意操作的，于是就需要一个专门的程序，它接受用户输入的命令，然后帮我们与内核沟通，最后让内核完成我们的任务。这个提供用户界面的程序被叫做 Shell (壳层)。</p>
+<p>通俗理解的话，就是一个命令解释器（程序），专门解释语句或命令用的。</p>
+<p>Unix 及类 Unix 系统下的：sh (Bourne shell)，bash (Bourne-Again shell)，zsh (Z shell)，fish (Friendly interactive shell)等；Windows 下的 cmd.exe (命令提示符) 与 PowerShell,都是shell程序，而这些程序的运行界面就是CLI</p>
+<p>可以近似地认为linux shell=bash 而 windows=cmd, 但是二者有着最根本区别：linux shell是个linux 操作系统的用户交互层。而windows下的cmd只是一个小桌面应用，不能脱离图形界面单独存在。bash功能强大，cmd功能十分有限，windows也有强大的shell叫windows powershell</p>
+<h2 id="终端-Terminal"><a href="#终端-Terminal" class="headerlink" title="终端 (Terminal)"></a>终端 (Terminal)</h2><p>早期的终端其实就是电传打字机(Teletype / Teletypewriter) ，Unix 的创始人把很多台 ASR-33 连接到计算机上，让每个用户都可以在终端登录并操作主机，从而创造了计算机历史上第一个真正的多用户操作系统 Unix。</p>
+<p>电传打字机的英文缩写就是 tty，所以我们可以直接认为终端 (Terminal) = TTY。  </p>
+<h3 id="终端与shell"><a href="#终端与shell" class="headerlink" title="终端与shell"></a>终端与shell</h3><p>终端的工作就是：从用户这里接收输入（键盘、鼠标等输入设备），扔给 Shell，然后把 Shell 返回的结果展示给用户（比如通过显示器）。  Shell的工作就是：从终端那里拿到用户输入的命令，解析后交给操作系统内核去执行，并把执行结果返回给终端。</p>
+<p>随着计算机技术的发展，传统的终端硬件已被抛弃，我们现在用到的更多是终端模拟器 (Terminal Emulator)</p>
+<p>譬如，我们登录阿里云时用的xshell，就可以理解为这一种终端模拟器:</p>
+<p><img src="/shell, terminal, TTY与CLI/./1.png" alt></p>
+<p>我们通过终端向主机发送命令，命令进入shell,shell 与内核交互，返给终端，终端展示出来，基本就是这个流程。  </p>
+<p>而当在linux机器上直接操作时，一般默认进入的是linux的bash程序，此时通过该程序可以直接与内核进行交互（ps:简单理解，linux没有系统容学习过）,当在linux上打开一个terminal时，操作系统会将terminal和shell关联起来，当我们在terminal中输入命令后，shell就负责解释命令</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://www.cnblogs.com/sddai/p/9769086.html" target="_blank" rel="noopener">命令行界面 (CLI)、终端 (Terminal)、Shell、TTY的区别</a></li>
+<li><a href="https://www.zhihu.com/question/328533621/answer/711398711" target="_blank" rel="noopener">如何通俗解释shell、kernel、bash、Terminal的关系？ - wrfly的回答 - 知乎</a></li>
 </ul>
 
       
@@ -849,7 +504,7 @@ fs.watchFile(filename[, options], listener)
       
         <div class="post-tags">
           
-            <a href="/tags/note/" rel="tag"># note</a>
+            <a href="/tags/shell-bash/" rel="tag"># shell.bash</a>
           
         </div>
       
@@ -862,8 +517,8 @@ fs.watchFile(filename[, options], listener)
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/Nodejs系列-7-Buffer模块/" rel="next" title="Nodejs系列-7-Buffer模块">
-                <i class="fa fa-chevron-left"></i> Nodejs系列-7-Buffer模块
+              <a href="/Nodejs系列-15-child_process模块/" rel="next" title="Nodejs系列-15-child_process模块">
+                <i class="fa fa-chevron-left"></i> Nodejs系列-15-child_process模块
               </a>
             
           </div>
@@ -941,7 +596,7 @@ fs.watchFile(filename[, options], listener)
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">51</span>
+                    <span class="site-state-item-count">59</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -968,7 +623,9 @@ fs.watchFile(filename[, options], listener)
                     
                       
                     
-                    <span class="site-state-item-count">5</span>
+                      
+                    
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1005,7 +662,9 @@ fs.watchFile(filename[, options], listener)
                     
                       
                     
-                    <span class="site-state-item-count">10</span>
+                      
+                    
+                    <span class="site-state-item-count">11</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1091,7 +750,7 @@ fs.watchFile(filename[, options], listener)
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-readFile-amp-amp-fs-readFileSync"><span class="nav-number">1.</span> <span class="nav-text">fs.readFile &amp;&amp; fs.readFileSync</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-writeFile-amp-amp-fs-writeFileSync"><span class="nav-number">2.</span> <span class="nav-text">fs.writeFile &amp;&amp; fs.writeFileSync</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文件描述符"><span class="nav-number">2.1.</span> <span class="nav-text">文件描述符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-mkdir-amp-amp-fs-mkdirSync"><span class="nav-number">3.</span> <span class="nav-text">fs.mkdir &amp;&amp; fs.mkdirSync</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-readdir-amp-amp-fs-readdirSync"><span class="nav-number">4.</span> <span class="nav-text">fs.readdir &amp;&amp; fs.readdirSync</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-stat-amp-amp-fs-statSync"><span class="nav-number">5.</span> <span class="nav-text">fs.stat &amp;&amp; fs.statSync</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-existsSync"><span class="nav-number">6.</span> <span class="nav-text">fs.existsSync</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-copyFile-amp-amp-fs-copyFileSync"><span class="nav-number">7.</span> <span class="nav-text">fs.copyFile &amp;&amp; fs.copyFileSync</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-unlink-amp-amp-fs-unlinkSync"><span class="nav-number">8.</span> <span class="nav-text">fs.unlink &amp;&amp; fs.unlinkSync</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-rmdir-amp-amp-fs-rmdirSync"><span class="nav-number">9.</span> <span class="nav-text">fs.rmdir &amp;&amp; fs.rmdirSync</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-watchfile-amp-amp-fs-unwatchfile"><span class="nav-number">10.</span> <span class="nav-text">fs.watchfile &amp;&amp; fs.unwatchfile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-ReadStream-类"><span class="nav-number">11.</span> <span class="nav-text">fs.ReadStream 类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-WriteStream-类"><span class="nav-number">12.</span> <span class="nav-text">fs.WriteStream 类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-Stats-类"><span class="nav-number">13.</span> <span class="nav-text">fs.Stats 类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-FSWatcher-类"><span class="nav-number">14.</span> <span class="nav-text">fs.FSWatcher 类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">15.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#命令行界面（CLI-command-line-interpreter）"><span class="nav-number">1.</span> <span class="nav-text">命令行界面（CLI-command-line interpreter）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shell"><span class="nav-number">2.</span> <span class="nav-text">shell</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#终端-Terminal"><span class="nav-number">3.</span> <span class="nav-text">终端 (Terminal)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#终端与shell"><span class="nav-number">3.1.</span> <span class="nav-text">终端与shell</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
