@@ -1,5 +1,5 @@
 ---
-title: Nodejs系列-14-child_process模块
+title: Nodejs系列-15-child_process模块
 date: 2019-10-17 18:38:19
 tags: [note]
 categories: Nodejs
