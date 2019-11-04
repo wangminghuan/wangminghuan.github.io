@@ -79,7 +79,9 @@ theme: next-pisces
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: git@github.com:wangminghuan/wangminghuan.github.io.git  #这里的网址填你自己的
+  repo:   #这里的网址填你自己的
+    gitHub: git@github.com:wangminghuan/wangminghuan.github.io.git
+    coding: git@git.dev.tencent.com:wangminghuan/blog.git
   branch: master 
 
 jsonContent:
