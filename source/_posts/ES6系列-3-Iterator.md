@@ -2,7 +2,7 @@
 title: ES6系列-3-Iterator
 date: 2019-11-04 11:09:37
 tags: [javascript]
-categories: ES6
+categories: ES6系列
 ---
 遍历器（Iterator）是带有特殊接口的对象。含有一个next()方法，调用返回一个包含两个属性的对象，分别是value和done，value表示当前位置的值，done表示是否迭代完，当为true的时候，调用next就无效了。它可以为各种不同的数据结构提供统一的访问机制。任何数据结构只要部署 Iterator 接口，就可以完成遍历操作。 
 <!-- more -->

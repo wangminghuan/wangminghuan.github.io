@@ -2,7 +2,7 @@
 title: Nodejs系列-14-http模块
 date: 2019-10-17 14:09:48
 tags: [note]
-categories: Nodejs
+categories: Nodejs 系列
 ---
 ## Http概述
 http模块主要用于搭建HTTP服务。大体上可以分为两个部分：客户端http请求 与 服务端http响应

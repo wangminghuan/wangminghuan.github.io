@@ -2,7 +2,7 @@
 title: Nodejs系列-2-EventLoop
 date: 2019-10-08 09:48:35
 tags: [note]
-categories: Nodejs
+categories: Nodejs 系列
 ---
 
 ## 概述

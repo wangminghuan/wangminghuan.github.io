@@ -2,7 +2,7 @@
 title: Nodejs系列-7-Buffer模块
 date: 2019-10-08 15:37:52
 tags: [note]
-categories: Nodejs
+categories: Nodejs 系列
 ---
 Buffer是用于操作二进制数据的类。  
 

@@ -2,7 +2,7 @@
 title: 'Nodejs系列-1-基础'
 date: 2019-10-08 09:47:51
 tags: [note]
-categories: Nodejs
+categories: Nodejs 系列
 ---
 ## Nodejs是什么？
 官网是这样介绍Nodejs的：Node.js 是一个基于 Chrome V8 引擎的 JavaScript 运行时。  

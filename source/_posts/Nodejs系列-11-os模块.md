@@ -2,7 +2,7 @@
 title: Nodejs系列-11-os模块
 date: 2019-10-17 14:09:15
 tags: [note]
-categories: Nodejs
+categories: Nodejs 系列
 ---
 
 os 模块提供了操作系统相关的实用方法

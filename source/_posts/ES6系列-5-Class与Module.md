@@ -2,7 +2,7 @@
 title: ES6系列-5-Class与Module
 date: 2019-11-04 11:10:36
 tags: [javascript]
-categories: ES6
+categories: ES6系列
 ---
 本篇介绍ES6的 Class（类）与 ES6的模块化方案
 

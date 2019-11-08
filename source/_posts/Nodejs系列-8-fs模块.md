@@ -2,7 +2,7 @@
 title: Nodejs系列-8-fs模块
 date: 2019-10-09 15:34:01
 tags: [note]
-categories: Nodejs
+categories: Nodejs 系列
 ---
 
 fs模块提供了一些与文件系统进行交互的 API，所有文件系统操作都具有同步和异步的形式。作为nodejs开发中最常用的模块之一，下面我们介绍一些常见API用法。

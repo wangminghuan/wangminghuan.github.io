@@ -2,7 +2,7 @@
 title: Nodejs系列-3-Module
 date: 2019-10-08 09:51:36
 tags: [note]
-categories: Nodejs
+categories: Nodejs 系列
 ---
 
 模块化用来分割，组织和打包软件。每个模块完成一个特定的子功能，所有的模块按某种方法组装起来，成为一个整体，完成整个系统所要求的功能。  

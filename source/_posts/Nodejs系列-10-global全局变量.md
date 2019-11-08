@@ -2,7 +2,7 @@
 title: Nodejs系列-10-global全局变量
 date: 2019-10-17 14:07:46
 tags: [note]
-categories: Nodejs
+categories: Nodejs 系列
 ---
 
 类似浏览器全局对象 window，但是 node（ECMAScript） 环境中是没有window的（本质上，浏览器的window 其实就是扩展自ECMAScript中的 global），但有些变量虽然看起来是全局的，但其实并不是。 它们仅存在于模块范围内，如 文件路径类 和 模块对象类

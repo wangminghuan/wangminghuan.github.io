@@ -2,7 +2,7 @@
 title: Nodejs系列-9-path模块
 date: 2019-10-17 14:00:53
 tags: [note]
-categories: Nodejs
+categories: Nodejs 系列
 ---
 ##  概述
 path 模块提供用于处理文件路径和目录路径的实用工具，path的几乎所有操作均不检测文件是否真是存在，只针对路径字符串本身进行解析。

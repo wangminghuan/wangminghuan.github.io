@@ -2,7 +2,7 @@
 title: Nodejs系列-6-Steam模块
 date: 2019-10-08 15:37:36
 tags: [note]
-categories: Nodejs
+categories: Nodejs 系列
 ---
 
 流（stream）是 Node.js 中处理流式数据的抽象接口。 stream 模块用于构建实现了流接口的对象。

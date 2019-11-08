@@ -2,7 +2,7 @@
 title: Nodejs系列-13-dgram模块
 date: 2019-10-17 14:09:20
 tags: [note]
-categories: Nodejs
+categories: Nodejs 系列
 ---
 
 dgram模块提供了 UDP 数据包 socket 的实现
