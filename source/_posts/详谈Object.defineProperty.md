@@ -23,40 +23,120 @@ Object.defineProperty()的作用就是直接在一个对象上定义一个新属
 
 ## 属性描述符
 
-主要有两种形式： 数据描述符和存取描述符.
+|  属性   | 默认值  | 说明   | 
+|  :----- | :-----|  :----- | 
+| configurable	| false	| 描述属性是否可以被删除，默认为 false ; 具备 数据描述符 和 存取描述符 | 
+| enumerable	| false	| 描述属性是否可以被for...in或Object.keys枚举，默认为 false ; 具备 数据描述符 和 存取描述符 | 
+| writable	| false	| 描述属性是否可以修改，默认为 false ; 具备 数据描述符 | 
+| value	| undefined	| 属性值，默认为undefined ; 具备 数据描述符 |  
+| get	| undefined	| 当访问属性时触发该方法，默认为undefined ; 具备 存取描述符 | 
+| set	| undefined	| 当属性被修改时触发该方法，默认为undefined; 具备 存取描述符 | 
+
+
+js对象中属性描述符号有两种形式： 数据描述符和存取描述符：
 
 ### 数据描述符
 
 拥有可写或不可写值的属性，可选键值如下：
 
-- configurable: 当且仅当configurable为true时，该属性描述符才能够被改变，也能被删除，默认为false（默认不可delect删除） 
-- enumerable:  当其值为true时，该属性才能够出现在对象的枚举属性中，默认为false（不可枚举 譬如：for in） 
-- writable: 当且仅当该属性的值为true时，该属性才能被赋值运算符改变， 默认为false。 
-- value： 该属性对应的值，可以是任意有效的javascript的值（数值，对象，函数等），默认为undefined
+- configurable
+- enumerable
+- writable
+- value
 
 举个例子：
 
       var a={};
-      Object.defineProperty(a, "b", {
-            configurable: false, // 不可删除
-            enumerable: false,// 不可通过for in 枚举
-            writable: false, // 不可通过等号赋值改写
-            value: 8  //属性值
-          })
+        Object.defineProperty(a, "b", {
+          configurable: false, // 不可删除
+          enumerable: false,// 不可通过for in 枚举
+          writable: false, // 不可通过等号赋值改写
+          value: 8  //属性值
+        })
+        console.log(a.b);//8
+        console.log(Object.keys(a));// []
+        a.b=1; //报错  Uncaught TypeError: Cannot assign to read only property 'b' of object '#<Object>'
+        delete a.b //报错 Uncaught TypeError: Cannot delete property 'b' of #<Object>
 
 ### 存取描述符
 
 由一对getter-setter函数功能来描述的属性，可选键值如下：
 
-- configurable: 当且仅当configurable为true时，该属性描述符才能够被改变，也能被删除，默认为false（默认不可delect删除）
-- enumerable:  当其值为true时，该属性才能够出现在对象的枚举属性中，默认为false（不可枚举 譬如：for in） 
-- get:  给属性提供getter的方法，如果没有 getter 则为undefined。当我们读取某个属性的时候，其实是在对象内部调用了该方法，此方法必须要有return语句。该方法返回值被用作属性值。默认为 undefined 。
-- set：设置属性值的方法， 如果没有 setter 则为 undefined。该方法将接受唯一参数，并将该参数的新值分配给该属性。默认为undefined。也就是说，当我们设置某个属性的时候，实际上是在对象的内部调用了该方法。
+- configurable
+- enumerable
+- get
+- set
 
-## 注意点
+举个例子：
 
-1. 在 descriptor 中 如果设置了 set 或 get, 就不能设置 writable 和 value 中的任何一个，否则报如下错误
+      var b={},val='7';
+      Object.defineProperty(b, "a", {
+        configurable: false, // 不可删除
+        enumerable: false,// 不可通过for in 枚举
+        get: function () {
+          return val
+        },
+        set: function (newVal) {
+          val = newVal
+        }
+      })
+      console.log(b.a);// 7
+      console.log(Object.keys(b));//[]
+      b.a=1;
+      console.log(b.a);// 1
+      delete b.a ;//报错 Uncaught TypeError: Cannot delete property 'a' of #<Object>
+
+因为JS的数据描述符和存取描述符只能选取一种规则，所以在 descriptor 中 如果设置了 set 或 get, 就不能设置 writable 和 value 中的任何一个，否则报如下错误：
 
         Uncaught TypeError: Invalid property descriptor. Cannot both specify accessors and a value or writable attribute, #<Object> at Function.defineProperty 
 
+## 数据劫持
 
+Vue的数据劫持就是利用Object.defineProperty来实现的（vue中可以直接改变data，vue内部的watcher机制会监听到这些数据的变化从而刷新页面，而react则是手动驱使setState去改变内部的state，从而使得页面刷新）  
+
+下面我们简单模拟下数据劫持的过程：
+
+
+    function observe(obj) {
+        if (!obj || typeof obj !== "object") {
+          return;
+        }
+        Object.keys(obj).forEach(function (key) {
+          defineReactive(obj, key, obj[key])
+        })
+      }
+
+    function defineReactive(obj, key, value) {
+
+      observe(value); //监听属性内部对象的变化
+      Object.defineProperty(obj, key, {
+        enumerable: true,
+        configurable: false, //不能删除
+        get: function () {
+          return value
+        },
+        set: function (newVal) {
+          console.log("监听到属性" + key + "变化了", value + "-->" + newVal);
+          value = newVal
+        }
+      })
+    }
+    const obj = {
+      name: "jack",
+      age: "14",
+      desc: {
+        job: "coder",
+        worker: "bj"
+      }
+    }
+    observe(obj)
+
+我们接下来修改对象的属性
+
+    obj.name="mike"
+    //监听到属性name变化了 jack-->mike
+
+    obj.desc.job="teacher"
+    //监听到属性job变化了 coder-->teacher
+
+这样，便实现了数据的劫持。
