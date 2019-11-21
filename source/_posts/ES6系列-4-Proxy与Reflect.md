@@ -32,6 +32,7 @@ Proxy: 英文意思为：代理，读音为：[ˈprɒksi]。它在目标对象�
 
 ## Proxy 对象
 
+### Proxy 构造函数
 ES6 原生提供 Proxy 构造函数，用来生成 Proxy 实例。
 
     var proxy = new Proxy(target, handler);
@@ -52,20 +53,71 @@ ES6 原生提供 Proxy 构造函数，用来生成 Proxy 实例。
 当修改target对象时
 
       target.name="jack";
-      console.log(proxy)
 
 可以看到proxy其实是接收到变化了
+![](1.jpg)
 
-      Proxy {name: "jack"}
-
-但当我们访问proxy下属性时，返回的依旧是'Li':
+但当我们访问proxy下属性时，返回的依旧是`Li`:
  
       proxy.name //'Li'
-直接设置proxy.name,proxy返回的依旧是'Li',target变为了'tom':
+直接设置proxy.name,proxy返回的依旧是`Li`,target变为了`tom`:
 
       proxy.name="tom"
       proxy.name //'Li'
       target.name //"tom"
-这很好理解，所有访问操作都会经过代理再处理一层，所以返回的永远是 'Li'
+这很好理解，所有访问操作都会经过代理再处理一层，所以返回的永远是 `Li`
+
+### Proxy 实例
+Proxy 实例也可以作为其他对象的原型对象（沿用上述例子）。
+
+      var target = {};
+      var handler = {
+        get(target, property){
+          return 'Li'
+        },
+      };
+      var proxy = new Proxy(target, handler);
+      var obj = Object.creat(proxy)
+      console.log(obj.time);// 'Li'
+
 
 ## Proxy 实例方法
+
+### get()
+get方法用于拦截某个属性的读取操作，可以接受三个参数：
+
+    get(target,property[,self])
+
+    - target: 目标对象
+    - property: 属性名
+    - self: proxy 实例本身,严格地说，是操作行为所针对的对象，可选
+
+
+### set()
+
+### apply()
+
+### has()
+
+### construct()
+
+### deleteProperty()
+
+### defineProperty()
+
+### getOwnPropertyDescriptor()
+
+### getPrototypeOf()
+
+### isExtensible()
+
+### ownKeys()
+
+### preventExtensions()
+
+### setPrototypeOf()
+
+
+## Proxy.revocable()
+
+## this 问题
