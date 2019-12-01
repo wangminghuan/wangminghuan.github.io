@@ -9,14 +9,13 @@ ArrayBuffer对象、TypedArray视图和DataView视图是 JavaScript 操作二进
 
 这个接口的原始设计目的，与 WebGL 项目有关。浏览器与显卡之间的大量通信都是通过二进制数据完成的，而传统的文本格式是32位整数，为了解决数据转化的效率低下问题，使得二者可以直接通过二进制进行通信，二进制数组就是在这种背景下诞生的。它很像 C 语言的数组，允许开发者以数组下标的形式，直接操作内存。
 
-ArrayBuffer作为内存区域，可以存放多种类型的数据。不同数据有不同的存储方式，这就叫做“视图”。
 
 <!-- more -->
 
 ## 二进制数组的组成
 由三类对象组成：  
 
-- ArrayBuffer对象：代表内存之中的一段二进制数据，可以通过“视图”进行操作。“视图”部署了数组接口，这意味着，可以用数组的方法操作内存。
+- ArrayBuffer对象：代表内存之中的一段二进制数据，可以存放多种类型的数据。不同数据有不同的存储方式，这就叫做“视图”。可以通过“视图”进行操作。“视图”部署了数组接口，这意味着，可以用数组的方法操作内存。
 
 - TypedArray视图：共包括 9 种类型的视图，比如Uint8Array（无符号 8 位整数）数组视图, Int16Array（16 位整数）数组视图, Float32Array（32 位浮点数）数组视图等等。
 
@@ -145,6 +144,36 @@ responseType支持以下几个参数：
 
 ![](4.png)
 
+#### 扩展
+开发中遇到一个接口上传，不同于常规接受FormData，接口只接受二进制数据，代码如下：
+   
+input表单
+
+      <input type="file" @change="handleChange">
+
+监听变化完成上传：
+
+      handleChange (e) {
+            const files = e.target.files[0];
+            var fileReader = new FileReader();
+            fileReader.readAsArrayBuffer(files);
+            fileReader.onload = function () {
+              const _buffer = (this.result)
+              fetch("http://xxx/upload", {
+                body: _buffer,
+                method: 'POST',
+              }).then((res) => {
+                return res.json()
+              }).then((data) => {
+                console.log(data)
+              })
+            }
+          }
+执行成功时的请求与返回截图如下:
+
+![](upload1.jpg)
+![](upload2.jpg)
+
 ###  WebSocket
 
 WebSocket可以通过ArrayBuffer，发送或接收二进制数据。
@@ -203,6 +232,35 @@ endings，默认值为"transparent"，用于指定包含行结束符\n的字符�
       var debug = {hello: "world"};
       var blob = new Blob([JSON.stringify(debug, null, 2)], {type : 'application/json'});
       console.log(blob)
+
+我们也可以将本地选取的音频，直接转化为url在页面中播放
+   
+ input表单与audio控件
+
+      <input type="file" @change="handleChange">
+      <audio :src="blobUrl" controls="controls"></audio>
+
+![](audio1.jpg)
+
+监听变化完成上传：
+
+
+      handleChange (e) {
+          const target=e.target.files[0]
+          const fileReader = new FileReader();
+          fileReader.readAsArrayBuffer(target);
+          fileReader.onload = () => {
+            const arrayBuffer = fileReader.result;
+            const unit8=new Uint8Array(arrayBuffer)
+            let _blob = new Blob([unit8],{
+              type: 'audio/mp3' 
+            })
+          this.blobUrl = URL.createObjectURL(_blob);
+          //URL.createObjectURL会创建一个 DOMString，其中包含一个表示参数中给出的对象的URL。这个新的URL 对象表示指定的 File 对象或 Blob 对象。
+        }
+      }
+
+![](audio2.jpg)
 
 从Blob中读取内容的唯一方法是使用 FileReader(具体使用参照5.1介绍):
 
