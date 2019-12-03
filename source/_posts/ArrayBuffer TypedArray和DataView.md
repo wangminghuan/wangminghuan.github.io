@@ -242,7 +242,7 @@ endings，默认值为"transparent"，用于指定包含行结束符\n的字符�
 
 ![](audio1.jpg)
 
-监听变化完成上传：
+方式一：通过FileReader读取文件，获取文件二进制数据，传入Blob对象，创建blob实例，创建URL：
 
 
       handleChange (e) {
@@ -256,23 +256,17 @@ endings，默认值为"transparent"，用于指定包含行结束符\n的字符�
               type: 'audio/mp3' 
             })
           this.blobUrl = URL.createObjectURL(_blob);
-          //URL.createObjectURL会创建一个 DOMString，其中包含一个表示参数中给出的对象的URL。这个新的URL 对象表示指定的 File 对象或 Blob 对象。
         }
+      }
+方式二：直接将文件传入`URL.createObjectURL`中,生成URL
+
+      handleChange (e) {
+        const target=e.target.files[0]
+        this.blobUrl = URL.createObjectURL(target);
       }
 
 ![](audio2.jpg)
 
-从Blob中读取内容的唯一方法是使用 FileReader(具体使用参照5.1介绍):
-
-      var reader = new FileReader();
-      reader.readAsArrayBuffer(blob);
-      reader.onload = function (e) {
-        let arrayBuffer = e.target.result;
-        console.log(arrayBuffer)
-      }
-运行结果：
-
-![](6.png) 
 
 ## File对象
 文件（File）接口提供有关文件的信息，并允许网页中的 JavaScript 访问其内容。
@@ -287,6 +281,18 @@ File 对象是特殊类型的 Blob，且可以用在任意的 Blob 类型的 con
 - XMLHttpRequest.send() 
 
 都可以接收 Blob 或 File 对象来进行对应处理。
+
+从Blob中读取内容的唯一方法是使用 FileReader(具体使用参照5.1介绍):
+
+      var reader = new FileReader();
+      reader.readAsArrayBuffer(blob);
+      reader.onload = function (e) {
+        let arrayBuffer = e.target.result;
+        console.log(arrayBuffer)
+      }
+运行结果：
+
+![](6.png) 
 
 ### FileReader
 FileReader对象允许Web应用程序异步读取存储在用户计算机上的文件（或原始数据缓冲区）的内容，使用 File 或 Blob 对象指定要读取的文件或数据。
