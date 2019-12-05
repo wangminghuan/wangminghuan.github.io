@@ -1,0 +1,2050 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":true,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="ES6 新增了多个异步编程解决方案，相比之前的callback地狱回调，ES6处理异步更加优雅。">
+<meta name="keywords" content="javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ES6系列-6-异步">
+<meta property="og:url" content="https://wangminghuan.github.io/ES6系列-6-异步/index.html">
+<meta property="og:site_name" content="WMH&#39;s Blog">
+<meta property="og:description" content="ES6 新增了多个异步编程解决方案，相比之前的callback地狱回调，ES6处理异步更加优雅。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://wangminghuan.github.io/ES6系列-6-异步/1.png">
+<meta property="og:image" content="https://wangminghuan.github.io/ES6系列-6-异步/2.png">
+<meta property="og:updated_time" content="2019-11-08T10:26:06.146Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ES6系列-6-异步">
+<meta name="twitter:description" content="ES6 新增了多个异步编程解决方案，相比之前的callback地狱回调，ES6处理异步更加优雅。">
+<meta name="twitter:image" content="https://wangminghuan.github.io/ES6系列-6-异步/1.png">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://wangminghuan.github.io/ES6系列-6-异步/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>ES6系列-6-异步 | WMH's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">WMH's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-主页">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>主页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-标签">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-分类">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-归档">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/ES6系列-6-异步/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WMH">
+      <meta itemprop="description" content="just code it">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WMH's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ES6系列-6-异步
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-11-04 11:11:13" itemprop="dateCreated datePublished" datetime="2019-11-04T11:11:13+08:00">2019-11-04</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-11-08 18:26:06" itemprop="dateModified" datetime="2019-11-08T18:26:06+08:00">2019-11-08</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/ES6系列/" itemprop="url" rel="index"><span itemprop="name">ES6系列</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>ES6 新增了多个异步编程解决方案，相比之前的callback地狱回调，ES6处理异步更加优雅。</p>
+<a id="more"></a>
+<h2 id="第一章-Promise"><a href="#第一章-Promise" class="headerlink" title="第一章 Promise"></a>第一章 Promise</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p><code>promise</code>是异步编程的一种解决方案，英语意思就是“承诺”, 简单说就是一个容器，里面保存着某个未来才会结束的事件。</p>
+<h4 id="Promise对象有以下两个特点："><a href="#Promise对象有以下两个特点：" class="headerlink" title="Promise对象有以下两个特点："></a>Promise对象有以下两个特点：</h4><ol>
+<li>对象的状态不受外界影响：Promise对象代表一个异步操作，有三种状态：pending（进行中）、fulfilled（已成功）和rejected（已失败）<br>只有操作结果可以影响，其他手段无法改变。</li>
+<li>一旦状态改变，就不会再变，任何时候都可以得到这个结果：只要状态改变，改变后的状态是凝固的，不会再变了，会一直保持这个结果，无论什么时候去添加回调函数，都会立即得到这个结果，这与事件（Event）完全不同，事件的特点是，如果你错过了它，再去监听，是得不到结果的。</li>
+</ol>
+<h4 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h4><ol>
+<li>优点：有了Promise对象，就可以将异步操作以同步操作的流程表达出来，避免了层层嵌套的回调函数。</li>
+<li>缺点：<br>1）无法取消Promise，一旦新建它就会立即执行，无法中途取消。<br>2）如果不设置回调函数，Promise内部抛出的错误，不会反应到外部。<br>3）当处于pending状态时，无法得知目前进展到哪一个阶段。 </li>
+</ol>
+<p>ES6规定，Promise对象是一个构造函数，用来生成Promise实例。</p>
+<h3 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h3><p>我们用promise封装一个异步请求图片的方法：</p>
+<pre><code>function loadImageAsync(url) {
+  return new Promise(function(resolve, reject) {
+    const image = new Image();
+    image.onload = function() {
+      resolve(image);
+    };
+
+    image.onerror = function(err) {
+      reject(err);
+    };
+
+    image.src = url;
+  });
+}
+</code></pre><p>Promise实例生成以后，可以用then方法分别指定resolved状态和rejected状态的回调函数。then方法可以接受两个回调函数作为参数。第一个回调函数是Promise对象的状态变为Resolved时调用，第二个回调函数是Promise对象的状态变为Reject时调用（可选）。</p>
+<pre><code>loadImageAsync(&quot;http://s29.9956.cn/static/common/img/crowdsource_logo_200_200.jpg&quot;).then((res)=&gt;{
+      console.log(res)
+    },(err)=&gt;{
+      console.log(err)
+    })
+</code></pre><p>也可以通过catch方法进行改造：</p>
+<pre><code>loadImageAsync(&quot;http://s29.9956.cn/static/common/img/crowdsource_logo_200_200.jpg&quot;).then((res)=&gt;{
+  console.log(res)
+}).catch((err)=&gt;{
+  console.log(err)
+})
+</code></pre><p>Promise不是新的语法功能，而是一种新的写法，允许将回调函数的嵌套，改成链式调用。</p>
+<p>我们也可以这样写：</p>
+<pre><code>const myPromise=loadImageAsync(&quot;http://s29.9956.cn/static/common/img/crowdsource_logo_200_2002.jpg&quot;);
+myPromise.then((res)=&gt;{
+  console.log(res)
+})
+myPromise.catch((err)=&gt;{
+  console.log(err)
+})
+</code></pre><p>控制台会有一个报错：<br><img src="/ES6系列-6-异步/1.png" alt><br>这就是上述优缺点板块中提到的缺点2，如果不设置回调，Promise内部抛出的错误，不会反应到外部。</p>
+<p>我们也可以“等会”在去获取promise的结果：</p>
+<pre><code>const myPromise=loadImageAsync(&quot;http://s29.9956.cn/static/common/img/crowdsource_logo_200_2002.jpg&quot;);
+setTimeout(()=&gt;{
+  myPromise.then((res)=&gt;{
+    console.log(res)
+  }).catch((err)=&gt;{
+    console.log(err)
+  })
+},2000)
+</code></pre><p>通过控制台可以发现，刚开始会有一个报错，但2s后报错就会消失，打印结果同上。这就说明promise实例中确实“保存”了异步的结果，且状态是凝固的，无论什么时候去添加回调函数，都会立即得到这个结果。</p>
+<h3 id="执行顺序"><a href="#执行顺序" class="headerlink" title="执行顺序"></a>执行顺序</h3><pre><code>const myPromise=new Promise((resolve, reject)=&gt;{
+    console.log(&quot;Promise&quot;)
+    resolve();
+})
+myPromise.then(()=&gt;{
+  console.log(&quot;resolve&quot;)
+})
+console.log(&apos;Hi!&apos;);
+</code></pre><p>结果依次输出：<code>&quot;Promise&quot; &quot;Hi!&quot; &quot;resolve&quot;</code>。解释：Promise 新建后立即执行，所以首先输出的是Promise。然后，then方法指定的回调函数，将在当前脚本所有同步任务执行完才会执行，所以resolved最后输出。</p>
+<h3 id="Promise-prototype-finally"><a href="#Promise-prototype-finally" class="headerlink" title="Promise.prototype.finally()"></a>Promise.prototype.finally()</h3><p>finally方法用于指定不管 Promise 对象最后状态如何，都会执行的操作。该方法是 ES2018 引入标准的。</p>
+<pre><code>loadImageAsync(&quot;http://s29.9956.cn/static/common/img/crowdsource_logo_200_2002.jpg&quot;).then((res)=&gt;{
+  console.log(res)
+}).catch((err)=&gt;{
+  console.log(err)
+}).finally(() =&gt; {
+  console.log(&quot;run over&quot;)
+});
+</code></pre><h3 id="Promise-all"><a href="#Promise-all" class="headerlink" title="Promise.all()"></a>Promise.all()</h3><p>Promise.all方法用于将多个 Promise 实例，包装成一个新的 Promise 实例，仍以异步加载图片为例：</p>
+<pre><code>const myPromise1=loadImageAsync(&quot;http://s29.9956.cn/static/common/img/crowdsource_logo_200_201.jpg&quot;);
+const myPromise2=loadImageAsync(&quot;http://s29.9956.cn/static/common/img/crowdsource_logo_200_200.jpg&quot;);
+Promise.all([myPromise1, myPromise1]).then((res)=&gt;{
+   console.log(res)
+}).catch((err)=&gt;{
+  console.log(&quot;加载都失败了&quot;,err)
+})
+</code></pre><ol>
+<li><p>只有myPromise1、myPromise2的状态都变成fulfilled（成功），Promise.all的状态才会变成fulfilled，此时myPromise1、myPromise2的返回值组成一个数组，传递给Promise.all的回调函数。</p>
+</li>
+<li><p>只要myPromise1、myPromise2之中有一个被rejected，pPromise.all的状态就变成rejected，此时第一个被reject的实例的返回值，会传递给Promise.all的回调函数</p>
+</li>
+<li><p>如果myPromise1或者myPromise2有自己的reject回调处理，那么将不会触发Promise.all的回调函数</p>
+<pre><code>const myPromise1=loadImageAsync(&quot;http://s29.9956.cn/static/common/img/crowdsource_logo_200_201.jpg&quot;).catch(()=&gt;{
+  console.log(&quot;myPromise1 失败了&quot;)
+});
+const myPromise2=loadImageAsync(&quot;http://s29.9956.cn/static/common/img/crowdsource_logo_200_200.jpg&quot;);
+Promise.all([myPromise1, myPromise2]).then((res)=&gt;{
+   console.log(res)
+}).catch((err)=&gt;{
+  console.log(&quot;加载都失败了&quot;,err)
+})
+</code></pre><p>运行结果为：   </p>
+<pre><code>&apos;myPromise1 失败了&apos;
+ (2) [undefined, img]
+</code></pre></li>
+<li><p>Promise.all方法接受一个数组作为参数，myPromise1、myPromise2、myPromise3都是 Promise 实例，如果不是，那么将会在Promise.resolve方法中将原数据返回（是否执行resolve方法依旧取决于其他实例共同的结果）</p>
+</li>
+</ol>
+<h3 id="Promise-race"><a href="#Promise-race" class="headerlink" title="Promise.race()"></a>Promise.race()</h3><p>Promise.race方法同样是将多个 Promise 实例，包装成一个新的 Promise 实例，与<code>Promise.all</code> 不同的是只要myPromise1、myPromise2之中有一个实例率先改变状态，Promise.race的状态就跟着改变。那个率先改变的 Promise 实例的返回值，就传递给Promise.race的回调函数。</p>
+<pre><code>const myPromise1=loadImageAsync(&quot;http://s29.9956.cn/static/common/img/crowdsource_logo_200_202.jpg&quot;);
+const myPromise2=loadImageAsync(&quot;http://s29.9956.cn/static/common/img/crowdsource_logo_200_200.jpg&quot;);
+Promise.race([myPromise1, myPromise2]).then((res)=&gt;{
+   console.log(res)
+}).catch((err)=&gt;{
+  console.log(&quot;加载都失败了&quot;,err)
+})
+//结果为：&lt;img src=&quot;http://s29.9956.cn/static/common/img/crowdsource_logo_200_200&quot;&gt;
+</code></pre><h3 id="Promise-resolve"><a href="#Promise-resolve" class="headerlink" title="Promise.resolve()"></a>Promise.resolve()</h3><p>有时需要将现有对象转为 Promise 对象，Promise.resolve方法就起到这个作用。</p>
+<h4 id="1）-参数为-Promise-实例"><a href="#1）-参数为-Promise-实例" class="headerlink" title="1） 参数为 Promise 实例"></a>1） 参数为 Promise 实例</h4><p>Promise.resolve将不做任何修改、原封不动地返回这个实例。</p>
+<h4 id="2）参数是一个thenable对象"><a href="#2）参数是一个thenable对象" class="headerlink" title="2）参数是一个thenable对象"></a>2）参数是一个thenable对象</h4><p>thenable对象指的是具有then方法的对象，比如下面这个对象：</p>
+<pre><code>const thenable = {
+  then: (resolve, reject)=&gt; {
+    resolve(42);
+  }
+};
+
+const p = Promise.resolve(thenable);
+p.then((value)=&gt; {
+  console.log(value);  // 42
+});
+</code></pre><h4 id="3）参数不是具有then方法的对象，或根本就不是对象"><a href="#3）参数不是具有then方法的对象，或根本就不是对象" class="headerlink" title="3）参数不是具有then方法的对象，或根本就不是对象"></a>3）参数不是具有then方法的对象，或根本就不是对象</h4><pre><code>const p = Promise.resolve(&apos;Hello&apos;);
+
+p.then((s)=&gt;{
+  console.log(s)
+});
+</code></pre><p>由于字符串Hello不属于异步操作（判断方法是字符串对象不具有 then 方法），返回 Promise 实例的状态从一生成就是resolved，所以回调函数会立即执行。Promise.resolve方法的参数，会同时传给回调函数。</p>
+<h4 id="4）不带有任何参数"><a href="#4）不带有任何参数" class="headerlink" title="4）不带有任何参数"></a>4）不带有任何参数</h4><p>Promise.resolve方法允许调用时不带参数，直接返回一个resolved状态的 Promise 对象。</p>
+<p>所以，如果希望得到一个 Promise 对象，比较方便的方法就是直接调用Promise.resolve方法</p>
+<pre><code>const p = Promise.resolve();
+
+p.then(()=&gt; {
+  console.log(&quot;resolve&quot;)
+});
+//输出 resolve
+</code></pre><p>我们再看下执行顺序：</p>
+<pre><code>setTimeout(()=&gt; {
+  console.log(&apos;three&apos;);
+}, 0);
+
+Promise.resolve().then(()=&gt; {
+  console.log(&apos;two&apos;);
+});
+
+console.log(&apos;one&apos;);
+</code></pre><p>依次输出：one two three 解释：setTimeout(fn, 0)在下一轮“事件循环”开始时执行，Promise.resolve()在本轮“事件循环”结束时执行，console.log(‘one’)则是立即执行，因此最先输出。</p>
+<h3 id="Promise-reject"><a href="#Promise-reject" class="headerlink" title="Promise.reject()"></a>Promise.reject()</h3><p>Promise.reject(reason)方法也会返回一个新的 Promise 实例，该实例的状态为rejected。该方法的参数，会原封不动地作为reject的理由，变成后续方法的参数。这一点与Promise.resolve方法不一致：</p>
+<pre><code>const thenable = {
+  then: (resolve, reject)=&gt; {
+    resolve(42);
+  }
+};
+const p1 = Promise.reject(thenable);
+const p2 = Promise.reject(&quot;hello&quot;);
+const p3 = Promise.reject();
+p1.catch((err)=&gt;{
+ console.log(err);//{then: ƒ}
+});
+p2.catch((err)=&gt;{
+  console.log(err);//hello
+});
+p3.catch((err)=&gt;{
+  console.log(err);//undefined
+});
+</code></pre><h2 id="第二章-Generator"><a href="#第二章-Generator" class="headerlink" title="第二章 Generator"></a>第二章 Generator</h2><p>generator的英语意思就是“发动机”, Generator函数是ES6提供的一种异步编程解决方案。语法行为与传统函数完全不同。 </p>
+<h3 id="理解-Generator"><a href="#理解-Generator" class="headerlink" title="理解 Generator"></a>理解 Generator</h3><ol>
+<li>语法上，可以把它理解成，Generator 函数是一个状态机，封装了多个内部状态。</li>
+<li><p>形式上，Generator函数是一个普通函数，但是有两个特征：<br>1) function关键字与函数名之间有一个星号；<br>2) 函数体内部使用yield语句，定义不同的内部状态（yield语句在英语里的意思就是“产出”）</p>
+<pre><code>function* helloWorldGenerator() {
+  console.log(&quot;start&quot;);
+  yield &apos;hello&apos;;
+  yield &apos;world&apos;;
+  return &apos;ending&apos;;
+}
+</code></pre><p>Generator 函数的调用方法与普通函数一样，也是在函数名后面加上一对圆括号。不同的是，调用 Generator 函数后，该函数并不执行，返回的也不是函数运行结果，而是一个指向内部状态的指针对象（遍历器对象:Iterator Object）。</p>
+<pre><code>var hw = helloWorldGenerator();
+//必须先调用一下这个函数,但此时函数并不会执行。
+//只有通过next方法才会执行。
+</code></pre><p>调用遍历器对象的next方法，使得指针移向下一个状态，直到遇到下一个yield表达式（或return语句，每个函数都有一个隐藏的 <code>return undefined</code> 语句）为止。</p>
+<pre><code>hw.next()
+// &quot;start&quot;；此时才会执行函数体，遇到yield停止
+//{ value: &apos;hello&apos;, done: false }
+
+hw.next()
+// { value: &apos;world&apos;, done: false }
+
+hw.next()
+// { value: &apos;ending&apos;, done: true }
+
+hw.next()
+// { value: undefined, done: true }
+</code></pre><h3 id="yeild-语句"><a href="#yeild-语句" class="headerlink" title="yeild 语句"></a>yeild 语句</h3></li>
+<li>由于 Generator 函数返回的遍历器对象，只有调用next方法才会遍历下一个内部状态，所以其实提供了一种可以暂停执行的函数。yield表达式就是暂停标志。</li>
+<li>yield表达式后面的表达式，只有当调用next方法、内部指针指向该语句时才会执行。</li>
+<li>yield表达式与return语句既有相似之处，也有区别：<br>1）相似之处：都能返回紧跟在语句后面的那个表达式的值。<br>2）不同之处：yield，函数暂停执行，下一次再从该位置继续向后执行，而return语句不具备位置记忆的功能；<br>一个函数中只能执行一次return语句，但是可以执行多次yield表达式。<strong>Generator 函数可以返回一系列的值，因为可以有任意多个yield</strong>。也可以说 Generator 生成了一系列的值，这也就是它的名称的（“生成器”）来历。</li>
+<li><p>Generator 函数可以不用yield表达式，这时就变成了一个单纯的暂缓执行函数。</p>
+<pre><code>function* helloWorldGenerator() {
+  console.log(&quot;Hello world&quot;)
+}
+
+var hw = helloWorldGenerator();
+setTimeout(()=&gt;{
+  hw.next()
+},1000)
+</code></pre></li>
+<li>yield表达式只能用在 Generator 函数里面，用在其他地方都会报错。</li>
+</ol>
+<h3 id="与Iterator接口的关系"><a href="#与Iterator接口的关系" class="headerlink" title="与Iterator接口的关系"></a>与Iterator接口的关系</h3><p>我们知道，任意一个对象的<code>Symbol.iterator</code>方法，等于该对象的遍历器生成函数，调用该函数就会返回该对象的一个遍历器对象。由于Generator函数就是遍历器生成函数，因此可以把Generator赋值给对象的<code>Symbol.iterator</code>属性，从而使得该对象具有Iterator接口。</p>
+<pre><code>const obj={}
+obj[Symbol.iterator]= function* (){
+   yield &apos;1&apos;;
+   yield &apos;2&apos;;
+   yield &apos;3&apos;;
+}
+
+for (let x of obj) {
+  console.log(x); 
+  //1
+  //2
+  //3
+}
+console.log([...obj]);// [&quot;1&quot;, &quot;2&quot;, &quot;3&quot;] ,只有具有Iterator接口才可以通过扩展运算符转化成数组
+</code></pre><p>Generator 函数执行后，返回一个遍历器对象。该对象本身也具有Symbol.iterator属性，执行后返回自身。</p>
+<pre><code>function* gen(){
+
+}
+const g=gen();
+console.log(g[Symbol.iterator]() === g); //true
+</code></pre><h3 id="next方法的参数"><a href="#next方法的参数" class="headerlink" title="next方法的参数"></a>next方法的参数</h3><p>yield表达式本身没有返回值，或者说总是返回undefined。next方法可以带一个参数，该参数就会被当作上一个yield表达式的返回值</p>
+<pre><code>function* f() {
+  for(var i = 0; true; i++) {
+    console.log(&quot;i value is: &quot; + i)
+    var reset = yield i;
+    //每次next方法，遇到yield就结束了，下次再执行next时，从此处开始
+    if(reset) {
+       i = -1; 
+      }
+  }
+}
+
+var g = f();
+
+g.next() // i value is: 0    { value: 0, done: false }
+g.next() // i value is: 1 { value: 1, done: false }
+g.next(true) // i value is: 0 { value: 0, done: false }
+// 传入参数true，执行next方法时，从上一个yield表达式开始，此时reset的返回值将为true，那么i被重置为-1
+// 再执行一次+1操作变为0,于是就输出了 i value is: 0， 返回值为{ value: 0, done: false }
+</code></pre><p>这个功能有很重要的语法意义。Generator 函数从暂停状态到恢复运行，它的上下文状态（context）是不变的。通过next方法的参数，就有办法在 Generator 函数开始运行之后，继续向函数体内部注入值。也就是说，可以在 Generator 函数运行的不同阶段，从外部向内部注入不同的值，从而调整函数行为。</p>
+<h3 id="for…of循环"><a href="#for…of循环" class="headerlink" title="for…of循环"></a>for…of循环</h3><ol>
+<li>for…of循环可以自动遍历 Generator 函数时生成的Iterator对象，且此时不再需要调用next方法。</li>
+<li><p>除了for…of循环以外，扩展运算符（…）、解构赋值和Array.from方法内部调用的，都是遍历器接口。它们都可以将 Generator 函数返回的 Iterator 对象，作为参数。</p>
+<pre><code>function* numbers () {
+  yield 1
+  yield 2
+  return 3
+  yield 4
+}
+
+// 扩展运算符
+[...numbers()] // [1, 2]
+
+// Array.from 方法
+Array.from(numbers()) // [1, 2]
+
+// 解构赋值
+let [x, y] = numbers();
+x // 1
+y // 2
+
+// for...of 循环
+for (let n of numbers()) {
+  console.log(n)
+}
+// 1
+// 2
+</code></pre></li>
+</ol>
+<h3 id="Generator-prototype-throw"><a href="#Generator-prototype-throw" class="headerlink" title="Generator.prototype.throw()"></a>Generator.prototype.throw()</h3><p>Generator 函数返回的遍历器对象，都有一个throw方法，可以在<strong>函数体外抛出错误</strong>，然后在 Generator <strong>函数体内捕获</strong></p>
+<pre><code>var g = function* () {
+  try {
+    yield;
+  } catch (e) {
+    console.log(&apos;内部捕获&apos;, e);
+  }
+};
+
+var i = g();
+i.next();
+
+try {
+  i.throw(&apos;第一次抛出错误！&apos;);
+  i.throw(&apos;第二次抛出错误！&apos;);
+} catch (e) {
+  console.log(&apos;外部捕获&apos;, e);
+}
+//内部捕获 第一次抛出错误！
+//外部捕获 第二次抛出错误！
+</code></pre><p>遍历器对象i连续抛出两个错误。第一个错误被 Generator 函数体内的catch语句捕获。第二次抛出错误，由于 Generator 函数内部的catch语句已经执行过了，不会再捕捉到这个错误了，所以这个错误就被抛出了 Generator 函数体，被函数体外的catch语句捕获。。throw方法可以接受一个参数，该参数会被catch语句接收，建议抛出Error对象的实例。  </p>
+<p>如果 Generator 函数内部没有部署try…catch代码块，抛出的错误将直接被外部catch代码块捕获。</p>
+<pre><code>var g = function* () {
+    yield;
+};
+
+var i = g();
+i.next();
+
+try {
+  i.throw(&apos;第一次抛出错误！&apos;);
+  i.throw(&apos;第二次抛出错误！&apos;);
+} catch (e) {
+  console.log(&apos;外部捕获&apos;, e);
+}
+//外部捕获 第一次抛出错误！ (不会运行第二次i.throw，被外部catch捕获后，直接跳出了try)
+</code></pre><p>throw方法抛出的错误要被内部捕获，前提是必须至少执行过一次next方法(只执行Generator函数返回的只是一个Iterator接口)。  </p>
+<p>throw方法被捕获以后，会附带执行下一条yield表达式。也就是说，会附带执行一次next方法。</p>
+<pre><code>var gen = function* gen(){
+  try {
+    yield console.log(&apos;a&apos;);
+  } catch (e) {
+    console.log(&quot;内部捕获！&quot;)
+  }
+  yield console.log(&apos;b&apos;);
+  yield console.log(&apos;c&apos;);
+}
+
+var g = gen();
+g.next() // a
+
+g.throw() 
+// 内部捕获！ 
+//b
+
+g.next() // c
+</code></pre><p><code>g.throw</code>方法被捕获以后，自动执行了一次next方法，所以会打印b。只要 Generator 函数内部部署了try…catch代码块，那么遍历器的throw方法抛出的错误，不影响下一次遍历。</p>
+<h3 id="Generator-prototype-return"><a href="#Generator-prototype-return" class="headerlink" title="Generator.prototype.return()"></a>Generator.prototype.return()</h3><p>Generator 函数返回的遍历器对象，还有一个return方法，可以返回给定的值，并且终结遍历 Generator 函数。</p>
+<pre><code>function* gen() {
+  yield 1;
+  yield 2;
+  yield 3;
+}
+
+var g = gen();
+
+g.next()        // { value: 1, done: false }
+g.return(&apos;foo&apos;) // { value: &quot;foo&quot;, done: true }
+g.next()        // { value: undefined, done: true }
+</code></pre><p>遍历器对象g调用return方法后，返回值的value属性就是return方法的参数foo（没有传参，则返回undefined）。并且，Generator 函数的遍历就终止了，返回值的done属性为true，以后再调用next方法，done属性总是返回true。  </p>
+<p>如果 Generator 函数内部有try…finally代码块，且正在执行try代码块，那么return方法会推迟到finally代码块执行完再执行。</p>
+<pre><code>function* numbers () {
+  yield 1;
+  try {
+    yield 2;
+    yield 3;
+  } finally {
+    yield 4;
+    yield 5;
+  }
+  yield 6;
+}
+var g = numbers();
+g.next() // { value: 1, done: false }
+g.next() // { value: 2, done: false }
+g.return(7) // { value: 4, done: false }
+g.next() // { value: 5, done: false }
+g.next() // { value: 7, done: true }
+</code></pre><h3 id="next-、throw-、return-的共同点"><a href="#next-、throw-、return-的共同点" class="headerlink" title="next()、throw()、return() 的共同点"></a>next()、throw()、return() 的共同点</h3><p><code>next()、throw()、return()</code>这三个方法本质上是同一件事，它们的作用都是让 Generator 函数恢复执行，并且使用不同的语句替换yield表达式：</p>
+<ol>
+<li><code>next()</code>是将yield表达式替换成一个值。</li>
+<li><code>throw()</code>是将yield表达式替换成一个throw语句。</li>
+<li><code>return()</code>是将yield表达式替换成一个return语句。<h3 id="yield-表达式"><a href="#yield-表达式" class="headerlink" title="yield* 表达式"></a>yield* 表达式</h3></li>
+</ol>
+<p>从语法角度看，如果yield表达式后面跟的是一个遍历器对象，需要在yield表达式后面加上星号，表明它返回的是一个遍历器对象。这被称为yield*表达式。  </p>
+<p>如果想在一个 Generator 函数里面执行另一个 Generator 函数，这时就需要用到<code>yield*</code>表达式</p>
+<pre><code>function* foo(){
+  yield &quot;a&quot;;
+  yield &quot;b&quot;;
+}
+
+function* bar() {
+  yield &apos;x&apos;;
+  yield* foo();
+  yield &apos;y&apos;;
+}
+for(let key of bar()){
+  console.log(key)
+}
+//x
+//a
+//b
+//y
+</code></pre><p>任何数据结构只要有 Iterator 接口，就可以被yield*遍历  </p>
+<pre><code>function* concat(iter1, iter2) {
+  yield* iter1;
+  yield* iter2;
+}
+const p=concat([1,2,3],new Map([
+  [&quot;name&quot;,&quot;jack&quot;],
+  [&quot;age&quot;,&quot;28&quot;]
+]))
+for(let key of p){
+  console.log(key)
+}
+// 1
+// 2
+// 3
+// [&quot;name&quot;, &quot;jack&quot;]
+// [&quot;age&quot;, &quot;28&quot;]
+</code></pre><h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><h4 id="作为对象属性的-Generator-函数"><a href="#作为对象属性的-Generator-函数" class="headerlink" title="作为对象属性的 Generator 函数"></a>作为对象属性的 Generator 函数</h4><p>如果一个对象的属性是 Generator 函数，可以简写成下面的形式。</p>
+<pre><code>let obj = {
+  * myGeneratorMethod() {
+    ···
+  }
+};
+</code></pre><p>等同于：</p>
+<pre><code>let obj = {
+  myGeneratorMethod: function* () {
+    // ···
+  }
+};
+</code></pre><h4 id="Generator-函数的this"><a href="#Generator-函数的this" class="headerlink" title="Generator 函数的this"></a>Generator 函数的this</h4><pre><code>function* Gen(){
+   this.attr=&quot;1&quot;
+}
+Gen.prototype.hello=()=&gt;{
+  return &quot;hello world&quot;
+}
+const gen=Gen();
+console.log(gen.hello())  // hello world
+console.log(gen instanceof Gen) // true
+console.log(gen.attr)    // undefined
+</code></pre><p>上面代码表明，Generator 函数Gen返回的遍历器gen，是Gen的实例，而且继承了Gen.prototype。这与构造函数很类似：</p>
+<pre><code>function Animal(){
+    this.attr=&quot;1&quot;
+}
+Animal.prototype.hello=()=&gt;{
+  return &quot;hello world&quot;
+}
+const ani=new Animal();
+console.log(ani.hello())      // hello world
+console.log(ani instanceof Animal)// true
+console.log(ani.attr)         // 1
+</code></pre><p>但是，也可以看到如果把Gen当作普通的构造函数，并不会生效，因为Gen返回的总是遍历器对象，而不是this对象;所以通过<code>gen.attr</code>拿不到内部的属性。同时也不可以对Gen进行new操作，会报错：</p>
+<pre><code>new Gen(); //Uncaught TypeError: Gen is not a constructor
+</code></pre><p>也可以使 Generator 函数返回一个正常的对象实例，既可以用next方法，又可以获得正常的this，具体参见<a href="http://es6.ruanyifeng.com/#docs/generator" target="_blank" rel="noopener">阮一峰ECMAScript 6 入门之17章：Generator 函数的语法</a>，此处不再赘述。</p>
+<h4 id="状态机"><a href="#状态机" class="headerlink" title="状态机"></a>状态机</h4><p>譬如实现一个开关状态，我们之前需要这么写：</p>
+<pre><code>let flag = true;
+const switchs =()=&gt; {
+  flag?console.log(&quot;turn on&quot;):console.log(&quot;turn off&quot;)
+  flag = !flag;
+}
+switchs(); //turn on
+switchs(); //turn off
+switchs(); //turn on
+switchs(); //turn off
+</code></pre><p>通过Generate函数可以很方便的创建状态机，不再需要一个外部变量进行记录了：</p>
+<pre><code>const switchg = function* (){
+  while (true) {
+    console.log(&quot;turn on&quot;)
+    yield;
+    console.log(&quot;turn off&quot;)
+    yield;
+  }
+}
+const gen=switchg();
+gen.next();//turn on
+gen.next();//turn off
+gen.next();//turn on
+gen.next();//turn off
+</code></pre><h3 id="Generate函数的应用"><a href="#Generate函数的应用" class="headerlink" title="Generate函数的应用"></a>Generate函数的应用</h3><h4 id="异步操作的同步化表达"><a href="#异步操作的同步化表达" class="headerlink" title="异步操作的同步化表达"></a>异步操作的同步化表达</h4><p>以ajax请求为例：</p>
+<pre><code>//XMLHttpRequest对象封装
+function myAjax(url,callback){
+  const config={
+    method:&quot;GET&quot;,
+    url: url,
+    data: &apos;&apos;,
+    async: true,
+    cache: true,
+    contentType: &apos;application/x-www-form-urlencoded&apos;
+  }
+  //1. 创建xml对象
+  var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject(&apos;Microsoft.XMLHTTP&apos;);
+  //2.  同服务器建立联系，open方法
+  xhr.open(config.method, url, config.async)
+
+  //3. 向服务器发送请求 send方法
+  if(config.method===&quot;GET&quot;){
+    xhr.send()
+  }else{
+    xhr.setRequestHeader(&apos;content-Type&apos;,config.contentType)
+    xhr.send(config.data)
+  }
+  //4. 接收服务器返回请求内容，onreadystatechange
+  xhr.onreadystatechange=function(){
+      if(xhr.readyState == 4){
+        if(xhr.status===200){
+          callback((xhr.responseText))
+        }else{
+          callback(JSON.stringify({
+              data:&quot;请求出错&quot;,
+              code:xhr.status
+            }))
+        }
+      }
+  }
+
+}
+//请求操作
+function request(url) {
+  myAjax(url, function(response){
+    it.next(response);
+  });
+}
+
+//generate函数， 异步操作的同步化写法：
+function* main() {
+  var result = yield request(&quot;http://oa.bxd365.com/api/questionnaire/gets?appid=a&amp;qid=4&quot;);
+  var resp = JSON.parse(result);
+  console.log(1,resp);
+}
+
+var it = main();
+it.next();
+</code></pre><h4 id="部署-Iterator-接口"><a href="#部署-Iterator-接口" class="headerlink" title="部署 Iterator 接口"></a>部署 Iterator 接口</h4><pre><code>let obj = {
+  * [Symbol.iterator]() {
+    yield &apos;hello&apos;;
+    yield &apos;world&apos;;
+  }
+};
+
+for (let x of obj) {
+  console.log(x);
+}
+// &quot;hello&quot;
+// &quot;world&quot;
+</code></pre><h4 id="控制流管理（略）"><a href="#控制流管理（略）" class="headerlink" title="控制流管理（略）"></a>控制流管理（略）</h4><h4 id="作为数据结构（略）"><a href="#作为数据结构（略）" class="headerlink" title="作为数据结构（略）"></a>作为数据结构（略）</h4><h3 id="Generator-函数的异步应用"><a href="#Generator-函数的异步应用" class="headerlink" title="Generator 函数的异步应用"></a>Generator 函数的异步应用</h3><p>ES6 诞生以前，异步编程的方法，大概有下面四种：</p>
+<ol>
+<li>回调函数</li>
+<li>事件监听</li>
+<li>发布/订阅</li>
+<li>Promise 对象</li>
+</ol>
+<p>回调函数本身并没有问题，它的问题出现在多个回调函数嵌套。这种情况就称为”回调函数地狱”（callback hell）。Promise 对象就是为了解决这个问题而提出的。它不是新的语法功能，而是一种新的写法，允许将回调函数的嵌套，改成链式调用。  </p>
+<p>Promise 的最大问题是代码冗余，原来的任务被 Promise 包装了一下，不管什么操作，一眼看去都是一堆then，原来的语义变得很不清楚。Generator函数应运而生。</p>
+<h4 id="协程"><a href="#协程" class="headerlink" title="协程"></a>协程</h4><p>众多异步编程的解决方案中，有一种叫做”协程”（coroutine），意思是多个线程互相协作，完成异步任务。协程有点像函数，又有点像线程。它的运行流程大致如下：</p>
+<pre><code>第一步，协程A开始执行。
+第二步，协程A执行到一半，进入暂停，执行权转移到协程B。
+第三步，（一段时间后）协程B交还执行权。
+第四步，协程A恢复执行。
+</code></pre><p>Generator 函数是协程在 ES6 的实现，最大特点就是可以交出函数的执行权（即暂停执行）。Generator 函数是协程在 ES6 的实现，最大特点就是可以交出函数的执行权（即暂停执行）。  </p>
+<p>整个 Generator 函数就是一个封装的异步任务，或者说是异步任务的容器。异步操作需要暂停的地方，都用yield语句注明。Generator 函数的执行方法如下。</p>
+<pre><code>function* gen(x) {
+  var y = yield x + 2;
+  return y;
+}
+
+var g = gen(1);
+g.next() // { value: 3, done: false }
+g.next() // { value: undefined, done: true }
+</code></pre><h4 id="Generator-函数的数据交换和错误处理"><a href="#Generator-函数的数据交换和错误处理" class="headerlink" title="Generator 函数的数据交换和错误处理"></a>Generator 函数的数据交换和错误处理</h4><p>Generator 函数可以暂停执行和恢复执行，这是它能封装异步任务的根本原因。除此之外，它还有两个特性，使它可以作为异步编程的完整解决方案：函数体内外的数据交换和错误处理机制。</p>
+<p>next返回值的 value 属性，是 Generator 函数向外输出数据；next方法还可以接受参数，向 Generator 函数体内输入数据。</p>
+<h4 id="Thunk-函数"><a href="#Thunk-函数" class="headerlink" title="Thunk 函数"></a>Thunk 函数</h4><p>Thunk 函数是自动执行 Generator 函数的一种方法，执行后所有异步操作可以自动完成，这样异步操作不仅可以写得像同步操作，而且一行代码就可以执行。</p>
+<h4 id="co模块"><a href="#co模块" class="headerlink" title="co模块"></a>co模块</h4><p>co模块也是自动执行 Generator 函数的一种方法。</p>
+<h2 id="第三章-async-和-await"><a href="#第三章-async-和-await" class="headerlink" title="第三章 async 和 await"></a>第三章 async 和 await</h2><h3 id="概述-1"><a href="#概述-1" class="headerlink" title="概述"></a>概述</h3><p>ES2017 标准引入了 async 函数，使得异步操作变得更加方便。<code>async</code> 函数就是 <code>Generator</code> 函数的语法糖。<br>我们将Generate章节的ajax请求进行改进：</p>
+<pre><code>//XMLHttpRequest对象封装
+function myAjax(url,callback){
+   ... //省略 同上
+}
+//请求操作(封装为promise对象)
+function request(url) {
+  return new Promise(function(resolve){
+    myAjax(url, resolve);
+  })
+
+}
+
+//async函数， 同样是异步操作的同步化写法：
+async function main() {
+  var result = await request(&quot;http://oa.bxd365.com/api/questionnaire/gets?appid=a&amp;qid=4&quot;);
+  var resp = JSON.parse(result);
+  console.log(1,resp);
+}
+main();
+</code></pre><p>一比较就会发现，async函数就是将 Generator 函数的星号（*）替换成async，将yield替换成await，仅此而已  </p>
+<p>async函数对 Generator 函数的改进，体现在以下四点：</p>
+<ol>
+<li><strong>内置执行器</strong>：无需调用next方法，或者用co模块，async函数的执行，与普通函数一模一样，只要一行。</li>
+<li><strong>更好的语义</strong>：async和await，比起星号和yield，语义更清楚了。async表示函数里有异步操作，await表示紧跟在后面的表达式需要等待结果。</li>
+<li><strong>更广的适用性</strong>：async函数的await命令后面，可以是 Promise 对象和原始类型的值，而yield命令后面只能是 Thunk 函数或 Promise 对象</li>
+<li><strong>返回值是 Promise</strong>：具体参见<strong>3.3 语法</strong> 部分的描述</li>
+</ol>
+<h3 id="基本用法-1"><a href="#基本用法-1" class="headerlink" title="基本用法"></a>基本用法</h3><p>async函数返回一个 Promise 对象，可以使用then方法添加回调函数。<strong>当函数执行的时候，一旦遇到await就会先返回，等到异步操作完成，再接着执行函数体内后面的语句</strong>。</p>
+<p>例子：</p>
+<pre><code>const timeout=()=&gt;{
+  return new Promise((resolve,reject)=&gt;{
+    setTimeout(()=&gt;{
+      resolve(new Date().getTime())
+    },1000)
+  })
+}
+async function getTime(){
+  let result= await timeout();
+  return result+&quot;,&quot;+new Date().getTime()
+}
+getTime().then((res)=&gt;{
+   console.log(res)
+})
+</code></pre><p>由于async函数返回的是 Promise 对象，可以作为await命令的参数。所以，上面的例子也可以写成下面的形式。</p>
+<pre><code>const timeout= async ()=&gt;{
+  return await new Promise((resolve,reject)=&gt;{
+    setTimeout(()=&gt;{
+      resolve(new Date().getTime())
+    },1000)
+  })
+}
+async function getTime(){
+  let result= await timeout();
+  return result+&quot;,&quot;+new Date().getTime()
+}
+getTime().then((res)=&gt;{
+   console.log(res)
+})
+</code></pre><h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><h4 id="返回-Promise-对象"><a href="#返回-Promise-对象" class="headerlink" title="返回 Promise 对象"></a>返回 Promise 对象</h4><p>async函数返回一个 Promise 对象，async函数内部return语句返回的值，会成为then方法回调函数的参数。async函数内部抛出错误，会导致返回的 Promise 对象变为reject状态。抛出的错误对象会被catch方法回调函数接收到。   </p>
+<h4 id="Promise-对象的状态变化"><a href="#Promise-对象的状态变化" class="headerlink" title="Promise 对象的状态变化"></a>Promise 对象的状态变化</h4><p>async函数返回的 Promise 对象，必须等到内部所有await命令后面的 Promise 对象执行完，才会发生状态改变，除非遇到return语句或者抛出错误。也就是说，只有async函数内部的异步操作执行完，才会执行then方法指定的回调函数。<br>仍以异步加载图片为例：</p>
+<pre><code>async function loadMultiImage() {
+    let first = await loadImageAsync(&quot;http://s29.9956.cn/static/common/img/crowdsource_logo_200_200.jpg&quot;);
+    let second = await loadImageAsync(&quot;http://s29.9956.cn/static/common/img/crowdsource_logo_400_400.jpg&quot;);
+    let third = await loadImageAsync(&quot;http://s29.9956.cn/static/common/img/crowdsource_logo_600_600.jpg&quot;);
+    console.log(&quot;load over&quot;)
+    return [first,second,third]
+}
+loadMultiImage().then((res)=&gt;{
+ console.log(&quot;resolve 回调&quot;)
+ console.log(res)
+}).catch((err)=&gt;{
+  console.log(&quot;reject 回调&quot;)
+  console.log(err)console.log(&quot;存储历史记录&quot;);
+})
+</code></pre><p>都加载成功的情况下，会执行then方法，同时将<code>loadMultiImage</code>函数的返回值作为参数传入；只要有一个失败，那么将会执行<code>loadMultiImage</code>函数的catch方法。</p>
+<h4 id="await-命令"><a href="#await-命令" class="headerlink" title="await 命令"></a>await 命令</h4><p>正常情况下，await命令后面是一个 Promise 对象，返回该对象的结果。如果不是 Promise 对象，就直接返回对应的值。</p>
+<pre><code>async function fn() {
+  // 等同于
+  // return 123;
+  return await 123;
+}
+
+fn().then(v =&gt; console.log(v))
+</code></pre><p>await命令后面是一个thenable对象（即定义then方法的对象），那么await会将其等同于 Promise 对象，返回该Promise的resolve传入的值。  </p>
+<pre><code>const foo = new Promise(function (resolve, reject) {
+  setTimeout(() =&gt; {
+    resolve(&quot;我是foo的reject值&quot;)
+  }, 100)
+});
+async function fn () {
+  const result = await foo;
+  console.log(result) //我是foo的reject值
+  return &quot;我是fn返回值&quot;
+}
+
+fn().then(v =&gt; {
+    console.log(v)//我是fn返回值
+}) 
+</code></pre><p>await命令后面的 Promise 对象如果变为reject状态，则reject的参数会被catch方法的回调函数接收到。</p>
+<pre><code>async function fn() {
+   // 等同于  await Promise.reject(&apos;出错了&apos;);
+  return await Promise.reject(&apos;出错了&apos;);
+}
+
+fn()
+.then(v =&gt; console.log(v))
+.catch(e =&gt; console.log(e))
+</code></pre><p>对于Promise对象的reject方法，无论await语句前面是否有return，reject方法的参数都会传入了catch方法的回调函数。但对于Promise对象的resolve方法则不是这样，有无return会影响回调的参数</p>
+<pre><code>async function fn() {
+    // 如果没有return 那么将会打印 &quot;undefined&quot;
+    return await Promise.resolve(&apos;成功了&apos;);
+}
+fn()
+.then(v =&gt; console.log(v))
+.catch(e =&gt; console.log(e))
+</code></pre><p>我们仍以上面的加载图片为例：任何一个await语句后面的 Promise 对象变为reject状态，那么整个async函数都会中断执行：</p>
+<pre><code>async function loadMultiImage() {
+        let first = await loadImageAsync(&quot;http://s29.9956.cn/static/common/img/crowdsource_logo_200_200.jpg&quot;);
+        let second = await loadImageAsync(&quot;http://s29.9956.cn/static/common/img/crowdsource_logo_400_401.jpg&quot;);
+        let third = await loadImageAsync(&quot;http://s29.9956.cn/static/common/img/crowdsource_logo_600_600.jpg&quot;);
+        console.log(&quot;load over&quot;)
+        return [first,second,third]
+    }
+</code></pre><p>从控制台也可以看出，图片只加载到了第二张，第三张图片并没有加载<br><img src="/ES6系列-6-异步/2.png" alt></p>
+<h4 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h4><p>如果我们希望前一个异步操作失败，也不要中断后面的异步操作，那么可以这样写：  </p>
+<ol>
+<li><p>利用 <code>try catch</code></p>
+<pre><code>async function loadMultiImage() {
+  let first = await loadImageAsync(&quot;http://s29.9956.cn/static/common/img/crowdsource_logo_200_200.jpg&quot;);
+  let second =&quot;&quot;;
+  try{
+    second = await loadImageAsync(&quot;http://s29.9956.cn/static/common/img/crowdsource_logo_400_401.jpg&quot;);
+  }catch(err){
+    console.log(&quot;加载出错&quot;)
+  }
+    let third = await loadImageAsync(&quot;http://s29.9956.cn/static/common/img/crowdsource_logo_600_600.jpg&quot;);
+    console.log(&quot;load over&quot;);//(3) [&quot;http://s29.9956.cn/static/common/img/crowdsource_logo_200_200.jpg&quot;, &quot;&quot;, &quot;http://s29.9956.cn/static/common/img/crowdsource_logo_600_600.jpg&quot;]
+    return [first,second,third]
+}
+</code></pre></li>
+<li><p>await后面的 Promise 对象再跟一个catch方法，处理前面可能出现的错误。</p>
+<pre><code>async function loadMultiImage() {
+  let first = await loadImageAsync(&quot;http://s29.9956.cn/static/common/img/crowdsource_logo_200_200.jpg&quot;);
+  let second = await loadImageAsync(&quot;http://s29.9956.cn/static/common/img/crowdsource_logo_400_401.jpg&quot;).catch(()=&gt;{
+    console.log(&quot;加载出错&quot;)
+  });
+  let third = await loadImageAsync(&quot;http://s29.9956.cn/static/common/img/crowdsource_logo_600_600.jpg&quot;);
+  console.log(&quot;load over&quot;);//(3) [&quot;http://s29.9956.cn/static/common/img/crowdsource_logo_200_200.jpg&quot;, undefined, &quot;http://s29.9956.cn/static/common/img/crowdsource_logo_600_600.jpg&quot;]
+  return [first,second,third]
+}
+</code></pre></li>
+</ol>
+<h4 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h4><ol>
+<li>await命令后面的Promise对象，运行结果可能是rejected，所以最好把await命令放在try…catch代码块中,防止前面的异步结果中断后面的操作</li>
+<li><p>多个await命令后面的异步操作，如果不存在继发关系，最好让它们同时触发。</p>
+<pre><code>// 写法一
+let [foo, bar] = await Promise.all([getFoo(), getBar()]);
+
+// 写法二
+let fooPromise = getFoo();
+let barPromise = getBar();
+let foo = await fooPromise;
+let bar = await barPromise;
+</code></pre></li>
+<li><p>await命令只能用在async函数之中，如果用在普通函数，就会报错（esm模块加载器支持顶层await，即await命令可以不放在 async 函数里面，直接使用）</p>
+</li>
+<li><p>async 函数可以保留运行堆栈</p>
+<pre><code> const a = () =&gt; {
+  b().then(() =&gt; c());
+};
+//如果b()或c()报错，错误堆栈将不包括a()。b()执行完的时候，a()或许早就执行完了
+
+const A = async () =&gt; {
+  await B();
+    C();
+};
+//一旦B()或C()，错误堆栈将包括A()。因为B()运行的时候，A()是暂停执行，上下文环境都保存着。
+</code></pre></li>
+</ol>
+<h3 id="异步遍历器（Async-Iterator）"><a href="#异步遍历器（Async-Iterator）" class="headerlink" title="异步遍历器（Async Iterator）"></a>异步遍历器（Async Iterator）</h3><p>ES2018 引入了“异步遍历器”（Async Iterator）,为异步操作提供原生的遍历器接口，即value和done这两个属性都是异步产生。更多介绍请参见<a href="http://es6.ruanyifeng.com/#docs/async#%E5%BC%82%E6%AD%A5%E9%81%8D%E5%8E%86%E5%99%A8" target="_blank" rel="noopener">async函数之异步遍历器</a></p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ol>
+<li><a href="http://es6.ruanyifeng.com/" target="_blank" rel="noopener">阮一峰ES6入门</a></li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/javascript/" rel="tag"># javascript</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/ES6系列-5-Class与Module/" rel="next" title="ES6系列-5-Class与Module">
+                <i class="fa fa-chevron-left"></i> ES6系列-5-Class与Module
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/vue系列-1-数据绑定原理/" rel="prev" title="vue系列-1-数据绑定原理">
+                vue系列-1-数据绑定原理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="WMH">
+            
+              <p class="site-author-name" itemprop="name">WMH</p>
+              <div class="site-description motion-element" itemprop="description">just code it</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">67</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wangminghuan" title="GitHub &rarr; https://github.com/wangminghuan" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:m.h.wang@foxmail.com" title="E-Mail &rarr; mailto:m.h.wang@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://weblog.mhwang.club" title="WebSite &rarr; https://weblog.mhwang.club" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>WebSite</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://weibo.com/u/1657970003?topnav=1&wvr=6&topsug=1&is_all=1" title="微博 &rarr; https://weibo.com/u/1657970003?topnav=1&wvr=6&topsug=1&is_all=1" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>微博</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一章-Promise"><span class="nav-number">1.</span> <span class="nav-text">第一章 Promise</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#概述"><span class="nav-number">1.1.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Promise对象有以下两个特点："><span class="nav-number">1.1.1.</span> <span class="nav-text">Promise对象有以下两个特点：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优缺点"><span class="nav-number">1.1.2.</span> <span class="nav-text">优缺点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本用法"><span class="nav-number">1.2.</span> <span class="nav-text">基本用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行顺序"><span class="nav-number">1.3.</span> <span class="nav-text">执行顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Promise-prototype-finally"><span class="nav-number">1.4.</span> <span class="nav-text">Promise.prototype.finally()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Promise-all"><span class="nav-number">1.5.</span> <span class="nav-text">Promise.all()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Promise-race"><span class="nav-number">1.6.</span> <span class="nav-text">Promise.race()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Promise-resolve"><span class="nav-number">1.7.</span> <span class="nav-text">Promise.resolve()</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1）-参数为-Promise-实例"><span class="nav-number">1.7.1.</span> <span class="nav-text">1） 参数为 Promise 实例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2）参数是一个thenable对象"><span class="nav-number">1.7.2.</span> <span class="nav-text">2）参数是一个thenable对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3）参数不是具有then方法的对象，或根本就不是对象"><span class="nav-number">1.7.3.</span> <span class="nav-text">3）参数不是具有then方法的对象，或根本就不是对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4）不带有任何参数"><span class="nav-number">1.7.4.</span> <span class="nav-text">4）不带有任何参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Promise-reject"><span class="nav-number">1.8.</span> <span class="nav-text">Promise.reject()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二章-Generator"><span class="nav-number">2.</span> <span class="nav-text">第二章 Generator</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#理解-Generator"><span class="nav-number">2.1.</span> <span class="nav-text">理解 Generator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#yeild-语句"><span class="nav-number">2.2.</span> <span class="nav-text">yeild 语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#与Iterator接口的关系"><span class="nav-number">2.3.</span> <span class="nav-text">与Iterator接口的关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#next方法的参数"><span class="nav-number">2.4.</span> <span class="nav-text">next方法的参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#for…of循环"><span class="nav-number">2.5.</span> <span class="nav-text">for…of循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generator-prototype-throw"><span class="nav-number">2.6.</span> <span class="nav-text">Generator.prototype.throw()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generator-prototype-return"><span class="nav-number">2.7.</span> <span class="nav-text">Generator.prototype.return()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#next-、throw-、return-的共同点"><span class="nav-number">2.8.</span> <span class="nav-text">next()、throw()、return() 的共同点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#yield-表达式"><span class="nav-number">2.9.</span> <span class="nav-text">yield* 表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他"><span class="nav-number">2.10.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#作为对象属性的-Generator-函数"><span class="nav-number">2.10.1.</span> <span class="nav-text">作为对象属性的 Generator 函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Generator-函数的this"><span class="nav-number">2.10.2.</span> <span class="nav-text">Generator 函数的this</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#状态机"><span class="nav-number">2.10.3.</span> <span class="nav-text">状态机</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generate函数的应用"><span class="nav-number">2.11.</span> <span class="nav-text">Generate函数的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#异步操作的同步化表达"><span class="nav-number">2.11.1.</span> <span class="nav-text">异步操作的同步化表达</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#部署-Iterator-接口"><span class="nav-number">2.11.2.</span> <span class="nav-text">部署 Iterator 接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#控制流管理（略）"><span class="nav-number">2.11.3.</span> <span class="nav-text">控制流管理（略）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#作为数据结构（略）"><span class="nav-number">2.11.4.</span> <span class="nav-text">作为数据结构（略）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generator-函数的异步应用"><span class="nav-number">2.12.</span> <span class="nav-text">Generator 函数的异步应用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#协程"><span class="nav-number">2.12.1.</span> <span class="nav-text">协程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Generator-函数的数据交换和错误处理"><span class="nav-number">2.12.2.</span> <span class="nav-text">Generator 函数的数据交换和错误处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Thunk-函数"><span class="nav-number">2.12.3.</span> <span class="nav-text">Thunk 函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#co模块"><span class="nav-number">2.12.4.</span> <span class="nav-text">co模块</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第三章-async-和-await"><span class="nav-number">3.</span> <span class="nav-text">第三章 async 和 await</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#概述-1"><span class="nav-number">3.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本用法-1"><span class="nav-number">3.2.</span> <span class="nav-text">基本用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#语法"><span class="nav-number">3.3.</span> <span class="nav-text">语法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#返回-Promise-对象"><span class="nav-number">3.3.1.</span> <span class="nav-text">返回 Promise 对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Promise-对象的状态变化"><span class="nav-number">3.3.2.</span> <span class="nav-text">Promise 对象的状态变化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#await-命令"><span class="nav-number">3.3.3.</span> <span class="nav-text">await 命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#错误处理"><span class="nav-number">3.3.4.</span> <span class="nav-text">错误处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#注意事项"><span class="nav-number">3.3.5.</span> <span class="nav-text">注意事项</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步遍历器（Async-Iterator）"><span class="nav-number">3.4.</span> <span class="nav-text">异步遍历器（Async Iterator）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文章"><span class="nav-number">4.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMH</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.1</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.1"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.1"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

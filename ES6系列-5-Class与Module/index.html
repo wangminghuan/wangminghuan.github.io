@@ -1,0 +1,2116 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":true,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本篇介绍ES6的 Class（类）与 ES6的模块化方案">
+<meta name="keywords" content="javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ES6系列-5-Class与Module">
+<meta property="og:url" content="https://wangminghuan.github.io/ES6系列-5-Class与Module/index.html">
+<meta property="og:site_name" content="WMH&#39;s Blog">
+<meta property="og:description" content="本篇介绍ES6的 Class（类）与 ES6的模块化方案">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://wangminghuan.github.io/ES6系列-5-Class与Module/1.png">
+<meta property="og:image" content="https://wangminghuan.github.io/ES6系列-5-Class与Module/2.png">
+<meta property="og:image" content="https://wangminghuan.github.io/ES6系列-5-Class与Module/3.jpg">
+<meta property="og:image" content="https://wangminghuan.github.io/ES6系列-5-Class与Module/4.jpg">
+<meta property="og:updated_time" content="2019-11-08T10:26:06.147Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ES6系列-5-Class与Module">
+<meta name="twitter:description" content="本篇介绍ES6的 Class（类）与 ES6的模块化方案">
+<meta name="twitter:image" content="https://wangminghuan.github.io/ES6系列-5-Class与Module/1.png">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://wangminghuan.github.io/ES6系列-5-Class与Module/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>ES6系列-5-Class与Module | WMH's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">WMH's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-主页">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>主页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-标签">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-分类">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-归档">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/ES6系列-5-Class与Module/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WMH">
+      <meta itemprop="description" content="just code it">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WMH's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ES6系列-5-Class与Module
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-11-04 11:10:36" itemprop="dateCreated datePublished" datetime="2019-11-04T11:10:36+08:00">2019-11-04</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-11-08 18:26:06" itemprop="dateModified" datetime="2019-11-08T18:26:06+08:00">2019-11-08</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/ES6系列/" itemprop="url" rel="index"><span itemprop="name">ES6系列</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本篇介绍ES6的 Class（类）与 ES6的模块化方案</p>
+<a id="more"></a>
+<h2 id="第一章-Class-（类）"><a href="#第一章-Class-（类）" class="headerlink" title="第一章  Class （类）"></a>第一章  Class （类）</h2><p>JavaScript 语言中，生成实例对象的传统方法是通过构造函数实现的，但这种写法跟传统面向对象的语法（c++/java）等差异很大，ES6 提供了更接近传统语言的写法，引入了 Class（类）这个概念，作为对象的模板。通过class关键字，可以定义类。</p>
+<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>通过class关键字，可以定义类，这样更优雅，易于理解。</p>
+<pre><code>class Person{
+  constructor(x) {
+    this.name = x;
+  }
+
+  toSayHi() {
+    return &apos;Hello &apos;+this.name;
+  }
+}
+const p1=new Person(&quot;jack&quot;);
+p1.name; //&quot;jack&quot;
+p1.toSayHi();//&quot;Hello jack&quot;
+console.log(Object.keys(Person.prototype));//[] toSayHi方法是Person类内部定义的方法，它是不可枚举的
+</code></pre><p>上面代码定义了一个“类”，可以看到里面有一个constructor方法，这就是构造方法，this关键字则代表实例对象。<strong>注意：</strong>定义“类”的方法不需要function这个关键字，直接把函数定义放进去了就可以了。另外，方法之间不需要逗号分隔，加了会报错。<br>上述代码等同于：</p>
+<pre><code>function Person(x){
+  this.name = x;
+}
+Person.prototype.toSayHi=function(){
+  return &apos;Hello &apos;+this.name;
+}
+
+const p1=new Person(&quot;jack&quot;);
+p1.name; //&quot;jack&quot;
+p1.toSayHi();//&quot;Hello jack&quot;
+console.log(Object.keys(Person.prototype));//[&quot;toSayHi&quot;] ES5写法下，toSayHi方法是可以枚举的，
+//注意ES6和ES5下此处的行为不一致
+</code></pre><p>以上两种模式都满足：</p>
+<pre><code>//等式1
+p1.constructor===Person;//true  
+
+//等式2
+Person===Person.prototype.constructor;//true 
+
+//等式3
+p1.constructor===Person.prototype.constructor;//true
+</code></pre><p>说明：</p>
+<ol>
+<li>每个实例对象都有一个 constructor（构造函数）属性，该属性指向创建它的构造函数，也就是说constructor始终指向创建当前对象的构造函数，所以等式1成立；</li>
+<li>无论什么时候，只要创建了一个新函数，就会根据一组特定的规则为该函数创建一个 prototype属性，这个属性指向函数的原型对象。在默认情况下，所有原型对象都会自动获得一个 constructor（构造函数）属性，这个属性包含一个指向 prototype 属性所在函数的指针，即指向函数本身。所以等式2成立（参见下图）；<br><img src="/ES6系列-5-Class与Module/1.png" alt></li>
+<li>将等式1和等式2合并即可得到等式3成立。</li>
+</ol>
+<p>另外：类的内部所有定义的方法，都是不可枚举的（demo代码中已经标明）。  </p>
+<p><strong>可以看到：</strong>ES6 的class可以看作只是一个语法糖，它的绝大部分功能，ES5 都可以做到，新的class写法只是让对象原型的写法更加清晰、更像面向对象编程的语法而已。</p>
+<p>由于类的方法都定义在prototype对象上面，所以类的新方法可以添加在prototype对象上面。<code>Object.assign</code>方法可以很方便地一次向类添加多个方法：</p>
+<pre><code>class Person{
+  constructor(x) {
+    this.name = x;
+  }
+}
+Object.assign(Person.prototype,{
+  toSayHi() {
+    return &apos;Hello &apos;+this.name;
+  },
+  toValue(){
+    return &apos;value &apos; +this.name
+  }
+})
+const p1=new Person(&quot;jack&quot;);
+console.log(p1.toSayHi()); //&quot;Hello jack&quot;
+console.log(p1.toValue()); //&quot;value jack&quot;
+</code></pre><h3 id="constructor-方法"><a href="#constructor-方法" class="headerlink" title="constructor 方法"></a>constructor 方法</h3><p>constructor方法是类的默认方法，通过new命令生成对象实例时，自动调用该方法。一个类必须有constructor方法，如果没有显式定义，一个空的constructor方法会被默认添加:</p>
+<pre><code>function Person(x){
+  this.name = x;
+}
+console.log(Person.prototype)
+class Person2{
+
+}
+console.log(Person2.prototype)
+</code></pre><p><img src="/ES6系列-5-Class与Module/2.png" alt></p>
+<h3 id="类的实例"><a href="#类的实例" class="headerlink" title="类的实例"></a>类的实例</h3><p>同ES5一致，生成类的实例的写法，也是使用new命令。实例的属性除非显式定义在其本身（即定义在this对象上），否则都是定义在原型上（即定义在class上）</p>
+<pre><code>//定义类
+class Point {
+
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  toString() {
+    return &apos;(&apos; + this.x + &apos;, &apos; + this.y + &apos;)&apos;;
+  }
+
+}
+
+var point = new Point(2, 3);
+
+point.toString() // (2, 3)
+
+point.hasOwnProperty(&apos;x&apos;) // true
+point.hasOwnProperty(&apos;y&apos;) // true
+point.hasOwnProperty(&apos;toString&apos;) // false
+point.__proto__.hasOwnProperty(&apos;toString&apos;) // true
+</code></pre><h3 id="取值函数（getter）和存值函数（setter）"><a href="#取值函数（getter）和存值函数（setter）" class="headerlink" title="取值函数（getter）和存值函数（setter）"></a>取值函数（getter）和存值函数（setter）</h3><p>与 ES5 一样，在“类”的内部可以使用get和set关键字，对某个属性设置存值函数和取值函数，拦截该属性的存取行为。</p>
+<pre><code>class Person{
+    constructor(){
+    }
+    get name(){
+        return &quot;getter&quot;
+    }
+    set name(val){
+        console.log(&quot;setter&quot;)
+    }
+}
+const p = new Person()
+console.log(p.name) ;// getter
+p.name=&quot;x&quot;;// setter
+console.log(Object.getOwnPropertyDescriptor(Person.prototype, &apos;name&apos;))
+</code></pre><p>存值函数和取值函数是设置在属性的 Descriptor 对象上的:<br><img src="/ES6系列-5-Class与Module/3.jpg" alt></p>
+<h3 id="属性表达式"><a href="#属性表达式" class="headerlink" title="属性表达式"></a>属性表达式</h3><p>类的属性名，可以采用表达式。</p>
+<pre><code>let methodName = &apos;getArea&apos;;
+
+class Square {
+  constructor(length) {
+    // ...
+  }
+
+  [methodName]() {
+    // ...
+  }
+}
+</code></pre><h3 id="Class-表达式"><a href="#Class-表达式" class="headerlink" title="Class 表达式"></a>Class 表达式</h3><pre><code>const MyPerson = class Person {
+getClassName() {
+  return Person.name;
+}
+  };
+const p =new MyPerson();
+console.log(p.getClassName());//&quot;Person&quot;
+const p1 =new Person(); // 报错 Uncaught ReferenceError: Person is not defined
+</code></pre><p>类的名字是Person，但是Person只在 Class 的内部可用，指代当前类。在 Class 外部，这个类只能用MyPerson引用;</p>
+<p>如果类内部用不到 Person ，完全可以省略不写，也可以采用 Class 表达式，可以写出立即执行的 Class：  </p>
+<pre><code>const p = new class {
+    constructor(name) {
+        this.name = name;
+      }
+    getClassName() {
+      console.log(this.name)
+    }
+  }(&apos;张三&apos;);
+p.getClassName();//&quot;张三&quot;
+</code></pre><h3 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h3><ol>
+<li><p>不存在提升</p>
+<pre><code>new Person();
+class Person{};
+//会报错
+
+new Person();
+function Person(){}
+//运行正常
+</code></pre></li>
+<li>name属性：<br>name属性总是返回紧跟在class关键字后面的类名：这点同ES5一样。</li>
+<li><p>this 的指向<br>类的方法内部如果含有this，它默认指向类的实例。但如果单独使用该方法，那么很可能报错。推荐使用箭头函数：</p>
+<pre><code>class Logger {
+  constructor() {
+    this.printName = (name = &apos;there&apos;) =&gt; {
+      this.print(`Hello ${name}`);
+    };
+  }
+
+  // ...
+}
+</code></pre><h3 id="静态方法"><a href="#静态方法" class="headerlink" title="静态方法"></a>静态方法</h3><p>类相当于实例的原型，所有在类中定义的方法，都会被实例继承。如果在一个方法前，加上static关键字，就表示该方法不会被实例继承，而是<strong>直接通过类来调用</strong>，这就称为“静态方法”。</p>
+<p>  class Person {</p>
+<pre><code>static bar() {
+    this.baz();
+  }
+static baz() {
+    console.log(&apos;hello&apos;);
+  }
+  baz() {
+    console.log(&apos;world&apos;);
+  }
+</code></pre><p>   }<br>   const p = new Person();<br>   Person.baz() // ‘hello’<br>   p.baz() //‘world’<br>   Person.bar(); //hello 静态方法的this指的是类，而不是实例！！！<br>   p.bar() //报错 p.bar is not a function<br>可以看到：静态方法中的this关键字，指的是类，而不是实例。  </p>
+</li>
+</ol>
+<p>父类的静态方法，可以被子类继承。</p>
+<pre><code>class Foo {
+  static classMethod() {
+    return &apos;hello&apos;;
+  }
+}
+
+class Bar extends Foo {
+}
+
+Bar.classMethod() // &apos;hello&apos;
+</code></pre><h3 id="实例属性的新写法"><a href="#实例属性的新写法" class="headerlink" title="实例属性的新写法"></a>实例属性的新写法</h3><p>实例属性除了定义在constructor()方法里面的this上面，也可以定义在类的最顶层。这种新写法的好处是，所有实例对象自身的属性都定义在类的头部，看上去比较整齐，一眼就能看出这个类有哪些实例属性：</p>
+<pre><code>class foo {
+  bar = &apos;hello&apos;;
+  baz = &apos;world&apos;;
+
+  constructor() {
+    // ...
+  }
+}
+</code></pre><p>ps：上述写法目前在chrome中直接运行会报错。2019-02-24标注</p>
+<h3 id="静态属性"><a href="#静态属性" class="headerlink" title="静态属性"></a>静态属性</h3><p>静态属性指的是 Class 本身的属性，即Class.propName，而不是定义在实例对象（this）上的属性。  </p>
+<pre><code>class Foo {
+}
+
+Foo.prop = 1;
+Foo.prop // 1
+</code></pre><p>目前，只有这种写法可行，因为 ES6 明确规定，Class 内部只有静态方法，没有静态属性。  </p>
+<p>现在有一个提案提供了类的静态属性，写法是在实例属性法的前面，加上static关键字(目前chrome未实现)：</p>
+<pre><code>class Foo {
+  static prop=1
+}
+</code></pre><h3 id="私有方法和私有属性"><a href="#私有方法和私有属性" class="headerlink" title="私有方法和私有属性"></a>私有方法和私有属性</h3><p>私有方法和私有属性，是只能在类的内部访问的方法和属性，外部不能访问。这是常见需求，有利于代码的封装，但 ES6 不提供，只能通过变通方法模拟实现。<br>具体实现方法可参见，目前还没有特别完美的方案<a href="http://es6.ruanyifeng.com/#docs/class#%E7%A7%81%E6%9C%89%E6%96%B9%E6%B3%95%E5%92%8C%E7%A7%81%E6%9C%89%E5%B1%9E%E6%80%A7" target="_blank" rel="noopener">私有属性和方法</a>，新版的提案（前面加#号）暂时还未实现。</p>
+<h3 id="new-target-属性"><a href="#new-target-属性" class="headerlink" title="new.target 属性"></a>new.target 属性</h3><p>new是从构造函数生成实例对象的命令。ES6 为new命令引入了一个new.target属性，该属性一般用在构造函数之中，返回new命令作用于的那个构造函数。如果构造函数不是通过new命令或Reflect.construct()调用的，new.target会返回undefined，因此这个属性可以用来确定构造函数是怎么调用的。</p>
+<pre><code>function Person(name) {
+  if (new.target !== undefined) {
+    this.name = name;
+  } else {
+    throw new Error(&apos;必须使用 new 命令生成实例&apos;);
+  }
+}
+
+// 另一种写法
+function Person(name) {
+  if (new.target === Person) {
+    this.name = name;
+  } else {
+    throw new Error(&apos;必须使用 new 命令生成实例&apos;);
+  }
+}
+
+var person = new Person(&apos;张三&apos;); // 正确
+var notAPerson = Person.call(person, &apos;张三&apos;);  // 报错
+</code></pre><h2 id="第二章-类的继承"><a href="#第二章-类的继承" class="headerlink" title="第二章 类的继承"></a>第二章 类的继承</h2><h3 id="extends"><a href="#extends" class="headerlink" title="extends"></a>extends</h3><p>Class 可以通过extends关键字实现继承，这比 ES5 的通过修改原型链实现继承，要清晰和方便很多：</p>
+<pre><code>class Animal{
+  constructor(){
+    this.food=&quot;meat&quot;
+  }
+  sayHi(){
+    console.log(&quot;I am animal, I eat &quot;+ this.food)
+  }
+  food(){
+    return this.food
+  }
+}
+
+class Cat extends Animal{
+  constructor(){
+    super(); //子类必须在constructor方法中调用super方法，否则新建实例时会报错
+    this.color=&quot;black&quot;;
+  }
+  sayHi(){
+    console.log(&quot;I am cat, I eat &quot;+ super.food() + &quot;, my color is &quot;+this.color )
+    console.log(&quot;I am cat, I eat &quot;+ this.food + &quot;, my color is &quot;+this.color );
+    //继承了父级的food属性
+    // 子类方法中调用父类方法，必须通过super关键字，super.food()
+  }
+}
+const cat=new Cat();
+const ani= new Animal();
+ani.sayHi(); //I am animal, I eat meat
+cat.sayHi(); 
+//I am cat, I eat meat, my color is black
+//I am cat, I eat meat, my color is black
+</code></pre><p>注意：  </p>
+<ol>
+<li>子类方法中super关键字的调用：子类必须在constructor方法中调用super方法，否则新建实例时会报错。子类方法中如果需要调用父级的方法，需通过super关键字。  </li>
+<li>ES6继承机制同ES5完全不同：先将父类实例对象的属性和方法，加到this上面（所以必须先调用super方法），然后再用子类的构造函数修改this。而ES5 的继承，实质是先创造子类的实例对象this，然后再将父类的方法添加到this上面（<code>Parent.apply(this)</code>）</li>
+<li><p>不管有没有显式定义，任何一个子类都有constructor方法（会被默认添加）。</p>
+<pre><code>class ColorPoint extends Point {
+}
+
+// 等同于
+class ColorPoint extends Point {
+  constructor(...args) {
+    super(...args);
+  }
+}
+</code></pre></li>
+<li><p>通过子类创建的实例，同时是Cat和Animal两个类的实例，这与 ES5 的行为完全一致。</p>
+<pre><code>const cat=new Cat();
+cat instanceof Cat;//true
+cat instanceof Animal; //true
+</code></pre></li>
+<li><p>父类的静态方法，也会被子类继承。</p>
+<pre><code>class A {
+  static hello() {
+    console.log(&apos;hello world&apos;);
+  }
+}
+
+class B extends A {
+}
+
+B.hello()  // hello world
+</code></pre><h3 id="Object-getPrototypeOf"><a href="#Object-getPrototypeOf" class="headerlink" title="Object.getPrototypeOf()"></a>Object.getPrototypeOf()</h3></li>
+</ol>
+<p>Object.getPrototypeOf方法可以用来从子类上获取父类，可以使用这个方法判断，一个类是否继承了另一个类：</p>
+<pre><code>Object.getPrototypeOf(Cat) === Animal
+</code></pre><h3 id="super-关键字"><a href="#super-关键字" class="headerlink" title="super 关键字"></a>super 关键字</h3><p>super这个关键字，既可以当作函数使用，也可以当作对象使用： </p>
+<ol>
+<li>super作为函数调用时，代表父类的构造函数。并且<code>super()</code>只能用在子类的构造函数之中，用在其他地方就会报错。</li>
+<li><p>super作为对象时（在普通方法中）：指向父类的原型对象（<code>A.prototype</code>）；</p>
+<pre><code>class A {
+  p() {
+    return 2;
+  }
+}
+
+class B extends A {
+  constructor() {
+    super();
+    console.log(super.p()); // 2  相当于A.prototype.p()。
+  }
+}
+
+let b = new B();
+b.m // undefined  super指向父类的原型对象，所以定义在父类实例上的方法或属性，是无法通过super调用的。
+</code></pre><p>ES6 规定，在子类普通方法中通过super调用父类的方法时，方法内部的this指向当前的子类实例。</p>
+<pre><code>class A {
+  constructor() {
+    this.x = 1;
+  }
+  print() {
+    console.log(this.x);
+  }
+}
+
+class B extends A {
+  constructor() {
+    super();
+    this.x = 2;
+    super.x = 3;
+    console.log(super.x); // undefined 
+    console.log(this.x); // 3
+  }
+  m() {
+    super.print();
+  }
+}
+
+let b = new B();
+b.m() // 3  A.prototype.print()内部的this指向子类B的实例，而不是A.prototype
+</code></pre><p>上面代码中可以看到：如果通过super对某个属性赋值，这时super就是this，赋值的属性会变成子类实例的属性：<code>super.x</code>赋值为3，这时等同于对<code>this.x</code>赋值为3。而当读取<code>super.x</code>的时候，读的是<code>A.prototype.x</code>，所以返回undefined。  </p>
+</li>
+<li><p>super作为对象时（在静态方法中）：指向父类。而不是父类的原型对象。</p>
+<pre><code>class Parent {
+  static myMethod(msg) {
+    console.log(&apos;static&apos;, msg);
+    //静态方法中的this指向Parent而不是Parent的实例
+  }
+
+  myMethod(msg) {
+    console.log(&apos;instance&apos;, msg);
+  }
+}
+
+class Child extends Parent {
+  static myMethod(msg) {
+    super.myMethod(msg);
+  }
+
+  myMethod(msg) {
+    super.myMethod(msg);
+  }
+}
+
+Child.myMethod(1); // static 1  父类直接调用，会返回静态方法
+
+var child = new Child();
+child.myMethod(2); // instance 2 实例调用，会返回父类的原型对象方法
+</code></pre><p>在子类的静态方法中通过super调用父类的方法时，方法内部的this指向当前的子类，而不是子类的实例。</p>
+<pre><code>class A {
+  constructor() {
+    this.x = 1;
+  }
+  static print() {
+    console.log(this.x);
+  }
+}
+
+class B extends A {
+  constructor() {
+    super();
+    this.x = 2;
+  }
+  static m() {
+    super.print();
+  }
+}
+
+B.x = 3;
+B.m() // 3  B.m里面，super.print指向父类的静态方法。这个方法里面的this指向的是B，而不是B的实例。
+</code></pre></li>
+<li>使用super的时候，必须显式指定是作为函数、还是作为对象使用，否则会报错。</li>
+<li>由于对象总是继承其他对象的，所以可以在任意一个对象中，使用super关键字。</li>
+</ol>
+<h3 id="原生构造函数的继承"><a href="#原生构造函数的继承" class="headerlink" title="原生构造函数的继承"></a>原生构造函数的继承</h3><p>原生构造函数是指语言内置的构造函数，通常用来生成数据结构。ECMAScript 的原生构造函数大致有下面这些。</p>
+<pre><code>Boolean()
+Number()
+String()
+Array()
+Date()
+Function()
+RegExp()
+Error()
+Object()
+</code></pre><p>ES6之前这些原生构造函数是无法继承的，比如，不能自己定义一个Array的子类。<br>    function MyArray() {<br>        Array.apply(this, arguments);<br>      }</p>
+<pre><code>MyArray.prototype = Object.create(Array.prototype, {
+  constructor: {
+    value: MyArray,
+    writable: true,
+    configurable: true,
+    enumerable: true
+  }
+});
+
+var colors = new MyArray();
+colors[0] = &quot;red&quot;;
+colors.length  // 0
+</code></pre><p>但是，在ES6中，通过class关键字可以实现原生构造函数的继承：</p>
+<pre><code>class MyArray extends Array {
+  constructor(...args) {
+    super(...args);
+  }
+}
+
+var arr = new MyArray();
+arr[0] = 12;
+arr.length // 1
+
+arr.length = 0;
+arr[0] // undefined
+</code></pre><p>extends关键字不仅可以用来继承类，还可以用来继承原生的构造函数。</p>
+<h3 id="补充-实例-构造函数和原型链"><a href="#补充-实例-构造函数和原型链" class="headerlink" title="补充: 实例/构造函数和原型链"></a>补充: 实例/构造函数和原型链</h3><p>简单回顾一下构造函数、原型和实例的关系：<strong>每个构造函数都有一个原型对象，原型对象都包含一个指向构造函数的指针，而实例都包含一个指向原型对象的内部指针</strong></p>
+<pre><code>class Person{
+  constructor(x) {
+    this.name = x;
+  }
+
+  toSayHi() {
+    return &apos;Hello &apos;+this.name;
+  }
+}
+const p1=new Person(&quot;jack&quot;);
+
+//每个构造函数都有一个原型对象(prototype)
+console.log(0,Person.prototype);
+    //0,{
+    //  constructor: class Person
+    //    toSayHi: ƒ toSayHi()
+    //    __proto__: Object
+    //    }
+
+//原型对象都包含一个指向构造函数的指针(constructor)
+console.log(1,Person===Person.prototype.constructor);
+
+//实例都包含一个指向原型对象的内部指针(这个连接存在于实例与构造函数的原型对象之间，而不是存在于实例与构造函数之间)
+console.log(2,p1.__proto__===Person.prototype);//true
+</code></pre><p><img src="/ES6系列-5-Class与Module/4.jpg" alt></p>
+<p>同时以上代码还满足</p>
+<pre><code>//实例会自动含有一个constructor属性，指向它们的构造函数,
+console.log(3,p1.constructor===Person);//true
+
+// instanceof运算符，验证原型对象与实例对象之间的关系。
+console.log(4,p1 instanceof Person); //true
+console.log(5,p1 instanceof Object); //true
+</code></pre><h2 id="第三章-Module-的语法"><a href="#第三章-Module-的语法" class="headerlink" title="第三章 Module 的语法"></a>第三章 Module 的语法</h2><h3 id="概述-1"><a href="#概述-1" class="headerlink" title="概述"></a>概述</h3><p>ES6 模块的设计思想是尽量的静态化，而commonJS则是使用“运行时加载”，因为只有运行时才能得到这个对象。</p>
+<pre><code>// CommonJS模块
+let { stat, exists, readFile } = require(&apos;fs&apos;);
+
+// 等同于
+let _fs = require(&apos;fs&apos;);
+let stat = _fs.stat;
+let exists = _fs.exists;
+let readfile = _fs.readfile;
+</code></pre><p>上面代码的实质是整体加载fs模块（即加载fs的所有方法），生成一个对象（_fs），然后再从这个对象上面读取 3 个方法。这种加载称为“运行时加载”。</p>
+<p><strong>ES6 模块不是对象</strong>，而是通过export命令显式指定输出的代码，再通过import命令输入。</p>
+<pre><code>// ES6模块
+import { stat, exists, readFile } from &apos;fs&apos;;
+</code></pre><p>上面代码的实质是从fs模块加载 3 个方法，其他方法不加载。这种加载称为“编译时加载”或者静态加载，效率要比 CommonJS 模块的加载方式高。当然，这也导致了没法引用 ES6 模块本身，因为它不是对象。同时这也使得静态分析成为可能（如引入宏或类型检验）。</p>
+<p>ES6 的模块自动采用严格模式，不管你有没有在模块头部加上”use strict”。</p>
+<p>import和export命令只能在模块的顶层，不能在代码块之中。</p>
+<h3 id="export-命令"><a href="#export-命令" class="headerlink" title="export 命令"></a>export 命令</h3><ol>
+<li><p>一个模块就是一个独立的文件。该文件内部的所有变量，外部无法获取。如果你希望外部能够读取模块内部的某个变量，就必须使用export关键字输出该变量。</p>
+<pre><code>//写法一
+// profile.js
+export var firstName = &apos;Michael&apos;;
+export var lastName = &apos;Jackson&apos;;
+export var multiply = function (x, y) {
+      return x * y;
+};
+
+//写法二
+var firstName = &apos;Michael&apos;;
+var lastName = &apos;Jackson&apos;;
+var multiply = function (x, y) {
+      return x * y;
+};
+
+export {firstName, lastName, multiply};
+</code></pre></li>
+<li><p>as关键字重命名:通常情况下，export输出的变量就是本来的名字，但是可以使用as关键字重命名。</p>
+<pre><code>function v1() { ... }
+function v2() { ... }
+
+export {
+  v1 as streamV1,
+  v2 as streamV2,
+  v2 as streamLatestVersion
+};
+</code></pre><p>上面代码使用as关键字，重命名了函数v1和v2的对外接口。重命名后，v2可以用不同的名字输出两次。</p>
+</li>
+<li><p>export语句输出的接口，与其对应的值是动态绑定关系，即通过该接口，可以取到模块内部实时的值。(这一点与 CommonJS 规范完全不同。CommonJS 模块输出的是值的缓存，不存在动态更新)。  </p>
+</li>
+<li><p>export命令可以出现在模块的任何位置，只要处于模块顶层就可以。如果处于块级作用域内，就会报错。</p>
+</li>
+</ol>
+<h3 id="import-命令"><a href="#import-命令" class="headerlink" title="import 命令"></a>import 命令</h3><p>使用export命令定义了模块的对外接口以后，其他 JS 文件就可以通过import命令加载这个模块。</p>
+<pre><code>// main.js
+import {firstName, lastName, year} from &apos;./profile.js&apos;;
+</code></pre><ol>
+<li><p>如果想为输入的变量重新取一个名字，import命令要使用as关键字，将输入的变量重命名。</p>
+<pre><code>import { lastName as surname } from &apos;./profile.js&apos;;
+</code></pre></li>
+<li><p>import命令输入的变量都是只读的，不允许在加载模块的脚本里面，改写接口。</p>
+<pre><code>import {a} from &apos;./xxx.js&apos;
+a = {}; // Syntax Error : &apos;a&apos; is read-only;不允许重新赋值
+a.foo = &apos;hello&apos;; // 合法操作，改写属性是允许的
+</code></pre></li>
+<li><p>import命令具有提升效果，会提升到整个模块的头部，会首先执行。</p>
+<pre><code>foo();
+
+import { foo } from &apos;my_module&apos;;
+</code></pre></li>
+<li><p>由于import是静态执行，所以不能使用表达式和变量</p>
+<pre><code>// 报错
+import { &apos;f&apos; + &apos;oo&apos; } from &apos;my_module&apos;;
+</code></pre></li>
+<li><p>import语句会执行所加载的模块：</p>
+<pre><code>import &apos;lodash&apos;;
+</code></pre></li>
+<li><p>如果多次重复执行同一句import语句，那么只会执行一次，而不会执行多次。</p>
+<pre><code>import &apos;lodash&apos;;
+import &apos;lodash&apos;;
+</code></pre></li>
+<li><p>模块加载时会自动判断：</p>
+<pre><code>import { foo } from &apos;my_module&apos;;
+import { bar } from &apos;my_module&apos;;
+
+// 等同于
+import { foo, bar } from &apos;my_module&apos;;
+</code></pre></li>
+<li><p>模块的整体加载</p>
+<pre><code>import * as circle from &apos;./circle&apos;;
+console.log(&apos;圆面积：&apos; + circle.area(4));
+console.log(&apos;圆周长：&apos; + circle.circumference(14));
+</code></pre></li>
+</ol>
+<pre><code>// 下面两行都是不允许的！！！！，因为是静态执行，所以不允许运行时改变
+circle.foo = &apos;hello&apos;;
+circle.area = function () {};
+</code></pre><h3 id="export-default"><a href="#export-default" class="headerlink" title="export default"></a>export default</h3><p>该命令可以为模块指定默认输出：</p>
+<pre><code>// export-default.js
+export default function () {
+  console.log(&apos;foo&apos;);
+}
+</code></pre><p>其他模块加载该模块时，import命令可以为该匿名函数指定任意名字。</p>
+<pre><code>// import-default.js
+import customName from &apos;./export-default&apos;; //需要注意的是，这时import命令后面，不使用大括号。!!!!!!
+customName(); // &apos;foo&apos;
+</code></pre><p>一个模块只能有一个默认输出，因此export default命令只能使用一次。所以，import命令后面才不用加大括号，因为只可能唯一对应export default命令。  </p>
+<p>export default命令的本质是将后面的值，赋给default变量，所以可以直接将一个值写在export default之后：</p>
+<pre><code>// 正确
+export var a = 1;
+
+// 正确
+var a = 1;
+export default a;
+
+// 正确
+export default 42;
+
+// 错误
+export default var a = 1;
+
+
+// 报错
+export 42;
+</code></pre><p>也可以在一条import语句中，同时输入默认方法和其他接口：</p>
+<pre><code>import _, { each, forEach } from &apos;lodash&apos;;
+</code></pre><h3 id="export-与-import-的复合写法"><a href="#export-与-import-的复合写法" class="headerlink" title="export 与 import 的复合写法"></a>export 与 import 的复合写法</h3><p>如果在一个模块之中，先输入后输出同一个模块，import语句可以与export语句写在一起。</p>
+<pre><code>export { foo, bar } from &apos;my_module&apos;;
+
+// 可以简单理解为
+import { foo, bar } from &apos;my_module&apos;;
+export { foo, bar };
+</code></pre><p>写成一行以后，foo和bar实际上并没有被导入当前模块，只是相当于对外转发了这两个接口，导致<strong>当前模块不能直接使用foo和bar</strong>。  </p>
+<p>模块的接口改名和整体输出，也可以采用这种写法:</p>
+<pre><code>// 接口改名
+export { foo as myFoo } from &apos;my_module&apos;;
+
+// 整体输出
+export * from &apos;my_module&apos;;
+</code></pre><p>默认接口、具名接口改为默认接口、默认接口改名为具名接口的写法如下：</p>
+<pre><code>//默认接口
+export { default } from &apos;foo&apos;;
+
+//具名接口改默认
+export { es6 as default } from &apos;./someModule&apos;;
+
+// 等同于
+import { es6 } from &apos;./someModule&apos;;
+export default es6;
+
+//默认接口改为具名接口
+export { default as es6 } from &apos;./someModule&apos;;
+</code></pre><h3 id="模块的继承"><a href="#模块的继承" class="headerlink" title="模块的继承"></a>模块的继承</h3><p>模块之间也可以继承。<br>假设有一个circleplus模块，继承了circle模块:</p>
+<pre><code>// circleplus.js
+
+export * from &apos;circle&apos;;
+export var e = 2.71828182846;
+export default function(x) {
+  return Math.exp(x);
+}
+</code></pre><p>上面代码中的<code>export *</code>，表示再输出circle模块的所有属性和方法。注意，<code>export *</code>命令会忽略circle模块的default方法。然后，上面代码又输出了自定义的e变量和默认方法。</p>
+<h3 id="跨模块常量"><a href="#跨模块常量" class="headerlink" title="跨模块常量"></a>跨模块常量</h3><p>如果一个值要被多个模块共享，可以采用下面的写法：</p>
+<pre><code>// constants/db.js
+export const db = {
+  url: &apos;http://my.couchdbserver.local:5984&apos;,
+  admin_username: &apos;admin&apos;,
+  admin_password: &apos;admin password&apos;
+};
+
+// constants/user.js
+export const users = [&apos;root&apos;, &apos;admin&apos;, &apos;staff&apos;, &apos;ceo&apos;, &apos;chief&apos;, &apos;moderator&apos;];
+</code></pre><p>将这些文件输出的常量，合并在index.js里面:</p>
+<pre><code>// constants/index.js
+export {db} from &apos;./db&apos;;
+export {users} from &apos;./users&apos;;
+</code></pre><p>最后使用的使用直接加载index.js就可以了：</p>
+<pre><code>// script.js
+import {db, users} from &apos;./constants/index&apos;;
+</code></pre><h3 id="import"><a href="#import" class="headerlink" title="import()"></a>import()</h3><p>因为import和export命令只能在模块的顶层，不能在代码块之中。所以，如果ES6要取代Node的require方法（require是运行时加载模块），是无法实现的：</p>
+<pre><code>const path = &apos;./&apos; + fileName;
+const myModual = require(path);
+</code></pre><p>因此，有一个提案，建议引入<code>import()</code>函数，完成动态加载：</p>
+<pre><code>//import()返回一个 Promise 对象：
+
+const main = document.querySelector(&apos;main&apos;);
+
+import(`./section-modules/${someVariable}.js`)
+  .then(module =&gt; {
+    module.loadPageInto(main);
+  })
+  .catch(err =&gt; {
+    main.textContent = err.message;
+  });
+</code></pre><h2 id="第四章-Module-的加载实现"><a href="#第四章-Module-的加载实现" class="headerlink" title="第四章 Module 的加载实现"></a>第四章 Module 的加载实现</h2><p>浏览器是同步加载 JavaScript 脚本，即渲染引擎遇到<code>&lt;script&gt;</code>标签就会停下来，等到执行完脚本，再继续向下渲染。如果是外部脚本，还必须加入脚本下载的时间，所以会造成浏览器堵塞。所以浏览器很早就已经支持脚本的异步加载了：</p>
+<pre><code>&lt;script src=&quot;path/to/myModule.js&quot; defer&gt;&lt;/script&gt;
+&lt;script src=&quot;path/to/myModule.js&quot; async&gt;&lt;/script&gt;
+</code></pre><p>defer是“渲染完再执行”，async是“下载完就执行”。另外，如果有多个defer脚本，会按照它们在页面出现的顺序加载，而多个async脚本是不能保证加载顺序的。</p>
+<h3 id="加载规则"><a href="#加载规则" class="headerlink" title="加载规则"></a>加载规则</h3><p>浏览器加载 ES6 模块，也使用<code>&lt;script&gt;</code>标签，但是要加入type=”module”属性。  </p>
+<p>浏览器对于带有type=”module”的<code>&lt;script&gt;</code>，都是异步加载，不会造成堵塞浏览器，即等到整个页面渲染完，再执行模块脚本，等同于打开了<code>&lt;script&gt;</code>标签的defer属性。</p>
+<pre><code>&lt;script type=&quot;module&quot; src=&quot;./foo.js&quot;&gt;&lt;/script&gt;
+&lt;!--chrome下必须写相对引用地址，否则会有跨域提示警告，无法加载 --&gt;
+
+&lt;!-- 等同于 --&gt;
+&lt;script type=&quot;module&quot; src=&quot;./foo.js&quot; defer&gt;&lt;/script&gt;
+</code></pre><p><code>&lt;script&gt;</code>标签的async属性也可以打开，这时只要加载完成，渲染引擎就会中断渲染立即执行。执行完成后，再恢复渲染。</p>
+<pre><code>&lt;script type=&quot;module&quot; src=&quot;./foo.js&quot; async&gt;&lt;/script&gt;
+</code></pre><p>一旦使用了async属性，<code>&lt;script type=&quot;module&quot;&gt;</code>就不会按照在页面出现的顺序执行，而是只要该模块加载完成，就执行该模块。</p>
+<p>ES6 模块也允许内嵌在网页中，语法行为与加载外部脚本完全一致。</p>
+<pre><code>&lt;script type=&quot;module&quot;&gt;
+  import utils from &quot;./utils.js&quot;;
+
+  // other code
+&lt;/script&gt;
+</code></pre><p>此时需要几点：</p>
+<ol>
+<li>通过type=”module”加载的代码是在模块作用域之中运行，而不是在全局作用域运行。模块内部的顶层变量，外部不可见。</li>
+<li>模块之中，顶层的this关键字返回undefined，而不是指向window。</li>
+<li>模块脚本自动采用严格模式，不管有没有声明use strict。</li>
+<li>模块之中，可以使用import命令加载其他模块（.js后缀不可省略），也可以使用export命令输出对外接口。</li>
+</ol>
+<h3 id="与commonJS模块差异"><a href="#与commonJS模块差异" class="headerlink" title="与commonJS模块差异"></a>与commonJS模块差异</h3><p>它们有两个重大差异：</p>
+<ol>
+<li>CommonJS 模块输出的是一个值的拷贝，ES6 模块输出的是值的引用。</li>
+<li>CommonJS 模块是运行时加载，ES6 模块是编译时输出接口。</li>
+</ol>
+<p>首先解释第一个差异：有如下两个js文件</p>
+<pre><code>//lib.js
+var counter = 3;
+function incCounter() {
+  counter++;
+}
+module.exports = {
+  counter: counter,
+  incCounter: incCounter,
+};
+
+// main.js
+var mod = require(&apos;./lib&apos;);
+
+console.log(mod.counter);  // 3
+mod.incCounter();
+console.log(mod.counter); // 3
+</code></pre><p>我们通过node运行后得到结果：</p>
+<pre><code>$ node main.js
+3
+3
+</code></pre><p>这说明CommonJS 模块输出的是值的拷贝，也就是说，一旦输出一个值，模块内部的变化就影响不到这个值。mod.counter是一个原始类型的值，会被缓存。除非写成一个函数，才能得到内部变动后的值。</p>
+<pre><code>//lib.js
+//同上，省略
+module.exports = {
+  get counter() {
+    return counter
+  },
+  incCounter: incCounter,
+};
+</code></pre><p>我们再次通过node运行后得到结果：</p>
+<pre><code>$ node main.js
+3
+4
+</code></pre><p>而ES6 模块是动态引用，并且不会缓存值（通过chrome执行以下代码）</p>
+<pre><code>//lib.js
+let counter = 3;
+let incCounter=function() {
+  counter++;
+}
+export {counter,incCounter}
+
+//main.js
+import { counter, incCounter } from &apos;./lib.js&apos;;
+console.log(counter); // 3
+incCounter();
+console.log(counter); // 4
+</code></pre><p>第二个差异是因为 CommonJS 加载的是一个对象（即module.exports属性），该对象只有在脚本运行完才会生成。而 ES6 模块不是对象，它的对外接口只是一种静态定义，在代码静态解析阶段就会生成。</p>
+<h4 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h4><p>ES6 模块的运行机制与 CommonJS 不一样。JS 引擎对脚本静态分析的时候，遇到模块加载命令import，就会生成一个只读引用。等到脚本真正执行时，再根据这个只读引用，到被加载的那个模块里面去取值。换句话说，ES6 的import有点像 Unix 系统的“符号连接”，原始值变了，import加载的值也会跟着变。因此，ES6 模块是动态引用，并且不会缓存值，模块里面的变量绑定其所在的模块。</p>
+<h3 id="Node加载"><a href="#Node加载" class="headerlink" title="Node加载"></a>Node加载</h3><ol>
+<li>Node 要求 ES6 模块采用.mjs后缀文件名。</li>
+<li>require命令不能加载.mjs文件，会报错，只有import命令才可以加载.mjs文件。  </li>
+<li>如果模块名不含路径，那么import命令会去node_modules目录寻找这个模块</li>
+<li><p>Node 的import命令只支持加载本地模块（file:协议），不支持加载远程模块。</p>
+<pre><code>如果脚本文件省略了后缀名，比如import &apos;./foo&apos;，Node 会依次尝试四个后缀名：./foo.mjs、./foo.js、./foo.json、./foo.node。
+如果这些脚本文件都不存在，Node 就会去加载./foo/package.json的main字段指定的脚本。
+如果./foo/package.json不存在或者没有main字段，那么就会依次加载./foo/index.mjs、./foo/index.js、./foo/index.json、./foo/index.node。
+如果以上四个文件还是都不存在，就会抛出错误。
+</code></pre></li>
+</ol>
+<h3 id="内部变量"><a href="#内部变量" class="headerlink" title="内部变量"></a>内部变量</h3><p>为了实现ES6 模块的通用性（浏览器环境和服务器环境通用）。Node 规定 ES6 模块之中不能使用 CommonJS 模块的特有的一些内部变量：</p>
+<ol>
+<li>this关键字：ES6 模块之中，顶层的this指向undefined；而CommonJS 模块的顶层this指向当前模块</li>
+<li><p>以下顶层变量，在ES6的模块中也是不存在的</p>
+<p> arguments<br> require<br> module<br> exports<br> <strong>filename
+ </strong>dirname</p>
+<h3 id="ES6-模块-与-CommonJS-模块-互相加载"><a href="#ES6-模块-与-CommonJS-模块-互相加载" class="headerlink" title="ES6 模块 与 CommonJS 模块 互相加载"></a>ES6 模块 与 CommonJS 模块 互相加载</h3></li>
+<li><p>ES6 模块加载 CommonJS 模块</p>
+<pre><code>// a.js -- commonJS模块
+module.exports = {
+  foo: &apos;hello&apos;,
+  bar: &apos;world&apos;
+};
+
+// 等同于
+export default {
+  foo: &apos;hello&apos;,
+  bar: &apos;world&apos;
+};
+</code></pre><p>故：一共有三种写法，可以拿到 CommonJS 模块的module.exports</p>
+<pre><code>// 写法一
+import baz from &apos;./a&apos;;
+// baz = {foo: &apos;hello&apos;, bar: &apos;world&apos;};
+
+// 写法二
+import {default as baz} from &apos;./a&apos;;
+// baz = {foo: &apos;hello&apos;, bar: &apos;world&apos;};
+
+// 写法三
+import * as baz from &apos;./a&apos;;
+// baz = {
+//   get default() {return module.exports;},
+//   get foo() {return this.default.foo}.bind(baz),
+//   get bar() {return this.default.bar}.bind(baz)
+// }
+</code></pre></li>
+<li><p>CommonJS 模块加载 ES6 模块</p>
+<pre><code>// es.mjs
+let foo = { bar: &apos;my-default&apos; };
+export default foo;
+
+// cjs.js
+const es_namespace = await import(&apos;./es.mjs&apos;);
+console.log(es_namespace.default);
+</code></pre><p>不能使用require命令，而要使用import()函数。ES6 模块的所有输出接口，会成为输入对象的属性。</p>
+</li>
+</ol>
+<h3 id="循环加载的处理机制"><a href="#循环加载的处理机制" class="headerlink" title="循环加载的处理机制"></a>循环加载的处理机制</h3><p>所谓“循环加载”（circular dependency）指的是，a脚本的执行依赖b脚本，而b脚本的执行又依赖a脚本。</p>
+<ol>
+<li><p>commonJS处理机制：  </p>
+<pre><code>首页，执行a.js，遇到加载b.js的代码就去执行b.js。此时a.js就挂起在那里，处于等待状态。
+接着，执行b.js的过程中，遇到加载a.js的部分系统会去a.js模块对应对象的exports属性取值，可是因为a.js还没有执行完，从exports属性只能取回已经执行的部分，而不是最后的值。
+然后，b.js接着往下执行，等到全部执行完毕，再把执行权交还给a.js。
+最后，a.js接着往下执行，直到执行完毕。
+</code></pre></li>
+<li><p>ES6处理机制：</p>
+<pre><code>首先，执行a.mjs以后，引擎发现它加载了b.mjs，因此会优先执行b.mjs，然后再执行a.mjs。
+接着，执行b.mjs的时候，已知它从a.mjs输入了foo接口，这时不会去执行a.mjs，而是认为这个接口已经存在了，继续往下执行。
+然后到跟a.mjs相关逻辑时，才发现这个接口根本没定义，因此报错
+</code></pre></li>
+</ol>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ol>
+<li><a href="http://es6.ruanyifeng.com/" target="_blank" rel="noopener">阮一峰ES6入门</a></li>
+<li><a href="https://blog.csdn.net/u012443286/article/details/78823955" target="_blank" rel="noopener">一句话总结JS构造函数、原型和实例的关系</a></li>
+<li><a href="http://www.cnblogs.com/liyusmile/p/8820443.html" target="_blank" rel="noopener">构造函数，原型对象，实例对象三者之间的关系</a></li>
+<li><a href="http://es6.ruanyifeng.com/#docs/module-loader#%E5%BE%AA%E7%8E%AF%E5%8A%A0%E8%BD%BD" target="_blank" rel="noopener">循环加载</a></li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/javascript/" rel="tag"># javascript</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/ES6系列-4-Proxy与Reflect/" rel="next" title="ES6系列-4-Proxy与Reflect">
+                <i class="fa fa-chevron-left"></i> ES6系列-4-Proxy与Reflect
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/ES6系列-6-异步/" rel="prev" title="ES6系列-6-异步">
+                ES6系列-6-异步 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="WMH">
+            
+              <p class="site-author-name" itemprop="name">WMH</p>
+              <div class="site-description motion-element" itemprop="description">just code it</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">67</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wangminghuan" title="GitHub &rarr; https://github.com/wangminghuan" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:m.h.wang@foxmail.com" title="E-Mail &rarr; mailto:m.h.wang@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://weblog.mhwang.club" title="WebSite &rarr; https://weblog.mhwang.club" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>WebSite</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://weibo.com/u/1657970003?topnav=1&wvr=6&topsug=1&is_all=1" title="微博 &rarr; https://weibo.com/u/1657970003?topnav=1&wvr=6&topsug=1&is_all=1" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>微博</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一章-Class-（类）"><span class="nav-number">1.</span> <span class="nav-text">第一章  Class （类）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#概述"><span class="nav-number">1.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#constructor-方法"><span class="nav-number">1.2.</span> <span class="nav-text">constructor 方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类的实例"><span class="nav-number">1.3.</span> <span class="nav-text">类的实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#取值函数（getter）和存值函数（setter）"><span class="nav-number">1.4.</span> <span class="nav-text">取值函数（getter）和存值函数（setter）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#属性表达式"><span class="nav-number">1.5.</span> <span class="nav-text">属性表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Class-表达式"><span class="nav-number">1.6.</span> <span class="nav-text">Class 表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意点"><span class="nav-number">1.7.</span> <span class="nav-text">注意点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#静态方法"><span class="nav-number">1.8.</span> <span class="nav-text">静态方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例属性的新写法"><span class="nav-number">1.9.</span> <span class="nav-text">实例属性的新写法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#静态属性"><span class="nav-number">1.10.</span> <span class="nav-text">静态属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#私有方法和私有属性"><span class="nav-number">1.11.</span> <span class="nav-text">私有方法和私有属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#new-target-属性"><span class="nav-number">1.12.</span> <span class="nav-text">new.target 属性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二章-类的继承"><span class="nav-number">2.</span> <span class="nav-text">第二章 类的继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#extends"><span class="nav-number">2.1.</span> <span class="nav-text">extends</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Object-getPrototypeOf"><span class="nav-number">2.2.</span> <span class="nav-text">Object.getPrototypeOf()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#super-关键字"><span class="nav-number">2.3.</span> <span class="nav-text">super 关键字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原生构造函数的继承"><span class="nav-number">2.4.</span> <span class="nav-text">原生构造函数的继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#补充-实例-构造函数和原型链"><span class="nav-number">2.5.</span> <span class="nav-text">补充: 实例/构造函数和原型链</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第三章-Module-的语法"><span class="nav-number">3.</span> <span class="nav-text">第三章 Module 的语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#概述-1"><span class="nav-number">3.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#export-命令"><span class="nav-number">3.2.</span> <span class="nav-text">export 命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#import-命令"><span class="nav-number">3.3.</span> <span class="nav-text">import 命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#export-default"><span class="nav-number">3.4.</span> <span class="nav-text">export default</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#export-与-import-的复合写法"><span class="nav-number">3.5.</span> <span class="nav-text">export 与 import 的复合写法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模块的继承"><span class="nav-number">3.6.</span> <span class="nav-text">模块的继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#跨模块常量"><span class="nav-number">3.7.</span> <span class="nav-text">跨模块常量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#import"><span class="nav-number">3.8.</span> <span class="nav-text">import()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第四章-Module-的加载实现"><span class="nav-number">4.</span> <span class="nav-text">第四章 Module 的加载实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#加载规则"><span class="nav-number">4.1.</span> <span class="nav-text">加载规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#与commonJS模块差异"><span class="nav-number">4.2.</span> <span class="nav-text">与commonJS模块差异</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#总结："><span class="nav-number">4.2.1.</span> <span class="nav-text">总结：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Node加载"><span class="nav-number">4.3.</span> <span class="nav-text">Node加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内部变量"><span class="nav-number">4.4.</span> <span class="nav-text">内部变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ES6-模块-与-CommonJS-模块-互相加载"><span class="nav-number">4.5.</span> <span class="nav-text">ES6 模块 与 CommonJS 模块 互相加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#循环加载的处理机制"><span class="nav-number">4.6.</span> <span class="nav-text">循环加载的处理机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文章"><span class="nav-number">5.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMH</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.1</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.1"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.1"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
