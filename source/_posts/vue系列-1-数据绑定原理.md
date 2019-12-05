@@ -43,7 +43,128 @@ vue 的数据绑定内部是如何实现的，本文一探究竟。
 2. 脏值检查（angular.js）
 
 3. 数据劫持（vue.js）  
-   Object.defineProperty()来劫持各个属性的 setter，getter，在数据变动时发布消息给订阅者，触发相应的监听回调
+   Object.defineProperty()来劫持各个属性的 setter，getter，在数据变动时发布消息给订阅者，触发相应的监听回调（vue3.x 改为proxy实现）
+
+## defineProperty 与 proxy 实现数据劫持对比
+
+### defineProperty
+
+Vue2.x的数据劫持就是利用Object.defineProperty来实现的（vue中可以直接改变data，vue内部的watcher机制会监听到这些数据的变化从而刷新页面，而react则是手动驱使setState去改变内部的state，从而使得页面刷新）  
+
+下面我们简单模拟下数据劫持的过程：
+
+
+    function observe(obj) {
+        if (!obj || typeof obj !== "object") {
+          return;
+        }
+        Object.keys(obj).forEach(function (key) {
+          defineReactive(obj, key, obj[key])
+        })
+      }
+
+    function defineReactive(obj, key, value) {
+
+      observe(value); //监听属性内部对象的变化
+      Object.defineProperty(obj, key, {
+        enumerable: true,
+        configurable: false, //不能删除
+        get: function () {
+          return value
+        },
+        set: function (newVal) {
+          console.log("监听到属性" + key + "变化了", value + "-->" + newVal);
+          value = newVal
+        }
+      })
+    }
+    const obj = {
+      name: "jack",
+      age: "14",
+      desc: {
+        job: "coder",
+        worker: "bj"
+      }
+    }
+    observe(obj)
+
+我们接下来修改对象的属性
+
+    obj.name="mike"
+    //监听到属性name变化了 jack-->mike
+
+    obj.desc.job="teacher"
+    //监听到属性job变化了 coder-->teacher
+
+这样，便实现了数据的劫持。
+
+### Proxy 
+
+Vue3.0将放弃Object.defineProperty，改用性能更好的Proxy, 为什么说Proxy的性能比Object.defineProperty更好?原因有如下几点：
+
+- Object.defineProperty只能监听属性，而Proxy能监听整个对象，省去对非对象或数组类型的劫持，也能做到监听。
+- Object.defineProperty不能监测到数组变化
+
+下面我们用Proxy于Reflect再来简单模拟下数据劫持的过程：
+
+      class Observables{
+          constructor(target, handler = {
+              set(target, key, value, receiver){
+                console.log("监听到属性" + key + "变化了",  "-->" + value);
+                return Reflect.set(target, key, value, receiver);
+              }
+            }){
+            if( this.isObject(target) && this.isArray(target) ){
+              throw new TypeError('target 不是数组或对象')
+            }
+
+            this._target = JSON.parse( JSON.stringify(target) );  // 避免引用修改  数组不考虑
+            this._handler = handler;
+
+            return new Proxy(this._observables(this._target), this._handler);
+          }
+          isArray(o){
+            return Object.prototype.toString.call(o) === `[object Array]`
+          }
+          isObject(o){
+            return Object.prototype.toString.call(o) === `[object Object]`
+          }
+          // 为每一项为Array或者Object类型数据变为代理
+          _observables(target){
+              // 遍历对象中的每一项
+              for( const key in target ){
+                // 如果对象为Object或者Array
+                if( this.isObject(target[key]) || this.isArray(target[key]) ){
+                  // 递归遍历
+                  this._observables(target[key]);
+                  // 转为Proxy
+                  target[key] = new Proxy(target[key], this._handler);
+                }
+              }
+              // 将转换好的target返回出去
+              return target;
+          }
+        }
+        const obj = {
+            name: "jack",
+            age: "14",
+            desc: {
+              job: "coder",
+              worker: "bj"
+            },
+            arr:[1,2,4]
+      }
+      const ob = new Observables(obj);
+
+我们接下来修改对象的属性：
+
+      ob.name="Jam"
+      // 监听到属性name变化了 -->Jam
+      ob.name="Tom"
+      // 监听到属性name变化了 -->Tom
+      ob.arr.push(8)
+      //监听到属性3变化了 -->8
+      //监听到属性length变化了 -->4
 
 
 下面简单介绍下vue实现双向绑定的思路：（利用Object.defineProperty 方法和订阅发布模式）
