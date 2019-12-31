@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[浅谈WebAssembly]]></title>
+    <url>%2F%E6%B5%85%E8%B0%88WebAssembly%2F</url>
+    <content type="text"><![CDATA[概述WebAssembly（缩写为Wasm）是一种新的编码方式，编码标准。它并不是一门编程语言，而是一份字节码标准，需要用高级编程语言编译出字节码放到 WebAssembly 虚拟机中才能运行， 浏览器厂商需要做的就是根据 WebAssembly 规范实现虚拟机。wasm格式的文件，接近java的字节码，它是通过编译工具（如Emscripten）从高级语言（如C / C ++ / Rust）等编译而来，他可以同js文件一样运行在客户端与服务端。2019年12月5日，W3C WebAssembly 工作组发布 WebAssembly 正式推荐标准（W3C Recommendation）。 WebAssembly具有巨大的意义——它提供了一条途径，以使得以各种语言编写的代码都可以以接近原生的速度在Web中运行。 为什么需要WebAssembly javascript语言本身的缺陷，如，没有静态变量类型、语法太灵活导致开发大型 Web 项目困难。 解释性语言的执行效率相比底层语言要慢很多，性能问题无法突破。 WebAssembly 有什么优点 体积小：由于浏览器运行时只加载编译成的字节码，一样的逻辑比用字符串描述的 JS 文件体积要小很多； 加载快：由于文件体积小，再加上无需解释执行，WebAssembly 能更快的加载并实例化，减少运行前的等待时间； 兼容性问题少：WebAssembly 是非常底层的字节码规范，制订好后很少变动，就算以后发生变化,也只需在从高级语言编译成字节码过程中做兼容。可能出现兼容性问题的地方在于 JS 和 WebAssembly 桥接的 JS 接口。 WebAssembly 是如何工作的我们都知道，机器只能识别0与1，但是这些机器码对人来说是难以阅读与理解的，对于js开发人员来说，JS运行环境中都存在着JavaScript引擎，它的工作就是把你的人类语言转化成机器所理解的语言，而翻译的过程一般有两种模式： 使用解释器，翻译的过程基本上是一行一行及时生效的。 使用编译器，在执行前翻译。两种方式各有利弊，实际的浏览器厂商开始引入了编译器来解决解释器重复执行的问题，此处有兴趣的可以了解下浏览器的JIT模式 一般高级语言不会直接通过编译器直接将语言转化为机器语言（如，汇编），这样效率比较低，通常编译器将把高级语言翻译成一种更低级的语言，但比机器码的等级高。这就是中间代码（IR）： 编译器的“前端”将高级编程语言转换为IR。编译器的“后端”将 IR 转换成目标机器的汇编代码。而WebAssembly 字节码不能直接在任何一种 CPU 架构上运行，它是一种抹平了不同 CPU 架构的机器码，由于非常接近机器码，可以非常快的被翻译为对应架构的机器码（它比 JavaScript 代码更快更直接的转换成机器代码，但它们不直接和特定硬件的特定机器代码对应）： 浏览器加载wasm文件后，可以迅速将WebAssembly 字节码转化为机器码，因而执行效率非常高。 在浏览器使用WebAssembly对于JavaScript调用wasm（目前还不能像js文件那样直接引用，只能通过 JS 去加载和执行），一般采用如下步骤： 加载wasm的字节码。 将获取到字节码后转换成 ArrayBuffer，只有这种结构才能被正确编译。编译时会对上述ArrayBuffer进行验证。验证通过方可编译。编译后会通过Promise resolve一个 WebAssembly.Module。 在获取到 module 后需要通过 WebAssembly.Instance API 去同步的实例化 module。 上述第2、3步骤可以用instaniate 异步API等价代替。 之后就可以和像使用JavaScript模块一样调用了。 完整的步骤，也可以参见下面的流程图： 我们看一个实际的demo : 通过wasm实现的一种视频播放器 查看源码可以看到： 控制台里面有.wasm调用： 当然，在WebAssembly也可以调用js, 例如通过WebAssembly.instantiate方法等，此处不再详细介绍。 个人看法WebAssembly可以说是web领域的一种扩展，他与javascript是互补，它更多是用在需要大量计算的场景，如大型游戏等，并不是要取代(也无法取代)javascript。其学习成本还是比较高的，而且还有许多性能问题需要去解决，目前成熟的产品似乎只有Google Earth，Egret Engine等，现阶段了解即可，因为几乎没有什么应用场景。WebAssembly依旧任重而道远，且看web的翻天覆地变化吧~ 参考 WebAssembly 现状与实战 W3C-WebAssembly Web API MDN-使用WebAssembly JavaScript API 几张图看懂WebAssembly 20分钟上手WebAssembly]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>WebAssembly</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[详谈Object.defineProperty]]></title>
     <url>%2F%E8%AF%A6%E8%B0%88Object.defineProperty%2F</url>
     <content type="text"><![CDATA[概述Object.defineProperty()的作用就是直接在一个对象上定义一个新属性，或者修改一个已经存在的属性，并返回这个对象。 语法Object.defineProperty(obj,prop,descriptor) 参数 obj 需要定义属性的对象。 prop 需定义或修改的属性的名字。 descriptor 将被定义或修改的属性的描述符。 属性描述符 属性 默认值 说明 configurable false 描述属性是否可以被删除，默认为 false ; 具备 数据描述符 和 存取描述符 enumerable false 描述属性是否可以被for…in或Object.keys枚举，默认为 false ; 具备 数据描述符 和 存取描述符 writable false 描述属性是否可以修改，默认为 false ; 具备 数据描述符 value undefined 属性值，默认为undefined ; 具备 数据描述符 get undefined 当访问属性时触发该方法，默认为undefined ; 具备 存取描述符 set undefined 当属性被修改时触发该方法，默认为undefined; 具备 存取描述符 js对象中属性描述符号有两种形式： 数据描述符和存取描述符： 数据描述符拥有可写或不可写值的属性，可选键值如下： configurable enumerable writable value 举个例子： var a={}; Object.defineProperty(a, &quot;b&quot;, { configurable: false, // 不可删除 enumerable: false,// 不可通过for in 枚举 writable: false, // 不可通过等号赋值改写 value: 8 //属性值 }) console.log(a.b);//8 console.log(Object.keys(a));// [] a.b=1; //报错 Uncaught TypeError: Cannot assign to read only property &apos;b&apos; of object &apos;#&lt;Object&gt;&apos; delete a.b //报错 Uncaught TypeError: Cannot delete property &apos;b&apos; of #&lt;Object&gt; 存取描述符由一对getter-setter函数功能来描述的属性，可选键值如下： configurable enumerable get set 举个例子： var b={},val=&apos;7&apos;; Object.defineProperty(b, &quot;a&quot;, { configurable: false, // 不可删除 enumerable: false,// 不可通过for in 枚举 get: function () { return val }, set: function (newVal) { val = newVal } }) console.log(b.a);// 7 console.log(Object.keys(b));//[] b.a=1; console.log(b.a);// 1 delete b.a ;//报错 Uncaught TypeError: Cannot delete property &apos;a&apos; of #&lt;Object&gt; 因为JS的数据描述符和存取描述符只能选取一种规则，所以在 descriptor 中 如果设置了 set 或 get, 就不能设置 writable 和 value 中的任何一个，否则报如下错误： Uncaught TypeError: Invalid property descriptor. Cannot both specify accessors and a value or writable attribute, #&lt;Object&gt; at Function.defineProperty]]></content>
@@ -496,9 +507,53 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[重学前端13 - JavaScript部分-理解编译原理]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF13-JavaScript%E9%83%A8%E5%88%86-%E7%90%86%E8%A7%A3%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%2F</url>
+    <content type="text"><![CDATA[概述待补充~]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[重学前端12 - JavaScript部分-执行(二)]]></title>
     <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF12-JavaScript%E9%83%A8%E5%88%86-%E6%89%A7%E8%A1%8C(%E4%BA%8C)%2F</url>
     <content type="text"><![CDATA[闭包闭包其实只是一个绑定了执行环境的函数，闭包与普通函数的区别是，它携带了执行的环境，就像人在外星中需要自带吸氧的装备一样，这个函数也带有在程序中生存的环境。 执行上下文JavaScript 标准把一段代码（包括函数），执行所需的所有信息定义为：“执行上下文”。 执行上下文在 ES2018 中，包含以下部分： lexical environment：词法环境，当获取变量或者 this 值时使用。 variable environment：变量环境，当声明变量时使用 code evaluation state：用于恢复代码执行位置。 Function：执行的任务是函数时使用，表示正在被执行的函数。 ScriptOrModule：执行的任务是脚本或者模块时使用，表示正在被执行的代码。 Realm：使用的基础库和内置对象实例。 Generator：仅生成器上下文有这个属性，表示当前生成器。 在js中任何语句的执行都会依赖特定的上下文。一旦上下文被切换，整个语句的效果可能都会发生改变。在 JavaScript，切换上下文最主要的场景是函数调用。 函数 补充:仅普通函数和类能够跟 new 搭配使用 普通函数用 function 关键字定义的函数。 function foo(){ // code } 箭头函数用 =&gt; 运算符定义的函数。 const foo = () =&gt; { // code } 方法在 class 中定义的函数。 class C { foo(){ //code } } 生成器函数用 function * 定义的函数。 function* foo(){ // code } 类用 class 定义的类，实际上也是函数。 class Foo { constructor(){ //code } } 异步函数：普通函数、箭头函数和生成器函数加上 async 关键字。 async function foo(){ // code } const foo = async () =&gt; { // code } async function foo*(){{ // code } 对普通变量而言，这些函数并没有本质区别，它们的一个行为差异在于 this 关键字。 this 关键字this 是执行上下文中很重要的一个组成部分。同一个函数调用方式不同，得到的 this 值也不同。 调用函数时使用的引用，决定了函数执行时刻的 this 值。实际上从运行时的角度来看，this 跟面向对象毫无关联，它是与函数调用时使用的表达式相关。 语句分类 在 try 中有 return 语句，finally 中的内容还会执行吗？代码一： function foo(){ try{ return 0; } catch(err) { } finally { console.log(&quot;a&quot;) } } console.log(foo()); finally执行了，并且函数有返回值 代码二： function foo(){ try{ return 0; } catch(err) { } finally { return 1; } } console.log(foo()); 返回值为1，try的返回值被 finally 擦写了 这个怪异的表现行为是由于 Javascript 的Completion Record机制来实现的（Completion Record用于描述异常、跳出等语句执行过程） Completion Record 表示一个语句执行完之后的结果，它有三个字段： [[type]] 表示完成的类型，有 break continue return throw 和 normal 几种类型； [[value]] 表示语句的返回值，如果语句没有，则是 empty； [[target]] 表示语句的目标，通常是一个 JavaScript 标签。 普通语句执行后，会得到 [[type]] 为 normal 的 Completion Record，JavaScript 引擎遇到这样的 Completion Record，会继续执行下一条语句。 在一个语句块中，，如果每一个语句都是 normal 类型，那么它会顺次执行。但是假如我们在语句块中插入了一条 return 语句，产生了一个非 normal 记录，那么整个语句块会成为非 normal。这个结构就保证了非 normal 的完成类型可以穿透复杂的语句嵌套结构，产生控制效果。 那么对于上述的例子：因为 finally 中的内容必须保证执行，所以 try/catch 执行完毕，即使得到的结果是非 normal 型的完成记录，也必须要执行 finally。而当 finally 执行也得到了非 normal 记录，则会使 finally 中的记录作为整个 try 结构的结果。 带标签的语句实际上，任何 JavaScript 语句是可以加标签的，在语句前加冒号即可： firstStatement: var i = 1; 一般情况下没什么用，break/continue 语句如果后跟了lable语句，就会跳到对应的label位置，一般用于多层嵌套循环的跳出 var num=0; outter: for(var i=0;i&lt;10;i++){ for(var j=0;j&lt;10;j++){ if(i==5&amp;&amp;j==5){ break outter; //退出内部循环，指向outter，即外循环，同时退出外循环 } num++; } } document.write(num); //55]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端24 - JavaScript部分-js语法四]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF24-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E5%9B%9B%2F</url>
+    <content type="text"><![CDATA[概述待补充~]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端20 - JavaScript部分-js词法]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF20-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%8D%E6%B3%95%2F</url>
+    <content type="text"><![CDATA[概述待补充~]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端23 - JavaScript部分-js语法三]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF23-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E4%B8%89%2F</url>
+    <content type="text"><![CDATA[概述待补充~]]></content>
       <categories>
         <category>重学前端</category>
       </categories>
@@ -520,50 +575,6 @@
   <entry>
     <title><![CDATA[重学前端22 - JavaScript部分-js语法二]]></title>
     <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF22-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E4%BA%8C%2F</url>
-    <content type="text"><![CDATA[概述待补充~]]></content>
-      <categories>
-        <category>重学前端</category>
-      </categories>
-      <tags>
-        <tag>js</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[重学前端23 - JavaScript部分-js语法三]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF23-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E4%B8%89%2F</url>
-    <content type="text"><![CDATA[概述待补充~]]></content>
-      <categories>
-        <category>重学前端</category>
-      </categories>
-      <tags>
-        <tag>js</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[重学前端13 - JavaScript部分-理解编译原理]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF13-JavaScript%E9%83%A8%E5%88%86-%E7%90%86%E8%A7%A3%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%2F</url>
-    <content type="text"><![CDATA[概述待补充~]]></content>
-      <categories>
-        <category>重学前端</category>
-      </categories>
-      <tags>
-        <tag>js</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[重学前端20 - JavaScript部分-js词法]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF20-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%8D%E6%B3%95%2F</url>
-    <content type="text"><![CDATA[概述待补充~]]></content>
-      <categories>
-        <category>重学前端</category>
-      </categories>
-      <tags>
-        <tag>js</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[重学前端24 - JavaScript部分-js语法四]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF24-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E5%9B%9B%2F</url>
     <content type="text"><![CDATA[概述待补充~]]></content>
       <categories>
         <category>重学前端</category>
