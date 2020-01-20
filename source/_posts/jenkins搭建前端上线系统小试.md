@@ -1,8 +1,8 @@
 ---
 title: jenkins搭建前端上线系统小试
 date: 2019-09-24 16:49:47
-tags: [前端工程化]
-categories: Nodejs
+tags: [jenkins]
+categories: 前端工程化
 ---
 
 ## 概述
