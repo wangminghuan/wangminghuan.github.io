@@ -51,7 +51,7 @@ categories: 前端工程化
 ![](1.png)
 
 
-ok, 安装完毕，我们开始配置
+ok, 安装完毕，我们开始配置（ps:如需常驻进程请用pm2 进行启动）
 
 ## verdaccio 配置
 
@@ -70,7 +70,8 @@ webUI部分,具体可参照[UI配置文档](https://verdaccio.org/docs/en/webui)
       # sort_packages: asc
       # logo: http://my/logopath/logo.png
       # scope: "@myscope"
-整个UI是基于react进行开发的，UI源码位于
+
+整个UI是基于react进行开发的，UI源码位于:`/usr/local/src/node/lib/node_modules/verdaccio/node_modules/@verdaccio/ui-theme/static`下。
 
 ### 权限部分
 
