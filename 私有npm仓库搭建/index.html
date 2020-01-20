@@ -105,7 +105,8 @@
 <meta property="og:description" content="概述2020年第一篇博客，我们来探索下私有npm仓库的搭建~ 在开发中经常会遇到一些公共的组件调用，将代码抽离成模块后，想通过npm进行管理，但很多时候这些代码是包含业务相关功能的，是不能对外发布的，这个时候就亟需搭建一个私有npm仓库来进行存放。 查阅资料可以发现，类似的开源库基本有以下两种： cnpm 和 sinopia(verdaccio)。本文选用的为verdaccio，它是sinopia">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://wangminghuan.github.io/私有npm仓库搭建/1.png">
-<meta property="og:updated_time" content="2020-01-20T06:47:04.005Z">
+<meta property="og:image" content="https://wangminghuan.github.io/私有npm仓库搭建/2.png">
+<meta property="og:updated_time" content="2020-01-20T06:55:52.439Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="私有npm仓库搭建">
 <meta name="twitter:description" content="概述2020年第一篇博客，我们来探索下私有npm仓库的搭建~ 在开发中经常会遇到一些公共的组件调用，将代码抽离成模块后，想通过npm进行管理，但很多时候这些代码是包含业务相关功能的，是不能对外发布的，这个时候就亟需搭建一个私有npm仓库来进行存放。 查阅资料可以发现，类似的开源库基本有以下两种： cnpm 和 sinopia(verdaccio)。本文选用的为verdaccio，它是sinopia">
@@ -398,7 +399,7 @@
                 
               
 
-              <time title="创建时间：2020-01-20 13:51:32 / 修改时间：14:47:04" itemprop="dateCreated datePublished" datetime="2020-01-20T13:51:32+08:00">2020-01-20</time>
+              <time title="创建时间：2020-01-20 13:51:32 / 修改时间：14:55:52" itemprop="dateCreated datePublished" datetime="2020-01-20T13:51:32+08:00">2020-01-20</time>
             
 
             
@@ -548,6 +549,7 @@ typeof define === &apos;function&apos; &amp;&amp; define.amd ? define(factory) :
 </code></pre><p>再运行指令：</p>
 <p>   npm publish </p>
 <p>这样便发布完成了</p>
+<p><img src="/私有npm仓库搭建/2.png" alt></p>
 <p>安装与使用跟正常模块无异：</p>
 <pre><code>npm install @myscope/utils
 </code></pre><p>或</p>
