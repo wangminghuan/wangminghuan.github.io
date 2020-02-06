@@ -18,9 +18,13 @@ categories: 数据库
 
 对于web服务来说：Linux+Apache+Mysql+PHP（LAMP）与Linux+Nginx+Mysql+PHP（LNMP）的组合方式对于企业来说更是首选，一来开源免费，二来非常成熟，相关技术人员也很好招聘。从这些可以看出，学习数据库，Mysql是一个绕不过去的点。
 
-<!-- more -->
-## MySql
 MySql在2010年被Oracle收购后，依旧是开源的，但是开源不代表是完全免费的，目前只有MySQL Community Server（社区版） 版本是免费的，也是我们通常使用的版本。
+
+<!-- more -->
+
+## MySql的安装与使用
+
+待后续完善补充~
 
 ## 参考
 - [mysql 官方文档](https://dev.mysql.com/doc/)
