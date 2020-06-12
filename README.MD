@@ -1,5 +1,5 @@
-欢迎访问我的博客：https://weblog.mhwang.club  
-备用站点：https://blog.mhwang.club 
+欢迎访问我的博客：https://weblog.wangminghuan.cn  
+备用站点：https://blog.wangminghuan.cn 
 
 
 source分支下为博客源码，master分支为打包后的博客。

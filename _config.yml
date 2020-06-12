@@ -81,7 +81,7 @@ deploy:
   type: git
   repo:   #这里的网址填你自己的
     gitHub: git@github.com:wangminghuan/wangminghuan.github.io.git
-    coding: git@git.dev.tencent.com:wangminghuan/blog.git
+    coding: git@e.coding.net:wangminghuan/blog.git
   branch: master 
 
 jsonContent:
