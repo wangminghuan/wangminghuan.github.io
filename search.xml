@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[是时候了解下APNG，WEBP了]]></title>
+    <url>%2F%E6%98%AF%E6%97%B6%E5%80%99%E4%BA%86%E8%A7%A3%E4%B8%8BAPNG%EF%BC%8CWEBP%E4%BA%86%2F</url>
+    <content type="text"><![CDATA[概述在日常开发中除了经常看到的png,jpg,bmp,gif外，还存在一些其他图片格式，因为没有正式纳入标准，所以兼容性存在一定问题，但随着web的日益壮大，越来越多的浏览器开始支持这些新的格式，本文我们介绍下APNG与WEBP APNGAPNG（Animated Portable Network Graphics）顾名思义是基于 PNG 格式扩展的一种动画格式，增加了对动画图像的支持，同时加入了 24 位图像和 8 位 Alpha 透明度的支持，这意味着动画将拥有更好的质量，其诞生的目的是为了替代老旧的 GIF 格式，但它目前并没有获得 PNG 组织官方的认可。 APNG 的出现就是为了替代 GIF，诞生于 1987 年的 GIF 为什么能存活 29 年之久？ 主要有四个原因： 几乎所有的主流浏览器都支持 GIF 早期选择不多，GIF 几乎是唯一选择（GIF - 1987、JPEG - 1992、PNG - 1996、APNG - 2004、WebP - 2010） 实现起来简单，制作的工具多 采用 LZW 数据压缩算法，使得 GIF 体积小，在早期慢速的互联网易于传播 为什么要取代gif 最多支持 8 位 256 色，色阶过渡糟糕，图片具有颗粒感 不支持 Alpha 透明通道，边缘有杂边 APNG的优点 支持 24 位真彩色图片 支持 8 位 Alpha 透明通道 向下兼容 PNG（不支持动画会展示第一帧静态png图片） 更小的体积：多数情况下比 GIF、WebP 以及有损的 WebP 的体积小 假设假设使用一个 4 帧图片合成 APNG，APNG 会通过算法计算帧之间的差异，只存储帧之前的差异，而不是存储全帧，这就是为什么APNG体积更小的原因。 img[title=gif],img[title=apng]{background-color:#000} gif图片： apng图片（如果展示为静态图说明不支持apng）： 可以看出来apng边缘没有杂边，质量要好很多。 如何制作APNG Software网站上有大量的制作工具，可根据需求选用。 兼容性 从上图可以看到apng的支持率已达到90%，基本可以放心使用。 WEBP目前网络中图片仍然是占用流量较大的一部分，对于移动端更是如此。JPEG、PNG、GIF等常用图片格式的优化已几乎达到极致，因此Google于2010年提出了一种新的图片压缩格式 — WebP，给图片的优化提供了新的可能。 又拍云有关于webp的详细介绍（从demo可以看出对比png，webp最多可压缩98%的大小）： 又拍云在线体验 动态WEBP没错，webp的“野心”只是替换静态图片，对于动图也做了支持。谷歌于2014年提出了动态WebP，拓展WebP使其支持动图能力。动态WebP相比GIF支持更丰富的色彩，并且也占用更小空间。 WebP的优势在于它具有更优的图像数据压缩算法，在拥有肉眼无法识别差异的图像质量前提下，带来更小的图片体积，同时具备了无损和有损的压缩模式、Alpha 透明以及动画的特性，在 JPEG 和 PNG 上的转化效果都非常优秀、稳定和统一。 兼容性 从上图可以看到webp的支持率大约为80%左右，还是存在一些兼容性问题的，对于桌面开发来说，无须关心兼容性，可以放心使用。 参考 APNG 那些事 WebP原理和Android支持现状介绍-知乎专栏]]></content>
+      <categories>
+        <category>web</category>
+      </categories>
+      <tags>
+        <tag>APNG</tag>
+        <tag>WEBP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[react系列-1-hooks]]></title>
     <url>%2Freact%E7%B3%BB%E5%88%97-1-hooks%2F</url>
     <content type="text"><![CDATA[前言 React 16.8 新增了hooks特性，这是一项激动人心的功能，可以让你在不编写 class 的情况下使用 state 以及其他的 React 特性。 什么是hooksHooks 是 React 16.8 新增的特性，它可以让你在不编写 class 的情况下使用 state 以及其他的 React 特性。 hooks的使用]]></content>
@@ -566,6 +578,17 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[重学前端20 - JavaScript部分-js词法]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF20-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%8D%E6%B3%95%2F</url>
+    <content type="text"><![CDATA[概述待补充~]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[重学前端12 - JavaScript部分-执行(二)]]></title>
     <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF12-JavaScript%E9%83%A8%E5%88%86-%E6%89%A7%E8%A1%8C(%E4%BA%8C)%2F</url>
     <content type="text"><![CDATA[闭包闭包其实只是一个绑定了执行环境的函数，闭包与普通函数的区别是，它携带了执行的环境，就像人在外星中需要自带吸氧的装备一样，这个函数也带有在程序中生存的环境。 执行上下文JavaScript 标准把一段代码（包括函数），执行所需的所有信息定义为：“执行上下文”。 执行上下文在 ES2018 中，包含以下部分： lexical environment：词法环境，当获取变量或者 this 值时使用。 variable environment：变量环境，当声明变量时使用 code evaluation state：用于恢复代码执行位置。 Function：执行的任务是函数时使用，表示正在被执行的函数。 ScriptOrModule：执行的任务是脚本或者模块时使用，表示正在被执行的代码。 Realm：使用的基础库和内置对象实例。 Generator：仅生成器上下文有这个属性，表示当前生成器。 在js中任何语句的执行都会依赖特定的上下文。一旦上下文被切换，整个语句的效果可能都会发生改变。在 JavaScript，切换上下文最主要的场景是函数调用。 函数 补充:仅普通函数和类能够跟 new 搭配使用 普通函数用 function 关键字定义的函数。 function foo(){ // code } 箭头函数用 =&gt; 运算符定义的函数。 const foo = () =&gt; { // code } 方法在 class 中定义的函数。 class C { foo(){ //code } } 生成器函数用 function * 定义的函数。 function* foo(){ // code } 类用 class 定义的类，实际上也是函数。 class Foo { constructor(){ //code } } 异步函数：普通函数、箭头函数和生成器函数加上 async 关键字。 async function foo(){ // code } const foo = async () =&gt; { // code } async function foo*(){{ // code } 对普通变量而言，这些函数并没有本质区别，它们的一个行为差异在于 this 关键字。 this 关键字this 是执行上下文中很重要的一个组成部分。同一个函数调用方式不同，得到的 this 值也不同。 调用函数时使用的引用，决定了函数执行时刻的 this 值。实际上从运行时的角度来看，this 跟面向对象毫无关联，它是与函数调用时使用的表达式相关。 语句分类 在 try 中有 return 语句，finally 中的内容还会执行吗？代码一： function foo(){ try{ return 0; } catch(err) { } finally { console.log(&quot;a&quot;) } } console.log(foo()); finally执行了，并且函数有返回值 代码二： function foo(){ try{ return 0; } catch(err) { } finally { return 1; } } console.log(foo()); 返回值为1，try的返回值被 finally 擦写了 这个怪异的表现行为是由于 Javascript 的Completion Record机制来实现的（Completion Record用于描述异常、跳出等语句执行过程） Completion Record 表示一个语句执行完之后的结果，它有三个字段： [[type]] 表示完成的类型，有 break continue return throw 和 normal 几种类型； [[value]] 表示语句的返回值，如果语句没有，则是 empty； [[target]] 表示语句的目标，通常是一个 JavaScript 标签。 普通语句执行后，会得到 [[type]] 为 normal 的 Completion Record，JavaScript 引擎遇到这样的 Completion Record，会继续执行下一条语句。 在一个语句块中，，如果每一个语句都是 normal 类型，那么它会顺次执行。但是假如我们在语句块中插入了一条 return 语句，产生了一个非 normal 记录，那么整个语句块会成为非 normal。这个结构就保证了非 normal 的完成类型可以穿透复杂的语句嵌套结构，产生控制效果。 那么对于上述的例子：因为 finally 中的内容必须保证执行，所以 try/catch 执行完毕，即使得到的结果是非 normal 型的完成记录，也必须要执行 finally。而当 finally 执行也得到了非 normal 记录，则会使 finally 中的记录作为整个 try 结构的结果。 带标签的语句实际上，任何 JavaScript 语句是可以加标签的，在语句前加冒号即可： firstStatement: var i = 1; 一般情况下没什么用，break/continue 语句如果后跟了lable语句，就会跳到对应的label位置，一般用于多层嵌套循环的跳出 var num=0; outter: for(var i=0;i&lt;10;i++){ for(var j=0;j&lt;10;j++){ if(i==5&amp;&amp;j==5){ break outter; //退出内部循环，指向outter，即外循环，同时退出外循环 } num++; } } document.write(num); //55]]></content>
@@ -577,8 +600,8 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[重学前端23 - JavaScript部分-js语法三]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF23-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E4%B8%89%2F</url>
+    <title><![CDATA[重学前端21 - JavaScript部分-js语法一]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF21-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E4%B8%80%2F</url>
     <content type="text"><![CDATA[概述待补充~]]></content>
       <categories>
         <category>重学前端</category>
@@ -599,30 +622,8 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[重学前端20 - JavaScript部分-js词法]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF20-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%8D%E6%B3%95%2F</url>
-    <content type="text"><![CDATA[概述待补充~]]></content>
-      <categories>
-        <category>重学前端</category>
-      </categories>
-      <tags>
-        <tag>js</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[重学前端24 - JavaScript部分-js语法四]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF24-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E5%9B%9B%2F</url>
-    <content type="text"><![CDATA[概述待补充~]]></content>
-      <categories>
-        <category>重学前端</category>
-      </categories>
-      <tags>
-        <tag>js</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[重学前端21 - JavaScript部分-js语法一]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF21-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E4%B8%80%2F</url>
+    <title><![CDATA[重学前端23 - JavaScript部分-js语法三]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF23-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E4%B8%89%2F</url>
     <content type="text"><![CDATA[概述待补充~]]></content>
       <categories>
         <category>重学前端</category>
@@ -634,6 +635,17 @@
   <entry>
     <title><![CDATA[重学前端13 - JavaScript部分-理解编译原理]]></title>
     <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF13-JavaScript%E9%83%A8%E5%88%86-%E7%90%86%E8%A7%A3%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%2F</url>
+    <content type="text"><![CDATA[概述待补充~]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端24 - JavaScript部分-js语法四]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF24-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E5%9B%9B%2F</url>
     <content type="text"><![CDATA[概述待补充~]]></content>
       <categories>
         <category>重学前端</category>
