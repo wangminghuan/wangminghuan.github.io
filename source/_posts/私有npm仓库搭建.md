@@ -161,6 +161,23 @@ index.js内容如下：
 
     yarn add @myscope/utils
 
+## 新增权限用户
+如果需要新增用户，用户通过 npm addUser 指令添加注册用户后： 
+
+1. `/root/.config/verdaccio/htpasswd` 文件会出现注册用户名单；  
+
+2. 编辑 `/root/.config/verdaccio/config.yaml` 文件添加对应用户与对应权限
+
+3. 重启verdaccio服务（切记~）
+
+PS: 密码是通过htpasswd方式进行管理的，所以常规手段是无法重置与找回密码的，如果无法登录，只能重新添加一个用户了~
+
+## 关于 htpasswd
+
+htpasswd 是开源 http 服务器 apache httpd 的一个命令工具，用于生成 http 基本认证的密码文件,每行内容格式为“用户名:密码”，
+
+用于用户文件的基本身份认证。默认采用MD5加密方式.
+
 ## 参考
 
 - [verdaccio 官网](https://verdaccio.org/)
