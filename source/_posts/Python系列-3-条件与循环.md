@@ -1,8 +1,13 @@
 ---
 title: Python系列-3-条件与循环
 date: 2020-07-31 09:01:39
-tags:
+tags: [note]
+categories: Python
 ---
+## 概述
+判断与循环, 在各个语言中基本都有对应实现，也是开始编程最基础的语法，本文学习下pyhon中是如何玩转这些的。
+
+<!-- more -->
 
 ## 条件判断
 py中只有`if else` 判断，没有`switch case`，语法格式如下：
