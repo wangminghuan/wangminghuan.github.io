@@ -1,6 +1,6 @@
 ---
 title: Web Worker 与 Service Worker 以及CacheStorage使用指北
-date: 2020-09-24 13:47:08
+date: 2020-07-04 13:47:08
 tags: [Web Worker, Service Worker, CacheStorage]
 categories: JavaScript
 ---
@@ -43,26 +43,24 @@ JS是单线程的，并且与 GUI 渲染线程是互斥的([想了解更多请�
 
 html文件逻辑如下（省略部分公共部分）：
         
-        <button id="btns">点我获取woker执行结果</button>
-        <button id="close">点我关闭worker</button>
-
+        <input type="number" id="ipt">
+        <button id="btns">发送</button>
+        <button id="close">关闭worker</button>
+        <ul class="list">
+          <p>执行结果为：<b></b></p>
+        </ul>
         <script type="text/javascript">
-        function getRandomNum(min, max) {
-            return min + Math.round(Math.random()*(max-min));
-        }
-        const btns=document.querySelector("#btns")
         var worker= new Worker('ww.js')
         worker.onmessage= e=>{
+          $(".list b").text($("#ipt").val()+" x 100 = "+e.data)
           console.log("worker run result is "+e.data)
         }
-        // 点击按钮发送随机数
-        btns.addEventListener("click",()=>{
-          const num=getRandomNum(10000,100000);
-          console.log("send num is "+num)
-          worker.postMessage({nums:num})
+        $("#btns").click(()=>{
+          var num=$("#ipt").val();
+          console.log("send data is "+num)
+          worker.postMessage(num)
         })
-        // 关闭web wroker
-        close.addEventListener('click',()=>{
+        $("#close").click(()=>{
           console.log("---worker is close---")
           worker.terminate();
         })
@@ -72,27 +70,107 @@ html文件逻辑如下（省略部分公共部分）：
 
         this.onmessage=e=>{  //self和this都代表线程本身，也可省略不写
           const message=e.data;
-          console.log("listen message is ",message)
-          const lens = message.nums;
-          let result=1;
-          for(let k=0;k<lens;k++){
-              result++;
-          } 
-          self.postMessage(result)
+          console.log("web worker get message")
+          self.postMessage(message*100)
         }
 
 得到执行结果为：
 
-![](./4.png)
+![](./4-1.png)
 
 - 主线程采用new命令，调用Worker()构造函数，新建一个 Worker 线程
 - worker线程与主线程之间通过postmessage与onmessage完成通信
 - 然woker线程也可以关闭自身：`self.close()`
 
+在控制台此处可以看到ww.js中的代码（Network中也可以看到ww.js的请求）
+
+![](./4-2.png)
+
+
 ## Shared Worker
 
 上面提到 Web Worker 无法共享的问题，Shared Worker可以说就是专门解决此问题而出现的。它可以创建一个执行指定 url 脚本的共享 web worker。不过这些页面必须是同源的（相同的协议、host 以及端口）
 
+依旧创建两个页面进行测试（share 与 share2，代码基本一致）：
+
+      <input type="text" id="ipt">
+        <button id="btns">发送消息</button>
+        <button id="close">关闭worker</button>
+        <ul class="list">
+          <p>对话消息列表1：</p>
+        </ul>
+        <script type="text/javascript">
+        var worker= new SharedWorker('swk.js',"share-worker-v1");
+        worker.port.start();
+        worker.port.onmessage= e=>{
+          console.log(e)
+          $(".list").append("<li style='color:red'>worker回："+e.data+"</li>")
+        }
+        $("#btns").click(()=>{
+          const val=$("#ipt").val()
+          $(".list").append("<li style='color:red'>share1问："+val+"</li>")
+          worker.port.postMessage(val)
+        })
+        $("#close").click(()=>{
+          console.log("---worker is close---")
+          worker.port.close()
+        })
+        </script>
+
+执行的 Share Worker文件swk.js，代码如下：
+
+      this.onconnect = function(e) {
+          var port = e.ports[0];
+          port.onmessage = function (e) {
+            console.log(e)
+            port.postMessage("Hi! "+e.data)
+        }
+      }
+
+执行结果：
+![](./1.gif)
+
+可以发现：
+- 通过构造函数`SharedWorker`来创建Share Worker。
+- 创建的 Share Worker 可以在多个页面运行，且互不干扰，各自监听各自的端口。
+- 关闭当前页面的 share worker 并不会影响其他页面worker正常运行。
+- 只有运行Share Worker的所有页面关闭，Share Worker也会自动关闭。
+- share worker的执行可以通过`chrome://inspect/#workers`进行调试，当前页面无法调试（Network中不会出现swk.js文件）
+
+![](./9.png)
+
+我们将swk.js文件稍加改造，设置为广播模式，所有页面均可"共享"数据了
+
+      const clients=[]
+      this.onconnect = function(e) {
+          var port = e.ports[0];
+          clients.push(port)
+          port.onmessage = function (e) {
+            clients.map((item)=>{
+              item.postMessage(e.data)
+            })
+        }
+      }
+
+此时我们在share页面与share2页面分别根据消息类型做不同的判断，即可获取对方页面的数据，实现"共享"：
+
+    // share页面，share2页面与之类似
+    worker.port.onmessage= e=>{
+        if(e.data && e.data.type=='b'){
+          $(".list").append("<li style='color:red'>接受到share2消息："+e.data.msg+"</li>")
+        }
+      }
+      $("#btns").click(()=>{
+        const val=$("#ipt").val()
+        $(".list").append("<li style='color:red'>share1发送："+val+"</li>")
+        worker.port.postMessage({
+          type:"a",
+          msg:val
+        })
+      })
+运行结果：
+
+![](./2.gif)
 
 
 ## Service Worker
@@ -208,8 +286,9 @@ Service Worker 是 Web Worker 进一步发展的产物，从其起步至今也�
 
 
 ## 参考
-- [MDN-Service Worker API](https://developer.mozilla.org/zh-CN/docs/Web/API/Service_Worker_API)
 - [MDN-Web Worker API](https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Workers_API)
+- [MDN-Share Worker API](https://developer.mozilla.org/zh-CN/docs/Web/API/SharedWorker/SharedWorker)
+- [MDN-Service Worker API](https://developer.mozilla.org/zh-CN/docs/Web/API/Service_Worker_API)
 - [kailian blog - Service Worker是什么?](http://kailian.github.io/2017/03/01/service-worker)
 - [浏览器缓存、CacheStorage、Web Worker 与 Service Worker](https://github.com/youngwind/blog/issues/113)
 - [借助Service Worker和cacheStorage缓存及离线开发-张鑫旭](https://www.zhangxinxu.com/wordpress/2017/07/service-worker-cachestorage-offline-develop/)
