@@ -168,7 +168,6 @@ lambda 函数的语法只包含一个语句，如下：
 | bool(int) |  转换为布尔类型| `str(0) >>> False str(None) >>> False`| 
 | bytes(str,code) |  接收一个字符串，与所要编码的格式，返回一个字节流类型| `bytes('abc', 'utf-8') >>> b'abc' bytes(u'爬虫', 'utf-8') >>> b'\xe7\x88\xac\xe8\x99\xab'`| 
 | list(iterable) | 转换为list| `list((1,2,3)) >>> [1,2,3]`| 
-| iter(iterable)|  返回一个可迭代的对象|  `iter([1,2,3]) >>> <list_iterator object at 0x0000000003813B00>`| 
 | dict(iterable) | 转换为dict| `dict([('a', 1), ('b', 2), ('c', 3)]) >>> {'a':1, 'b':2, 'c':3}`| 
 | enumerate(iterable)|  返回一个枚举对象。| 略 |
 | tuple(iterable) |  转换为tuple|  `tuple([1,2,3]) >>>(1,2,3)`| 
@@ -195,10 +194,98 @@ lambda 函数的语法只包含一个语句，如下：
 | isinstance()| 判断一个对象是否为该类的一个实例。| 略|
 | issubclass()| 判断一个类是否为另一个类的子类。| 略|
 | globals() | 返回当前全局变量的字典。| 略|
-| next(iterator[, default]) |  接收一个迭代器，返回迭代器中的数值，如果设置了default，则当迭代器中的元素遍历后，输出default内容。|略|
 | reversed(sequence) | 生成一个反转序列的迭代器|  `reversed('abc') >>> ['c','b','a']`| 
 
+### 迭代器/生成器函数
+
+迭代是Python最强大的功能之一，是访问集合元素的一种方式。字符串，列表，元组，集合，字典对象都可用于创建迭代器:
+
+
+    str="0987"
+    list =  [1,2,'3'] 
+    tup = (10, 20, '30')
+    sites = {'b', 'a', 'b', 'a', 'y'}
+    dict = {'name':'jack','age':12}
+
+    it0 = iter(str)
+    it1 = iter(list)
+    it2 = iter(tup)
+    it3 = iter(sites)
+    it4 = iter(dict)
+
+    print(it0)
+    print(it1)
+    print(it2)
+    print(it3)
+    print(it4)
+
+执行结果：
+
+    <str_iterator object at 0x000001C8430F7DC8>
+    <list_iterator object at 0x000001C8430F7E08>
+    <tuple_iterator object at 0x000001C8430F7E48>
+    <set_iterator object at 0x000001C8430D1A98>
+    <dict_keyiterator object at 0x000001C8430D1B88>
+
+迭代就是从迭代器中取元素的过程。比如我们用for循环从列表[1,2,3]中取元素，这种遍历过程就被称作迭代。上述数据类型通过iter函数转成迭代对象（ps:字符串，列表，元组，集合，字典本身都是支持for循环的，因为这些数据结构已经内置了iter函数），此时我们除了for循环外，还可以使用next函数进行迭代：
+
+    import sys         # 引入 sys 模块
+    
+    list=[1,2,3,4]
+    it = iter(list)    # 创建迭代器对象
+    
+    while True:
+        try:
+            print (next(it))
+        except StopIteration:
+            sys.exit()
+运行结果：
+
+      1
+      2
+      3
+      4
+
+
+在 Python 中，使用了 yield 的函数被称为生成器（generator）。跟普通函数不同的是，生成器是一个返回迭代器的函数，只能用于迭代操作，更简单点理解生成器就是一个迭代器:
+
+      def generate():
+          yield 1
+          yield [1,2,3]
+          yield 'over'
+
+      p = generate()
+      print(p)
+
+执行结果：
+
+    <generator object generate at 0x0000013C5A583648>
+
+**它支持for循环**
+
+    for x in p:
+      print(x, end=' ')
+
+运行结果：
+
+    1 [1, 2, 3] over
+
+**也支持next方法**
+
+    while True:
+        try:
+            print (next(p))
+        except StopIteration:
+            sys.exit()
+
+运行结果：
+
+      1
+      [1, 2, 3]
+      over
+
 ### I/O操作
+
 待补充~
 
 ## 参考

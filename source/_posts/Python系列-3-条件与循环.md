@@ -80,7 +80,7 @@ Python 中的循环语句有 for 和 while。
     maps=[1,3,4,7]
     for item in maps:
       if(item>3):
-        print(item
+        print(item)
         break
     print('循环结束')
 
@@ -102,6 +102,32 @@ Python 中的循环语句有 for 和 while。
     # 指定步长输出：2,5
     for i in range(2,8,3):
       print(i)
+      
 ## pass 语句
 
 Python pass是空语句，是为了保持程序结构的完整性。pass 不做任何事情，一般用做占位语句，如下实例
+
+      for l in 'Runoob': 
+        if l == 'o':
+            pass
+            print ('执行 pass 块')
+        print ('当前字母 :', l)
+      
+      print ("Run over!")
+
+执行结果：
+
+      当前字母 : R
+      当前字母 : u
+      当前字母 : n
+      执行 pass 块
+      当前字母 : o
+      执行 pass 块
+      当前字母 : o
+      当前字母 : b
+      Run over!
+
+## 参考
+
+- [Python3 条件控制](https://www.runoob.com/python3/python3-conditional-statements.html)
+- [Python3 循环语句](https://www.runoob.com/python3/python3-loop.html)
