@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="WMH&#39;s Blog">
 <meta property="og:description" content="概述函数能提高应用的模块性，和代码的重复利用率。Python提供了许多内建函数，比如print()。但我们也可以自己创建函数:  def 关键字来开头 括号中间为函数参数 函数第一行可以选择性的使用字符串作为函数说明 函数内容以冒号（:）开始 return 表示函数结束，无返回内容默认返回None">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-08-04T09:40:02.257Z">
+<meta property="og:updated_time" content="2020-10-12T10:02:53.172Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python系列-4-函数">
 <meta name="twitter:description" content="概述函数能提高应用的模块性，和代码的重复利用率。Python提供了许多内建函数，比如print()。但我们也可以自己创建函数:  def 关键字来开头 括号中间为函数参数 函数第一行可以选择性的使用字符串作为函数说明 函数内容以冒号（:）开始 return 表示函数结束，无返回内容默认返回None">
@@ -413,7 +413,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-08-04 17:40:02" itemprop="dateModified" datetime="2020-08-04T17:40:02+08:00">2020-08-04</time>
+                <time title="修改时间：2020-10-12 18:02:53" itemprop="dateModified" datetime="2020-10-12T18:02:53+08:00">2020-10-12</time>
               
             
           </span>
@@ -657,11 +657,6 @@ print(sum(1,10))
 <td><code>list((1,2,3)) &gt;&gt;&gt; [1,2,3]</code></td>
 </tr>
 <tr>
-<td>iter(iterable)</td>
-<td>返回一个可迭代的对象</td>
-<td><code>iter([1,2,3]) &gt;&gt;&gt; &lt;list_iterator object at 0x0000000003813B00&gt;</code></td>
-</tr>
-<tr>
 <td>dict(iterable)</td>
 <td>转换为dict</td>
 <td><code>dict([(&#39;a&#39;, 1), (&#39;b&#39;, 2), (&#39;c&#39;, 3)]) &gt;&gt;&gt; {&#39;a&#39;:1, &#39;b&#39;:2, &#39;c&#39;:3}</code></td>
@@ -778,20 +773,80 @@ print(sum(1,10))
 <td>略</td>
 </tr>
 <tr>
-<td>next(iterator[, default])</td>
-<td>接收一个迭代器，返回迭代器中的数值，如果设置了default，则当迭代器中的元素遍历后，输出default内容。</td>
-<td>略</td>
-</tr>
-<tr>
 <td>reversed(sequence)</td>
 <td>生成一个反转序列的迭代器</td>
 <td><code>reversed(&#39;abc&#39;) &gt;&gt;&gt; [&#39;c&#39;,&#39;b&#39;,&#39;a&#39;]</code></td>
 </tr>
 </tbody>
 </table>
-<h3 id="I-O操作"><a href="#I-O操作" class="headerlink" title="I/O操作"></a>I/O操作</h3><p>待补充~</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<h3 id="迭代器-生成器函数"><a href="#迭代器-生成器函数" class="headerlink" title="迭代器/生成器函数"></a>迭代器/生成器函数</h3><p>迭代是Python最强大的功能之一，是访问集合元素的一种方式。字符串，列表，元组，集合，字典对象都可用于创建迭代器:</p>
+<pre><code>str=&quot;0987&quot;
+list =  [1,2,&apos;3&apos;] 
+tup = (10, 20, &apos;30&apos;)
+sites = {&apos;b&apos;, &apos;a&apos;, &apos;b&apos;, &apos;a&apos;, &apos;y&apos;}
+dict = {&apos;name&apos;:&apos;jack&apos;,&apos;age&apos;:12}
+
+it0 = iter(str)
+it1 = iter(list)
+it2 = iter(tup)
+it3 = iter(sites)
+it4 = iter(dict)
+
+print(it0)
+print(it1)
+print(it2)
+print(it3)
+print(it4)
+</code></pre><p>执行结果：</p>
+<pre><code>&lt;str_iterator object at 0x000001C8430F7DC8&gt;
+&lt;list_iterator object at 0x000001C8430F7E08&gt;
+&lt;tuple_iterator object at 0x000001C8430F7E48&gt;
+&lt;set_iterator object at 0x000001C8430D1A98&gt;
+&lt;dict_keyiterator object at 0x000001C8430D1B88&gt;
+</code></pre><p>迭代就是从迭代器中取元素的过程。比如我们用for循环从列表[1,2,3]中取元素，这种遍历过程就被称作迭代。上述数据类型通过iter函数转成迭代对象（ps:字符串，列表，元组，集合，字典本身都是支持for循环的，因为这些数据结构已经内置了iter函数），此时我们除了for循环外，还可以使用next函数进行迭代：</p>
+<pre><code>import sys         # 引入 sys 模块
+
+list=[1,2,3,4]
+it = iter(list)    # 创建迭代器对象
+
+while True:
+    try:
+        print (next(it))
+    except StopIteration:
+        sys.exit()
+</code></pre><p>运行结果：</p>
+<pre><code>1
+2
+3
+4
+</code></pre><p>在 Python 中，使用了 yield 的函数被称为生成器（generator）。跟普通函数不同的是，生成器是一个返回迭代器的函数，只能用于迭代操作，更简单点理解生成器就是一个迭代器:</p>
+<pre><code>def generate():
+    yield 1
+    yield [1,2,3]
+    yield &apos;over&apos;
+
+p = generate()
+print(p)
+</code></pre><p>执行结果：</p>
+<pre><code>&lt;generator object generate at 0x0000013C5A583648&gt;
+</code></pre><p><strong>它支持for循环</strong></p>
+<pre><code>for x in p:
+  print(x, end=&apos; &apos;)
+</code></pre><p>运行结果：</p>
+<pre><code>1 [1, 2, 3] over
+</code></pre><p><strong>也支持next方法</strong></p>
+<pre><code>while True:
+    try:
+        print (next(p))
+    except StopIteration:
+        sys.exit()
+</code></pre><p>运行结果：</p>
+<pre><code>1
+[1, 2, 3]
+over
+</code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li><a href="https://blog.csdn.net/yangxiaoyan12/article/details/87566833" target="_blank" rel="noopener">python 常见的内置函数</a></li>
+<li><a href="https://www.runoob.com/python3/python3-function.html" target="_blank" rel="noopener">Python3 函数</a></li>
 </ul>
 
       
@@ -838,6 +893,10 @@ print(sum(1,10))
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Python系列-5-模块/" rel="prev" title="Python系列-5-模块">
+                Python系列-5-模块 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -908,7 +967,7 @@ print(sum(1,10))
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">81</span>
+                    <span class="site-state-item-count">82</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1120,7 +1179,7 @@ print(sum(1,10))
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数定义"><span class="nav-number">2.</span> <span class="nav-text">函数定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参数"><span class="nav-number">3.</span> <span class="nav-text">参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#可更改-mutable-与不可更改-immutable-对象"><span class="nav-number">3.1.</span> <span class="nav-text">可更改(mutable)与不可更改(immutable)对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#必需参数"><span class="nav-number">3.2.</span> <span class="nav-text">必需参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关键字参数"><span class="nav-number">3.3.</span> <span class="nav-text">关键字参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#默认参数"><span class="nav-number">3.4.</span> <span class="nav-text">默认参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不定长参数"><span class="nav-number">3.5.</span> <span class="nav-text">不定长参数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#匿名函数"><span class="nav-number">4.</span> <span class="nav-text">匿名函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python内置函数"><span class="nav-number">5.</span> <span class="nav-text">Python内置函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数学运算类"><span class="nav-number">5.1.</span> <span class="nav-text">数学运算类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类型转换"><span class="nav-number">5.2.</span> <span class="nav-text">类型转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#功能相关"><span class="nav-number">5.3.</span> <span class="nav-text">功能相关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#I-O操作"><span class="nav-number">5.4.</span> <span class="nav-text">I/O操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数定义"><span class="nav-number">2.</span> <span class="nav-text">函数定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参数"><span class="nav-number">3.</span> <span class="nav-text">参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#可更改-mutable-与不可更改-immutable-对象"><span class="nav-number">3.1.</span> <span class="nav-text">可更改(mutable)与不可更改(immutable)对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#必需参数"><span class="nav-number">3.2.</span> <span class="nav-text">必需参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关键字参数"><span class="nav-number">3.3.</span> <span class="nav-text">关键字参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#默认参数"><span class="nav-number">3.4.</span> <span class="nav-text">默认参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不定长参数"><span class="nav-number">3.5.</span> <span class="nav-text">不定长参数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#匿名函数"><span class="nav-number">4.</span> <span class="nav-text">匿名函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python内置函数"><span class="nav-number">5.</span> <span class="nav-text">Python内置函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数学运算类"><span class="nav-number">5.1.</span> <span class="nav-text">数学运算类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类型转换"><span class="nav-number">5.2.</span> <span class="nav-text">类型转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#功能相关"><span class="nav-number">5.3.</span> <span class="nav-text">功能相关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#迭代器-生成器函数"><span class="nav-number">5.4.</span> <span class="nav-text">迭代器/生成器函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>

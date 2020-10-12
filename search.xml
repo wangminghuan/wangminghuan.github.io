@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Python系列-5-模块]]></title>
+    <url>%2FPython%E7%B3%BB%E5%88%97-5-%E6%A8%A1%E5%9D%97%2F</url>
+    <content type="text"><![CDATA[概述关于模块的概念，都已有了概念，本章我们学习下python的模块, 看看它的模块化怎么玩儿。 python中的模块在Python中模块分为以下几种： 系统内置模块，例如：sys、time、json模块等等； 自定义模块，自定义模块是自己写的模块，对某段逻辑或某些函数进行封装后供其他函数调用。注意：自定义模块的命名一定不能和系统内置的模块重名了，否则将不能再导入系统的内置模块了。例如：自定义了一个sys.py模块后，再想使用系统的sys模块是不能使用的； 第三方的开源模块：这部分模块可以通过pip install进行安装，有开源的代码。pip 类似node中的npm。 pip 默认源为https://pypi.org，使用时可以设置国内镜像源 pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple进行加速。PS: python3 使用 pip3 定义模块我们先看下如何定义一个模块，不同于nodejs，py中不需要特定的语法。模块内部的作用域是在模块内，如果两个不同的模块如果需要共享变量，只需要通过引入对应变量即可。我们先定义一个模块hello.py: #!/usr/bin/env python3 # -*- coding=utf-8 -*- listdata=[1,2,3] def sayHi(name): print(&quot;Hello,&quot;+name) listdata.append(name) def foo(name): print(&quot;Hi! &quot;+ name + &quot;,I am foo&quot;) 这样，就定义好了一个模块，我们接下来看如何引用模块 引入模块Python中引入模块的方式有以下几种: import 语句import module1[, module2[,... moduleN] 对于hello.py模块： import hello hello.sayHi(&apos;main&apos;) print(hello.listdata) 我们可以通过模块名称访问模块内部所有的变量与函数。 from .. import 语句 from 语句让你从模块中导入一个指定的部分到当前命名空间中： from modname import name1[, name2[, ... nameN]] 对于hello.py模块： from hello import listdata, sayHi sayHi(&apos;main&apos;) print(listdata) 即可引入变量listdata 与 函数sayHi，可以直接调用，无须再加模块名称。 导入时也支持别名 from modname import name as otherName 对于hello.py模块： from hello import sayHi as sayHello, listdata as listArr sayHello(&apos;Tom&apos;) print(listArr) from .. import *如果需要将模块中所有内容全部导入到当前命名空间中，需要使用： from modname import * 对于hello.py模块： from hello import * sayHi(&apos;Tom&apos;) print(listdata) 但是尽量避免这种引用方式，这样会将引用模块中所有的变量及函数引入到当前模块内，极大概率的会污染当前命名空间。 import * 无法导入以下划线开头的变量名 如果定义了__all__, import * 只会导入all中指定的变量，无论是否以下划线开头 推荐直接使用 import， 语法简单且基本不会造成命名冲突 作用域上面提到模块内部的作用域是在模块内，如果模块之前共享数据的话只需要引入对应变量即可： import hello # 执行sayHi函数 hello.sayHi(&apos;Tom&apos;) # 修改listdata hello.listdata.append(&quot;main&quot;) print(hello.listdata) 运行结果： hello Tom [1, 2, 3, &apos;Tom&apos;, &apos;main&apos;] 可以看到 listdata 数据在hello.py模块中增加一条数据Tom,在当前模块内又被追加上数据main，相当于两个模块“共享”了这个数据。当然这种方式在nodejs中与ES6中都是通用的。 在python中没有类似public,private等关键词来修饰成员函数和成员变量,那怎么才能将函数或变量作为作为非公开的（private）？ 非类定义很多博客跟文档反复提到’_’开头的命名，但对于非类成员的定义，下划线开头的命名方式只对于import * 有效（上面有提到），其他引入方式仍是可以正常访问的，这个只能作为规范，只是“不建议”直接引用，而不是“不能”直接引用。 类定义对于类成员的定义 我们定义一个类，放在hi.py中 class Hi(object): def __init__(self): self.__list=[1,2,3] self.list=[-1,-2] def add(self,name): self.__list.append(name) self.list.append(name) print(&quot;Hello,&quot;+name) print(self.__list) 然后我们在main.py中执行 from hello import Hi p = Hi() p.add(&quot;Tom&quot;) print(p.list) 运行结果为： Hello,Tom [1, 2, 3, &apos;Tom&apos;] [-1, -2, &apos;Tom&apos;] 如果我们再打印下内部__list属性： print(p.__list) 此时就会报错： Traceback (most recent call last): File &quot;main.py&quot;, line 19, in &lt;module&gt; print(p.__list) AttributeError: &apos;Hi&apos; object has no attribute &apos;__list&apos; 导入模块的搜索路径用import hello时，python会搜寻hello.py文件，搜索顺序如下: 首先搜寻内置模块是否有hello（所以我们定义的模块名不要和内置模块相同） 如果内置模块没有，则看下面这些目录里有没有(以下结果通过内置sys模块的sys.path属性获取): [&apos;F:\\python-demo&apos;, &apos;C:\\Users\\wmh\\AppData\\Local\\Programs\\Python\\Python37\\python37.zip&apos;, &apos;C:\\Users\\wmh\\AppData\\Local\\Programs\\Python\\Python37\\DLLs&apos;, &apos;C:\\Users\\wmh\\AppData\\Local\\Programs\\Python\\Python37\\lib&apos;, &apos;C:\\Users\\wmh\\AppData\\Local\\Programs\\Python\\Python37&apos;, &apos;C:\\Users\\wmh\\AppData\\Roaming\\Python\\Python37\\site-packages&apos;, &apos;C:\\Users\\wmh\\AppData\\Local\\Programs\\Python\\Python37\\lib\\site-packages&apos;] 相对引用与绝对引用python中的import分为绝对引用和相对引用两种。绝对引用就是上面我们采用的引用方式，对与相对引用，在nodejs中也经常遇到，不同的是：Python中只采用.来拼接 对于如下结构： home ├─── hello.py 我们可以这样引用 from home.hello import Hi .只能放在from后，不能放import后，更多用法请参考：python模块详解 if __name__ == &#39;__main__&#39;经常会在别人的代码中发现if __name__ == &#39;__main__&#39;, 我们接着上面的例子，执行如下代码： import hello print(__name__) print(hello.__name__) 运行结果： __main__ hello 其实，if __name__ == &#39;__main__&#39;的含义就是：该模块直接执行时运行的代码，如果被引用时则不执行；这算是一种约定俗成的写法。 参考 python中的模块详解 廖雪峰-Python教程 菜鸟教程-Python3 模块 python模块详解 NodeJs与python的使用对比]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>note</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Python系列-4-函数]]></title>
     <url>%2FPython%E7%B3%BB%E5%88%97-4-%E5%87%BD%E6%95%B0%2F</url>
-    <content type="text"><![CDATA[概述函数能提高应用的模块性，和代码的重复利用率。Python提供了许多内建函数，比如print()。但我们也可以自己创建函数: def 关键字来开头 括号中间为函数参数 函数第一行可以选择性的使用字符串作为函数说明 函数内容以冒号（:）开始 return 表示函数结束，无返回内容默认返回None 函数定义Python 定义函数使用 def 关键字，一般格式如下： def 函数名（参数列表）: 函数体 Python是一种对缩进非常敏感的语言，对代码格式要求非常严格的，这块在函数体中可以更直白的看出来，举个例子： def fn1(num): &quot;将传入的数字转为正整数，包含0&quot; if num&lt;0: return abs(num) return num print(fn1(10)) print(fn1(-10)) print(fn1(0)) 运行结果： 10 10 0 参数可更改(mutable)与不可更改(immutable)对象在 python 中，strings, tuples, 和 numbers 是不可更改的对象，而 list,dict 等则是可以修改的对象。所谓不可更改对象是指，变量只是一个对象的引用（指针），如： a = &quot;Hello&quot; a = [1,2,3] a的重新赋值，并不会修改之前引用对象的值，而是重新创建了一个对象，把a又指向了这个对象。 def change(a): a = 100 b=20 change(b) print(b) # b的值并没有被修改 但对于列表与字典，则会修改原始数据： def change(a): a.reverse() b=[1,2,3,4] change(b) print(b) # [4,3,2,1] 必需参数必须参数就是函数运行时必须的参数，否则会报错，如上change方法，如果直接运行就会报错。 关键字参数正常情况下，函数参数是按顺序解析的，但使用关键字参数允许函数调用时参数的顺序与声明时不一致： def printinfo( name, age ): print (&quot;名字: &quot;, name) print (&quot;年龄: &quot;, age) return printinfo(age=50,name=&apos;Tom&apos;) 运行结果： 名字: Tom 年龄: 50 默认参数这点与ES6语法类似，可以为函数指定默认参数 def printinfo( name, age=20 ): print (&quot;名字: &quot;, name) print (&quot;年龄: &quot;, age) return printinfo(&apos;Tom&apos;) 运行结果： 名字: Tom 年龄: 20 不定长参数某些情况下不确定函数的参数个数，这个时候就需要不定长参数出场了，加了星号 *的参数会以元组(tuple)的形式导入，存放所有未命名的变量参数: def printinfo( arg1, *vartuple ): 举个例子： def printinfo( arg1, *vartuple ): &quot;打印任何传入的参数&quot; print (&quot;输出: &quot;) print (arg1) print (vartuple) printinfo(1,2,3,4,5) 运行结果： 1 (2, 3, 4, 5) 匿名函数python 使用 lambda 来创建匿名函数。 lambda 函数的语法只包含一个语句，如下： lambda [arg1 [,arg2,.....argn]]:expression 举个例子： sum = lambda ag1, ag2 : ag1 + ag2 print(sum(1,10)) 运行结果为：11。可以看到lambda的主体是一个表达式，而不是一个代码块。仅仅能在lambda表达式中封装有限的逻辑进去。 Python内置函数数学运算类 函数名 描述 例子 abs(a) 求取绝对值 abs(-1) max(list) 求取list最大值 max([1,2,3]) min(list) 求取list最小值 min([1,2,3]) sum(list) 求取list元素的和 sum([1,2,3]) &gt;&gt;&gt; 6 sorted(list) 排序 返回排序后的list。 len(list) list长度 len([1,2,3]) divmod(a,b) 获取商和余数。 divmod(5,2) &gt;&gt;&gt; (2,1) pow(a,b) 获取乘方数。 pow(2,3) &gt;&gt;&gt; 8 round(a,b) 获取指定位数的小数。a代表浮点数，b代表要保留的位数。 round(3.1415926,2) &gt;&gt;&gt; 3.14 range(a[,b]) 生成一个a到b的数组,左闭右开。 range(1,10) &gt;&gt;&gt; [1,2,3,4,5,6,7,8,9] 类型转换 函数名 描述 例子 int(str) 转换为int型 int(&#39;1&#39;) &gt;&gt;&gt; 1 float(int/str) : 将int型或字符型转换为浮点型 float(&#39;1&#39;) &gt;&gt;&gt; 1.0 str(int) 转换为字符型 str(1) &gt;&gt;&gt; &#39;1&#39; bool(int) 转换为布尔类型 str(0) &gt;&gt;&gt; False str(None) &gt;&gt;&gt; False bytes(str,code) 接收一个字符串，与所要编码的格式，返回一个字节流类型 bytes(&#39;abc&#39;, &#39;utf-8&#39;) &gt;&gt;&gt; b&#39;abc&#39; bytes(u&#39;爬虫&#39;, &#39;utf-8&#39;) &gt;&gt;&gt; b&#39;\xe7\x88\xac\xe8\x99\xab&#39; list(iterable) 转换为list list((1,2,3)) &gt;&gt;&gt; [1,2,3] iter(iterable) 返回一个可迭代的对象 iter([1,2,3]) &gt;&gt;&gt; &lt;list_iterator object at 0x0000000003813B00&gt; dict(iterable) 转换为dict dict([(&#39;a&#39;, 1), (&#39;b&#39;, 2), (&#39;c&#39;, 3)]) &gt;&gt;&gt; {&#39;a&#39;:1, &#39;b&#39;:2, &#39;c&#39;:3} enumerate(iterable) 返回一个枚举对象。 略 tuple(iterable) 转换为tuple tuple([1,2,3]) &gt;&gt;&gt;(1,2,3) set(iterable) 转换为set set([1,4,2,4,3,5]) &gt;&gt;&gt; {1,2,3,4,5} set({1:&#39;a&#39;,2:&#39;b&#39;,3:&#39;c&#39;}) &gt;&gt;&gt; {1,2,3} hex(int) 转换为16进制 hex(1024) &gt;&gt;&gt; &#39;0x400&#39; oct(int) 转换为8进制 oct(1024) &gt;&gt;&gt; &#39;0o2000&#39; bin(int) 转换为2进制 bin(1024) &gt;&gt;&gt; &#39;0b10000000000&#39; chr(int) 转换数字为相应ASCI码字符 chr(65) &gt;&gt;&gt; &#39;A&#39; ord(str) 转换ASCI字符为相应的数字 ord(&#39;A&#39;) &gt;&gt;&gt; 65 功能相关 函数名 描述 例子 eval() 执行一个表达式，或字符串作为运算 eval(&#39;1+1&#39;) &gt;&gt;&gt; 2 exec() 执行python语句 exec(&#39;print(&quot;Python&quot;)&#39;) &gt;&gt;&gt; Python filter(func, iterable) 通过判断函数fun，筛选符合条件的元素 filter(lambda x: x&gt;3, [1,2,3,4,5,6]) &gt;&gt;&gt; &lt;filter object at 0x0000000003813828&gt; map(func, *iterable) 将func用于每个iterable对象 map(lambda a,b: a+b, [1,2,3,4], [5,6,7]) &gt;&gt;&gt; [6,8,10] zip(*iterable) 将iterable分组合并。返回一个zip对象 list(zip([1,2,3],[4,5,6])) &gt;&gt;&gt; [(1, 4), (2, 5), (3, 6)] type() 返回一个对象的类型。 略 id() 返回一个对象的唯一标识值。 略 hash(object) 返回一个对象的hash值，具有相同值的object具有相同的hash值 hash(&#39;python&#39;) &gt;&gt;&gt; 7070808359261009780 help() 调用系统内置的帮助系统。 略 isinstance() 判断一个对象是否为该类的一个实例。 略 issubclass() 判断一个类是否为另一个类的子类。 略 globals() 返回当前全局变量的字典。 略 next(iterator[, default]) 接收一个迭代器，返回迭代器中的数值，如果设置了default，则当迭代器中的元素遍历后，输出default内容。 略 reversed(sequence) 生成一个反转序列的迭代器 reversed(&#39;abc&#39;) &gt;&gt;&gt; [&#39;c&#39;,&#39;b&#39;,&#39;a&#39;] I/O操作待补充~ 参考 python 常见的内置函数]]></content>
+    <content type="text"><![CDATA[概述函数能提高应用的模块性，和代码的重复利用率。Python提供了许多内建函数，比如print()。但我们也可以自己创建函数: def 关键字来开头 括号中间为函数参数 函数第一行可以选择性的使用字符串作为函数说明 函数内容以冒号（:）开始 return 表示函数结束，无返回内容默认返回None 函数定义Python 定义函数使用 def 关键字，一般格式如下： def 函数名（参数列表）: 函数体 Python是一种对缩进非常敏感的语言，对代码格式要求非常严格的，这块在函数体中可以更直白的看出来，举个例子： def fn1(num): &quot;将传入的数字转为正整数，包含0&quot; if num&lt;0: return abs(num) return num print(fn1(10)) print(fn1(-10)) print(fn1(0)) 运行结果： 10 10 0 参数可更改(mutable)与不可更改(immutable)对象在 python 中，strings, tuples, 和 numbers 是不可更改的对象，而 list,dict 等则是可以修改的对象。所谓不可更改对象是指，变量只是一个对象的引用（指针），如： a = &quot;Hello&quot; a = [1,2,3] a的重新赋值，并不会修改之前引用对象的值，而是重新创建了一个对象，把a又指向了这个对象。 def change(a): a = 100 b=20 change(b) print(b) # b的值并没有被修改 但对于列表与字典，则会修改原始数据： def change(a): a.reverse() b=[1,2,3,4] change(b) print(b) # [4,3,2,1] 必需参数必须参数就是函数运行时必须的参数，否则会报错，如上change方法，如果直接运行就会报错。 关键字参数正常情况下，函数参数是按顺序解析的，但使用关键字参数允许函数调用时参数的顺序与声明时不一致： def printinfo( name, age ): print (&quot;名字: &quot;, name) print (&quot;年龄: &quot;, age) return printinfo(age=50,name=&apos;Tom&apos;) 运行结果： 名字: Tom 年龄: 50 默认参数这点与ES6语法类似，可以为函数指定默认参数 def printinfo( name, age=20 ): print (&quot;名字: &quot;, name) print (&quot;年龄: &quot;, age) return printinfo(&apos;Tom&apos;) 运行结果： 名字: Tom 年龄: 20 不定长参数某些情况下不确定函数的参数个数，这个时候就需要不定长参数出场了，加了星号 *的参数会以元组(tuple)的形式导入，存放所有未命名的变量参数: def printinfo( arg1, *vartuple ): 举个例子： def printinfo( arg1, *vartuple ): &quot;打印任何传入的参数&quot; print (&quot;输出: &quot;) print (arg1) print (vartuple) printinfo(1,2,3,4,5) 运行结果： 1 (2, 3, 4, 5) 匿名函数python 使用 lambda 来创建匿名函数。 lambda 函数的语法只包含一个语句，如下： lambda [arg1 [,arg2,.....argn]]:expression 举个例子： sum = lambda ag1, ag2 : ag1 + ag2 print(sum(1,10)) 运行结果为：11。可以看到lambda的主体是一个表达式，而不是一个代码块。仅仅能在lambda表达式中封装有限的逻辑进去。 Python内置函数数学运算类 函数名 描述 例子 abs(a) 求取绝对值 abs(-1) max(list) 求取list最大值 max([1,2,3]) min(list) 求取list最小值 min([1,2,3]) sum(list) 求取list元素的和 sum([1,2,3]) &gt;&gt;&gt; 6 sorted(list) 排序 返回排序后的list。 len(list) list长度 len([1,2,3]) divmod(a,b) 获取商和余数。 divmod(5,2) &gt;&gt;&gt; (2,1) pow(a,b) 获取乘方数。 pow(2,3) &gt;&gt;&gt; 8 round(a,b) 获取指定位数的小数。a代表浮点数，b代表要保留的位数。 round(3.1415926,2) &gt;&gt;&gt; 3.14 range(a[,b]) 生成一个a到b的数组,左闭右开。 range(1,10) &gt;&gt;&gt; [1,2,3,4,5,6,7,8,9] 类型转换 函数名 描述 例子 int(str) 转换为int型 int(&#39;1&#39;) &gt;&gt;&gt; 1 float(int/str) : 将int型或字符型转换为浮点型 float(&#39;1&#39;) &gt;&gt;&gt; 1.0 str(int) 转换为字符型 str(1) &gt;&gt;&gt; &#39;1&#39; bool(int) 转换为布尔类型 str(0) &gt;&gt;&gt; False str(None) &gt;&gt;&gt; False bytes(str,code) 接收一个字符串，与所要编码的格式，返回一个字节流类型 bytes(&#39;abc&#39;, &#39;utf-8&#39;) &gt;&gt;&gt; b&#39;abc&#39; bytes(u&#39;爬虫&#39;, &#39;utf-8&#39;) &gt;&gt;&gt; b&#39;\xe7\x88\xac\xe8\x99\xab&#39; list(iterable) 转换为list list((1,2,3)) &gt;&gt;&gt; [1,2,3] dict(iterable) 转换为dict dict([(&#39;a&#39;, 1), (&#39;b&#39;, 2), (&#39;c&#39;, 3)]) &gt;&gt;&gt; {&#39;a&#39;:1, &#39;b&#39;:2, &#39;c&#39;:3} enumerate(iterable) 返回一个枚举对象。 略 tuple(iterable) 转换为tuple tuple([1,2,3]) &gt;&gt;&gt;(1,2,3) set(iterable) 转换为set set([1,4,2,4,3,5]) &gt;&gt;&gt; {1,2,3,4,5} set({1:&#39;a&#39;,2:&#39;b&#39;,3:&#39;c&#39;}) &gt;&gt;&gt; {1,2,3} hex(int) 转换为16进制 hex(1024) &gt;&gt;&gt; &#39;0x400&#39; oct(int) 转换为8进制 oct(1024) &gt;&gt;&gt; &#39;0o2000&#39; bin(int) 转换为2进制 bin(1024) &gt;&gt;&gt; &#39;0b10000000000&#39; chr(int) 转换数字为相应ASCI码字符 chr(65) &gt;&gt;&gt; &#39;A&#39; ord(str) 转换ASCI字符为相应的数字 ord(&#39;A&#39;) &gt;&gt;&gt; 65 功能相关 函数名 描述 例子 eval() 执行一个表达式，或字符串作为运算 eval(&#39;1+1&#39;) &gt;&gt;&gt; 2 exec() 执行python语句 exec(&#39;print(&quot;Python&quot;)&#39;) &gt;&gt;&gt; Python filter(func, iterable) 通过判断函数fun，筛选符合条件的元素 filter(lambda x: x&gt;3, [1,2,3,4,5,6]) &gt;&gt;&gt; &lt;filter object at 0x0000000003813828&gt; map(func, *iterable) 将func用于每个iterable对象 map(lambda a,b: a+b, [1,2,3,4], [5,6,7]) &gt;&gt;&gt; [6,8,10] zip(*iterable) 将iterable分组合并。返回一个zip对象 list(zip([1,2,3],[4,5,6])) &gt;&gt;&gt; [(1, 4), (2, 5), (3, 6)] type() 返回一个对象的类型。 略 id() 返回一个对象的唯一标识值。 略 hash(object) 返回一个对象的hash值，具有相同值的object具有相同的hash值 hash(&#39;python&#39;) &gt;&gt;&gt; 7070808359261009780 help() 调用系统内置的帮助系统。 略 isinstance() 判断一个对象是否为该类的一个实例。 略 issubclass() 判断一个类是否为另一个类的子类。 略 globals() 返回当前全局变量的字典。 略 reversed(sequence) 生成一个反转序列的迭代器 reversed(&#39;abc&#39;) &gt;&gt;&gt; [&#39;c&#39;,&#39;b&#39;,&#39;a&#39;] 迭代器/生成器函数迭代是Python最强大的功能之一，是访问集合元素的一种方式。字符串，列表，元组，集合，字典对象都可用于创建迭代器: str=&quot;0987&quot; list = [1,2,&apos;3&apos;] tup = (10, 20, &apos;30&apos;) sites = {&apos;b&apos;, &apos;a&apos;, &apos;b&apos;, &apos;a&apos;, &apos;y&apos;} dict = {&apos;name&apos;:&apos;jack&apos;,&apos;age&apos;:12} it0 = iter(str) it1 = iter(list) it2 = iter(tup) it3 = iter(sites) it4 = iter(dict) print(it0) print(it1) print(it2) print(it3) print(it4) 执行结果： &lt;str_iterator object at 0x000001C8430F7DC8&gt; &lt;list_iterator object at 0x000001C8430F7E08&gt; &lt;tuple_iterator object at 0x000001C8430F7E48&gt; &lt;set_iterator object at 0x000001C8430D1A98&gt; &lt;dict_keyiterator object at 0x000001C8430D1B88&gt; 迭代就是从迭代器中取元素的过程。比如我们用for循环从列表[1,2,3]中取元素，这种遍历过程就被称作迭代。上述数据类型通过iter函数转成迭代对象（ps:字符串，列表，元组，集合，字典本身都是支持for循环的，因为这些数据结构已经内置了iter函数），此时我们除了for循环外，还可以使用next函数进行迭代： import sys # 引入 sys 模块 list=[1,2,3,4] it = iter(list) # 创建迭代器对象 while True: try: print (next(it)) except StopIteration: sys.exit() 运行结果： 1 2 3 4 在 Python 中，使用了 yield 的函数被称为生成器（generator）。跟普通函数不同的是，生成器是一个返回迭代器的函数，只能用于迭代操作，更简单点理解生成器就是一个迭代器: def generate(): yield 1 yield [1,2,3] yield &apos;over&apos; p = generate() print(p) 执行结果： &lt;generator object generate at 0x0000013C5A583648&gt; 它支持for循环 for x in p: print(x, end=&apos; &apos;) 运行结果： 1 [1, 2, 3] over 也支持next方法 while True: try: print (next(p)) except StopIteration: sys.exit() 运行结果： 1 [1, 2, 3] over 参考 python 常见的内置函数 Python3 函数]]></content>
       <categories>
         <category>Python</category>
       </categories>
@@ -14,7 +25,7 @@
   <entry>
     <title><![CDATA[Python系列-3-条件与循环]]></title>
     <url>%2FPython%E7%B3%BB%E5%88%97-3-%E6%9D%A1%E4%BB%B6%E4%B8%8E%E5%BE%AA%E7%8E%AF%2F</url>
-    <content type="text"><![CDATA[概述判断与循环, 在各个语言中基本都有对应实现，也是开始编程最基础的语法，本文学习下pyhon中是如何玩转这些的。 条件判断py中只有if else 判断，没有switch case，语法格式如下： if &lt;条件判断1&gt;: &lt;执行1&gt; elif &lt;条件判断2&gt;: &lt;执行2&gt; elif &lt;条件判断3&gt;: &lt;执行3&gt; else: &lt;执行4&gt; 举个例子: s = input(&apos;birth: &apos;) birth = int(s) # 此处一定要做类型转换，py不同与js不会做自动类型转换 if birth &lt; 1990: print(&apos;90前&apos;) else: print(&apos;90后&apos;) 三目运算Python 是一种极简主义的编程语言，它没有引入? :这个新的运算符，而是使用已有的 if else 关键字来实现相同的功能: exp1 if contion else exp2 举个例子： a=10 b=a*-10 if a&gt;20 else a*10 c=&apos;Leo&apos; if a&gt;100 else (&apos;Tom&apos; if a&gt;10 else &apos;Jack&apos;) print(b) # 100 print(c) # Jack 循环Python 中的循环语句有 for 和 while。 while循环语法格式如下： while 判断条件(condition)： 执行语句(statements)…… 举个例子： i=1 while i&gt;=1: print(i) i += 1 if i == 15: print(&quot;跳出&quot;) break elif i&gt;10: print(&quot;继续&quot;) continue print(&quot;循环结束&quot;) 当i为15的时候会跳出while循环，执行后面的语句 for循环通过for in 进行循环，千万不要遗漏冒号(:) lists = [&quot;C&quot;, &quot;C++&quot;, &quot;Perl&quot;, &quot;Python&quot;] for item in lists: print(item) print(&quot;循环结束&quot;) 可以通过break跳出循环： maps=[1,3,4,7] for item in maps: if(item&gt;3): print(item break print(&apos;循环结束&apos;) 运行结果： 4 循环结束 range()函数可以使用内置range()函数。它会生成数列 # 输出0-9 for i in range(10): print(i) # 输出2-7 for i in range(2,8): print(i) # 指定步长输出：2,5 for i in range(2,8,3): print(i) pass 语句Python pass是空语句，是为了保持程序结构的完整性。pass 不做任何事情，一般用做占位语句，如下实例]]></content>
+    <content type="text"><![CDATA[概述判断与循环, 在各个语言中基本都有对应实现，也是开始编程最基础的语法，本文学习下pyhon中是如何玩转这些的。 条件判断py中只有if else 判断，没有switch case，语法格式如下： if &lt;条件判断1&gt;: &lt;执行1&gt; elif &lt;条件判断2&gt;: &lt;执行2&gt; elif &lt;条件判断3&gt;: &lt;执行3&gt; else: &lt;执行4&gt; 举个例子: s = input(&apos;birth: &apos;) birth = int(s) # 此处一定要做类型转换，py不同与js不会做自动类型转换 if birth &lt; 1990: print(&apos;90前&apos;) else: print(&apos;90后&apos;) 三目运算Python 是一种极简主义的编程语言，它没有引入? :这个新的运算符，而是使用已有的 if else 关键字来实现相同的功能: exp1 if contion else exp2 举个例子： a=10 b=a*-10 if a&gt;20 else a*10 c=&apos;Leo&apos; if a&gt;100 else (&apos;Tom&apos; if a&gt;10 else &apos;Jack&apos;) print(b) # 100 print(c) # Jack 循环Python 中的循环语句有 for 和 while。 while循环语法格式如下： while 判断条件(condition)： 执行语句(statements)…… 举个例子： i=1 while i&gt;=1: print(i) i += 1 if i == 15: print(&quot;跳出&quot;) break elif i&gt;10: print(&quot;继续&quot;) continue print(&quot;循环结束&quot;) 当i为15的时候会跳出while循环，执行后面的语句 for循环通过for in 进行循环，千万不要遗漏冒号(:) lists = [&quot;C&quot;, &quot;C++&quot;, &quot;Perl&quot;, &quot;Python&quot;] for item in lists: print(item) print(&quot;循环结束&quot;) 可以通过break跳出循环： maps=[1,3,4,7] for item in maps: if(item&gt;3): print(item) break print(&apos;循环结束&apos;) 运行结果： 4 循环结束 range()函数可以使用内置range()函数。它会生成数列 # 输出0-9 for i in range(10): print(i) # 输出2-7 for i in range(2,8): print(i) # 指定步长输出：2,5 for i in range(2,8,3): print(i) pass 语句Python pass是空语句，是为了保持程序结构的完整性。pass 不做任何事情，一般用做占位语句，如下实例 for l in &apos;Runoob&apos;: if l == &apos;o&apos;: pass print (&apos;执行 pass 块&apos;) print (&apos;当前字母 :&apos;, l) print (&quot;Run over!&quot;) 执行结果： 当前字母 : R 当前字母 : u 当前字母 : n 执行 pass 块 当前字母 : o 执行 pass 块 当前字母 : o 当前字母 : b Run over! 参考 Python3 条件控制 Python3 循环语句]]></content>
       <categories>
         <category>Python</category>
       </categories>
@@ -52,8 +63,8 @@
         <category>web</category>
       </categories>
       <tags>
-        <tag>渲染</tag>
         <tag>浏览器</tag>
+        <tag>渲染</tag>
       </tags>
   </entry>
   <entry>
@@ -659,17 +670,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[重学前端24 - JavaScript部分-js语法四]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF24-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E5%9B%9B%2F</url>
-    <content type="text"><![CDATA[概述待补充~]]></content>
-      <categories>
-        <category>重学前端</category>
-      </categories>
-      <tags>
-        <tag>js</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[重学前端12 - JavaScript部分-执行(二)]]></title>
     <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF12-JavaScript%E9%83%A8%E5%88%86-%E6%89%A7%E8%A1%8C(%E4%BA%8C)%2F</url>
     <content type="text"><![CDATA[闭包闭包其实只是一个绑定了执行环境的函数，闭包与普通函数的区别是，它携带了执行的环境，就像人在外星中需要自带吸氧的装备一样，这个函数也带有在程序中生存的环境。 执行上下文JavaScript 标准把一段代码（包括函数），执行所需的所有信息定义为：“执行上下文”。 执行上下文在 ES2018 中，包含以下部分： lexical environment：词法环境，当获取变量或者 this 值时使用。 variable environment：变量环境，当声明变量时使用 code evaluation state：用于恢复代码执行位置。 Function：执行的任务是函数时使用，表示正在被执行的函数。 ScriptOrModule：执行的任务是脚本或者模块时使用，表示正在被执行的代码。 Realm：使用的基础库和内置对象实例。 Generator：仅生成器上下文有这个属性，表示当前生成器。 在js中任何语句的执行都会依赖特定的上下文。一旦上下文被切换，整个语句的效果可能都会发生改变。在 JavaScript，切换上下文最主要的场景是函数调用。 函数 补充:仅普通函数和类能够跟 new 搭配使用 普通函数用 function 关键字定义的函数。 function foo(){ // code } 箭头函数用 =&gt; 运算符定义的函数。 const foo = () =&gt; { // code } 方法在 class 中定义的函数。 class C { foo(){ //code } } 生成器函数用 function * 定义的函数。 function* foo(){ // code } 类用 class 定义的类，实际上也是函数。 class Foo { constructor(){ //code } } 异步函数：普通函数、箭头函数和生成器函数加上 async 关键字。 async function foo(){ // code } const foo = async () =&gt; { // code } async function foo*(){{ // code } 对普通变量而言，这些函数并没有本质区别，它们的一个行为差异在于 this 关键字。 this 关键字this 是执行上下文中很重要的一个组成部分。同一个函数调用方式不同，得到的 this 值也不同。 调用函数时使用的引用，决定了函数执行时刻的 this 值。实际上从运行时的角度来看，this 跟面向对象毫无关联，它是与函数调用时使用的表达式相关。 语句分类 在 try 中有 return 语句，finally 中的内容还会执行吗？代码一： function foo(){ try{ return 0; } catch(err) { } finally { console.log(&quot;a&quot;) } } console.log(foo()); finally执行了，并且函数有返回值 代码二： function foo(){ try{ return 0; } catch(err) { } finally { return 1; } } console.log(foo()); 返回值为1，try的返回值被 finally 擦写了 这个怪异的表现行为是由于 Javascript 的Completion Record机制来实现的（Completion Record用于描述异常、跳出等语句执行过程） Completion Record 表示一个语句执行完之后的结果，它有三个字段： [[type]] 表示完成的类型，有 break continue return throw 和 normal 几种类型； [[value]] 表示语句的返回值，如果语句没有，则是 empty； [[target]] 表示语句的目标，通常是一个 JavaScript 标签。 普通语句执行后，会得到 [[type]] 为 normal 的 Completion Record，JavaScript 引擎遇到这样的 Completion Record，会继续执行下一条语句。 在一个语句块中，，如果每一个语句都是 normal 类型，那么它会顺次执行。但是假如我们在语句块中插入了一条 return 语句，产生了一个非 normal 记录，那么整个语句块会成为非 normal。这个结构就保证了非 normal 的完成类型可以穿透复杂的语句嵌套结构，产生控制效果。 那么对于上述的例子：因为 finally 中的内容必须保证执行，所以 try/catch 执行完毕，即使得到的结果是非 normal 型的完成记录，也必须要执行 finally。而当 finally 执行也得到了非 normal 记录，则会使 finally 中的记录作为整个 try 结构的结果。 带标签的语句实际上，任何 JavaScript 语句是可以加标签的，在语句前加冒号即可： firstStatement: var i = 1; 一般情况下没什么用，break/continue 语句如果后跟了lable语句，就会跳到对应的label位置，一般用于多层嵌套循环的跳出 var num=0; outter: for(var i=0;i&lt;10;i++){ for(var j=0;j&lt;10;j++){ if(i==5&amp;&amp;j==5){ break outter; //退出内部循环，指向outter，即外循环，同时退出外循环 } num++; } } document.write(num); //55]]></content>
@@ -681,19 +681,8 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[重学前端23 - JavaScript部分-js语法三]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF23-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E4%B8%89%2F</url>
-    <content type="text"><![CDATA[概述待补充~]]></content>
-      <categories>
-        <category>重学前端</category>
-      </categories>
-      <tags>
-        <tag>js</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[重学前端20 - JavaScript部分-js词法]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF20-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%8D%E6%B3%95%2F</url>
+    <title><![CDATA[重学前端22 - JavaScript部分-js语法二]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF22-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E4%BA%8C%2F</url>
     <content type="text"><![CDATA[概述待补充~]]></content>
       <categories>
         <category>重学前端</category>
@@ -714,8 +703,19 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[重学前端22 - JavaScript部分-js语法二]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF22-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E4%BA%8C%2F</url>
+    <title><![CDATA[重学前端24 - JavaScript部分-js语法四]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF24-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E5%9B%9B%2F</url>
+    <content type="text"><![CDATA[概述待补充~]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端23 - JavaScript部分-js语法三]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF23-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E4%B8%89%2F</url>
     <content type="text"><![CDATA[概述待补充~]]></content>
       <categories>
         <category>重学前端</category>
@@ -727,6 +727,17 @@
   <entry>
     <title><![CDATA[重学前端13 - JavaScript部分-理解编译原理]]></title>
     <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF13-JavaScript%E9%83%A8%E5%88%86-%E7%90%86%E8%A7%A3%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%2F</url>
+    <content type="text"><![CDATA[概述待补充~]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端20 - JavaScript部分-js词法]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF20-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%8D%E6%B3%95%2F</url>
     <content type="text"><![CDATA[概述待补充~]]></content>
       <categories>
         <category>重学前端</category>
