@@ -284,9 +284,7 @@ lambda 函数的语法只包含一个语句，如下：
       [1, 2, 3]
       over
 
-### I/O操作
-
-待补充~
 
 ## 参考
 - [python 常见的内置函数](https://blog.csdn.net/yangxiaoyan12/article/details/87566833)
+- [Python3 函数](https://www.runoob.com/python3/python3-function.html)
