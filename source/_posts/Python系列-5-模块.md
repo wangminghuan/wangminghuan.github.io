@@ -184,6 +184,8 @@ Python中引入模块的方式有以下几种:
          'C:\\Users\\wmh\\AppData\\Roaming\\Python\\Python37\\site-packages', 
          'C:\\Users\\wmh\\AppData\\Local\\Programs\\Python\\Python37\\lib\\site-packages']
 
+执行导入模块命令时，会首先检查待导入的模块是否在当前已有模块之中，如果有则跳过import。因此模块之间相互引用不会导致无限循环
+
 ## 相对引用与绝对引用
 python中的import分为绝对引用和相对引用两种。绝对引用就是上面我们采用的引用方式，对与相对引用，在nodejs中也经常遇到，不同的是：Python中只采用`.`来拼接
 
