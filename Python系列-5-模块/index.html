@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="WMH&#39;s Blog">
 <meta property="og:description" content="概述关于模块的概念，都已有了概念，本章我们学习下python的模块, 看看它的模块化怎么玩儿。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-10-12T10:01:37.801Z">
+<meta property="og:updated_time" content="2020-10-13T03:53:11.034Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python系列-5-模块">
 <meta name="twitter:description" content="概述关于模块的概念，都已有了概念，本章我们学习下python的模块, 看看它的模块化怎么玩儿。">
@@ -413,7 +413,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-10-12 18:01:37" itemprop="dateModified" datetime="2020-10-12T18:01:37+08:00">2020-10-12</time>
+                <time title="修改时间：2020-10-13 11:53:11" itemprop="dateModified" datetime="2020-10-13T11:53:11+08:00">2020-10-13</time>
               
             
           </span>
@@ -588,6 +588,7 @@ AttributeError: &apos;Hi&apos; object has no attribute &apos;__list&apos;
  &apos;C:\\Users\\wmh\\AppData\\Local\\Programs\\Python\\Python37\\lib\\site-packages&apos;]
 </code></pre></li>
 </ul>
+<p>执行导入模块命令时，会首先检查待导入的模块是否在当前已有模块之中，如果有则跳过import。因此模块之间相互引用不会导致无限循环</p>
 <h2 id="相对引用与绝对引用"><a href="#相对引用与绝对引用" class="headerlink" title="相对引用与绝对引用"></a>相对引用与绝对引用</h2><p>python中的import分为绝对引用和相对引用两种。绝对引用就是上面我们采用的引用方式，对与相对引用，在nodejs中也经常遇到，不同的是：Python中只采用<code>.</code>来拼接</p>
 <p>对于如下结构：</p>
 <pre><code>home
@@ -656,6 +657,10 @@ hello
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Python系列-6-面向对象/" rel="prev" title="Python系列-6-面向对象">
+                Python系列-6-面向对象 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -726,7 +731,7 @@ hello
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">82</span>
+                    <span class="site-state-item-count">83</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
