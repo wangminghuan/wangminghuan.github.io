@@ -178,6 +178,9 @@ math标准库为Python提供了常用数学方法（以下方法除了`abs,max,m
     str[0]='C'
     print(str) # TypeError: 'str' object does not support item assignment
 
+f-string 格式化字符串以 f 开头，后面跟着字符串，字符串中的表达式用大括号 {} 包起来，它会将变量或表达式计算后的值替换进去
+
+
 ### Bytes 类型
 
 Python3 新增 bytes 类型，是指一堆字节的集合，十六进制表现形式，两个十六进制数构成一个 byte ，用带b前缀的单引号或双引号来表示。bytes通常用于网络数据传输、二进制图片和文件的保存等等。  
@@ -212,6 +215,19 @@ Bytes 与 String 可以相关转换
     print(str[0])        # Retrieve 
     del str              # Delete 删除变量，不同于列表，集合，字典等，依旧可以访问
     print(str)           #  <class 'str'>
+
+### f-string
+
+f-string 是 python3.6 之后版本添加的，称之为字面量格式化字符串，是新的格式化字符串的语法。
+
+之前我们习惯用百分号 (%):
+
+    name = "Jack"
+    print("My name is %s" %name)    # My name is Jack
+
+如果采用f-string表达更简单了（类似NodeJs中的模板字符串）
+
+    print(f"My name is {name}")     # My name is Jack
 
 ### String类型方法
 
