@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="WMH&#39;s Blog">
 <meta property="og:description" content="概述判断与循环, 在各个语言中基本都有对应实现，也是开始编程最基础的语法，本文学习下pyhon中是如何玩转这些的。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-10-09T03:53:13.623Z">
+<meta property="og:updated_time" content="2020-10-15T04:11:48.512Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python系列-3-条件与循环">
 <meta name="twitter:description" content="概述判断与循环, 在各个语言中基本都有对应实现，也是开始编程最基础的语法，本文学习下pyhon中是如何玩转这些的。">
@@ -413,7 +413,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-10-09 11:53:13" itemprop="dateModified" datetime="2020-10-09T11:53:13+08:00">2020-10-09</time>
+                <time title="修改时间：2020-10-15 12:11:48" itemprop="dateModified" datetime="2020-10-15T12:11:48+08:00">2020-10-15</time>
               
             
           </span>
@@ -560,6 +560,64 @@ print (&quot;Run over!&quot;)
 当前字母 : o
 当前字母 : b
 Run over!
+</code></pre><h2 id="其他语句"><a href="#其他语句" class="headerlink" title="其他语句"></a>其他语句</h2><h3 id="with语句"><a href="#with语句" class="headerlink" title="with语句"></a>with语句</h3><p>python中的with语句使用于对资源进行访问的场合，保证不管处理过程中是否发生错误或者异常都会执行规定的<code>__exit__</code>（“清理”）操作，释放被访问的资源，比如: 有文件读写后自动关闭、线程中锁的自动获取和释放等</p>
+<p>与python中with语句有关的概念有：上下文管理协议、上下文管理器、运行时上下文、上下文表达式、处理资源的代码段。</p>
+<p>经常看到的是进行文件操作时会带有with语句</p>
+<pre><code>with open( &apos;/path/to/file&apos;, &apos;r&apos; ) as f:
+  print( f.read() ) 
+</code></pre><p>此处with的作用就是在读取结束后（包括出错后）执行close函数，不用我们每次调取。</p>
+<h3 id="del-语句"><a href="#del-语句" class="headerlink" title="del 语句"></a>del 语句</h3><p>del语句删除一些对象引用,只是删除引用，变为了一个可回收的对象，内存会不定期回收</p>
+<h3 id="return-语句"><a href="#return-语句" class="headerlink" title="return 语句"></a>return 语句</h3><p>返回函数执行结果, 与c++/nodejs等基本一致：</p>
+<pre><code>def add(x,y):
+    result = x + y
+    return result
+
+print(add(10,24))
+</code></pre><h3 id="yeild-语句"><a href="#yeild-语句" class="headerlink" title="yeild 语句"></a>yeild 语句</h3><p>yeild 语句等同于yeild表达式，使用了yield 表达式的函数被称为生成器（generator）</p>
+<h3 id="assert-语句"><a href="#assert-语句" class="headerlink" title="assert 语句"></a>assert 语句</h3><p>当表达式为False时则触发AssertionError异常，代码终止</p>
+<pre><code>def testAssert(num):
+  if num&gt;0:
+    print(&quot;输入大于0，正常执行&quot;)
+  else:
+    print(&quot;输入小于0！&quot;)
+    assert False ,&apos;Not positive integer&apos;
+try:
+  n=input(&quot;请输入正整数：&quot;) 
+  testAssert(int(n))
+
+except Exception as ex:
+    print(&quot;发现错误:&quot;,ex)
+</code></pre><p>执行<code>python main.py</code>,输入10：</p>
+<pre><code>输入大于0，正常执行
+</code></pre><p>执行<code>python main.py</code>,输入-10：</p>
+<pre><code>输入小于0！
+发现错误: Not positive integer
+</code></pre><h3 id="raise语句"><a href="#raise语句" class="headerlink" title="raise语句"></a>raise语句</h3><p>raise语句是抛出一个异常，即使程序没有任何问题:</p>
+<pre><code>print(&apos;run&apos;)
+
+raise RuntimeError(&quot;没事找事，怎么了&quot;)
+</code></pre><p>执行结果：</p>
+<pre><code>run
+Traceback (most recent call last):
+  File &quot;main.py&quot;, line 188, in &lt;module&gt;
+    raise RuntimeError(&quot;没事找事，怎么了&quot;)
+RuntimeError: 没事找事，怎么了
+</code></pre><h3 id="global语句"><a href="#global语句" class="headerlink" title="global语句"></a>global语句</h3><p>global 语句是作用于整个当前代码块的声明。 它意味着所列出的标识符将被解读为全局变量</p>
+<pre><code>x=1
+y=0
+
+def foo():
+  x=2
+
+def fun():
+  global y  # 声明为全局变量
+  y=2
+
+foo()
+fun()
+
+print(x)   # 1
+print(y)   # 3
 </code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li><a href="https://www.runoob.com/python3/python3-conditional-statements.html" target="_blank" rel="noopener">Python3 条件控制</a></li>
 <li><a href="https://www.runoob.com/python3/python3-loop.html" target="_blank" rel="noopener">Python3 循环语句</a></li>
@@ -683,7 +741,7 @@ Run over!
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">83</span>
+                    <span class="site-state-item-count">85</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -895,7 +953,7 @@ Run over!
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条件判断"><span class="nav-number">2.</span> <span class="nav-text">条件判断</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#三目运算"><span class="nav-number">2.1.</span> <span class="nav-text">三目运算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#循环"><span class="nav-number">3.</span> <span class="nav-text">循环</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#while循环"><span class="nav-number">3.1.</span> <span class="nav-text">while循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#for循环"><span class="nav-number">3.2.</span> <span class="nav-text">for循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#range-函数"><span class="nav-number">3.3.</span> <span class="nav-text">range()函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-语句"><span class="nav-number">4.</span> <span class="nav-text">pass 语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条件判断"><span class="nav-number">2.</span> <span class="nav-text">条件判断</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#三目运算"><span class="nav-number">2.1.</span> <span class="nav-text">三目运算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#循环"><span class="nav-number">3.</span> <span class="nav-text">循环</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#while循环"><span class="nav-number">3.1.</span> <span class="nav-text">while循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#for循环"><span class="nav-number">3.2.</span> <span class="nav-text">for循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#range-函数"><span class="nav-number">3.3.</span> <span class="nav-text">range()函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-语句"><span class="nav-number">4.</span> <span class="nav-text">pass 语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他语句"><span class="nav-number">5.</span> <span class="nav-text">其他语句</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#with语句"><span class="nav-number">5.1.</span> <span class="nav-text">with语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#del-语句"><span class="nav-number">5.2.</span> <span class="nav-text">del 语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#return-语句"><span class="nav-number">5.3.</span> <span class="nav-text">return 语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#yeild-语句"><span class="nav-number">5.4.</span> <span class="nav-text">yeild 语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#assert-语句"><span class="nav-number">5.5.</span> <span class="nav-text">assert 语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#raise语句"><span class="nav-number">5.6.</span> <span class="nav-text">raise语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#global语句"><span class="nav-number">5.7.</span> <span class="nav-text">global语句</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
