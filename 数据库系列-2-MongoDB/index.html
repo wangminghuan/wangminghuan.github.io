@@ -112,7 +112,7 @@
 <meta property="og:image" content="https://wangminghuan.github.io/数据库系列-2-MongoDB/6.png">
 <meta property="og:image" content="https://wangminghuan.github.io/数据库系列-2-MongoDB/7.png">
 <meta property="og:image" content="https://wangminghuan.github.io/数据库系列-2-MongoDB/8.png">
-<meta property="og:updated_time" content="2020-03-10T06:08:41.497Z">
+<meta property="og:updated_time" content="2020-10-15T09:54:01.332Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据库系列-2-MongoDB">
 <meta name="twitter:description" content="概述NoSQL用于超大规模数据的存储。（例如谷歌或Facebook每天为他们的用户收集万亿比特的数据）。这些类型的数据存储不需要固定的模式，无需多余操作就可以横向扩展。 随着前端技术的不断迭代，代表MongoDB（文档数据库），Express（Web服务器），AngularJS（前端框架）和Node.js（后端JavaScript运行时）的MEAN堆栈开始流行。除其他原因外，MEAN堆栈很有吸引力">
@@ -422,7 +422,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-03-10 14:08:41" itemprop="dateModified" datetime="2020-03-10T14:08:41+08:00">2020-03-10</time>
+                <time title="修改时间：2020-10-15 17:54:01" itemprop="dateModified" datetime="2020-10-15T17:54:01+08:00">2020-10-15</time>
               
             
           </span>
@@ -497,7 +497,8 @@ fork = true  # 后台进程启动
 auth=true    # 开启验证
 port = 3001  # 端口号  
 bind_ip=0.0.0.0 # 对外访问
-</code></pre><h3 id="通过指定配置启动"><a href="#通过指定配置启动" class="headerlink" title="通过指定配置启动"></a>通过指定配置启动</h3><pre><code>./mongod -f /etc/mongod.conf
+</code></pre><h3 id="通过指定配置启动"><a href="#通过指定配置启动" class="headerlink" title="通过指定配置启动"></a>通过指定配置启动</h3><p>确保<code>mongod.conf</code>中的dbpath与logpath对应目录存在，启动数据库：</p>
+<pre><code>./mongod -f /etc/mongod.conf
 </code></pre><h2 id="MongoDB中的概念"><a href="#MongoDB中的概念" class="headerlink" title="MongoDB中的概念"></a>MongoDB中的概念</h2><table>
 <thead>
 <tr>
@@ -542,6 +543,11 @@ local   0.000GB
 <li>local: 这个数据永远不会被复制，可以用来存储限于本地单台服务器的任意集合。 </li>
 <li>config: 当Mongo用于分片设置时，config数据库在内部使用，用于保存分片的相关信息。  </li>
 </ul>
+<p>如果执行 <code>show dbs</code> 返回为空，说明开启的数据库认证，但是没有正确登录访问，此时需要切换到admin数据库，执行添加操作：</p>
+<pre><code>use admin
+
+db.createUser({user:&quot;admin&quot;,pwd:&quot;admin&quot;,roles:[&quot;root&quot;]})
+</code></pre><p>此时再通过用户名密码连接，即可正常展示，如果没有开启认证，强烈建议开启 <code>./mongod --auth</code></p>
 <p><img src="/数据库系列-2-MongoDB/1.png" alt></p>
 <h3 id="通过可视化工具连接"><a href="#通过可视化工具连接" class="headerlink" title="通过可视化工具连接"></a>通过可视化工具连接</h3><p>本文中使用的可视化工具为<a href="https://robomongo.org/" target="_blank" rel="noopener">Robo 3T</a>，</p>
 <h3 id="通过shell连接"><a href="#通过shell连接" class="headerlink" title="通过shell连接"></a>通过shell连接</h3><p>进入mongodb安装目录（如：/usr/local/mongodb/bin), 执行以下命令：</p>

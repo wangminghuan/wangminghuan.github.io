@@ -108,7 +108,11 @@
 <meta property="og:image" content="https://wangminghuan.github.io/浏览器渲染页面过程解析/2.png">
 <meta property="og:image" content="https://wangminghuan.github.io/浏览器渲染页面过程解析/3.png">
 <meta property="og:image" content="https://wangminghuan.github.io/浏览器渲染页面过程解析/4.png">
-<meta property="og:updated_time" content="2020-09-30T05:41:13.570Z">
+<meta property="og:image" content="https://wangminghuan.github.io/浏览器渲染页面过程解析/5.png">
+<meta property="og:image" content="https://wangminghuan.github.io/浏览器渲染页面过程解析/6.png">
+<meta property="og:image" content="https://wangminghuan.github.io/浏览器渲染页面过程解析/8.png">
+<meta property="og:image" content="https://wangminghuan.github.io/浏览器渲染页面过程解析/7.png">
+<meta property="og:updated_time" content="2020-11-03T10:17:07.828Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浏览器渲染页面过程解析">
 <meta name="twitter:description" content="概述一个老生常谈的问题，也是我们每天都在遇到的事情，我们从输入网址，到页面最终展示，中间到底经历了多少个流程？大致流程是：URL 解析 -&amp;gt; DNS 查询 -&amp;gt; TCP 连接 -&amp;gt; 处理请求 -&amp;gt; 接受响应 -&amp;gt; 渲染页面 这里只讨论一个环节：浏览器的渲染流程">
@@ -418,7 +422,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-09-30 13:41:13" itemprop="dateModified" datetime="2020-09-30T13:41:13+08:00">2020-09-30</time>
+                <time title="修改时间：2020-11-03 18:17:07" itemprop="dateModified" datetime="2020-11-03T18:17:07+08:00">2020-11-03</time>
               
             
           </span>
@@ -573,9 +577,33 @@
 </ul>
 <p>主线程不断重复上面的第三步，这也被称为Event Loop。上面提到的事件触发线程,定时触发器线程和异步http请求线程都是来处理生成“任务队列”的</p>
 <p>更多请访问之前的博文：<a href="https://weblog.wangminghuan.cn/Nodejs%E7%B3%BB%E5%88%97-2-EventLoop/" target="_blank" rel="noopener">Nodejs系列-2-EventLoop</a></p>
+<h2 id="Performance-工具"><a href="#Performance-工具" class="headerlink" title="Performance 工具"></a>Performance 工具</h2><p>为了更好理解浏览器渲染页面的过程，我们通过chrome浏览器的Performance工具来详解查看整个渲染过程：点刷新按钮重载页面并记录事件，得到如下报告。</p>
+<p><img src="/浏览器渲染页面过程解析/./5.png" alt></p>
+<pre><code>蓝色(Loading)：网络通信和HTML解析
+黄色(Scripting)：JavaScript执行
+紫色(Rendering)：样式计算和布局，即重排
+绿色(Painting)：重绘
+灰色(other)：其它事件花费的时间
+白色(Idle)：空闲时间（是一次timeline中的无实际捕获时间，并非白屏时间）
+</code></pre><h3 id="网络请求"><a href="#网络请求" class="headerlink" title="网络请求"></a>网络请求</h3><p>Network选项中有不同颜色的请求，它们分别代表的是蓝色-HTML、黄色-JS、紫色-css文件、绿色-图片的资源请求，可以看到他们触发加载的时间顺序</p>
+<h3 id="Event-log"><a href="#Event-log" class="headerlink" title="Event log"></a>Event log</h3><p><img src="/浏览器渲染页面过程解析/./6.png" alt></p>
+<p>Event log 记录了整个加载过程中所有的事件触发记录，包括在send requerst请求Html之前，会触发浏览器一系列默认事件行为：webkitvisibilitychange,unloadEventStart,unloadEventEnd等等。</p>
+<p>可以看到渲染页面（截图只有一部分）在Paint 与 Rendering 之间来回执行，中间还穿插着<code>Evaluate Script</code>与<code>Parse Stylesheet</code>,整个过程基本遵循着内核渲染流程图。</p>
+<p>HTML 页面的生命周期包含三个重要事件：</p>
+<ul>
+<li>DOMContentLoaded —— 浏览器已完全加载 HTML，并构建了 DOM 树，但像图片和样式表之类的外部资源可能尚未加载完成。</li>
+<li>load —— 浏览器不仅加载完成了 HTML，还加载完成了所有外部资源：图片，样式等。</li>
+<li>beforeunload/unload —— 当用户正在离开页面时（Event Log最顶部）。</li>
+</ul>
+<p><img src="/浏览器渲染页面过程解析/./8.png" alt></p>
+<p>各部分执行时间如下（从高到低）：</p>
+<p><img src="/浏览器渲染页面过程解析/./7.png" alt></p>
+<p>Performance 工具非常强大，本文只是大概观察了下页面的渲染过程，如果要做优化，这里将会为你提供很多优化的依据与目标</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li><a href="https://www.jianshu.com/p/e6252dc9be32" target="_blank" rel="noopener">浏览器渲染原理与过程</a></li>
 <li><a href="https://www.cnblogs.com/cangqinglang/p/8963557.html" target="_blank" rel="noopener">从浏览器多进程到JS单线程，JS运行机制最全面的一次梳理</a></li>
+<li><a href="https://mp.weixin.qq.com/s/Y_iNtM2TdvilRY6NN1Ag9g" target="_blank" rel="noopener">大转转FE-前端隐秘角落 - 页面渲染</a></li>
+<li><a href="https://www.cnblogs.com/zjjing/p/9106111.html" target="_blank" rel="noopener">chrome-performance页面性能分析使用教程</a></li>
 </ul>
 
       
@@ -910,7 +938,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#渲染过程"><span class="nav-number">2.</span> <span class="nav-text">渲染过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构建DOM树"><span class="nav-number">2.1.</span> <span class="nav-text">构建DOM树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构建CSSOM规则树"><span class="nav-number">2.2.</span> <span class="nav-text">构建CSSOM规则树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构建渲染树（Render-Tree）"><span class="nav-number">2.3.</span> <span class="nav-text">构建渲染树（Render Tree）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#渲染树布局-layout-of-the-render-tree"><span class="nav-number">2.4.</span> <span class="nav-text">渲染树布局(layout of the render tree)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#渲染树绘制（Painting-the-render-tree）"><span class="nav-number">2.5.</span> <span class="nav-text">渲染树绘制（Painting the render tree）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#渲染中遇到的其他事儿"><span class="nav-number">3.</span> <span class="nav-text">渲染中遇到的其他事儿</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#渲染阻塞"><span class="nav-number">3.1.</span> <span class="nav-text">渲染阻塞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#回流（reflow）"><span class="nav-number">3.2.</span> <span class="nav-text">回流（reflow）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重绘（repaint）"><span class="nav-number">3.3.</span> <span class="nav-text">重绘（repaint）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程与线程"><span class="nav-number">4.</span> <span class="nav-text">进程与线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#浏览器中的Event-Loop"><span class="nav-number">5.</span> <span class="nav-text">浏览器中的Event Loop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#渲染过程"><span class="nav-number">2.</span> <span class="nav-text">渲染过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构建DOM树"><span class="nav-number">2.1.</span> <span class="nav-text">构建DOM树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构建CSSOM规则树"><span class="nav-number">2.2.</span> <span class="nav-text">构建CSSOM规则树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构建渲染树（Render-Tree）"><span class="nav-number">2.3.</span> <span class="nav-text">构建渲染树（Render Tree）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#渲染树布局-layout-of-the-render-tree"><span class="nav-number">2.4.</span> <span class="nav-text">渲染树布局(layout of the render tree)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#渲染树绘制（Painting-the-render-tree）"><span class="nav-number">2.5.</span> <span class="nav-text">渲染树绘制（Painting the render tree）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#渲染中遇到的其他事儿"><span class="nav-number">3.</span> <span class="nav-text">渲染中遇到的其他事儿</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#渲染阻塞"><span class="nav-number">3.1.</span> <span class="nav-text">渲染阻塞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#回流（reflow）"><span class="nav-number">3.2.</span> <span class="nav-text">回流（reflow）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重绘（repaint）"><span class="nav-number">3.3.</span> <span class="nav-text">重绘（repaint）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程与线程"><span class="nav-number">4.</span> <span class="nav-text">进程与线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#浏览器中的Event-Loop"><span class="nav-number">5.</span> <span class="nav-text">浏览器中的Event Loop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Performance-工具"><span class="nav-number">6.</span> <span class="nav-text">Performance 工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#网络请求"><span class="nav-number">6.1.</span> <span class="nav-text">网络请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Event-log"><span class="nav-number">6.2.</span> <span class="nav-text">Event log</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
