@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[sentry部署前端监控系统]]></title>
+    <url>%2Fsentry%E9%83%A8%E7%BD%B2%E5%89%8D%E7%AB%AF%E7%9B%91%E6%8E%A7%E7%B3%BB%E7%BB%9F%2F</url>
+    <content type="text"><![CDATA[Sentry 是一个开源的实时错误监控的项目，它支持很多端的配置，包括 web 前端、服务器端、移动端及其游戏端。支持各种语言，例如 python、oc、java、node、javascript 等。也可以应用到各种不同的框架上面，如前端框架中的vue 、angular 、react 等最流行的前端框架中。最最最重要的是，他是提供收费服务的同时，也提供开源的版本。本文我们从零开始安装配置一套sentry项目。 安装sentry官网提供两种安装方式，docker与python, 我们的主要目的是使用，安装尽量简单化，所以，选择了docker方式进行安装 安装docker本次演示服务器是centos7的阿里云，首先安装docker 安装依赖包 sudo yum install -y yum-utils device-mapper-persistent-data lvm2 设置镜像（清华大学，也可使用阿里云的） sudo yum-config-manager --add-repo https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/docker-ce.repo 可以查看所有仓库中所有docker版本，并选择特定版本安装 yum list docker-ce --showduplicates | sort -r 安装docker sudo yum install docker-ce-19.03.13 #由于repo中默认只开启stable仓库，故这里安装的是最新稳定版19.03.13 启动docker sudo systemctl enable docker # 开机自启 sudo systemctl start docker # 启动docker服务 测试docker sudo docker run hello-world # 拉取hello-world 镜像 至此，docker安装成功~ 安装docker-composedocker安装完毕后，需要安装docker-compose(macos 貌似docker安装完就自带了docker-compose，未确认) Docker Compose是一个用来定义和运行复杂应用的Docker工具。一个使用Docker容器的应用，通常由多个容器组成。使用Docker Compose不再需要使用shell脚本来启动容器。 docker-compose的安装也有两种方式：pip(python的包管理工具)与二进制。本文我选用二进制文件进行安装： 拉取二进制源码： sudo curl -L https://github.com/docker/compose/releases/download/1.27.4/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose # uname -s 类似ES6中的模板字符串写法 添加可执行权限 sudo chmod +x /usr/local/bin/docker-compose 添加软连接 sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose 测试docker-compose docker-compose --version # 返回 docker-compose version 1.27.4, build 40524192 安装sentry 拉取sentry源码 git clone https://github.com/getsentry/onpremise.git 执行安装shell文件 cd onpremise sudo ./install.sh 这个过程会特别久（持续了差不多60分钟~），中间会提示你创建账户与密码 安装完毕后，通过docker-compose启用sentry: sudo docker-compose up -d 服务启用成功后界面： 访问服务默认开启9000端口，可以通过修改onpremise/.env文件中的端口号来修改配置： SENTRY_BIND=9100 # 修改为9100 另外config.yml与sentry/sentry.conf.py也都有9000的值，最好一并都修改了 配置因为Sentry整个服务比较占用内存，导致机器内存只剩下170M左右，且访问直接502，为了不影响其他服务，暂时搁浅项目，后续继续研究。配置部分后续有机会再补上，可参照Sentry 入门实战 其他命令停止sentry服务及重新打包升级配置 docker-compose stop # 停止 docker-compose build # 重新build docker-compose run --rm web upgrade # 升级配置 docker-compose up -d 查看端口占用 sudo netstat -tanlp # 所有tcp端口 sudo netstat -tunlp | grep 9100 # 指定端口 停止docker sudo systemctl stop docker 参考文章 docker-compose教程 Centos7上安装docker docker-compose源码 sentry源码 转转商业前端错误监控系统(Sentry)策略升级]]></content>
+      <categories>
+        <category>前端工程化</category>
+      </categories>
+      <tags>
+        <tag>sentry</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Python系列-8-常用标准库]]></title>
     <url>%2FPython%E7%B3%BB%E5%88%97-8-%E5%B8%B8%E7%94%A8%E6%A0%87%E5%87%86%E5%BA%93%2F</url>
     <content type="text"><![CDATA[概述Python提供了一个强大的标准库，内置了许多非常有用的模块，可以直接使用（标准库是随Python一起安装的）， 日常应用比较广泛的模块是： 名称 作用 re 正则表达式操作 datetime / time 为日期和时间处理同时提供了简单和复杂的方法。 random 提供了生成随机数的工具。 math 为浮点运算提供了对底层C函数库的访问。 zlib 直接支持通用的数据打包和压缩格式：zlib，gzip，bz2，zipfile，以及 tarfile。 pathlib / os.path 文件和目录操作访问 sys 工具脚本经常调用命令行参数。这些命令行参数以链表形式存储于 sys 模块的 argv 变量。 glob 提供了一个函数用于从目录通配符搜索中生成文件列表。 os 提供了不少与操作系统相关联的函数。 argparse 命令行选项、参数和子命令解析器 base64 /json/urllib Internet相关数据处理 html / xml 结构化标记处理工具 threading / queue 多线程相关 常用标准库示例reimport re p = re.compile(r&apos;(\d+)&apos;) print(p.match(&apos;123abc&apos;).groups()) # (&apos;123&apos;,) print(p.search(&apos;abc&apos;)) # None datatime / time注意Python的timestamp是一个浮点数，整数位表示秒, 而nodejs是以整数来表示的 import time print (time.strftime(&quot;%Y-%m-%d %H:%M:%S&quot;, time.localtime())) # 获取当前时间：2020-10-14 14:16:31 import datetime now = datetime.datetime.now() # 获取当前datetime print(now) # 当前时间 2020-10-14 14:22:21.735610 print(now.timestamp()) # 时间戳 浮点型 1602656541.73561 math &amp;&amp; randomimport math import random rand = random.randrange(10) # 获取0-10内的随机数 print(rand) # 6 print(math.pow(2,rand)) # 计算2的n次方 64 sys &amp;&amp; osimport os print(os.getcwd()) # 获取当前运行目录 F:\python-demo import sys print(sys.argv) # 获取命令行参数 [&apos;main.py&apos;] argparseimport argparse def main(): parser = argparse.ArgumentParser(description=&quot;Demo of argparse&quot;) parser.add_argument(&apos;-n&apos;,&apos;--name&apos;, default=&apos; Li &apos;) parser.add_argument(&apos;-y&apos;,&apos;--year&apos;, default=&apos;20&apos;) parser.add_argument(&apos;-s&apos;,&apos;--sex&apos;, default=&apos;man&apos;) args = parser.parse_args() print(args) name = args.name year = args.year sex = args.sex print(&apos;Hello {} {} {}&apos;.format(name,year,sex)) if __name__ == &apos;__main__&apos;: main() 执行python main.py -n Tom --year 40 Namespace(name=&apos;Tom&apos;, sex=&apos;man&apos;, year=&apos;40&apos;) Hello Tom 40 man -n,--name表示同一个参数，default参数表示在运行命令时的缺省参数 glob该模块可根据 Unix 终端所用规则找出所有匹配特定模式的路径名 import glob print(glob.glob(&apos;*.py&apos;)) # 找出当前目录下的所有的py文件（不含子目录） [&apos;hello.py&apos;, &apos;index.py&apos;, &apos;io.py&apos;, &apos;main.py&apos;, &apos;main2.py&apos;] zlib此模块为需要数据压缩的程序提供了一系列函数，且与gzip兼容 import zlib s = b&apos;witch which has which witches wrist watch&apos; print(len(s)) # 41 t = zlib.compress(s) print(t) # b&apos;x\x9c+\xcf,I\xceP(\xcf\xc8\x04\x92\x19\x89\xc5PV9H4\x15\xc8+\xca,.Q(O\x04\xf2\x00D?\x0f\x89&apos; print(len(t)) # 37 print(zlib.decompress(t)) # b&apos;witch which has which witches wrist watch&apos; json &amp;&amp; urlliburllib 是一个收集了多个用到 URL 的模块的包（写爬虫会经常用到）： urllib.request 打开和读取 URL urllib.error 包含 urllib.request 抛出的异常 urllib.parse 用于解析 URL urllib.robotparser 用于解析 robots.txt 文件 import urllib.request import urllib.parse url = &apos;https://www.baidu.com/&apos; # 解析url参数 print(urllib.parse.urlparse(url)) # 定义一个请求头的User-Agent字段 headers = {&apos;User-Agent&apos;:&apos;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36&apos;} # 自定义请求头信息，返回一个请求的对象request，Request()参数，还可以接收data参数，表示请求体 request = urllib.request.Request(url,headers = headers) # 通过urlopen访问url，服务器返回response对象 response = urllib.request.urlopen(request) # 读取返回结果 result = response.read() with open(&apos;baidu.html&apos;,&apos;wb&apos;) as f: f.write(result) 运行结果： ParseResult(scheme=&apos;https&apos;, netloc=&apos;www.baidu.com&apos;, path=&apos;/&apos;, params=&apos;&apos;, query=&apos;&apos;, fragment=&apos;&apos;) # 本地出现baidu.html文件，跟正常访问时返回的源码一样 jsonjson 模块提供了一种很简单的方式来编码和解码JSON数据。 其中两个主要的函数是 json.dumps() 和 json.loads() import json data={&quot;status&quot;:&quot;1&quot;,&quot;notice&quot;:{&quot;title&quot;:&quot;测试&quot;}} # 将一个Python数据结构转换为JSON 类似js中的JSON.stringify # 只对Number,String,List,Dict 有效，其他类型如Tuple会报错 obj=json.dumps(data) print(obj) # {&quot;status&quot;: &quot;1&quot;, &quot;notice&quot;: {&quot;title&quot;: &quot;\u6d4b\u8bd5&quot;}} print(isinstance(obj,str)) # True # 将一个JSON编码的字符串转换回一个Python数据结构,类似js中的JSON.parse strs=json.loads(obj) print(strs) # {&apos;status&apos;: &apos;1&apos;, &apos;notice&apos;: {&apos;title&apos;: &apos;测试&apos;}} print(isinstance(strs,dict)) # True 而 json.dump() 和 json.load() 来编码和解码JSON数据,用于处理文件: with open(&apos;test.json&apos;, &apos;w&apos;) as f: json.dump(data, f) with open(&apos;test.json&apos;, &apos;r&apos;) as f: data = json.load(f) base64此模块提供了将二进制数据编码为可打印的 ASCII 字符以及将这些编码解码回二进制数据的函数。 关于 PythonPython2.x已经是遗产，已经不再维护，Python3.x是现在和未来的语言。 目前，Python最流行的发行版是 Anaconda, 除了标准库以外，集成了很多常用软件包（尤其科学计算相关依赖）,安装后可以使用conda来管理Python环境和依赖。 Python的优点： 语法简洁：容易上手，入门简单 跨平台：windows, mac, linux 均支持 可扩展性：可以直接调用c/c++代码 开放源码：开源生态圈，源码可查 类库丰富：得力于开源，相关工具类库非常丰富 jupyter notebook 可以能将代码、文档等这一切集中到一处，让用户一目了然。可以随时运行多个自己编写的py代码 参考 Python 标准库 - 3.7 清华大学开源软件镜像站 清华大学开源软件镜像站-Anaconda 镜像使用帮助 The Jupyter Notebook Python官方文档 Conda使用指南]]></content>
@@ -703,19 +714,8 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[重学前端20 - JavaScript部分-js词法]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF20-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%8D%E6%B3%95%2F</url>
-    <content type="text"><![CDATA[概述待补充~]]></content>
-      <categories>
-        <category>重学前端</category>
-      </categories>
-      <tags>
-        <tag>js</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[重学前端13 - JavaScript部分-理解编译原理]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF13-JavaScript%E9%83%A8%E5%88%86-%E7%90%86%E8%A7%A3%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%2F</url>
+    <title><![CDATA[重学前端24 - JavaScript部分-js语法四]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF24-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E5%9B%9B%2F</url>
     <content type="text"><![CDATA[概述待补充~]]></content>
       <categories>
         <category>重学前端</category>
@@ -736,8 +736,8 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[重学前端24 - JavaScript部分-js语法四]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF24-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E5%9B%9B%2F</url>
+    <title><![CDATA[重学前端21 - JavaScript部分-js语法一]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF21-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E4%B8%80%2F</url>
     <content type="text"><![CDATA[概述待补充~]]></content>
       <categories>
         <category>重学前端</category>
@@ -747,8 +747,8 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[重学前端21 - JavaScript部分-js语法一]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF21-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E4%B8%80%2F</url>
+    <title><![CDATA[重学前端23 - JavaScript部分-js语法三]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF23-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E4%B8%89%2F</url>
     <content type="text"><![CDATA[概述待补充~]]></content>
       <categories>
         <category>重学前端</category>
@@ -769,8 +769,19 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[重学前端23 - JavaScript部分-js语法三]]></title>
-    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF23-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%AD%E6%B3%95%E4%B8%89%2F</url>
+    <title><![CDATA[重学前端13 - JavaScript部分-理解编译原理]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF13-JavaScript%E9%83%A8%E5%88%86-%E7%90%86%E8%A7%A3%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%2F</url>
+    <content type="text"><![CDATA[概述待补充~]]></content>
+      <categories>
+        <category>重学前端</category>
+      </categories>
+      <tags>
+        <tag>js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[重学前端20 - JavaScript部分-js词法]]></title>
+    <url>%2F%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF20-JavaScript%E9%83%A8%E5%88%86-js%E8%AF%8D%E6%B3%95%2F</url>
     <content type="text"><![CDATA[概述待补充~]]></content>
       <categories>
         <category>重学前端</category>
