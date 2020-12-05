@@ -50,7 +50,13 @@ MongoDB在阿里云(`CentOS Linux release 7.6.1810`)的安装流程如下：
 
     ./mongod -f /etc/mongod.conf
 
+### mongod 与 mongo 命令
 
+ 前者是启用MongoDB进程，后者是对MongoDB进行连接操作
+ 
+### win10 下的安装
+
+可参照[MongoDB的安装，mongod和mongo的区别](https://www.cnblogs.com/nangezi/p/11279401.html)进行设置，自己win10上安装时作为window service服务一直无法启动，无奈只好通过命令行手动启动 `mongod --dbpath "D:/MongoDB/Server/4.4/data/db"`
 
 ## MongoDB中的概念
 

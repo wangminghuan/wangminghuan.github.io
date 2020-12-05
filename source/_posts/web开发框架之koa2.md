@@ -1,0 +1,235 @@
+---
+title: web开发框架之koa2
+date: 2020-11-17 09:52:00
+tags: [koa, koa2, express]
+categories: Web框架
+---
+
+## 概述
+
+koa2也用了两年，主要用来在服务端搭建web服务（编写spa主模板路由，api反向代理等简单功能），也未系统学习过。最近正好有时间，从头细致捋一遍koa。
+
+<!-- more -->
+## koa基本组成
+
+Koa源码非常精简，只有四个文件：
+
+- application.js：Application(或Koa)负责管理中间件，以及处理请求
+- context.js：Context维护了一个请求的上下文环境
+- request.js：Request对`req`做了抽象和封装
+- response.js：Response对`res`做了抽象和封装 
+
+## 中间件
+Koa2本身只能算一个极简的HTTP服务器，自身不内置中间件，但是提供中间件内核。我们可以把一个HTTP请求理解为水流，而各种各样的中间件类似各种管道，它会对水流进行处理。每个中间件在HTTP请求过程中会改写请求，响应等数据。koa的中间件模型就是经常被提起的“洋葱模型”
+
+![](2.jpg)
+
+
+### 理解中间件
+中间件是按顺序执行, 从第一个中间件开始执行，遇到`next`进入下一个中间件，一直执行到最后一个中间件，在逆序，执行上一个中间件`next`之后的代码，一直到第一个中间件执行结束才发出响应。以下面代码为例，会更容易理解：
+
+    // app.js
+    const Koa = require('koa')
+    const app = new Koa()
+    app.use(async (ctx, next) => {
+      console.log(1);
+      await next();
+      console.log(1.1);
+    });
+
+    app.use(async (ctx, next) => {
+      console.log(2);
+      await next();
+      console.log(2.2);
+    });
+
+    app.use(async (ctx, next) => {
+      console.log(3);
+      await next();
+      console.log(3.3);
+    });
+
+    module.exports = app
+
+启动后，通过浏览器访问 `http://localhost:3000/`, 控制台会出现如下结果（其实会发出2个请求，因为加载首页html时，也会加载一次favicon.ico文件）
+
+    1
+    2
+    3
+    3.3
+    2.2
+    1.1
+
+中间件包含两个参数 ctx, next。
+
+### Koa-router
+
+Koa-router 是 koa 的一个路由中间件，它可以将请求的URL和方法（如：GET 、 POST 、 PUT 、 DELETE 等） 匹配到对应的响应程序或页面。
+    
+    // routes/index.js
+
+    const router = require('koa-router')()
+
+    router.get('/', async (ctx, next) => {
+      await ctx.render('index', {
+        title: 'Hello Koa 2!'
+      })
+    })
+    module.exports = router
+
+接着还需要分别调用 router.routes() 和 router.allowedMethods() 来得到两个中间件，并且调用 app.use() 使用这两个中间件：
+
+    const index = require('./routes/index') 
+    app.use(index.routes()).use(index.allowedMethods())
+
+注意，此处关于路由的调用，[koa-generator](https://github.com/i5ting/koa-generator) 中的代码如下:
+
+    // routes
+    app.use(index.routes(), index.allowedMethods())
+
+但通过查阅koa源码，app.use只接收一个参数，第二个参数是无效的：
+
+![](4.png)
+
+也有人在[issue区](https://github.com/i5ting/koa-generator/issues/57)提了同样的问题，然而无人回答。所以本人做了修改。同时根据自己常用的一些中间件，做了一个项目模板：[koa2-template](https://github.com/wangminghuan/koa2-template)
+
+
+### 上下文对象
+
+Koa Context 将 node 的 request 和 response 对象封装到单个对象中，ctx是一次完整的HTTP请求的上下文，会贯穿这个请求的生命周期。也就是说在整个请求阶段都是共享的。
+
+我们打印下上面例子中的第一个中间件：
+
+    app.use(async (ctx, next) => {
+      console.log(1);
+      console.log([ctx.request.url,ctx.response])
+      await next();
+      console.log([ctx.request.url,ctx.response])
+      console.log(1.1);
+    });
+
+启动后，通过浏览器访问 `http://localhost:3000/`, 控制台会出现如下结果:
+
+
+    1
+    [ '/json',
+      { status: 404,
+        message: 'Not Found',
+        header: [Object: null prototype] {},
+        body: undefined } ]
+    2
+    3
+    3.3
+    2.2
+    [ '/json',
+      { status: 200,
+        message: 'OK',
+        header:
+        [Object: null prototype] { 'content-type': 'application/json; charset=utf-8' },
+        body: { code: 0, data: {} } } ]
+    1.1
+
+结合“洋葱图”可以看到，在中间件中都是可以访问到ctx对象的，在创建 context 的时候，还会同时创建 request 和 response 。只不过进入“洋葱”时只有request数据内容；在穿出“洋葱”时，ctx对象的response才有了相关数据。
+
+## 用户认证方案
+
+服务端服务离不开用户认证，早期常用的方法是：
+
+- 用户输入用户名+密码提交登录
+- 服务端认证通过后下发session_id,将cookie写入用户端
+- 用户端每次请求都会携带这个cookie,服务端通过cookie(session_id)查找用户信息从而判断用户身份
+
+这个流程在单台机器上没有什么问题，一旦遇到服务器集群就有问题了，这就要求不同机器之间的session共享，做session数据持久化，工程量比较巨大，除此之外还有另外一种方案就是jwt
+
+### jwt
+
+jwt 全称为`JSON web token`,目前最流行的跨域认证解决方案。
+
+jwt的大体流程如下：
+
+- 用户输入用户名+密码提交登录
+- 服务端认证通过后，下发用户信息（json）返给用户
+- 用户每次请求都带上这个json数据，服务端完全靠这个对象认证用户身份
+- 为了防止篡改，这个json对象一般都需要签名加密（具体签名规格参考下面阮一峰博客）
+
+这样做的好处是服务端完全不需要存储session数据，服务端变成无状态的了。但也有一个比较大的弊端：由于服务器不保存 session 状态，因此无法在使用过程中废止某个 token，或者更改 token 的权限。也就是说，一旦 JWT 签发了，在到期之前就会始终有效，除非服务器部署额外的逻辑。
+
+## Mongoose
+
+koa中我们使用Mongoose来连接数据库
+
+### 连接
+
+    const mongoose = require('mongoose');
+    // 此处链接的是数据库，如果不存在会自动创建,有则直接连接
+    mongoose.connect('mongodb://localhost:27017/mall',{ useNewUrlParser: true }).then(
+      () => { 
+        console.log("Connection success~")
+      },
+      err => { 
+        console.log(err)
+      }
+    );
+
+### Shema
+
+Shema即XML Schema，XSD (XML Schema Definition)是W3C于2001年5月发布的推荐标准，指出如何形式描述XML文档的元素。
+
+Mongoose 的一切始于 Schema。每个 schema 都会映射到一个 MongoDB collection，创建集合之前，需要先实例化一个Shema
+
+    const Schema = mongoose.Schema; 
+    let userSchema = new Schema({
+      u_name: String,
+      u_pwd: String,
+      u_code: String,
+      token: {
+        type: String,
+        default: ""
+      }
+    })
+
+
+### Model
+
+将上一步的schema，通过`mongoose.model(modelName, schema)` 函数转换为一个 Model
+
+    // 第一个参数是跟 model 对应的集合（ collection ）名字的 单数 形式，
+    mongoose.model('User', userSchema); // 会自动创建一张users集合（表）
+
+### Documents
+Documents是Model的实例，如果需要新建集合，只需要实例化Model, 并调用save即可：
+
+    let user = new User({u_name,u_pwd,u_code,token});
+    let resp = await user.save();
+
+### CURD
+
+常用的增删改查方法有些是挂载在`Model.prototype`下，有些是挂载在`Model`下的，类似这样（代码仅为示意图，不代表Model的具体实现）
+
+    class Model{
+      constructor() {
+      }
+      save() {
+        return 'save';
+      }
+    }
+    Model.update=function(){
+      return 'update'
+    }
+    const m=new Model();
+    console.log(m.save()); //'save'
+    console.log(Model.prototype.save());//'save'
+    console.log(Model.update()); //'update'
+
+具体如截图所示（来源mongoose官网V5.10.16）
+
+   ![](./5.png)
+
+## 参考
+
+- [知乎专栏-Koa2第二篇：中间件](https://zhuanlan.zhihu.com/p/150700836)
+- [简书-koa洋葱模型](https://www.jianshu.com/p/c76d9ffd7899)
+- [koa-router allowedMethods](https://www.jianshu.com/p/fef91266a44c)
+- [koa-官网文档](https://koa.bootcss.com/)
+- [json-web-token 入门教程](http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html)
+- [mongoose官网文档](http://mongoosejs.net/docs/guide.html)
