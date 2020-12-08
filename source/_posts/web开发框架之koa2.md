@@ -6,10 +6,37 @@ categories: Web框架
 ---
 
 ## 概述
-
-koa2也用了两年，主要用来在服务端搭建web服务（编写spa主模板路由，api反向代理等简单功能），也未系统学习过。最近正好有时间，从头细致捋一遍koa。
+Nodejs天生就是异步操作，非阻塞I/O操作，使得它在服务端有着一些其他语言没有的天生优势。那么如何创建Web Server？koa2也用了两年，主要用来在服务端搭建web服务（编写spa主模板路由，api反向代理等简单功能），也未系统学习过。它跟Egg.js又各自有什么优缺点，最近正好有时间，从头细致捋一遍koa。
 
 <!-- more -->
+
+## 原生nodejs
+
+框架只是nodejs底层api的再封装，我们使用nodejs的api可以很简单的实现一个web server:
+
+    const http=require("http")
+    var url = require('url');
+    http.createServer((req,res)=>{
+      res.writeHead(200, {'Content-Type': 'text/plain'});
+      var pathname = url.parse(req.url, true).pathname;
+      if(pathname=="/list"){
+        res.write('I am list')
+      }else{
+        res.write('I am home')
+      }
+      res.end()
+    }).listen(8008,()=>{
+      console.log('web server started at port 8008')
+    })
+
+运行一下，访问http://localhost:8008/ 与 http://localhost:8008/list 分别返回不用的内容。
+
+但实际应用中不会这么简单，如何处理本地静态文件，如何解析get/post请求参数与返回内容，如何管理路由，如何管理cookie等等，都是需要考虑的。于是就出现了web server 框架, 其中最著名的当属express
+
+##  Express
+Express 是一个最小且灵活的 Node.js Web 应用框架，它为 Web 和移动应用程序提供一组强大的功能。但由于初期nodejs对异步的解决方案基本都是通过callback实现的，async/await还未纳入官方方案，于是就有了最臭名昭著的[callback hell](http://callbackhell.com/)。
+
+于是，Express 幕后原班人马重新打造了新的web 框架--Koa
 ## koa基本组成
 
 Koa源码非常精简，只有四个文件：
@@ -131,6 +158,10 @@ Koa Context 将 node 的 request 和 response 对象封装到单个对象中，c
 
 结合“洋葱图”可以看到，在中间件中都是可以访问到ctx对象的，在创建 context 的时候，还会同时创建 request 和 response 。只不过进入“洋葱”时只有request数据内容；在穿出“洋葱”时，ctx对象的response才有了相关数据。
 
+## 项目初始化
+
+koa官方并没有相关脚手架可以快速初始化项目，此处推荐狼叔的 koa-generator, 我在此基础上做了一些修改，提交到了该仓库：[koa-template](https://github.com/wangminghuan/koa2-template)
+
 ## 用户认证方案
 
 服务端服务离不开用户认证，早期常用的方法是：
@@ -227,6 +258,8 @@ Documents是Model的实例，如果需要新建集合，只需要实例化Model,
 
 ## 参考
 
+- [NodeJS框架Expres与Koa](https://www.jianshu.com/p/6f7930687835)
+- [Expres与Koa对比](https://www.jianshu.com/p/b4335b482fc6)
 - [知乎专栏-Koa2第二篇：中间件](https://zhuanlan.zhihu.com/p/150700836)
 - [简书-koa洋葱模型](https://www.jianshu.com/p/c76d9ffd7899)
 - [koa-router allowedMethods](https://www.jianshu.com/p/fef91266a44c)

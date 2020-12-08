@@ -1,6 +1,6 @@
 ---
 title: 你不知道的npm init
-date: 2020-12-05 11:49:07
+date: 2020-12-07 11:49:07
 tags: [note]
 categories: Nodejs
 ---
