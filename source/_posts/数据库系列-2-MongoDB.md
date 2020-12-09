@@ -99,12 +99,17 @@ MongoDB在阿里云(`CentOS Linux release 7.6.1810`)的安装流程如下：
 ### 通过shell连接
 进入mongodb安装目录（如：/usr/local/mongodb/bin), 执行以下命令：
 
-    ./mongo --port 3001
+     ./mongo --port 3001
 
 如果添加账号管理后需通过以下方式连接：
    
-    ./mongo  --port 3001 -u admin -p xxx
+     ./mongo  --port 3001 -u admin -p xxx
 
+ps: 如果通过进程守护方式启动，依旧可以通过此方式再次进入shell
+
+如果需要通过进程守护方式启动
+
+     ./mongo --fork --port 3001 -u admin -p xxx  
 
 ### 创建数据库
 
@@ -689,7 +694,7 @@ Key 值为你要创建的索引字段，1 为指定按升序创建索引，-1 �
 
 此时我们需要重启下数据库（基于`/usr/local/mongodb/bin`目录）：
 
-    ./mongod --shutdown  //关闭数据库
+     ./mongod --shutdown  //关闭数据库
 
 开启`/etc/mongod.conf`下的用户认证:
 
@@ -715,7 +720,62 @@ mongostat是mongodb自带的状态检测工具，在命令行下使用。它会�
 
 ![](8.png)
 
+## 其他操作
+
+### 修改密码
+
+    use admin
+    db.changeUserPassword('admin','12xxx');
+    
+### 停止mongodb
+
+    db.shutdownServer()
+
+尽量避免使用看kill命令来操作
+
+### 导出数据
+
+mongodb官网有配套的导出工具：`mongoexport`, 语法如下：
+
+      mongoexport -d dbname -c collectionname -o file --type json/csv -f field
+
+参数说明：
+
+      -d ：数据库名
+      -c ：collection名
+      -o ：输出的文件名
+      --type ： 输出的格式，默认为json
+      -f ：输出的字段，如果-type为csv，则需要加上-f "字段名"
+
+例子：
+
+       ./mongoexport -d manage -c orders -o d:/dbs/manage/order.json  # 进入安装目录bin下执行
+
+![](./9.png)
+### 导入数据
+
+mongodb官网有配套的导出工具：`mongoimport`, 语法如下：
+
+      mongoimport -d dbname -c collectionname --file filename --headerline --type json/csv -f field
+      
+参数说明：
+
+      -d ：数据库名
+      -c ：collection名
+      --type ：导入的格式默认json
+      -f ：导入的字段名
+      --headerline ：如果导入的格式是csv，则可以使用第一行的标题作为导入的字段
+      --file ：要导入的文件
+
+例子：
+
+      ./mongoimport --port 7000 -d manage -c orders --file /home/mongodb/dbs/manage/order.json  # 进入安装目录bin下执行
+
+![](./10.png)
+
+导入导出过程中需启动mongodb服务，操作过程中无需密码，如果不是默认端口，需要指定端口。window下安装目录若无相关工具，请进入[官网下载页面](https://www.mongodb.com/try/download/database-tools)进行下载安装
 ## 参考
 
 - [知乎专栏-MongoDB与MySQL：如何选择](https://zhuanlan.zhihu.com/p/92898439)
 - [MongoDB官方文档-update方法](https://docs.mongodb.com/manual/reference/operator/update/)
+- [MongoDB导入导出以及数据库备份](https://www.cnblogs.com/qingtianyu2015/p/5968400.html)

@@ -202,6 +202,14 @@ koa中我们使用Mongoose来连接数据库
       }
     );
 
+如果需要用户名密码登陆，则连接地址为：
+   
+    mongodb://username:password@localhost:27017/mall
+
+如果mall数据库没有设置管理员，需要使用admin数据库的管理员进行间接操作，则连接地址为
+
+    mongodb://username:password@localhost:27017/mall?authSource=admin
+   
 ### Shema
 
 Shema即XML Schema，XSD (XML Schema Definition)是W3C于2001年5月发布的推荐标准，指出如何形式描述XML文档的元素。
