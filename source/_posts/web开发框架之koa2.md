@@ -6,7 +6,7 @@ categories: Web框架
 ---
 
 ## 概述
-Nodejs天生就是异步操作，非阻塞I/O操作，使得它在服务端有着一些其他语言没有的天生优势。那么如何创建Web Server？koa2也用了两年，主要用来在服务端搭建web服务（编写spa主模板路由，api反向代理等简单功能），也未系统学习过。它跟Egg.js又各自有什么优缺点，最近正好有时间，从头细致捋一遍koa。
+Nodejs天生就是异步操作，非阻塞I/O操作，使得它在服务端有着一些其他语言没有的天生优势。那么如何创建Web Server？koa2也用了两年，主要用来在服务端搭建web服务（编写spa主模板路由，api反向代理等简单功能），也未系统学习过。它跟Egg.js又各自有什么优缺点，最近正好有时间，从头细致捋一遍koa，并与egg做下对比。
 
 <!-- more -->
 
@@ -172,6 +172,7 @@ koa官方并没有相关脚手架可以快速初始化项目，此处推荐狼�
 
 这个流程在单台机器上没有什么问题，一旦遇到服务器集群就有问题了，这就要求不同机器之间的session共享，做session数据持久化，工程量比较巨大，除此之外还有另外一种方案就是jwt
 
+
 ### jwt
 
 jwt 全称为`JSON web token`,目前最流行的跨域认证解决方案。
@@ -185,6 +186,34 @@ jwt的大体流程如下：
 
 这样做的好处是服务端完全不需要存储session数据，服务端变成无状态的了。但也有一个比较大的弊端：由于服务器不保存 session 状态，因此无法在使用过程中废止某个 token，或者更改 token 的权限。也就是说，一旦 JWT 签发了，在到期之前就会始终有效，除非服务器部署额外的逻辑。
 
+### jsonwebtoken
+koa中我们使用`jsonwebtoken`模块, 并将其作为中间件来运行,先定义一个check_token方法：
+    
+    // config/token.js
+
+    const check_token=async (ctx,next)=>{
+      const url = ctx.url;
+      if(ctx.method != 'GET'  && !URL_PASS_LOGIN.includes(url)){
+      let token= ctx.get("Authorization");
+      if(!token){
+        return ctx.response.body={
+          code:2001,
+          message:"未登录，请登录！"
+        }
+      }
+      let {name = ''} = await jwt.verify(token,TOKEN_ENCODE_STR);
+      // do something...
+    }
+      await next();
+    }
+  
+在app.js中进行调用，注意执行顺序(router注册之前)
+      
+      // checkToken
+      app.use(check_token);
+
+      // routes
+      app.use(index.routes(), index.allowedMethods())
 ## Mongoose
 
 koa中我们使用Mongoose来连接数据库
@@ -215,7 +244,8 @@ koa中我们使用Mongoose来连接数据库
 Shema即XML Schema，XSD (XML Schema Definition)是W3C于2001年5月发布的推荐标准，指出如何形式描述XML文档的元素。
 
 Mongoose 的一切始于 Schema。每个 schema 都会映射到一个 MongoDB collection，创建集合之前，需要先实例化一个Shema
-
+   
+    // db/index.js
     const Schema = mongoose.Schema; 
     let userSchema = new Schema({
       u_name: String,
@@ -232,11 +262,16 @@ Mongoose 的一切始于 Schema。每个 schema 都会映射到一个 MongoDB co
 
 将上一步的schema，通过`mongoose.model(modelName, schema)` 函数转换为一个 Model
 
+     // db/index.js
     // 第一个参数是跟 model 对应的集合（ collection ）名字的 单数 形式，
     mongoose.model('User', userSchema); // 会自动创建一张users集合（表）
 
 ### Documents
 Documents是Model的实例，如果需要新建集合，只需要实例化Model, 并调用save即可：
+    
+    // service/user.js
+
+    const User = require('../db').User;
 
     let user = new User({u_name,u_pwd,u_code,token});
     let resp = await user.save();
@@ -264,6 +299,53 @@ Documents是Model的实例，如果需要新建集合，只需要实例化Model,
 
    ![](./5.png)
 
+## 其他
+
+### koa-views
+在koa2中使用模板机制必须依靠中间件，最常用的便是koa-views
+
+    // 加载模板引擎
+    const views = require('koa-views')
+    app.use(views(path.join(__dirname, './views'), {
+        extension: 'ejs'
+    }))
+    
+如果需要模板引擎则需要额外安装ejs,或pug,在extension声明即可
+### koa-static
+koa-static是静态资源请求中间件，不涉及其他的处理过程，只是单纯的读取文件
+
+
+    app.use(require('koa-static')(__dirname + '/source/dist'))
+### koa-body
+服务端收到请求时，需要对参数做对应解析（query，form, multipart）等，koa-body就是出来处理这些的：
+
+  const koaBody = require('koa-body')
+  app.use(koaBody({
+    multipart:true
+  }))
+
+koa-generator 中推荐的是 koa-bodyparser 但其不支持文件上传，koa-body用法与koa-bodyparser基本一致，且支持文件类型解析
+
+### koa-router
+
+顾名思义，这是koa的路由中间件，也是非常重要的一部分，有兴趣的可以详细去了解，此处我们只简单介绍下使用方式：
+
+    
+    // routes/index.js
+
+    const router = require('koa-router')()
+    const controller = require('../controller')
+    router.get('/', async (ctx, next) => {
+      await ctx.render('index')
+    })
+    .post("/api/user/login",controller.user.login)
+    .post("/api/common/upload",controller.common.upload)
+
+在app.js中注册，注意执行顺序（一般在最后）
+
+    const index = require('./routes/index')
+    app.use(index.routes(), index.allowedMethods())
+    
 ## 参考
 
 - [NodeJS框架Expres与Koa](https://www.jianshu.com/p/6f7930687835)
@@ -272,5 +354,7 @@ Documents是Model的实例，如果需要新建集合，只需要实例化Model,
 - [简书-koa洋葱模型](https://www.jianshu.com/p/c76d9ffd7899)
 - [koa-router allowedMethods](https://www.jianshu.com/p/fef91266a44c)
 - [koa-官网文档](https://koa.bootcss.com/)
+- [koa-github](https://github.com/koajs/koa)
+- [koa-middleware官网列表](https://github.com/koajs/koa/wiki)
 - [json-web-token 入门教程](http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html)
 - [mongoose官网文档](http://mongoosejs.net/docs/guide.html)

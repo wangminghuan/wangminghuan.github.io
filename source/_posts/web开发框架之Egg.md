@@ -119,11 +119,36 @@ jsonwebtoken使用该模块，需要校验的路由地址，需要在`app/router
           .post('/api/user/login', controller.user.login)
           .post('/api/user/info', jwt, controller.user.info)  //校验token
 
+也可以在中间件中指定哪些接口需要校验token（指定返回内容）
+    
+    // app/middleware/auth.js 下
+
+    module.exports = (options, app) => {
+      return async function(ctx, next) {
+        const url = ctx.url;
+        // 校验所有api下接口
+        if (ctx.url.match(/^\/api\//) && !app.config.URL_PASS_LOGIN.includes(url)) {
+          const token = (ctx.get('Authorization') || '').replace(/^Bearer /, '');
+          if (!token) {
+            ctx.response.body = {
+              code: 2001,
+              message: '未登录，请登录！',
+            };
+            return;
+          }
+        }
+        // 校验token
+        const u_name = await app.jwt.verify(token, app.config.jwt.secret);
+        // do something 
+        await next();
+      }
+    }
+
 前端发送xmlhttprequest请求时需要指定header
 
       config.headers['Authorization'] =`Bearer ${token}`
 
-且token无效时会返回状态码401，需要在拦截器的error中做对应跳转处理（暂时没找到如果修改鉴权失败的返回）
+默认token无效时会返回状态码401，需要在拦截器的error中做对应跳转处理
 
       error => {
         if(error.response.status === 401){
@@ -131,7 +156,8 @@ jsonwebtoken使用该模块，需要校验的路由地址，需要在`app/router
           return Promise.reject();
         }
       }
-
+      
+也可以在中间件中自定义返回参数。
 ## security 
 
 对于post请求，Egg内置了安全插件[egg-security](https://github.com/eggjs/egg-security),可以临时进行关闭，但是不推荐这么做：
