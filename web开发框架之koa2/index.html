@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":true,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="概述Nodejs天生就是异步操作，非阻塞I/O操作，使得它在服务端有着一些其他语言没有的天生优势。那么如何创建Web Server？koa2也用了两年，主要用来在服务端搭建web服务（编写spa主模板路由，api反向代理等简单功能），也未系统学习过。它跟Egg.js又各自有什么优缺点，最近正好有时间，从头细致捋一遍koa，并与egg做下对比。">
+<meta name="keywords" content="koa,koa2,express">
+<meta property="og:type" content="article">
+<meta property="og:title" content="web开发框架之koa2">
+<meta property="og:url" content="https://wangminghuan.github.io/web开发框架之koa2/index.html">
+<meta property="og:site_name" content="WMH&#39;s Blog">
+<meta property="og:description" content="概述Nodejs天生就是异步操作，非阻塞I/O操作，使得它在服务端有着一些其他语言没有的天生优势。那么如何创建Web Server？koa2也用了两年，主要用来在服务端搭建web服务（编写spa主模板路由，api反向代理等简单功能），也未系统学习过。它跟Egg.js又各自有什么优缺点，最近正好有时间，从头细致捋一遍koa，并与egg做下对比。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://wangminghuan.github.io/web开发框架之koa2/2.jpg">
+<meta property="og:image" content="https://wangminghuan.github.io/web开发框架之koa2/4.png">
+<meta property="og:image" content="https://wangminghuan.github.io/web开发框架之koa2/5.png">
+<meta property="og:updated_time" content="2020-12-10T11:36:38.736Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="web开发框架之koa2">
+<meta name="twitter:description" content="概述Nodejs天生就是异步操作，非阻塞I/O操作，使得它在服务端有着一些其他语言没有的天生优势。那么如何创建Web Server？koa2也用了两年，主要用来在服务端搭建web服务（编写spa主模板路由，api反向代理等简单功能），也未系统学习过。它跟Egg.js又各自有什么优缺点，最近正好有时间，从头细致捋一遍koa，并与egg做下对比。">
+<meta name="twitter:image" content="https://wangminghuan.github.io/web开发框架之koa2/2.jpg">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://wangminghuan.github.io/web开发框架之koa2/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>web开发框架之koa2 | WMH's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">WMH's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-主页">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>主页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-标签">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-分类">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-归档">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/web开发框架之koa2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WMH">
+      <meta itemprop="description" content="just code it">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WMH's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">web开发框架之koa2
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-11-17 09:52:00" itemprop="dateCreated datePublished" datetime="2020-11-17T09:52:00+08:00">2020-11-17</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-12-10 19:36:38" itemprop="dateModified" datetime="2020-12-10T19:36:38+08:00">2020-12-10</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Web框架/" itemprop="url" rel="index"><span itemprop="name">Web框架</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Nodejs天生就是异步操作，非阻塞I/O操作，使得它在服务端有着一些其他语言没有的天生优势。那么如何创建Web Server？koa2也用了两年，主要用来在服务端搭建web服务（编写spa主模板路由，api反向代理等简单功能），也未系统学习过。它跟Egg.js又各自有什么优缺点，最近正好有时间，从头细致捋一遍koa，并与egg做下对比。</p>
+<a id="more"></a>
+<h2 id="原生nodejs"><a href="#原生nodejs" class="headerlink" title="原生nodejs"></a>原生nodejs</h2><p>框架只是nodejs底层api的再封装，我们使用nodejs的api可以很简单的实现一个web server:</p>
+<pre><code>const http=require(&quot;http&quot;)
+var url = require(&apos;url&apos;);
+http.createServer((req,res)=&gt;{
+  res.writeHead(200, {&apos;Content-Type&apos;: &apos;text/plain&apos;});
+  var pathname = url.parse(req.url, true).pathname;
+  if(pathname==&quot;/list&quot;){
+    res.write(&apos;I am list&apos;)
+  }else{
+    res.write(&apos;I am home&apos;)
+  }
+  res.end()
+}).listen(8008,()=&gt;{
+  console.log(&apos;web server started at port 8008&apos;)
+})
+</code></pre><p>运行一下，访问<a href="http://localhost:8008/" target="_blank" rel="noopener">http://localhost:8008/</a> 与 <a href="http://localhost:8008/list" target="_blank" rel="noopener">http://localhost:8008/list</a> 分别返回不用的内容。</p>
+<p>但实际应用中不会这么简单，如何处理本地静态文件，如何解析get/post请求参数与返回内容，如何管理路由，如何管理cookie等等，都是需要考虑的。于是就出现了web server 框架, 其中最著名的当属express</p>
+<h2 id="Express"><a href="#Express" class="headerlink" title="Express"></a>Express</h2><p>Express 是一个最小且灵活的 Node.js Web 应用框架，它为 Web 和移动应用程序提供一组强大的功能。但由于初期nodejs对异步的解决方案基本都是通过callback实现的，async/await还未纳入官方方案，于是就有了最臭名昭著的<a href="http://callbackhell.com/" target="_blank" rel="noopener">callback hell</a>。</p>
+<p>于是，Express 幕后原班人马重新打造了新的web 框架–Koa</p>
+<h2 id="koa基本组成"><a href="#koa基本组成" class="headerlink" title="koa基本组成"></a>koa基本组成</h2><p>Koa源码非常精简，只有四个文件：</p>
+<ul>
+<li>application.js：Application(或Koa)负责管理中间件，以及处理请求</li>
+<li>context.js：Context维护了一个请求的上下文环境</li>
+<li>request.js：Request对<code>req</code>做了抽象和封装</li>
+<li>response.js：Response对<code>res</code>做了抽象和封装 </li>
+</ul>
+<h2 id="中间件"><a href="#中间件" class="headerlink" title="中间件"></a>中间件</h2><p>Koa2本身只能算一个极简的HTTP服务器，自身不内置中间件，但是提供中间件内核。我们可以把一个HTTP请求理解为水流，而各种各样的中间件类似各种管道，它会对水流进行处理。每个中间件在HTTP请求过程中会改写请求，响应等数据。koa的中间件模型就是经常被提起的“洋葱模型”</p>
+<p><img src="/web开发框架之koa2/2.jpg" alt></p>
+<h3 id="理解中间件"><a href="#理解中间件" class="headerlink" title="理解中间件"></a>理解中间件</h3><p>中间件是按顺序执行, 从第一个中间件开始执行，遇到<code>next</code>进入下一个中间件，一直执行到最后一个中间件，在逆序，执行上一个中间件<code>next</code>之后的代码，一直到第一个中间件执行结束才发出响应。以下面代码为例，会更容易理解：</p>
+<pre><code>// app.js
+const Koa = require(&apos;koa&apos;)
+const app = new Koa()
+app.use(async (ctx, next) =&gt; {
+  console.log(1);
+  await next();
+  console.log(1.1);
+});
+
+app.use(async (ctx, next) =&gt; {
+  console.log(2);
+  await next();
+  console.log(2.2);
+});
+
+app.use(async (ctx, next) =&gt; {
+  console.log(3);
+  await next();
+  console.log(3.3);
+});
+
+module.exports = app
+</code></pre><p>启动后，通过浏览器访问 <code>http://localhost:3000/</code>, 控制台会出现如下结果（其实会发出2个请求，因为加载首页html时，也会加载一次favicon.ico文件）</p>
+<pre><code>1
+2
+3
+3.3
+2.2
+1.1
+</code></pre><p>中间件包含两个参数 ctx, next。</p>
+<h3 id="Koa-router"><a href="#Koa-router" class="headerlink" title="Koa-router"></a>Koa-router</h3><p>Koa-router 是 koa 的一个路由中间件，它可以将请求的URL和方法（如：GET 、 POST 、 PUT 、 DELETE 等） 匹配到对应的响应程序或页面。</p>
+<pre><code>// routes/index.js
+
+const router = require(&apos;koa-router&apos;)()
+
+router.get(&apos;/&apos;, async (ctx, next) =&gt; {
+  await ctx.render(&apos;index&apos;, {
+    title: &apos;Hello Koa 2!&apos;
+  })
+})
+module.exports = router
+</code></pre><p>接着还需要分别调用 router.routes() 和 router.allowedMethods() 来得到两个中间件，并且调用 app.use() 使用这两个中间件：</p>
+<pre><code>const index = require(&apos;./routes/index&apos;) 
+app.use(index.routes()).use(index.allowedMethods())
+</code></pre><p>注意，此处关于路由的调用，<a href="https://github.com/i5ting/koa-generator" target="_blank" rel="noopener">koa-generator</a> 中的代码如下:</p>
+<pre><code>// routes
+app.use(index.routes(), index.allowedMethods())
+</code></pre><p>但通过查阅koa源码，app.use只接收一个参数，第二个参数是无效的：</p>
+<p><img src="/web开发框架之koa2/4.png" alt></p>
+<p>也有人在<a href="https://github.com/i5ting/koa-generator/issues/57" target="_blank" rel="noopener">issue区</a>提了同样的问题，然而无人回答。所以本人做了修改。同时根据自己常用的一些中间件，做了一个项目模板：<a href="https://github.com/wangminghuan/koa2-template" target="_blank" rel="noopener">koa2-template</a></p>
+<h3 id="上下文对象"><a href="#上下文对象" class="headerlink" title="上下文对象"></a>上下文对象</h3><p>Koa Context 将 node 的 request 和 response 对象封装到单个对象中，ctx是一次完整的HTTP请求的上下文，会贯穿这个请求的生命周期。也就是说在整个请求阶段都是共享的。</p>
+<p>我们打印下上面例子中的第一个中间件：</p>
+<pre><code>app.use(async (ctx, next) =&gt; {
+  console.log(1);
+  console.log([ctx.request.url,ctx.response])
+  await next();
+  console.log([ctx.request.url,ctx.response])
+  console.log(1.1);
+});
+</code></pre><p>启动后，通过浏览器访问 <code>http://localhost:3000/</code>, 控制台会出现如下结果:</p>
+<pre><code>1
+[ &apos;/json&apos;,
+  { status: 404,
+    message: &apos;Not Found&apos;,
+    header: [Object: null prototype] {},
+    body: undefined } ]
+2
+3
+3.3
+2.2
+[ &apos;/json&apos;,
+  { status: 200,
+    message: &apos;OK&apos;,
+    header:
+    [Object: null prototype] { &apos;content-type&apos;: &apos;application/json; charset=utf-8&apos; },
+    body: { code: 0, data: {} } } ]
+1.1
+</code></pre><p>结合“洋葱图”可以看到，在中间件中都是可以访问到ctx对象的，在创建 context 的时候，还会同时创建 request 和 response 。只不过进入“洋葱”时只有request数据内容；在穿出“洋葱”时，ctx对象的response才有了相关数据。</p>
+<h2 id="项目初始化"><a href="#项目初始化" class="headerlink" title="项目初始化"></a>项目初始化</h2><p>koa官方并没有相关脚手架可以快速初始化项目，此处推荐狼叔的 koa-generator, 我在此基础上做了一些修改，提交到了该仓库：<a href="https://github.com/wangminghuan/koa2-template" target="_blank" rel="noopener">koa-template</a></p>
+<h2 id="用户认证方案"><a href="#用户认证方案" class="headerlink" title="用户认证方案"></a>用户认证方案</h2><p>服务端服务离不开用户认证，早期常用的方法是：</p>
+<ul>
+<li>用户输入用户名+密码提交登录</li>
+<li>服务端认证通过后下发session_id,将cookie写入用户端</li>
+<li>用户端每次请求都会携带这个cookie,服务端通过cookie(session_id)查找用户信息从而判断用户身份</li>
+</ul>
+<p>这个流程在单台机器上没有什么问题，一旦遇到服务器集群就有问题了，这就要求不同机器之间的session共享，做session数据持久化，工程量比较巨大，除此之外还有另外一种方案就是jwt</p>
+<h3 id="jwt"><a href="#jwt" class="headerlink" title="jwt"></a>jwt</h3><p>jwt 全称为<code>JSON web token</code>,目前最流行的跨域认证解决方案。</p>
+<p>jwt的大体流程如下：</p>
+<ul>
+<li>用户输入用户名+密码提交登录</li>
+<li>服务端认证通过后，下发用户信息（json）返给用户</li>
+<li>用户每次请求都带上这个json数据，服务端完全靠这个对象认证用户身份</li>
+<li>为了防止篡改，这个json对象一般都需要签名加密（具体签名规格参考下面阮一峰博客）</li>
+</ul>
+<p>这样做的好处是服务端完全不需要存储session数据，服务端变成无状态的了。但也有一个比较大的弊端：由于服务器不保存 session 状态，因此无法在使用过程中废止某个 token，或者更改 token 的权限。也就是说，一旦 JWT 签发了，在到期之前就会始终有效，除非服务器部署额外的逻辑。</p>
+<h3 id="jsonwebtoken"><a href="#jsonwebtoken" class="headerlink" title="jsonwebtoken"></a>jsonwebtoken</h3><p>koa中我们使用<code>jsonwebtoken</code>模块, 并将其作为中间件来运行,先定义一个check_token方法：</p>
+<pre><code>// config/token.js
+
+const check_token=async (ctx,next)=&gt;{
+  const url = ctx.url;
+  if(ctx.method != &apos;GET&apos;  &amp;&amp; !URL_PASS_LOGIN.includes(url)){
+  let token= ctx.get(&quot;Authorization&quot;);
+  if(!token){
+    return ctx.response.body={
+      code:2001,
+      message:&quot;未登录，请登录！&quot;
+    }
+  }
+  let {name = &apos;&apos;} = await jwt.verify(token,TOKEN_ENCODE_STR);
+  // do something...
+}
+  await next();
+}
+</code></pre><p>在app.js中进行调用，注意执行顺序(router注册之前)</p>
+<pre><code>// checkToken
+app.use(check_token);
+
+// routes
+app.use(index.routes(), index.allowedMethods())
+</code></pre><h2 id="Mongoose"><a href="#Mongoose" class="headerlink" title="Mongoose"></a>Mongoose</h2><p>koa中我们使用Mongoose来连接数据库</p>
+<h3 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h3><pre><code>const mongoose = require(&apos;mongoose&apos;);
+// 此处链接的是数据库，如果不存在会自动创建,有则直接连接
+mongoose.connect(&apos;mongodb://localhost:27017/mall&apos;,{ useNewUrlParser: true }).then(
+  () =&gt; { 
+    console.log(&quot;Connection success~&quot;)
+  },
+  err =&gt; { 
+    console.log(err)
+  }
+);
+</code></pre><p>如果需要用户名密码登陆，则连接地址为：</p>
+<pre><code>mongodb://username:password@localhost:27017/mall
+</code></pre><p>如果mall数据库没有设置管理员，需要使用admin数据库的管理员进行间接操作，则连接地址为</p>
+<pre><code>mongodb://username:password@localhost:27017/mall?authSource=admin
+</code></pre><h3 id="Shema"><a href="#Shema" class="headerlink" title="Shema"></a>Shema</h3><p>Shema即XML Schema，XSD (XML Schema Definition)是W3C于2001年5月发布的推荐标准，指出如何形式描述XML文档的元素。</p>
+<p>Mongoose 的一切始于 Schema。每个 schema 都会映射到一个 MongoDB collection，创建集合之前，需要先实例化一个Shema</p>
+<pre><code>// db/index.js
+const Schema = mongoose.Schema; 
+let userSchema = new Schema({
+  u_name: String,
+  u_pwd: String,
+  u_code: String,
+  token: {
+    type: String,
+    default: &quot;&quot;
+  }
+})
+</code></pre><h3 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h3><p>将上一步的schema，通过<code>mongoose.model(modelName, schema)</code> 函数转换为一个 Model</p>
+<pre><code> // db/index.js
+// 第一个参数是跟 model 对应的集合（ collection ）名字的 单数 形式，
+mongoose.model(&apos;User&apos;, userSchema); // 会自动创建一张users集合（表）
+</code></pre><h3 id="Documents"><a href="#Documents" class="headerlink" title="Documents"></a>Documents</h3><p>Documents是Model的实例，如果需要新建集合，只需要实例化Model, 并调用save即可：</p>
+<pre><code>// service/user.js
+
+const User = require(&apos;../db&apos;).User;
+
+let user = new User({u_name,u_pwd,u_code,token});
+let resp = await user.save();
+</code></pre><h3 id="CURD"><a href="#CURD" class="headerlink" title="CURD"></a>CURD</h3><p>常用的增删改查方法有些是挂载在<code>Model.prototype</code>下，有些是挂载在<code>Model</code>下的，类似这样（代码仅为示意图，不代表Model的具体实现）</p>
+<pre><code>class Model{
+  constructor() {
+  }
+  save() {
+    return &apos;save&apos;;
+  }
+}
+Model.update=function(){
+  return &apos;update&apos;
+}
+const m=new Model();
+console.log(m.save()); //&apos;save&apos;
+console.log(Model.prototype.save());//&apos;save&apos;
+console.log(Model.update()); //&apos;update&apos;
+</code></pre><p>具体如截图所示（来源mongoose官网V5.10.16）</p>
+<p>   <img src="/web开发框架之koa2/./5.png" alt></p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="koa-views"><a href="#koa-views" class="headerlink" title="koa-views"></a>koa-views</h3><p>在koa2中使用模板机制必须依靠中间件，最常用的便是koa-views</p>
+<pre><code>// 加载模板引擎
+const views = require(&apos;koa-views&apos;)
+app.use(views(path.join(__dirname, &apos;./views&apos;), {
+    extension: &apos;ejs&apos;
+}))
+</code></pre><p>如果需要模板引擎则需要额外安装ejs,或pug,在extension声明即可</p>
+<h3 id="koa-static"><a href="#koa-static" class="headerlink" title="koa-static"></a>koa-static</h3><p>koa-static是静态资源请求中间件，不涉及其他的处理过程，只是单纯的读取文件</p>
+<pre><code>app.use(require(&apos;koa-static&apos;)(__dirname + &apos;/source/dist&apos;))
+</code></pre><h3 id="koa-body"><a href="#koa-body" class="headerlink" title="koa-body"></a>koa-body</h3><p>服务端收到请求时，需要对参数做对应解析（query，form, multipart）等，koa-body就是出来处理这些的：</p>
+<p>  const koaBody = require(‘koa-body’)<br>  app.use(koaBody({<br>    multipart:true<br>  }))</p>
+<p>koa-generator 中推荐的是 koa-bodyparser 但其不支持文件上传，koa-body用法与koa-bodyparser基本一致，且支持文件类型解析</p>
+<h3 id="koa-router"><a href="#koa-router" class="headerlink" title="koa-router"></a>koa-router</h3><p>顾名思义，这是koa的路由中间件，也是非常重要的一部分，有兴趣的可以详细去了解，此处我们只简单介绍下使用方式：</p>
+<pre><code>// routes/index.js
+
+const router = require(&apos;koa-router&apos;)()
+const controller = require(&apos;../controller&apos;)
+router.get(&apos;/&apos;, async (ctx, next) =&gt; {
+  await ctx.render(&apos;index&apos;)
+})
+.post(&quot;/api/user/login&quot;,controller.user.login)
+.post(&quot;/api/common/upload&quot;,controller.common.upload)
+</code></pre><p>在app.js中注册，注意执行顺序（一般在最后）</p>
+<pre><code>const index = require(&apos;./routes/index&apos;)
+app.use(index.routes(), index.allowedMethods())
+</code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://www.jianshu.com/p/6f7930687835" target="_blank" rel="noopener">NodeJS框架Expres与Koa</a></li>
+<li><a href="https://www.jianshu.com/p/b4335b482fc6" target="_blank" rel="noopener">Expres与Koa对比</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/150700836" target="_blank" rel="noopener">知乎专栏-Koa2第二篇：中间件</a></li>
+<li><a href="https://www.jianshu.com/p/c76d9ffd7899" target="_blank" rel="noopener">简书-koa洋葱模型</a></li>
+<li><a href="https://www.jianshu.com/p/fef91266a44c" target="_blank" rel="noopener">koa-router allowedMethods</a></li>
+<li><a href="https://koa.bootcss.com/" target="_blank" rel="noopener">koa-官网文档</a></li>
+<li><a href="https://github.com/koajs/koa" target="_blank" rel="noopener">koa-github</a></li>
+<li><a href="https://github.com/koajs/koa/wiki" target="_blank" rel="noopener">koa-middleware官网列表</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html" target="_blank" rel="noopener">json-web-token 入门教程</a></li>
+<li><a href="http://mongoosejs.net/docs/guide.html" target="_blank" rel="noopener">mongoose官网文档</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/koa/" rel="tag"># koa</a>
+          
+            <a href="/tags/koa2/" rel="tag"># koa2</a>
+          
+            <a href="/tags/express/" rel="tag"># express</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/sentry部署前端监控系统/" rel="next" title="sentry部署前端监控系统">
+                <i class="fa fa-chevron-left"></i> sentry部署前端监控系统
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/web开发框架之Egg/" rel="prev" title="web开发框架之Egg">
+                web开发框架之Egg <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="WMH">
+            
+              <p class="site-author-name" itemprop="name">WMH</p>
+              <div class="site-description motion-element" itemprop="description">just code it</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">89</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wangminghuan" title="GitHub &rarr; https://github.com/wangminghuan" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:m.h.wang@foxmail.com" title="E-Mail &rarr; mailto:m.h.wang@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://weblog.wangminghuan.cn" title="WebSite &rarr; https://weblog.wangminghuan.cn" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>WebSite</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://weibo.com/u/1657970003?topnav=1&wvr=6&topsug=1&is_all=1" title="微博 &rarr; https://weibo.com/u/1657970003?topnav=1&wvr=6&topsug=1&is_all=1" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>微博</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原生nodejs"><span class="nav-number">2.</span> <span class="nav-text">原生nodejs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Express"><span class="nav-number">3.</span> <span class="nav-text">Express</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#koa基本组成"><span class="nav-number">4.</span> <span class="nav-text">koa基本组成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#中间件"><span class="nav-number">5.</span> <span class="nav-text">中间件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#理解中间件"><span class="nav-number">5.1.</span> <span class="nav-text">理解中间件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Koa-router"><span class="nav-number">5.2.</span> <span class="nav-text">Koa-router</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上下文对象"><span class="nav-number">5.3.</span> <span class="nav-text">上下文对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#项目初始化"><span class="nav-number">6.</span> <span class="nav-text">项目初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用户认证方案"><span class="nav-number">7.</span> <span class="nav-text">用户认证方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#jwt"><span class="nav-number">7.1.</span> <span class="nav-text">jwt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jsonwebtoken"><span class="nav-number">7.2.</span> <span class="nav-text">jsonwebtoken</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mongoose"><span class="nav-number">8.</span> <span class="nav-text">Mongoose</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#连接"><span class="nav-number">8.1.</span> <span class="nav-text">连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shema"><span class="nav-number">8.2.</span> <span class="nav-text">Shema</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Model"><span class="nav-number">8.3.</span> <span class="nav-text">Model</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Documents"><span class="nav-number">8.4.</span> <span class="nav-text">Documents</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CURD"><span class="nav-number">8.5.</span> <span class="nav-text">CURD</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他"><span class="nav-number">9.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#koa-views"><span class="nav-number">9.1.</span> <span class="nav-text">koa-views</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#koa-static"><span class="nav-number">9.2.</span> <span class="nav-text">koa-static</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#koa-body"><span class="nav-number">9.3.</span> <span class="nav-text">koa-body</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#koa-router"><span class="nav-number">9.4.</span> <span class="nav-text">koa-router</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">10.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMH</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.1</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.1"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.1"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

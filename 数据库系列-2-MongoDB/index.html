@@ -112,7 +112,9 @@
 <meta property="og:image" content="https://wangminghuan.github.io/数据库系列-2-MongoDB/6.png">
 <meta property="og:image" content="https://wangminghuan.github.io/数据库系列-2-MongoDB/7.png">
 <meta property="og:image" content="https://wangminghuan.github.io/数据库系列-2-MongoDB/8.png">
-<meta property="og:updated_time" content="2020-10-15T09:54:01.332Z">
+<meta property="og:image" content="https://wangminghuan.github.io/数据库系列-2-MongoDB/9.png">
+<meta property="og:image" content="https://wangminghuan.github.io/数据库系列-2-MongoDB/10.png">
+<meta property="og:updated_time" content="2020-12-09T10:41:45.757Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据库系列-2-MongoDB">
 <meta name="twitter:description" content="概述NoSQL用于超大规模数据的存储。（例如谷歌或Facebook每天为他们的用户收集万亿比特的数据）。这些类型的数据存储不需要固定的模式，无需多余操作就可以横向扩展。 随着前端技术的不断迭代，代表MongoDB（文档数据库），Express（Web服务器），AngularJS（前端框架）和Node.js（后端JavaScript运行时）的MEAN堆栈开始流行。除其他原因外，MEAN堆栈很有吸引力">
@@ -422,7 +424,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-10-15 17:54:01" itemprop="dateModified" datetime="2020-10-15T17:54:01+08:00">2020-10-15</time>
+                <time title="修改时间：2020-12-09 18:41:45" itemprop="dateModified" datetime="2020-12-09T18:41:45+08:00">2020-12-09</time>
               
             
           </span>
@@ -499,7 +501,9 @@ port = 3001  # 端口号
 bind_ip=0.0.0.0 # 对外访问
 </code></pre><h3 id="通过指定配置启动"><a href="#通过指定配置启动" class="headerlink" title="通过指定配置启动"></a>通过指定配置启动</h3><p>确保<code>mongod.conf</code>中的dbpath与logpath对应目录存在，启动数据库：</p>
 <pre><code>./mongod -f /etc/mongod.conf
-</code></pre><h2 id="MongoDB中的概念"><a href="#MongoDB中的概念" class="headerlink" title="MongoDB中的概念"></a>MongoDB中的概念</h2><table>
+</code></pre><h3 id="mongod-与-mongo-命令"><a href="#mongod-与-mongo-命令" class="headerlink" title="mongod 与 mongo 命令"></a>mongod 与 mongo 命令</h3><p> 前者是启用MongoDB进程，后者是对MongoDB进行连接操作</p>
+<h3 id="win10-下的安装"><a href="#win10-下的安装" class="headerlink" title="win10 下的安装"></a>win10 下的安装</h3><p>可参照<a href="https://www.cnblogs.com/nangezi/p/11279401.html" target="_blank" rel="noopener">MongoDB的安装，mongod和mongo的区别</a>进行设置，自己win10上安装时作为window service服务一直无法启动，无奈只好通过命令行手动启动 <code>mongod --dbpath &quot;D:/MongoDB/Server/4.4/data/db&quot;</code></p>
+<h2 id="MongoDB中的概念"><a href="#MongoDB中的概念" class="headerlink" title="MongoDB中的概念"></a>MongoDB中的概念</h2><table>
 <thead>
 <tr>
 <th>RDBMS</th>
@@ -554,6 +558,9 @@ db.createUser({user:&quot;admin&quot;,pwd:&quot;admin&quot;,roles:[&quot;root&qu
 <pre><code>./mongo --port 3001
 </code></pre><p>如果添加账号管理后需通过以下方式连接：</p>
 <pre><code>./mongo  --port 3001 -u admin -p xxx
+</code></pre><p>ps: 如果通过进程守护方式启动，依旧可以通过此方式再次进入shell</p>
+<p>如果需要通过进程守护方式启动</p>
+<pre><code>./mongo --fork --port 3001 -u admin -p xxx  
 </code></pre><h3 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h3><pre><code>use code
 </code></pre><p>但此时创建的数据库 code 并不在数据库的列表中， 要显示它，我们需要向 code 数据库插入一些数据。（ps: MongoDB 中默认的数据库为 test，如果你没有创建新的数据库，将默认使用test数据库）</p>
 <h3 id="删除数据库"><a href="#删除数据库" class="headerlink" title="删除数据库"></a>删除数据库</h3><pre><code>db.dropDatabase()
@@ -1140,9 +1147,38 @@ bind_ip=0.0.0.0 # 对外访问
 <pre><code>./mongostat --port 3001 -u admin -p xxxx  --authenticationDatabase=admin
 </code></pre><p>运行结果：</p>
 <p><img src="/数据库系列-2-MongoDB/8.png" alt></p>
+<h2 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h2><h3 id="修改密码"><a href="#修改密码" class="headerlink" title="修改密码"></a>修改密码</h3><pre><code>use admin
+db.changeUserPassword(&apos;admin&apos;,&apos;12xxx&apos;);
+</code></pre><h3 id="停止mongodb"><a href="#停止mongodb" class="headerlink" title="停止mongodb"></a>停止mongodb</h3><pre><code>db.shutdownServer()
+</code></pre><p>尽量避免使用看kill命令来操作</p>
+<h3 id="导出数据"><a href="#导出数据" class="headerlink" title="导出数据"></a>导出数据</h3><p>mongodb官网有配套的导出工具：<code>mongoexport</code>, 语法如下：</p>
+<pre><code>mongoexport -d dbname -c collectionname -o file --type json/csv -f field
+</code></pre><p>参数说明：</p>
+<pre><code>-d ：数据库名
+-c ：collection名
+-o ：输出的文件名
+--type ： 输出的格式，默认为json
+-f ：输出的字段，如果-type为csv，则需要加上-f &quot;字段名&quot;
+</code></pre><p>例子：</p>
+<pre><code>./mongoexport -d manage -c orders -o d:/dbs/manage/order.json  # 进入安装目录bin下执行
+</code></pre><p><img src="/数据库系列-2-MongoDB/./9.png" alt></p>
+<h3 id="导入数据"><a href="#导入数据" class="headerlink" title="导入数据"></a>导入数据</h3><p>mongodb官网有配套的导出工具：<code>mongoimport</code>, 语法如下：</p>
+<pre><code>mongoimport -d dbname -c collectionname --file filename --headerline --type json/csv -f field
+</code></pre><p>参数说明：</p>
+<pre><code>-d ：数据库名
+-c ：collection名
+--type ：导入的格式默认json
+-f ：导入的字段名
+--headerline ：如果导入的格式是csv，则可以使用第一行的标题作为导入的字段
+--file ：要导入的文件
+</code></pre><p>例子：</p>
+<pre><code>./mongoimport --port 7000 -d manage -c orders --file /home/mongodb/dbs/manage/order.json  # 进入安装目录bin下执行
+</code></pre><p><img src="/数据库系列-2-MongoDB/./10.png" alt></p>
+<p>导入导出过程中需启动mongodb服务，操作过程中无需密码，如果不是默认端口，需要指定端口。window下安装目录若无相关工具，请进入<a href="https://www.mongodb.com/try/download/database-tools" target="_blank" rel="noopener">官网下载页面</a>进行下载安装</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li><a href="https://zhuanlan.zhihu.com/p/92898439" target="_blank" rel="noopener">知乎专栏-MongoDB与MySQL：如何选择</a></li>
 <li><a href="https://docs.mongodb.com/manual/reference/operator/update/" target="_blank" rel="noopener">MongoDB官方文档-update方法</a></li>
+<li><a href="https://www.cnblogs.com/qingtianyu2015/p/5968400.html" target="_blank" rel="noopener">MongoDB导入导出以及数据库备份</a></li>
 </ul>
 
       
@@ -1265,7 +1301,7 @@ bind_ip=0.0.0.0 # 对外访问
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">86</span>
+                    <span class="site-state-item-count">89</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1310,7 +1346,9 @@ bind_ip=0.0.0.0 # 对外访问
                     
                       
                     
-                    <span class="site-state-item-count">14</span>
+                      
+                    
+                    <span class="site-state-item-count">15</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1393,7 +1431,15 @@ bind_ip=0.0.0.0 # 对外访问
                     
                       
                     
-                    <span class="site-state-item-count">33</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">37</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1479,7 +1525,7 @@ bind_ip=0.0.0.0 # 对外访问
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MongoDB的安装"><span class="nav-number">2.</span> <span class="nav-text">MongoDB的安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#获取压缩包"><span class="nav-number">2.1.</span> <span class="nav-text">获取压缩包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解压"><span class="nav-number">2.2.</span> <span class="nav-text">解压</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#将解压包拷贝到指定目录"><span class="nav-number">2.3.</span> <span class="nav-text">将解压包拷贝到指定目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建数据存储路径"><span class="nav-number">2.4.</span> <span class="nav-text">创建数据存储路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改配置"><span class="nav-number">2.5.</span> <span class="nav-text">修改配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过指定配置启动"><span class="nav-number">2.6.</span> <span class="nav-text">通过指定配置启动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MongoDB中的概念"><span class="nav-number">3.</span> <span class="nav-text">MongoDB中的概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MongoDB的使用"><span class="nav-number">4.</span> <span class="nav-text">MongoDB的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#通过可视化工具连接"><span class="nav-number">4.1.</span> <span class="nav-text">通过可视化工具连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过shell连接"><span class="nav-number">4.2.</span> <span class="nav-text">通过shell连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建数据库"><span class="nav-number">4.3.</span> <span class="nav-text">创建数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除数据库"><span class="nav-number">4.4.</span> <span class="nav-text">删除数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建集合"><span class="nav-number">4.5.</span> <span class="nav-text">创建集合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除集合"><span class="nav-number">4.6.</span> <span class="nav-text">删除集合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插入文档"><span class="nav-number">4.7.</span> <span class="nav-text">插入文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除文档"><span class="nav-number">4.8.</span> <span class="nav-text">删除文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更新文档"><span class="nav-number">4.9.</span> <span class="nav-text">更新文档</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#字段更新操作符"><span class="nav-number">4.9.1.</span> <span class="nav-text">字段更新操作符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数组更新操作符"><span class="nav-number">4.9.2.</span> <span class="nav-text">数组更新操作符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#位更新操作符"><span class="nav-number">4.9.3.</span> <span class="nav-text">位更新操作符</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询文档"><span class="nav-number">4.10.</span> <span class="nav-text">查询文档</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#条件查询"><span class="nav-number">4.10.1.</span> <span class="nav-text">条件查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AND查询"><span class="nav-number">4.10.2.</span> <span class="nav-text">AND查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OR查询"><span class="nav-number">4.10.3.</span> <span class="nav-text">OR查询</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#type-操作符"><span class="nav-number">4.11.</span> <span class="nav-text">$type 操作符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#limit与skip方法"><span class="nav-number">4.12.</span> <span class="nav-text">limit与skip方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sort排序"><span class="nav-number">4.13.</span> <span class="nav-text">sort排序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引"><span class="nav-number">5.</span> <span class="nav-text">索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库创建管理员"><span class="nav-number">6.</span> <span class="nav-text">数据库创建管理员</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MongoDB监控"><span class="nav-number">7.</span> <span class="nav-text">MongoDB监控</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">8.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MongoDB的安装"><span class="nav-number">2.</span> <span class="nav-text">MongoDB的安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#获取压缩包"><span class="nav-number">2.1.</span> <span class="nav-text">获取压缩包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解压"><span class="nav-number">2.2.</span> <span class="nav-text">解压</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#将解压包拷贝到指定目录"><span class="nav-number">2.3.</span> <span class="nav-text">将解压包拷贝到指定目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建数据存储路径"><span class="nav-number">2.4.</span> <span class="nav-text">创建数据存储路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改配置"><span class="nav-number">2.5.</span> <span class="nav-text">修改配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过指定配置启动"><span class="nav-number">2.6.</span> <span class="nav-text">通过指定配置启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mongod-与-mongo-命令"><span class="nav-number">2.7.</span> <span class="nav-text">mongod 与 mongo 命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#win10-下的安装"><span class="nav-number">2.8.</span> <span class="nav-text">win10 下的安装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MongoDB中的概念"><span class="nav-number">3.</span> <span class="nav-text">MongoDB中的概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MongoDB的使用"><span class="nav-number">4.</span> <span class="nav-text">MongoDB的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#通过可视化工具连接"><span class="nav-number">4.1.</span> <span class="nav-text">通过可视化工具连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过shell连接"><span class="nav-number">4.2.</span> <span class="nav-text">通过shell连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建数据库"><span class="nav-number">4.3.</span> <span class="nav-text">创建数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除数据库"><span class="nav-number">4.4.</span> <span class="nav-text">删除数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建集合"><span class="nav-number">4.5.</span> <span class="nav-text">创建集合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除集合"><span class="nav-number">4.6.</span> <span class="nav-text">删除集合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插入文档"><span class="nav-number">4.7.</span> <span class="nav-text">插入文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除文档"><span class="nav-number">4.8.</span> <span class="nav-text">删除文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更新文档"><span class="nav-number">4.9.</span> <span class="nav-text">更新文档</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#字段更新操作符"><span class="nav-number">4.9.1.</span> <span class="nav-text">字段更新操作符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数组更新操作符"><span class="nav-number">4.9.2.</span> <span class="nav-text">数组更新操作符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#位更新操作符"><span class="nav-number">4.9.3.</span> <span class="nav-text">位更新操作符</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询文档"><span class="nav-number">4.10.</span> <span class="nav-text">查询文档</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#条件查询"><span class="nav-number">4.10.1.</span> <span class="nav-text">条件查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AND查询"><span class="nav-number">4.10.2.</span> <span class="nav-text">AND查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OR查询"><span class="nav-number">4.10.3.</span> <span class="nav-text">OR查询</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#type-操作符"><span class="nav-number">4.11.</span> <span class="nav-text">$type 操作符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#limit与skip方法"><span class="nav-number">4.12.</span> <span class="nav-text">limit与skip方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sort排序"><span class="nav-number">4.13.</span> <span class="nav-text">sort排序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引"><span class="nav-number">5.</span> <span class="nav-text">索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库创建管理员"><span class="nav-number">6.</span> <span class="nav-text">数据库创建管理员</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MongoDB监控"><span class="nav-number">7.</span> <span class="nav-text">MongoDB监控</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他操作"><span class="nav-number">8.</span> <span class="nav-text">其他操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#修改密码"><span class="nav-number">8.1.</span> <span class="nav-text">修改密码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#停止mongodb"><span class="nav-number">8.2.</span> <span class="nav-text">停止mongodb</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#导出数据"><span class="nav-number">8.3.</span> <span class="nav-text">导出数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#导入数据"><span class="nav-number">8.4.</span> <span class="nav-text">导入数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">9.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
