@@ -5,7 +5,7 @@ tags: [你不知道的js]
 categories: JavaScript
 ---
 
-## 概论
+## 前言
 
 本篇主要为阅读《你不知道的JavaScript-上卷》中发现的一些问题，梳理整理下自己知识点，加上一些自己的理解
 <!-- more -->
@@ -85,11 +85,68 @@ with在严格模式下已经无法使用。最重要的时，由于eval 和 with
 
 JS的词法作用域是基于函数的，在ES6语法中的块级作用域出现之前，我们创建作用域通常都是基于函数的，也经常看到如下代码：
 
-  (function(){
-    var a=1;
-    console.log(a)
-  })();
-  console.log(a); //ReferenceError 引用报错
+    (function(){
+      var a=1;
+      console.log(a)
+    })();
+    console.log(a); //ReferenceError 引用报错
 
-IIFE，代表立即执行函数表达式 （Immediately Invoked Function Expression）
+### IIFE
+
+上述函数被称为立即执行函数表达式，也称为IIFE（Immediately Invoked Function Expression），它还有其他写法：
+
+    (function(){
+      var a=1;
+      console.log(a)
+    }());
+
+两种写法是一致的，不过第一种经常出现在一些第三方库中，将全局对象的引用作为函数参数传递进去：
+
+      var a=2;
+      (function ( global ) {
+      var a = 3;
+      console.log( a ); // 3
+      console.log( global.a ); // 2
+      })( window );
+
+这种写法使得函数对全局对象的引用更清晰直观。
+
+IIFE 还有一种变化的用途是倒置代码的运行顺序， 将需要运行的函数放在第二位， 在 IIFE执行之后当作参数传递进去。 这种模式在[UMD项目](/%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E5%8C%96%E8%BF%9B%E5%8C%96%E5%8F%B2/#UMD)中被广泛使用。 
+
+## 块级作用域
+块作用域是一个用来对之前的最小授权原则进行扩展的工具， 将代码从在函数中隐藏信息扩展为在块中隐藏信息。  
+在ES6之前，JS是不不支持块级作用域的，但深入研究后，其实是有其他替代方案的。
+
+### with
+with会创建一个块级作用域，但他会引发其他问题，因为不再推荐使用
+
+### try/catch
+
+没错，try/catch的catch分句会创建一个块级作用域：
+
+    try {
+      throw 1;
+    } catch (a) {
+      a = 2;
+      console.log( a );
+    }
+    console.log(a) ; //ReferenceError: a is not defined
+
+但是try/catch在chrome中有性能问题（虽然从语法上看不应该运行缓慢）
+
+### let && const
+
+let 关键字可以将变量绑定到所在的任意作用域中。 换句话说， let为其声明的变量隐式地了所在的块作用域。
+
+    var foo = true;
+    if (foo) {
+      let bar = foo * 2;
+      console.log( bar );
+    }
+    console.log( bar ); // ReferenceError
+
+const 与 let基本等同，只是其定义的值无法修改。
+
+## 参考
+- [知乎-JavaScript中圆括号() 和 方括号[] 的特殊用法疑问？](https://www.zhihu.com/question/20127472)
 
