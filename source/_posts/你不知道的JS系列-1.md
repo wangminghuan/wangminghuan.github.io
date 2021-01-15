@@ -7,7 +7,7 @@ categories: JavaScript
 
 ## 前言
 
-本篇主要为阅读《你不知道的JavaScript-上卷》中发现的一些问题，梳理整理下自己知识点，加上一些自己的理解
+本篇主要为阅读《你不知道的JavaScript-上卷》中遇到自己遗漏的知识点，加上一些自己的理解进行了梳理整理：
 <!-- more -->
 
 ## 编译原理
@@ -146,6 +146,180 @@ let 关键字可以将变量绑定到所在的任意作用域中。 换句话说
     console.log( bar ); // ReferenceError
 
 const 与 let基本等同，只是其定义的值无法修改。
+
+函数作用域和块作用域的行为是一样的，可以总结为：任何声明在某个作用域内的变量，都将附属于这个作用域
+
+## 声明提升
+
+先看两个例子：
+
+    console.log(a)
+    var a=1;
+
+对，没有报错，运行结果是 undefined
+    
+    a = 2;
+    var a;
+    console.log(a);
+大多数会认为a又被赋值了，所以输出应该是undefined, 但输出结果是2。
+
+所以，到底发生了什么，先有鸡（赋值）还是先有蛋（声明）？
+
+上面讲到过引擎会对代码先进行编译，编译阶段中的一部分工作就是找到所有的声明，并用合适的作用域将它们关联起来。
+
+譬如：var a=1; 引擎会将它分成两个部分，var a 和 a=1; 第一个定义声明是在编译阶段进行的。第二个赋值声明会被留在原地等待执行阶段，也就是说，所有的声明（变量与函数）都会在编译阶段先被处理。
+
+
+    foo();
+    function foo() { 
+      console.log( a ); // undefined
+      var a = 2;
+    }
+
+上面的代码中函数foo 会被提升到当前作用域中，foo中的变量a也被提升到了函数作用域内的顶部，值得注意的是，函数表达式(包括具名函数)的作用域并不会提升。
+
+      foo(); // TypeError 
+      bar(); // ReferenceError
+      var foo = function bar() { 
+        // ... 
+      }
+如果多处“重复声明”，函数声明的优先级最高，其次才是变量。
+
+      foo(); // 1
+      var foo;
+      function foo() { 
+        console.log( 1 ); 
+      }
+      foo = function() { 
+        console.log( 2 );
+      };
+      foo();//2  
+
+后面出现的函数声明可以覆盖前面的，也可以这样理解，foo执行时，引擎其实已经把`function foo{...}` 提升到最顶部，后面再次调用foo时，后面的函数表达式覆盖了函数声明，此时变输出2
+
+不过我们要尽量避免重复声明，会引发意想不到的问题！
+
+
+## 闭包
+
+闭包，总是笼罩着一层神秘色彩，关于这块内容其实理解的一直不够透彻。其实自己在日常书写中有意无意都会创建闭包，只是，我们不知道"它"叫闭包而已。
+
+### 概念
+
+当函数可以记住并访问所在的词法作用域，即使函数是在当前词法作用域之外执行，这时就产生了闭包；通俗理解的闭包就是：能够读取其他函数内部变量的函数。对，闭包的直观判断就是函数。
+
+      function foo() {
+        var a = 2;
+        function bar() { 
+          console.log( a ); 
+        }
+        return bar; 
+      }
+      var baz = foo(); 
+      baz(); // 2 在函数外部访问到了其他函数内部的变量
+
+当然，也可以使用其他方式对函数的值进行传递:
+
+    var fn;
+    function foo(){
+      var a=1;
+      fn=function(){
+        console.log(a)
+      }
+    }
+    function bar(){
+      fn(); // 快看，这就是闭包
+    }
+    foo();  // 必须先执行，才能形成之传递
+    bar(); // 1
+### 创建
+
+上述都是人为刻意的创建闭包，回归到我们日常开发中，只要使用了回调函数，其实就是在使用闭包！！！
+
+譬如经常看到的多个li标签点击展示索引值的问题：
+
+    const list=document.querySelectorAll("li");
+    for(var i=0;i<list.length;i++){
+        list[i].addEventListener("click",function(){
+          alert(i)
+        })
+    }
+但是，如果按上述代码执行，无论怎么点击，alert的结果永远是一样的（list.length-1）
+
+这是因为每次循环执行的代码都被封闭在一个共享的作用域中，此时，我们需要创建一个闭包作用域，使得每次循环都是独立的作用域，将上述代码进行改写：
+
+    const list=document.querySelectorAll("li");
+    for(var i=0;i<list.length;i++){
+      (function(j){
+        list[j].addEventListener("click",function(){
+          alert(j)
+        })
+      })(i);
+    }
+
+当然，如果使用ES6语法，利用let创建的块级作用域可以更简单的实现：
+
+    const list=document.querySelectorAll("li");
+    for(let i=0;i<list.length;i++){
+        list[i].addEventListener("click",function(){
+          alert(i)
+        })
+    }
+
+### 模块
+
+考虑下面代码，创建一个coolMod模块
+
+    function coolMod(){
+      var something="cool";
+      var another=[1,2,3];
+      function doSomething(){
+        console.log(something)
+      }
+      function doAnother(){
+        console.log(another)
+      }
+      return {
+        doSomething:doSomething,
+        doAnother:doAnother
+      }
+    }
+    var foo = coolMod(); // 也可以将coolMod改为立即调用函数，变为单例模式
+    foo.doSomething(); 
+    foo.doAnother(); 
+
+doSomething() 和 doAnother() 函数具有涵盖模块实例内部作用域的闭包
+
+从coolMod模块也可以看出，模块模式需要具备两个必要条件：
+- 为创建内部作用域而调用了一个包装函数
+- 包装函数的返回 值必须至少包括一个对内部函数的引用，这样就会创建涵盖整个包装函数内部作用域的闭包。
+
+模块模式另一个简单但强大的变化用法是，命名将要作为公共 API 返回的对象：通过在模块实例的内部保留对公共 API 对象的内部引用，可以从内部对模块实例进行修改。
+
+      var foo = (function coolMod(id) {
+      function change() {
+        // 修改公共 API 
+        publicAPI.identify = identify2;
+      }
+      function identify1() {
+        console.log(id);
+      }
+      function identify2() {
+        console.log(id.toUpperCase());
+      }
+      var publicAPI = {
+        change: change,
+        identify: identify1
+      };
+      return publicAPI;
+      })('foo mod');
+      foo.identify(); //foo mod
+      foo.change();
+      foo.identify(); // FOO MOD
+
+#### 创建一个模块依赖加载器
+
+#### ES6模块机制
 
 ## 参考
 - [知乎-JavaScript中圆括号() 和 方括号[] 的特殊用法疑问？](https://www.zhihu.com/question/20127472)
