@@ -7,7 +7,7 @@ categories: JavaScript
 
 ## 前言
 
-本篇主要为阅读《你不知道的JavaScript-上卷》中遇到自己遗漏的知识点，加上一些自己的理解进行了梳理整理：
+本篇主要为阅读《你不知道的JavaScript-上卷》中遇到自己遗漏的知识点，加上一些自己的理解进行了梳理整理，阅读章节为第一部分：作用域和闭包
 <!-- more -->
 
 ## 编译原理
@@ -319,8 +319,60 @@ doSomething() 和 doAnother() 函数具有涵盖模块实例内部作用域的�
 
 #### 创建一个模块依赖加载器
 
-#### ES6模块机制
+创建一个模块依赖加载器，这里只是介绍下核心逻辑：
 
-## 参考
+    var MyModules = (function Manager() {
+      var modules = {};
+      function define(name, deps, impl) {
+        for (var i = 0; i < deps.length; i++) { 
+          deps[i] = modules[deps[i]]; 
+        } 
+        modules[name] = impl.apply(impl, deps); 
+        // 核心逻辑，将定义的模块函数挂载到内部modules对象下，并对外暴露API
+        // apply 用法回忆：function fn(a,b){return a+b}; fn.apply(fn,[1,2]);
+      }
+      function get(name) {
+        return modules[name];
+      }
+      return {
+        define: define,
+        get: get
+      }
+    })();
+
+可以看到闭包的写法，下面开始定义一个模块`bar`
+
+    MyModules.define( "bar", [], function() {
+      function hello(who) {
+        return "Let me introduce: " + who;
+      }
+      return { hello: hello }; 
+   });
+   
+`bar`模块不依赖任何内容，同时对外暴露`hello`方法；
+再定义一个`foo`模块，他依赖bar模块：
+
+     MyModules.define( "foo", ["bar"], function(bar) { 
+        function awesome(name) { 
+          console.log(bar.hello( name ).toUpperCase()); 
+        }
+      return { awesome: awesome }; 
+      });
+
+可以看到`foo`模块的`awesome`方法依赖`bar`的`hello`方法，我们执行下两个模块，并调用下foo模块对外暴露的`awesome`方法
+
+    var bar = MyModules.get( "bar" );
+    var foo = MyModules.get( "foo" );
+    foo.awesome('jack'); // LET ME INTRODUCE: JACK
+
+
+requireJS等模块加载库逻辑会比这个复杂许多，但基本核心思想大致相同，可以看到里面存在大量闭包的用法。
+
+ES6语法开始支持的原生的模块语法，import 可以将一个模块中的一个或多个 API 导入到当前作用域中，并分别绑定在一个变量上，而上面的例子是将整个模块的 API 导入并绑定到一个变量上；export 会将当前模块的变量/函数导出为公共API, 而上面例子是通过函数return出去；
+
+ES6 的模块文件是一个独立的作用域，不需要再创建函数作用域闭包来处理了
+
+## 拓展
+
 - [知乎-JavaScript中圆括号() 和 方括号[] 的特殊用法疑问？](https://www.zhihu.com/question/20127472)
 
