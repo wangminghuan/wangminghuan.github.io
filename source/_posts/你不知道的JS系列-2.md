@@ -188,5 +188,7 @@ ES6中的箭头函数不适用四种标准规则，而是根据外层（函数�
     var a = "global";
     foo.call(obj);
 ## 对象
+ JavaScript 中一共有七种主要类型（术语是“语言类型”）: `null/undefined/boolean/string/number/symbol/object`,具体可参见[重学前端系列-数据类型](/重学前端3-JavaScript部分-数据类型/)，
+ 
 [重学前端系列-对象](/重学前端4-JavaScript部分-对象/)
-[重学前端系列-数据类型](/重学前端3-JavaScript部分-数据类型/)
+
