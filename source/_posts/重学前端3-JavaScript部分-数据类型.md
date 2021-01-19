@@ -33,7 +33,19 @@ Undefined 类型表示未定义，它的类型只有一个值，就是 undefined
 Null 类型也只有一个值，就是 null，它的语义表示空值，与 undefined 不同，null 表示的是：“定义了但是为空”。同时null 是 JavaScript 关键字，所以在任何代码中，你都可以放心用 null 关键字来获取 null 值。
 但是有时候null会被当作一种对象类型，这是语言本身设计缺陷：`typeof null === 'object'`，究其原因是因为：
 
-    不同的对象在底层都表示为二进制，在 JavaScript 中二进制前三位都为 0 的话会被判 断为 object 类型，null 的二进制表示是全 0，自然前三位也是 0，所以执行 typeof 时会返回“object”。。
+    不同的对象在底层都表示为二进制，在 JavaScript 中二进制前三位都为 0 的话会被判 断为 object 类型，null 的二进制表示是全 0，自然前三位也是 0，所以执行 typeof 时会返回“object”。
+
+因为Undefined 类型与 Null 类型的值也对应只有一个（undefined/null），所以在有些代码中也直接通过判断值来判断类型：
+
+    var obj;
+    console.log(obj===undefined);//true
+    console.log(Object.prototype.__proto__===null);// true
+
+undefined 值是派生自 null 值的，因此 ECMA-262 规定对它们的相等性测试要返回 true：
+
+    console.log(null==undefined);// true
+    console.log(null===undefined);// false
+    
 ### String
 String 用于表示文本数据。String 有最大长度是 2^53 - 1，这在一般开发中都是够用的，但这个所谓最大长度，并不完全是我们理解中的字符数。因为 String 的意义并非“字符串”，而是字符串的 UTF16 编码，我们字符串的操作 charAt、charCodeAt、length 等方法针对的都是 UTF16 编码。所以，字符串的最大长度，实际上是受字符串的编码长度影响的。
 
@@ -79,7 +91,7 @@ Object 是 JavaScript 中最复杂的类型，也是 JavaScript 的核心机制�
 
 在 JavaScript 中，对象的定义是“属性的集合”。属性分为数据属性和访问器属性，二者都是 key-value 结构，key 可以是字符串或者 Symbol 类型。
 
-JavaScript 中的六个基本类型，都在对象类型中有一个“亲戚”（包装类型）。它们是： Number,String,Boolean,Symbol（null 与 undefined 表示不知道你们在说什么）：
+JavaScript 中的六个基本类型，有四个都在对象类型中有一个“亲戚”（包装类型）。它们是： Number,String,Boolean,Symbol（null 与 undefined 表示不知道你们在说什么）：
 
 - Number、String 和 Boolean，三个构造器是两用的，当跟 new 搭配时，它们产生对象，当直接调用时，它们表示强制类型转换。
 	
@@ -94,6 +106,13 @@ JavaScript 中的六个基本类型，都在对象类型中有一个“亲戚”
 当不用 new 运算符调用 String() 时，它只把 s 转换成原始的字符串，并返回转换后的值
 - Symbol 函数比较特殊，直接用 new 调用它会抛出错误，但它仍然是 Symbol 对象的构造器。
 
+      // 我们无法通过new 调用来得到一个Symbol对象，可以利用call强制进行装箱
+      var symbolObject = (function(){ return this; }).call(Symbol("a"));
+      console.log(typeof symbolObject); //object
+      console.log(symbolObject instanceof Symbol); //true
+      console.log(symbolObject.constructor == Symbol); //true
+
+![](./1.png)
 JavaScript 语言设计上试图模糊对象和基本类型之间的关系，我们日常代码可以把对象的方法在基本类型上使用，比如：
 
     console.log("abc".charAt(0)); //a
@@ -103,7 +122,7 @@ JavaScript 语言设计上试图模糊对象和基本类型之间的关系，我
 
     var a = Symbol("a");
     console.log(typeof a); //symbol，a 并非对象
-	a.hello(); //hello，有效
+	  a.hello(); //hello，有效
 
 ### 类型转换
 

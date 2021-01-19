@@ -139,11 +139,11 @@ JavaScript 语言和宿主环境中许多新的内置函数，都提供了一 �
 
 我们接着看代码：
    
-   function foo(a){
-     this.a=a;
-   }
-   var bar=new foo(2);
-   console.log(bar.a) //2
+    function foo(a){
+      this.a=a;
+    }
+    var bar=new foo(2);
+    console.log(bar.a) //2
    
 
 
@@ -188,7 +188,51 @@ ES6中的箭头函数不适用四种标准规则，而是根据外层（函数�
     var a = "global";
     foo.call(obj);
 ## 对象
- JavaScript 中一共有七种主要类型（术语是“语言类型”）: `null/undefined/boolean/string/number/symbol/object`,具体可参见[重学前端系列-数据类型](/重学前端3-JavaScript部分-数据类型/)，
+ JavaScript 中一共有七种主要类型（术语是“语言类型”）: `null/undefined/boolean/string/number/symbol/object`,具体可参见[重学前端系列-数据类型](/重学前端3-JavaScript部分-数据类型/)
  
-[重学前端系列-对象](/重学前端4-JavaScript部分-对象/)
+前面六种称之为基本类型，剩下的都可以归到复杂类型下。同时JavaScript 中还有一些对象子类型，通常被称为内置对象：`String/Number/Boolean/Object/Function/Array/Date/RegExp/Error/Set/Map/Promise`, 更多关于对象部分可参见[重学前端系列-对象](/重学前端4-JavaScript部分-对象/)
+
+这些内置函数可以当作构造函数 （可以通过new调用）来使用，从而可以构造一个对应子类型的新对象。对于这些对象子类型，Object、Array、Function 和 RegExp（正则表达式）来说，无论使用文字形式还是构造形式，它们都是对象(不是字面量)，所以首选更简单的文字形式。建议只在需要那些额外选项时使用构造形式。
+
+在对象中，属性名永远都是字符串（会被强制转化），数组中则是下标数字。
+
+### 属性名
+
+ES6之前属性名写法不支持变量，现在也开始支持了，主要场景是针对`Symbol`类型
+
+    var prefix = "foo";
+    var mySymbol=Symbol();
+    var myObject = { 
+      [prefix + "bar"]:"hello", 
+      [prefix + "baz"]: "world",
+      [mySymbol]:"Hello World"
+    };
+    console.log(myObject[mySymbol]) // Hello World
+
+### 属性与方法
+对于对象来说，如果改属性值指向的是一个函数，我们经常会称之为“方法”，但这其实是个误解，函数不管在什么情况下都不会属于某个对象，只是属性引用值指向一个函数而已，这在JS中经常混用，知道即可。“函数”和“方法”在 JavaScript 中是可以互换的。
+
+### 数组
+
+数组也是对象，所以也可以把数组当“普通”对象使用：
+
+    var arr=[1,2,3];
+    arr.type="array"
+    console.log(arr);// [1, 2, 3, type: "array"]
+    console.log(arr.length); //3
+
+我们可以给数组添加属性，但数组的长度并不会改变
+### 对象的复制
+
+对于 JSON 安全的对象来说，有一种巧妙的复制方法(可以实现深度复制)：
+
+     var newObj = JSON.parse( JSON.stringify( someObj ) );
+
+ES6 新增了 `Object.assign`方法来实现浅复制(内部也是通过遍历使用 `= `操作符来赋值):
+
+     var newObj = Object.assign( {}, someObj )
+### Getter && Setter
+
+### 
+
 

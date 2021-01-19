@@ -52,12 +52,11 @@ JavaScript 允许运行时向对象添加属性，这就跟绝大多数基于类
 它比较接近于其它语言的属性概念。数据属性具有四个特征:
 
 1. value：就是属性的值。
-2. writable：决定属性能否被赋值。
+2. writable：决定属性能否被赋值(修改)。
 3. enumerable：决定 for in 能否枚举该属性。
 4. configurable：决定该属性能否被删除或者改变特征值。
 
 在大多数情况下，我们只关心数据属性的值即可。我们可以使用`Object.defineProperty`来定义属性：  
-
 
 	var o = {
 	  a: 1
@@ -65,14 +64,27 @@ JavaScript 允许运行时向对象添加属性，这就跟绝大多数基于类
 	Object.defineProperty(o, "b", {
 	  value: 2,
 	  writable: false,
-	  enumerable: false,
-	  configurable: true
+	  enumerable: true,
+	  configurable: false
 	});
-	//a 和 b 都是数据属性，但特征值变化了
-	Object.getOwnPropertyDescriptor(o, "a"); // {value: 1, writable: true, enumerable: true, configurable: true}
-	Object.getOwnPropertyDescriptor(o, "b"); // {value: 2, writable: false, enumerable: false, configurable: true}
-	o.b = 3;
-	console.log(o.b); // 2，b的值不会发生变化
+    //a 和 b 都是数据属性，但特征值变化了
+    Object.getOwnPropertyDescriptor(o, "a"); // {value: 1, writable: true, enumerable: true, configurable: true}
+    Object.getOwnPropertyDescriptor(o, "b"); // {value: 2, writable: false, enumerable: true, configurable: false}
+
+    o.b = 3;
+    delete o.b; // configurable为false后无法删除属性
+    console.log(o.b); // 2，b的值不会发生变化
+
+    Object.defineProperty(o, "b", {
+      value: 10,
+      writable: true,
+      enumerable: true,
+      configurable: true
+    }); // TypeError: Cannot redefine property: b
+
+对于configurable属性来说，如果通过`defineProperty`修改成 false, 那便无法再修改回来（单向操作，无法撤销）。
+
+
 #### 访问器（getter/setter）属性，
 访问器属性也有四个特征:
 
