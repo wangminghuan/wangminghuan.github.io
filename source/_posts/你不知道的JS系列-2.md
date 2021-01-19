@@ -231,8 +231,57 @@ ES6之前属性名写法不支持变量，现在也开始支持了，主要场�
 ES6 新增了 `Object.assign`方法来实现浅复制(内部也是通过遍历使用 `= `操作符来赋值):
 
      var newObj = Object.assign( {}, someObj )
-### Getter && Setter
+### 对象的“其他”方法
 
-### 
+- Object.preventExtensions：禁止一个对象添加新属性并且保留已有属性
+
+    var myObject = {
+      a:2
+    };
+    Object.preventExtensions( myObject );
+    myObject.b = 3;
+    myObject.b; // undefined
+- Object.seal：会创建一个“密封” 的对象（对对象所有属性调用preventExtensions方法，并把所有现有属性标记为 `configurable:false`）
+- Object.freeze：会创建一个冻结对象（对象上调用seal方法，并把所有“数据访问” 属性标记为 `writable:false`）
+
+### Getter && Setter
+此部分可参见[重学前端系列-对象](/重学前端4-JavaScript部分-对象/#访问器（getter-setter）属性)
+
+### 存在性
+
+- `for in` 操作符会检查属性是否在对象及其 [[Prototype]] 原型链中
+
+      1. for in 其实只是检测属性名是否存在
+      2. 不要在数组中调用for in 因为会得到除了数值索引外其他的属性值：
+         var arr=[1,2,3];
+         arr.type='8'
+         for( var k in arr){
+          console.log(k);// 0,1,2,type
+         }
+
+- `hasOwnProperty` 只会检查属性是否在当前对象中。
+      1. 如果担心myObejct.hasOwnProperty失败可以调用：Object.prototype.myObejct.call(hasOwnProperty)
+
+- `propertyIsEnumerable`:会检查给定的属性名是否直接存在于对象中（不包含原型链）并满足 `enumerable:true`
+
+- `Object.keys`:会返回一个数组，包含所有可枚举属性;
+
+- `Object.getOwnPropertyNames`:会返回一个数组，包含所有属性，无论它们是否可枚举
+
+### 遍历
+
+说起遍历首先想到的就是for循环，但for循环其实并不是在遍历值， 而是遍历下标来指向值， 如 `myArray[i]`
+
+- map()：对数组中的每一项运行给定函数，返回每次函数调用的结果组成的数组
+
+- forEach()：对数组中的每一项运行给定函数。这个方法没有返回值
+
+- every()：对数组中的每一项运行给定函数，如果该函数对每一项都返回true，则返回true
+
+- filter()：对数组中的每一项运行给定函数，返回该函数会返回true 的项组成的数
+
+- some()：对数组中的每一项运行给定函数，如果该函数对任一项返回true，则返回true
+
+如何直接遍历值而不是数组下标（或者对象属性） ？ 幸好， ES6 增加了一种用来遍历数组的`for of`循环语法, 具体可参见[ES6系列:Iterator](/ES6系列-3-Iterator/)
 
 
