@@ -272,16 +272,90 @@ ES6 新增了 `Object.assign`方法来实现浅复制(内部也是通过遍历�
 
 说起遍历首先想到的就是for循环，但for循环其实并不是在遍历值， 而是遍历下标来指向值， 如 `myArray[i]`
 
-- map()：对数组中的每一项运行给定函数，返回每次函数调用的结果组成的数组
+- map：【不改变原数组】对数组中的每一项运行给定函数，返回每次函数调用的结果组成的数组
+      
+      // 调用map时大多情况下是为了他的返回值的, 除了抛出异常以外，没有办法中止或跳出
 
-- forEach()：对数组中的每一项运行给定函数。这个方法没有返回值
+      const arr=[1,2,3];
+      const newArr=arr.map(v=>v*10); 
+       // 箭头函数只有一个返回值时可以省略return，其他情况不能省略，不然得到是[undefined,undefined,undefined]
+      console.log(arr,newArr)
+       // 结果：[1,2,3]  [10,20,30]
+     
 
-- every()：对数组中的每一项运行给定函数，如果该函数对每一项都返回true，则返回true
+- forEach：【不改变原数组】对数组中的每一项运行给定函数。这个方法没有返回值
+    
+       // 调用map时大多情况下是只是为了遍历, 除了抛出异常以外，没有办法中止或跳出
+      const arr=[1,2,3];
+      const newArr=arr.map(v=>v*10);
+      console.log(arr,newArr) // [1,2,3] undefined
 
-- filter()：对数组中的每一项运行给定函数，返回该函数会返回true 的项组成的数
+- filter：【不改变原数组】对数组中的每一项运行给定函数，返回该函数会返回true 的项组成的数
+        
+      const arr=[1,2,3];
+      const newArr=arr.filter(v=>v>2);
+      console.log(arr,newArr) // [1,2,3] [3]
 
-- some()：对数组中的每一项运行给定函数，如果该函数对任一项返回true，则返回true
+- every：【不改变原数组】对数组中的每一项运行给定函数，如果该函数对每一项都返回true，则返回true
+   
+      // 只要给定函数返回false立即跳出，并得到false;
+      const arr=[1,2,3];
+      const newArr=arr.every(v=>{
+        console.log(v);//1
+        return v>1
+      });
+      console.log(arr,newArr) ;//[1,2,3] false
+- some：【不改变原数组】对数组中的每一项运行给定函数，如果该函数对任一项返回true，则返回true，跳出不再遍历
+      // 只要给定函数返回true立即跳出，并得到true;
+      const arr=[1,2,3];
+      const newArr=arr.some(v=>{
+        console.log(v);//1,2
+        return v>1
+      });
+      console.log(arr,newArr) ;//[1,2,3] true
+  
+如何直接遍历值而不是数组下标（或者对象属性）？ ES6 增加了一种用来遍历数组的`for of`循环语法, 具体可参见[ES6系列:Iterator](/ES6系列-3-Iterator/)
 
-如何直接遍历值而不是数组下标（或者对象属性） ？ 幸好， ES6 增加了一种用来遍历数组的`for of`循环语法, 具体可参见[ES6系列:Iterator](/ES6系列-3-Iterator/)
+几种遍历的执行效率：
 
+      for > for-of > forEach > filter > map > for-in
+ES6扩展了数组的方法，新增了entries/keys/values方法，返回的`iterator`对象用于`for of`循环，参见：[ES6系列-新增类型与扩展方法](/ES6系列-2-新增类型与扩展方法/#数组实例的-entries-，keys-和-values)
 
+##  类
+我们经常讨论到的设计模式如：迭代器模式、观察者模式、工厂模式、单例模式等，都是基于面向对象类的基础上实现了。**类本身也是一种设计模式!!!!**；在Javascript的世界中，类不是必须的（这点不同于Java，Java中万物都是类），也可以选择面向过程化编程。
+
+纵然ES6中提供了class等关键字，但Javascript依旧是面向对象的编程语言，而非面向类。
+
+### 理解类与实例
+如果拿建筑蓝图与建筑实体来做类比：建筑蓝图就是一个类，它只是建造计划，并不是真正的建筑；而依旧设计蓝图建造出来的实体建筑就是一个实例：它是一个真正存在的对象。
+
+### 构造函数
+类的实例是由构造函数创建的，这个函数通常与类名相同，使用伪代码来实现一个例子：
+
+    class CoolGuy {
+      specialTrick = nothing 
+      CoolGuy( trick ) {  
+        specialTrick = trick  // 构造函数
+      }
+      showOff() { 
+        output( "Here's my trick: ", specialTrick ) 
+        } 
+     } 
+
+调用类构造函数来生成一个 CoolGuy 实例： 
+
+    Joe = new CoolGuy( "jumping rope" ) 
+    Joe.showOff() // Here's my trick: , specialTrick
+
+对于真正的类语言来说，构造函数是属于类的。然而，在 JavaScript 中恰好相反——**实际上“类”是属于构造函数的!!!**
+
+### 继承和多态
+
+- 继承
+在面向类的语言中，我们可以先定义一个类，然后定义一个继承前者的类。 后者通常被称为“子类”，前者通常被称为“父类”，这点非常类似现实中的“父亲与孩子”。
+子类会继承父类的一些属性与方法，但是也可以重写所有继承的行为甚至定义新行为，所以子类定义好后，其实是一个完全独立的不同于父类的类。子类只是父类行为复制后的一个副本
+
+- 多态
+任何方法都可以引用继承层次中高层的方法，同时在继承链的不同层次中一个方法名可以被多次定义。在子类中也可以相对引用它继承的父类，这种相对引用 通常被称为`super`
+
+## 原型
