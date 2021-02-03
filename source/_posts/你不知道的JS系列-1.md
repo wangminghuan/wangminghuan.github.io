@@ -347,7 +347,7 @@ doSomething() 和 doAnother() 函数具有涵盖模块实例内部作用域的�
         return "Let me introduce: " + who;
       }
       return { hello: hello }; 
-   });
+    });
    
 `bar`模块不依赖任何内容，同时对外暴露`hello`方法；
 再定义一个`foo`模块，他依赖bar模块：
