@@ -104,13 +104,14 @@
 <meta property="og:site_name" content="WMH&#39;s Blog">
 <meta property="og:description" content="概述根据最新的语言标准，js共有七种语言类型：  Undefined Null Boolean String Number Object Symbol">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://wangminghuan.github.io/重学前端3-JavaScript部分-数据类型/1.png">
 <meta property="og:image" content="https://wangminghuan.github.io/重学前端3-JavaScript部分-数据类型/3-1.jpg">
 <meta property="og:image" content="https://wangminghuan.github.io/重学前端3-JavaScript部分-数据类型/3-2.png">
-<meta property="og:updated_time" content="2019-07-03T03:56:34.972Z">
+<meta property="og:updated_time" content="2021-01-19T09:15:31.443Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="重学前端3 - JavaScript部分-数据类型">
 <meta name="twitter:description" content="概述根据最新的语言标准，js共有七种语言类型：  Undefined Null Boolean String Number Object Symbol">
-<meta name="twitter:image" content="https://wangminghuan.github.io/重学前端3-JavaScript部分-数据类型/3-1.jpg">
+<meta name="twitter:image" content="https://wangminghuan.github.io/重学前端3-JavaScript部分-数据类型/1.png">
 
 
 
@@ -416,7 +417,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-03 11:56:34" itemprop="dateModified" datetime="2019-07-03T11:56:34+08:00">2019-07-03</time>
+                <time title="修改时间：2021-01-19 17:15:31" itemprop="dateModified" datetime="2021-01-19T17:15:31+08:00">2021-01-19</time>
               
             
           </span>
@@ -494,8 +495,16 @@ console.log(typeof undefinedBackup);// 显示&quot;undefined&quot;
 
 console.log(typeof undefined);// 在IE5.5~8中显示&quot;number&quot;，其他浏览器中则显示&quot;undefined&quot;
 </code></pre><p>所以，我们为了避免无意中被篡改，我建议使用 void 0 来获取 undefined 值。</p>
-<h3 id="null"><a href="#null" class="headerlink" title="null"></a>null</h3><p>Null 类型也只有一个值，就是 null，它的语义表示空值，与 undefined 不同，null 表示的是：“定义了但是为空”。同时null 是 JavaScript 关键字，所以在任何代码中，你都可以放心用 null 关键字来获取 null 值。</p>
-<h3 id="String"><a href="#String" class="headerlink" title="String"></a>String</h3><p>String 用于表示文本数据。String 有最大长度是 2^53 - 1，这在一般开发中都是够用的，但这个所谓最大长度，并不完全是我们理解中的字符数。因为 String 的意义并非“字符串”，而是字符串的 UTF16 编码，我们字符串的操作 charAt、charCodeAt、length 等方法针对的都是 UTF16 编码。所以，字符串的最大长度，实际上是受字符串的编码长度影响的。</p>
+<h3 id="null"><a href="#null" class="headerlink" title="null"></a>null</h3><p>Null 类型也只有一个值，就是 null，它的语义表示空值，与 undefined 不同，null 表示的是：“定义了但是为空”。同时null 是 JavaScript 关键字，所以在任何代码中，你都可以放心用 null 关键字来获取 null 值。<br>但是有时候null会被当作一种对象类型，这是语言本身设计缺陷：<code>typeof null === &#39;object&#39;</code>，究其原因是因为：</p>
+<pre><code>不同的对象在底层都表示为二进制，在 JavaScript 中二进制前三位都为 0 的话会被判 断为 object 类型，null 的二进制表示是全 0，自然前三位也是 0，所以执行 typeof 时会返回“object”。
+</code></pre><p>因为Undefined 类型与 Null 类型的值也对应只有一个（undefined/null），所以在有些代码中也直接通过判断值来判断类型：</p>
+<pre><code>var obj;
+console.log(obj===undefined);//true
+console.log(Object.prototype.__proto__===null);// true
+</code></pre><p>undefined 值是派生自 null 值的，因此 ECMA-262 规定对它们的相等性测试要返回 true：</p>
+<pre><code>console.log(null==undefined);// true
+console.log(null===undefined);// false
+</code></pre><h3 id="String"><a href="#String" class="headerlink" title="String"></a>String</h3><p>String 用于表示文本数据。String 有最大长度是 2^53 - 1，这在一般开发中都是够用的，但这个所谓最大长度，并不完全是我们理解中的字符数。因为 String 的意义并非“字符串”，而是字符串的 UTF16 编码，我们字符串的操作 charAt、charCodeAt、length 等方法针对的都是 UTF16 编码。所以，字符串的最大长度，实际上是受字符串的编码长度影响的。</p>
 <h3 id="Boolean"><a href="#Boolean" class="headerlink" title="Boolean"></a>Boolean</h3><p>布尔类型有两个值：true和false，其他不做赘述。</p>
 <h3 id="Number"><a href="#Number" class="headerlink" title="Number"></a>Number</h3><p>JavaScript 中有 +0 和 -0，在加法类运算中它们没有区别，但是除法的场合则需要特别留意区分，“忘记检测除以 -0，而得到负无穷大”的情况经常会导致错误，而区分 +0 和 -0 的方式，正是检测 1/x 是 Infinity 还是 -Infinity。</p>
 <p>补充:ES6中增加了Object.is来判断两个数值是否相等（解决正负零和NaN的问题，其他等同于<code>===</code>）</p>
@@ -514,12 +523,12 @@ Object.is(NaN, NaN) // true
 </code></pre><p>那么如何正确比较浮点数：</p>
 <pre><code>console.log( Math.abs(0.1 + 0.2 - 0.3) &lt;= Number.EPSILON); //true Number.EPSILON表示js的最小精度
 </code></pre><h3 id="Symbol"><a href="#Symbol" class="headerlink" title="Symbol"></a>Symbol</h3><p>ES5 的对象属性名都是字符串，很容易产生冲突。Symbol 是 ES6 中引入的新类型，它是一切非字符串的对象 key 的集合，在 ES6 规范中，整个对象系统被用 Symbol 重塑。</p>
-<p>我们创建 Symbol 的方式是使用全局的 Symbol 函数。</p>
+<p>我们创建 Symbol 的方式是使用全局的 Symbol 函数（无法通过字面量方式创建）。</p>
 <p>ES6 规定，默认的 Iterator 接口部署在数据结构的Symbol.iterator属性上，所以可以通过Symbol.iterator来定义 for..of在对象上的行为。</p>
 <h3 id="Object"><a href="#Object" class="headerlink" title="Object"></a>Object</h3><p>Object 是 JavaScript 中最复杂的类型，也是 JavaScript 的核心机制之一。  </p>
 <p>在 JavaScript 中，对象的定义是“属性的集合”。属性分为数据属性和访问器属性，二者都是 key-value 结构，key 可以是字符串或者 Symbol 类型。</p>
-<p>JavaScript 中的几个基本类型，都在对象类型中有一个“亲戚”（包装类型）。它们是： Number,String,Boolean,Symbol：</p>
-<ol>
+<p>JavaScript 中的六个基本类型，有四个都在对象类型中有一个“亲戚”（包装类型）。它们是： Number,String,Boolean,Symbol（null 与 undefined 表示不知道你们在说什么）：</p>
+<ul>
 <li><p>Number、String 和 Boolean，三个构造器是两用的，当跟 new 搭配时，它们产生对象，当直接调用时，它们表示强制类型转换。</p>
 <pre><code>new String() instanceof String;//true
 new String instanceof String;//true, 
@@ -529,19 +538,25 @@ new Number() instanceof Number;//true
 // 补充：String() 和运算符 new 一起作为构造函数使用时，它返回一个新创建的 String 对象,存放的是字符串 s 或 s 的字符串表示。
 // 当不用 new 运算符调用 String() 时，它只把 s 转换成原始的字符串，并返回转换后的值
 </code></pre></li>
-</ol>
+</ul>
 <p>当不用 new 运算符调用 String() 时，它只把 s 转换成原始的字符串，并返回转换后的值</p>
-<ol start="2">
-<li>Symbol 函数比较特殊，直接用 new 调用它会抛出错误，但它仍然是 Symbol 对象的构造器。</li>
-</ol>
-<p>JavaScript 语言设计上试图模糊对象和基本类型之间的关系，我们日常代码可以把对象的方法在基本类型上使用，比如：</p>
+<ul>
+<li><p>Symbol 函数比较特殊，直接用 new 调用它会抛出错误，但它仍然是 Symbol 对象的构造器。</p>
+<pre><code>// 我们无法通过new 调用来得到一个Symbol对象，可以利用call强制进行装箱
+var symbolObject = (function(){ return this; }).call(Symbol(&quot;a&quot;));
+console.log(typeof symbolObject); //object
+console.log(symbolObject instanceof Symbol); //true
+console.log(symbolObject.constructor == Symbol); //true
+</code></pre></li>
+</ul>
+<p><img src="/重学前端3-JavaScript部分-数据类型/./1.png" alt><br>JavaScript 语言设计上试图模糊对象和基本类型之间的关系，我们日常代码可以把对象的方法在基本类型上使用，比如：</p>
 <pre><code>console.log(&quot;abc&quot;.charAt(0)); //a
 </code></pre><p>甚至我们在原型上添加方法，都可以应用于基本类型，比如以下代码，在 Symbol 原型上添加了 hello 方法，在任何 Symbol 类型变量都可以调用。</p>
 <pre><code>Symbol.prototype.hello = () =&gt; console.log(&quot;hello&quot;);
 
 var a = Symbol(&quot;a&quot;);
 console.log(typeof a); //symbol，a 并非对象
-a.hello(); //hello，有效
+  a.hello(); //hello，有效
 </code></pre><h3 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h3><p>  <img src="/重学前端3-JavaScript部分-数据类型/3-1.jpg" alt></p>
 <h4 id="StringToNumber"><a href="#StringToNumber" class="headerlink" title="StringToNumber"></a>StringToNumber</h4><pre><code>parseInt(&quot;1.1&quot;);//1
 parseFloat(&quot;1.1&quot;);//1.1
@@ -574,7 +589,7 @@ console.log(Object.prototype.toString.call(symbolObject)); //[object Symbol]
 o * 2
 // valueOf
 // toString
-// TypeError
+// TypeError: Cannot convert object to primitive value
 </code></pre><p>到 String 的拆箱转换会优先调用 toString。我们把刚才的运算从 o*2 换成 o + “”，那么你会看到调用顺序就变了：</p>
 <pre><code>var o = {
     valueOf : () =&gt; {console.log(&quot;valueOf&quot;); return {}},
@@ -719,7 +734,7 @@ console.log(o + &quot;&quot;)
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">90</span>
+                    <span class="site-state-item-count">93</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -865,7 +880,9 @@ console.log(o + &quot;&quot;)
                     
                       
                     
-                    <span class="site-state-item-count">40</span>
+                      
+                    
+                    <span class="site-state-item-count">41</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

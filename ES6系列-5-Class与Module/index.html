@@ -108,7 +108,7 @@
 <meta property="og:image" content="https://wangminghuan.github.io/ES6系列-5-Class与Module/2.png">
 <meta property="og:image" content="https://wangminghuan.github.io/ES6系列-5-Class与Module/3.jpg">
 <meta property="og:image" content="https://wangminghuan.github.io/ES6系列-5-Class与Module/4.jpg">
-<meta property="og:updated_time" content="2019-11-08T10:26:06.147Z">
+<meta property="og:updated_time" content="2021-02-09T06:27:28.272Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ES6系列-5-Class与Module">
 <meta name="twitter:description" content="本篇介绍ES6的 Class（类）与 ES6的模块化方案">
@@ -418,7 +418,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-11-08 18:26:06" itemprop="dateModified" datetime="2019-11-08T18:26:06+08:00">2019-11-08</time>
+                <time title="修改时间：2021-02-09 14:27:28" itemprop="dateModified" datetime="2021-02-09T14:27:28+08:00">2021-02-09</time>
               
             
           </span>
@@ -479,7 +479,7 @@
       
         <p>本篇介绍ES6的 Class（类）与 ES6的模块化方案</p>
 <a id="more"></a>
-<h2 id="第一章-Class-（类）"><a href="#第一章-Class-（类）" class="headerlink" title="第一章  Class （类）"></a>第一章  Class （类）</h2><p>JavaScript 语言中，生成实例对象的传统方法是通过构造函数实现的，但这种写法跟传统面向对象的语法（c++/java）等差异很大，ES6 提供了更接近传统语言的写法，引入了 Class（类）这个概念，作为对象的模板。通过class关键字，可以定义类。</p>
+<h2 id="Class-（类）"><a href="#Class-（类）" class="headerlink" title="Class （类）"></a>Class （类）</h2><p>JavaScript 语言中，生成实例对象的传统方法是通过构造函数实现的，但这种写法跟传统面向对象的语法（c++/java）等差异很大，ES6 提供了更接近传统语言的写法，引入了 Class（类）这个概念，作为对象的模板。通过class关键字，可以定义类。</p>
 <h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>通过class关键字，可以定义类，这样更优雅，易于理解。</p>
 <pre><code>class Person{
   constructor(x) {
@@ -602,10 +602,10 @@ class Square {
     // ...
   }
 }
-</code></pre><h3 id="Class-表达式"><a href="#Class-表达式" class="headerlink" title="Class 表达式"></a>Class 表达式</h3><pre><code>const MyPerson = class Person {
-getClassName() {
-  return Person.name;
-}
+</code></pre><h3 id="Class-表达式"><a href="#Class-表达式" class="headerlink" title="Class 表达式"></a>Class 表达式</h3><pre><code>  const MyPerson = class Person {
+  getClassName() {
+    return Person.name;
+  }
   };
 const p =new MyPerson();
 console.log(p.getClassName());//&quot;Person&quot;
@@ -642,21 +642,26 @@ function Person(){}
 
   // ...
 }
-</code></pre><h3 id="静态方法"><a href="#静态方法" class="headerlink" title="静态方法"></a>静态方法</h3><p>类相当于实例的原型，所有在类中定义的方法，都会被实例继承。如果在一个方法前，加上static关键字，就表示该方法不会被实例继承，而是<strong>直接通过类来调用</strong>，这就称为“静态方法”。</p>
-<p>  class Person {</p>
-<pre><code>static bar() {
-    this.baz();
-  }
-static baz() {
-    console.log(&apos;hello&apos;);
-  }
-  baz() {
-    console.log(&apos;world&apos;);
-  }
-</code></pre><p>   }<br>   const p = new Person();<br>   Person.baz() // ‘hello’<br>   p.baz() //‘world’<br>   Person.bar(); //hello 静态方法的this指的是类，而不是实例！！！<br>   p.bar() //报错 p.bar is not a function<br>可以看到：静态方法中的this关键字，指的是类，而不是实例。  </p>
-</li>
+</code></pre></li>
 </ol>
-<p>父类的静态方法，可以被子类继承。</p>
+<h3 id="静态方法"><a href="#静态方法" class="headerlink" title="静态方法"></a>静态方法</h3><p>类相当于实例的原型，所有在类中定义的方法，都会被实例继承。如果在一个方法前，加上static关键字，就表示该方法不会被实例继承，而是<strong>直接通过类来调用</strong>，这就称为“静态方法”。</p>
+<pre><code>class Person {
+  static bar() {
+      this.baz();
+    }
+  static baz() {
+      console.log(&apos;hello&apos;);
+    }
+    baz() {
+      console.log(&apos;world&apos;);
+    }
+}
+const p = new Person();
+Person.baz() // &apos;hello&apos;
+p.baz() //&apos;world&apos;
+Person.bar(); //hello 静态方法的this指的是类，而不是实例！！！
+p.bar() //报错 p.bar is not a function
+</code></pre><p>可以看到：静态方法中的this关键字，指的是类，而不是实例。<br>父类的静态方法，可以被子类继承。</p>
 <pre><code>class Foo {
   static classMethod() {
     return &apos;hello&apos;;
@@ -709,7 +714,7 @@ function Person(name) {
 
 var person = new Person(&apos;张三&apos;); // 正确
 var notAPerson = Person.call(person, &apos;张三&apos;);  // 报错
-</code></pre><h2 id="第二章-类的继承"><a href="#第二章-类的继承" class="headerlink" title="第二章 类的继承"></a>第二章 类的继承</h2><h3 id="extends"><a href="#extends" class="headerlink" title="extends"></a>extends</h3><p>Class 可以通过extends关键字实现继承，这比 ES5 的通过修改原型链实现继承，要清晰和方便很多：</p>
+</code></pre><h2 id="类的继承"><a href="#类的继承" class="headerlink" title="类的继承"></a>类的继承</h2><h3 id="extends"><a href="#extends" class="headerlink" title="extends"></a>extends</h3><p>Class 可以通过extends关键字实现继承，这比 ES5 的通过修改原型链实现继承，要清晰和方便很多：</p>
 <pre><code>class Animal{
   constructor(){
     this.food=&quot;meat&quot;
@@ -737,9 +742,7 @@ class Cat extends Animal{
 const cat=new Cat();
 const ani= new Animal();
 ani.sayHi(); //I am animal, I eat meat
-cat.sayHi(); 
-//I am cat, I eat meat, my color is black
-//I am cat, I eat meat, my color is black
+cat.sayHi(); //I am cat, I eat meat, my color is black    I am cat, I eat meat, my color is black
 </code></pre><p>注意：  </p>
 <ol>
 <li>子类方法中super关键字的调用：子类必须在constructor方法中调用super方法，否则新建实例时会报错。子类方法中如果需要调用父级的方法，需通过super关键字。  </li>
@@ -943,7 +946,7 @@ console.log(3,p1.constructor===Person);//true
 // instanceof运算符，验证原型对象与实例对象之间的关系。
 console.log(4,p1 instanceof Person); //true
 console.log(5,p1 instanceof Object); //true
-</code></pre><h2 id="第三章-Module-的语法"><a href="#第三章-Module-的语法" class="headerlink" title="第三章 Module 的语法"></a>第三章 Module 的语法</h2><h3 id="概述-1"><a href="#概述-1" class="headerlink" title="概述"></a>概述</h3><p>ES6 模块的设计思想是尽量的静态化，而commonJS则是使用“运行时加载”，因为只有运行时才能得到这个对象。</p>
+</code></pre><h2 id="Module-的语法"><a href="#Module-的语法" class="headerlink" title="Module 的语法"></a>Module 的语法</h2><h3 id="概述-1"><a href="#概述-1" class="headerlink" title="概述"></a>概述</h3><p>ES6 模块的设计思想是尽量的静态化，而commonJS则是使用“运行时加载”，因为只有运行时才能得到这个对象。</p>
 <pre><code>// CommonJS模块
 let { stat, exists, readFile } = require(&apos;fs&apos;);
 
@@ -1412,7 +1415,7 @@ console.log(es_namespace.default);
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">90</span>
+                    <span class="site-state-item-count">93</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1558,7 +1561,9 @@ console.log(es_namespace.default);
                     
                       
                     
-                    <span class="site-state-item-count">40</span>
+                      
+                    
+                    <span class="site-state-item-count">41</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1644,7 +1649,7 @@ console.log(es_namespace.default);
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一章-Class-（类）"><span class="nav-number">1.</span> <span class="nav-text">第一章  Class （类）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#概述"><span class="nav-number">1.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#constructor-方法"><span class="nav-number">1.2.</span> <span class="nav-text">constructor 方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类的实例"><span class="nav-number">1.3.</span> <span class="nav-text">类的实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#取值函数（getter）和存值函数（setter）"><span class="nav-number">1.4.</span> <span class="nav-text">取值函数（getter）和存值函数（setter）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#属性表达式"><span class="nav-number">1.5.</span> <span class="nav-text">属性表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Class-表达式"><span class="nav-number">1.6.</span> <span class="nav-text">Class 表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意点"><span class="nav-number">1.7.</span> <span class="nav-text">注意点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#静态方法"><span class="nav-number">1.8.</span> <span class="nav-text">静态方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例属性的新写法"><span class="nav-number">1.9.</span> <span class="nav-text">实例属性的新写法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#静态属性"><span class="nav-number">1.10.</span> <span class="nav-text">静态属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#私有方法和私有属性"><span class="nav-number">1.11.</span> <span class="nav-text">私有方法和私有属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#new-target-属性"><span class="nav-number">1.12.</span> <span class="nav-text">new.target 属性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二章-类的继承"><span class="nav-number">2.</span> <span class="nav-text">第二章 类的继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#extends"><span class="nav-number">2.1.</span> <span class="nav-text">extends</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Object-getPrototypeOf"><span class="nav-number">2.2.</span> <span class="nav-text">Object.getPrototypeOf()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#super-关键字"><span class="nav-number">2.3.</span> <span class="nav-text">super 关键字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原生构造函数的继承"><span class="nav-number">2.4.</span> <span class="nav-text">原生构造函数的继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#补充-实例-构造函数和原型链"><span class="nav-number">2.5.</span> <span class="nav-text">补充: 实例/构造函数和原型链</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第三章-Module-的语法"><span class="nav-number">3.</span> <span class="nav-text">第三章 Module 的语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#概述-1"><span class="nav-number">3.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#export-命令"><span class="nav-number">3.2.</span> <span class="nav-text">export 命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#import-命令"><span class="nav-number">3.3.</span> <span class="nav-text">import 命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#export-default"><span class="nav-number">3.4.</span> <span class="nav-text">export default</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#export-与-import-的复合写法"><span class="nav-number">3.5.</span> <span class="nav-text">export 与 import 的复合写法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模块的继承"><span class="nav-number">3.6.</span> <span class="nav-text">模块的继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#跨模块常量"><span class="nav-number">3.7.</span> <span class="nav-text">跨模块常量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#import"><span class="nav-number">3.8.</span> <span class="nav-text">import()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第四章-Module-的加载实现"><span class="nav-number">4.</span> <span class="nav-text">第四章 Module 的加载实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#加载规则"><span class="nav-number">4.1.</span> <span class="nav-text">加载规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#与commonJS模块差异"><span class="nav-number">4.2.</span> <span class="nav-text">与commonJS模块差异</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#总结："><span class="nav-number">4.2.1.</span> <span class="nav-text">总结：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Node加载"><span class="nav-number">4.3.</span> <span class="nav-text">Node加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内部变量"><span class="nav-number">4.4.</span> <span class="nav-text">内部变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ES6-模块-与-CommonJS-模块-互相加载"><span class="nav-number">4.5.</span> <span class="nav-text">ES6 模块 与 CommonJS 模块 互相加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#循环加载的处理机制"><span class="nav-number">4.6.</span> <span class="nav-text">循环加载的处理机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文章"><span class="nav-number">5.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Class-（类）"><span class="nav-number">1.</span> <span class="nav-text">Class （类）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#概述"><span class="nav-number">1.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#constructor-方法"><span class="nav-number">1.2.</span> <span class="nav-text">constructor 方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类的实例"><span class="nav-number">1.3.</span> <span class="nav-text">类的实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#取值函数（getter）和存值函数（setter）"><span class="nav-number">1.4.</span> <span class="nav-text">取值函数（getter）和存值函数（setter）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#属性表达式"><span class="nav-number">1.5.</span> <span class="nav-text">属性表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Class-表达式"><span class="nav-number">1.6.</span> <span class="nav-text">Class 表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意点"><span class="nav-number">1.7.</span> <span class="nav-text">注意点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#静态方法"><span class="nav-number">1.8.</span> <span class="nav-text">静态方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例属性的新写法"><span class="nav-number">1.9.</span> <span class="nav-text">实例属性的新写法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#静态属性"><span class="nav-number">1.10.</span> <span class="nav-text">静态属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#私有方法和私有属性"><span class="nav-number">1.11.</span> <span class="nav-text">私有方法和私有属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#new-target-属性"><span class="nav-number">1.12.</span> <span class="nav-text">new.target 属性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类的继承"><span class="nav-number">2.</span> <span class="nav-text">类的继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#extends"><span class="nav-number">2.1.</span> <span class="nav-text">extends</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Object-getPrototypeOf"><span class="nav-number">2.2.</span> <span class="nav-text">Object.getPrototypeOf()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#super-关键字"><span class="nav-number">2.3.</span> <span class="nav-text">super 关键字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原生构造函数的继承"><span class="nav-number">2.4.</span> <span class="nav-text">原生构造函数的继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#补充-实例-构造函数和原型链"><span class="nav-number">2.5.</span> <span class="nav-text">补充: 实例/构造函数和原型链</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Module-的语法"><span class="nav-number">3.</span> <span class="nav-text">Module 的语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#概述-1"><span class="nav-number">3.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#export-命令"><span class="nav-number">3.2.</span> <span class="nav-text">export 命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#import-命令"><span class="nav-number">3.3.</span> <span class="nav-text">import 命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#export-default"><span class="nav-number">3.4.</span> <span class="nav-text">export default</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#export-与-import-的复合写法"><span class="nav-number">3.5.</span> <span class="nav-text">export 与 import 的复合写法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模块的继承"><span class="nav-number">3.6.</span> <span class="nav-text">模块的继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#跨模块常量"><span class="nav-number">3.7.</span> <span class="nav-text">跨模块常量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#import"><span class="nav-number">3.8.</span> <span class="nav-text">import()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第四章-Module-的加载实现"><span class="nav-number">4.</span> <span class="nav-text">第四章 Module 的加载实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#加载规则"><span class="nav-number">4.1.</span> <span class="nav-text">加载规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#与commonJS模块差异"><span class="nav-number">4.2.</span> <span class="nav-text">与commonJS模块差异</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#总结："><span class="nav-number">4.2.1.</span> <span class="nav-text">总结：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Node加载"><span class="nav-number">4.3.</span> <span class="nav-text">Node加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内部变量"><span class="nav-number">4.4.</span> <span class="nav-text">内部变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ES6-模块-与-CommonJS-模块-互相加载"><span class="nav-number">4.5.</span> <span class="nav-text">ES6 模块 与 CommonJS 模块 互相加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#循环加载的处理机制"><span class="nav-number">4.6.</span> <span class="nav-text">循环加载的处理机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文章"><span class="nav-number">5.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
             
 
           </div>

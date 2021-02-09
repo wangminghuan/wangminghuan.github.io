@@ -108,7 +108,7 @@
 <meta property="og:image" content="https://wangminghuan.github.io/web-server开发之nginx/2.jpg">
 <meta property="og:image" content="https://wangminghuan.github.io/web-server开发之nginx/3.jpg">
 <meta property="og:image" content="https://wangminghuan.github.io/web-server开发之nginx/1.png">
-<meta property="og:updated_time" content="2021-01-12T08:09:02.276Z">
+<meta property="og:updated_time" content="2021-01-14T01:20:57.675Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="web server开发之nginx">
 <meta name="twitter:description" content="概述本篇开始，我们详细了解下Web Server（通常也代表http server），以及我们经常看到的，入nginx, tomcat, apache都是什么，都在什么场景下使用。">
@@ -418,7 +418,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2021-01-12 16:09:02" itemprop="dateModified" datetime="2021-01-12T16:09:02+08:00">2021-01-12</time>
+                <time title="修改时间：2021-01-14 09:20:57" itemprop="dateModified" datetime="2021-01-14T09:20:57+08:00">2021-01-14</time>
               
             
           </span>
@@ -500,9 +500,33 @@ service nginx restart # 重启Nginx服务
 
 service nginx status  # 查看Nginx运行状态
 
-nginx -t              # 检查Nginx配置文件
-
 nginx -s reload       # 服务运行中重新加载配置
+
+nginx -s reopen       #重启Nginx
+
+nginx -s reload       #重新加载Nginx配置文件，然后以优雅的方式重启Nginx
+
+nginx -s stop         #强制停止Nginx服务
+
+nginx -s quit         #优雅地停止Nginx服务（即处理完所有请求后再停止服务）
+
+nginx -?,-h           #打开帮助信息
+
+nginx -v              #显示版本信息并退出
+
+nginx -V              #显示版本和配置选项信息，然后退出
+
+nginx -t              #检测配置文件是否有语法错误，然后退出
+
+nginx -T              #检测配置文件是否有语法错误，转储并退出
+
+nginx -q              #在检测配置文件期间屏蔽非错误信息
+
+nginx -p prefix       #设置前缀路径(默认是:/usr/share/nginx/)nginx -c filename #设置配置文件(默认是:/etc/nginx/nginx.conf)
+
+nginx -g directives   #设置配置文件外的全局指令
+
+killall nginx         #杀死所有nginx进程
 </code></pre><h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><h3 id="正向代理"><a href="#正向代理" class="headerlink" title="正向代理"></a>正向代理</h3><p>平常使用FQ软件访问Google，Facebook时的过程就是正常代理：客户端请求代理服务器（节点）去访问目标站点，代理服务器将请求到的内容返给客户端。</p>
 <p>正向代理最大的特点是客户端非常明确要访问的服务器地址；服务器只清楚请求来自哪个代理服务器，而不清楚来自哪个具体的客户端；正向代理模式屏蔽或者隐藏了真实客户端信息</p>
 <p><img src="/web-server开发之nginx/./2.jpg" alt></p>
@@ -609,6 +633,10 @@ server {
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/你不知道的JS系列-1/" rel="prev" title="你不知道的JS系列-1">
+                你不知道的JS系列-1 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -678,7 +706,7 @@ server {
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">90</span>
+                    <span class="site-state-item-count">93</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -824,7 +852,9 @@ server {
                     
                       
                     
-                    <span class="site-state-item-count">40</span>
+                      
+                    
+                    <span class="site-state-item-count">41</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
