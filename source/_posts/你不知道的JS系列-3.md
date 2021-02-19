@@ -133,11 +133,11 @@ Foo 和其他函数没有任何区别。函数本身并不是构造函数，当�
 
 除了`Object.create`(关于这个函数可访问[MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/create))外，还可以使用其他方法，但均存在其他的副作用：
 
--  Bar.prototype=Foo.prototype
+-  `Bar.prototype=Foo.prototype`
     
           二者直接引用，这就导致Bar.prototype.doJob = xxx 的赋值语句时会直接修改 Foo.prototype 对象本身
   
--  Bar.prototype=new Foo()
+-  `Bar.prototype=new Foo()`
 
           通过“构造函数”调用，如果函数Foo有一些副作用（如写日志、修改状态、注册到其他对象、给this 添加数据属性）的话，就会影响到Bar()的“后代”
 考虑到`Object.create`有一些兼容性问题（ES5新增），可以使用一些其他profill方法进行替代，此处不再展开，可以参考书本160页。  
