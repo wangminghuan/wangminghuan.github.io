@@ -7,7 +7,7 @@ categories: ES6系列
 本篇介绍ES6的 Class（类）与 ES6的模块化方案
 
 <!-- more -->
-## 第一章  Class （类）
+## Class （类）
 JavaScript 语言中，生成实例对象的传统方法是通过构造函数实现的，但这种写法跟传统面向对象的语法（c++/java）等差异很大，ES6 提供了更接近传统语言的写法，引入了 Class（类）这个概念，作为对象的模板。通过class关键字，可以定义类。
 ### 概述
 通过class关键字，可以定义类，这样更优雅，易于理解。
@@ -158,14 +158,14 @@ constructor方法是类的默认方法，通过new命令生成对象实例时，
 	}
 ### Class 表达式
 
-	const MyPerson = class Person {
-    getClassName() {
-      return Person.name;
-    }
+	  const MyPerson = class Person {
+      getClassName() {
+        return Person.name;
+      }
   	};
-	const p =new MyPerson();
-	console.log(p.getClassName());//"Person"
-	const p1 =new Person(); // 报错 Uncaught ReferenceError: Person is not defined
+    const p =new MyPerson();
+    console.log(p.getClassName());//"Person"
+    const p1 =new Person(); // 报错 Uncaught ReferenceError: Person is not defined
 类的名字是Person，但是Person只在 Class 的内部可用，指代当前类。在 Class 外部，这个类只能用MyPerson引用;
 
 如果类内部用不到 Person ，完全可以省略不写，也可以采用 Class 表达式，可以写出立即执行的 Class：  
@@ -203,39 +203,40 @@ name属性总是返回紧跟在class关键字后面的类名：这点同ES5一�
 		
 		  // ...
 		}
+
+
 ### 静态方法
 类相当于实例的原型，所有在类中定义的方法，都会被实例继承。如果在一个方法前，加上static关键字，就表示该方法不会被实例继承，而是**直接通过类来调用**，这就称为“静态方法”。
 
-	 class Person {
-	    static bar() {
-	        this.baz();
-	      }
-	    static baz() {
-	        console.log('hello');
-	      }
-	      baz() {
-	        console.log('world');
-	      }
-	  }
-	  const p = new Person();
-	  Person.baz() // 'hello'
-	  p.baz() //'world'
-	  Person.bar(); //hello 静态方法的this指的是类，而不是实例！！！
-	  p.bar() //报错 p.bar is not a function
+        class Person {
+          static bar() {
+              this.baz();
+            }
+          static baz() {
+              console.log('hello');
+            }
+            baz() {
+              console.log('world');
+            }
+        }
+        const p = new Person();
+        Person.baz() // 'hello'
+        p.baz() //'world'
+        Person.bar(); //hello 静态方法的this指的是类，而不是实例！！！
+        p.bar() //报错 p.bar is not a function
 可以看到：静态方法中的this关键字，指的是类，而不是实例。  
-
 父类的静态方法，可以被子类继承。
 
-	class Foo {
-	  static classMethod() {
-	    return 'hello';
-	  }
-	}
-	
-	class Bar extends Foo {
-	}
-	
-	Bar.classMethod() // 'hello'
+        class Foo {
+          static classMethod() {
+            return 'hello';
+          }
+        }
+        
+        class Bar extends Foo {
+        }
+        
+        Bar.classMethod() // 'hello'
 ### 实例属性的新写法
 实例属性除了定义在constructor()方法里面的this上面，也可以定义在类的最顶层。这种新写法的好处是，所有实例对象自身的属性都定义在类的头部，看上去比较整齐，一眼就能看出这个类有哪些实例属性：
 
@@ -290,7 +291,7 @@ new是从构造函数生成实例对象的命令。ES6 为new命令引入了一�
 	
 	var person = new Person('张三'); // 正确
 	var notAPerson = Person.call(person, '张三');  // 报错
-## 第二章 类的继承
+## 类的继承
 ### extends
 Class 可以通过extends关键字实现继承，这比 ES5 的通过修改原型链实现继承，要清晰和方便很多：
 
@@ -321,9 +322,7 @@ Class 可以通过extends关键字实现继承，这比 ES5 的通过修改原�
 	const cat=new Cat();
 	const ani= new Animal();
 	ani.sayHi(); //I am animal, I eat meat
-	cat.sayHi(); 
-    //I am cat, I eat meat, my color is black
-    //I am cat, I eat meat, my color is black
+	cat.sayHi(); //I am cat, I eat meat, my color is black    I am cat, I eat meat, my color is black
 注意：  
 
 1. 子类方法中super关键字的调用：子类必须在constructor方法中调用super方法，否则新建实例时会报错。子类方法中如果需要调用父级的方法，需通过super关键字。  
@@ -550,7 +549,7 @@ extends关键字不仅可以用来继承类，还可以用来继承原生的构�
 	console.log(4,p1 instanceof Person); //true
 	console.log(5,p1 instanceof Object); //true
 
-## 第三章 Module 的语法
+## Module 的语法
 ### 概述
 ES6 模块的设计思想是尽量的静态化，而commonJS则是使用“运行时加载”，因为只有运行时才能得到这个对象。
 
