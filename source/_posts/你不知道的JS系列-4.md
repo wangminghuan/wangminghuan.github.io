@@ -11,6 +11,7 @@ categories: JavaScript
 <!-- more -->
 
 ## 类型与值
+> 更多内容可参考[重学前端3 - JavaScript部分-数据类型](/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF3-JavaScript%E9%83%A8%E5%88%86-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/)
 
 JavaScript 中的变量是没有类型的，只有值才有。变量可以随时持有任何类型的值。所以在对变量执行 typeof 操作时，得到的结果并不是该变量的类型，而是该变量持有的值的类型。
 
@@ -112,3 +113,184 @@ JS的七种类型已经提及无数遍了：null、 undefined 、boolean 、stri
           return v1 === v2;
         };
       }
+  
+## 原生函数
+
+下面介绍下与数据类型相关的十个内建函数, 之前也已经介绍过，每一种基本类型在对象中都有对应的内置函数，且在操作过程中，引擎会自动进行装箱/拆箱转换
+
+### String / Number / Boolean
+对于字符串/数字/布尔类型的数据，多数情况下都是使用字面量进行操作的（性能更优），基本很少使用对应的内置函数进行创建：
+
+    var a = new String( "abc" );
+    var b = new Number( 42 );
+    var c = new Boolean( true );
+
+    // 通过new关键字创建的是字符串的封装对象，而非基本类型值
+    a.valueOf(); // "abc"
+    b.valueOf(); // 42
+    c.valueOf(); // true 
+
+不推荐使用构造函数来创建基本数据类型，会产生很多副作用
+
+### Array
+构造函数 `Array()` 不要求必须带 `new` 关键字 `new Array(3)` 与 `Array(3)`是等效的, 返回的都是一个数组；不过构造函数调用时返回的稀疏数组（将包含至少一个“空单元”的数组称为“稀疏数组”）令人有些困惑：
+
+      Array(3)  //[empty × 3]
+
+不同浏览器展示的结果有些不同，上面结果为chrome 88 版本下的结果，接下来对这个稀疏数组进行方法调用：
+     
+     Array(3).map((item)=>{console.log(item)}) // 不执行
+     Array(3).join("-")  // "--"
+
+map方法对于只有空单元的数据不执行，而join方法却可以。我们可以通过下述方式来创建包含 undefined 单元（而非“空单元”）的数组来避免上述问题的发生：
+
+    Array.apply(null,{length:3}) // [undefined, undefined, undefined]
+
+### Object / Function / RegExp
+除了RegExp外，Object 与 Function这两个构造函数很少用到，不是必须也不建议使用。
+
+PS: 在chrome 88下测试，`new` 关键字可以省略，且JavaScript 有一处奇特的语法，即构造函数没有参数时可以不用带`()`调用
+
+      Function() instanceof Function       // true
+      new Function() instanceof Function   // true
+
+      Object() instanceof Object           // true
+      new Object() instanceof Object       // true
+
+      new RegExp instanceof RegExp          // true
+      RegExp() instanceof RegExp           // true
+
+
+### Date / Error
+
+Date 与 Error是经常用到的两个内置函数
+
+      (new Date()).getTime()     // 获取当前时间戳
+      throw new Error("error")  // 抛出错误
+
+在chrome 88下测试，`Error('error')` 等同于 `new Error('error')`, 但是Date 加new与不加new调用时，结果不一致：
+
+     var d=Date();           // "Mon Feb 22 2021 17:05:10 GMT+0800 (中国标准时间)"
+     d instanceof Date;      // false
+     typeof d;               // string
+
+     var _d=new Date();      // Mon Feb 22 2021 17:06:50 GMT+0800 (中国标准时间)
+     _d instanceof Date      // true
+
+所以，如果就是需要进行构造函数调用，建议加上`new`关键字，以免产生意想不到的结果，同时也便于理解。
+### Symbol
+作为ES6新进成员，此处不再赘述，Symbol函数只能直接调用，无法通过构造函数调用：
+
+`new Symbol('')` 会直接报错：`Uncaught TypeError: Symbol is not a constructor`
+
+很显然，Symbol并非构造函数~
+
+## 类型转换
+
+作为动态语言，JavaScript 中所有的类型转换可称之为：强制类型转换，同时分为显式与隐式；转换规则可参考[重学前端3-JavaScript部分](/重学前端3-JavaScript部分-数据类型/#类型转换)，里面介绍的比较详细，下面部分为补充部分
+
+
+### ToString && ToNumber
+
+从 ES5 开始，使用 Object.create(null) 创建的对象 [[Prototype]] 属性为 null，并且没有 valueOf() 和 toString() 方法，因此无法进行强制类型转换
+
+      String(Object.create(null)) // Cannot convert object to primitive value
+      Number(Object.create(null)) // Cannot convert object to primitive value
+
+### JSON 字符串化
+执行`JSON.stringify(...)`即可得到JSON字符串化的结果，那内部的实现逻辑又是怎样？
+
+类似其他类型转化为字符串时调用内部的`toString`方法，JSON转化为字符串时调用内部的`toJSON`方法，不同的是：得到结果后还会再进行一步字符串化操作：
+
+      var o={
+        a:1,
+        toJSON: function(){
+          return {
+            b:this.a *10
+          }
+        }
+      }
+      JSON.stringify(o) // "{"b":10}"
+
+`toJSON()` 需要“返回一个能够被字符串化的安全的 JSON 值”。
+
+**JSON.stringify(value[, replacer [, space]])**
+
+- replacer: 可选参数，它可以是数组或者函数
+        var a={
+          b: 42,
+          c: "42",
+          d: [1,2,3]
+        }
+        /*replacer为数组时，只有包含在这个数组中的属性名才会被序列化到最终的 JSON 字符串中*/
+        JSON.stringify(a, ["b","c"]) // "{"b":42,"c":"42"}"
+        
+        /* replacer为函数时，在序列化过程中，被序列化的值的每个属性都会经过该函数的转换和处理
+        在开始时, replacer 函数会被传入一个空字符串作为 key 值，代表着要被 stringify 的这个对象。随后每个对象或数组上的属性会被依次传入
+        */
+        JSON.stringify(a, function(k,v){
+          if(k!=='d') return v
+        })
+        // "{"b":42,"c":"42"}"
+- space:可选参数，指定缩进用的空白字符串，用于美化输出
+
+总结：整个转换过程遵循如下原则：
+
+- 字符串、数字、布尔值和 null 的 JSON.stringify(..) 规则与 ToString 基本相同。
+- 如果传递给 JSON.stringify(..) 的对象中定义了 toJSON() 方法，那么该方法会在字符
+串化前调用，以便将对象转换为安全的 JSON 值。
+
+### ToBoolean
+
+以下为可以显式转换为false的值：
+
+- undefined
+- null
+- false
+- +0、-0 和 NaN
+- ""
+
+JavaScript 代码中会出现假值对象，如document.all：它是一个类数组对象，包含了页面上的所有元素。但现在在多数浏览器上强制转换结果却是false:
+
+      Boolean(document.all)  // false
+
+这个是浏览器厂商因为一些其他因素强制改写的结果，注意避免掉坑。
+### 字符串和数字之间的显式转换
+
+**1.日期转换为数字**
+
+          +new Date() === +new Date;
+          +new Date() === Date.now();
+          +new Date() === new Date().getTime();
+
+**2.~ 运算符**
+
+
+按位非（NOT）运算符~经常出现，它可以用在以下两种情况下：**判断x的值是否大于-1** 和 **截除掉数字值的小数部分**
+
+可以记住以下等式：`~x = -(x+1)`，多数情况下都是适用的。在查找索引过程中可以这样改写：
+
+      var msg="Hello World"
+      if(!~msg.indexOf("success")){
+        // 只有msg.indexOf("success")==-1的情况下才执行
+        console.log("error")
+      }
+
+PS: 由 -(x+1) 推断 ~-1 的结果应该是 -0，然而实际上结果是 0，因为它是字位操作而非数学运算。
+
+两个波浪线时可用作截除数字值的小数部分：
+
+      ~~-49.6; // -49
+
+
+
+9007199254740991(16位)==Math.pow(2,53)-1
+xen= x * 10 ^ n 
+
+### 显式转化为布尔值
+
+## 语法
+
+
+## 参考
+- [ECMAScript 位运算符](https://www.w3school.com.cn/js/pro_js_operators_bitwise.asp)

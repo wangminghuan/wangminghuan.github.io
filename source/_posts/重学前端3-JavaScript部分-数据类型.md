@@ -185,7 +185,7 @@ JavaScript 语言设计上试图模糊对象和基本类型之间的关系，我
     // valueOf
     // TypeError
 
-在 ES6 之后，还允许对象通过显式指定 @@toPrimitive Symbol 来覆盖原有的行为。
+在 ES6 之后，还允许对象通过显式指定 `Symbol.toPrimitive`属性来覆盖原有的行为。
 
     var o = {
         valueOf : () => {console.log("valueOf"); return {}},
