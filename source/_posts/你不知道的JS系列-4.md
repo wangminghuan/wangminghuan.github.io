@@ -185,19 +185,25 @@ Date 与 Error是经常用到的两个内置函数
 
 很显然，Symbol并非构造函数~
 
+PS: 此处插一个知识点：ES6 允许Symbol到String的显式强制类型转换，隐式强制转换会报错：
+
+      var s1 = Symbol( "cool" );
+      String( s1 );  // "Symbol(cool)"
+      s1 + '';       // Uncaught TypeError: Cannot convert a Symbol value to a string
+       
 ## 类型转换
 
 作为动态语言，JavaScript 中所有的类型转换可称之为：强制类型转换，同时分为显式与隐式；转换规则可参考[重学前端3-JavaScript部分](/重学前端3-JavaScript部分-数据类型/#类型转换)，里面介绍的比较详细，下面部分为补充部分
-
-
-### ToString && ToNumber
+### 类型转换规则
+#### ToString && ToNumber
 
 从 ES5 开始，使用 Object.create(null) 创建的对象 [[Prototype]] 属性为 null，并且没有 valueOf() 和 toString() 方法，因此无法进行强制类型转换
 
       String(Object.create(null)) // Cannot convert object to primitive value
       Number(Object.create(null)) // Cannot convert object to primitive value
 
-### JSON 字符串化
+补充：**JSON 字符串化**
+
 执行`JSON.stringify(...)`即可得到JSON字符串化的结果，那内部的实现逻辑又是怎样？
 
 类似其他类型转化为字符串时调用内部的`toString`方法，JSON转化为字符串时调用内部的`toJSON`方法，不同的是：得到结果后还会再进行一步字符串化操作：
@@ -240,7 +246,7 @@ Date 与 Error是经常用到的两个内置函数
 - 如果传递给 JSON.stringify(..) 的对象中定义了 toJSON() 方法，那么该方法会在字符
 串化前调用，以便将对象转换为安全的 JSON 值。
 
-### ToBoolean
+#### ToBoolean
 
 以下为可以显式转换为false的值：
 
@@ -255,15 +261,17 @@ JavaScript 代码中会出现假值对象，如document.all：它是一个类数
       Boolean(document.all)  // false
 
 这个是浏览器厂商因为一些其他因素强制改写的结果，注意避免掉坑。
-### 字符串和数字之间的显式转换
+### 显式强制类型转换
 
-**1.日期转换为数字**
+String(..) , Number(..) , Boolean(..), .toString(..)方法都可以实现类型强制转换。除此以外还有一些其他情况：
+
+#### 日期转换为数字
 
           +new Date() === +new Date;
           +new Date() === Date.now();
           +new Date() === new Date().getTime();
 
-**2.~ 运算符**
+#### 位运算符(~)
 
 
 按位非（NOT）运算符~经常出现，它可以用在以下两种情况下：**判断x的值是否大于-1** 和 **截除掉数字值的小数部分**
@@ -281,9 +289,118 @@ PS: 由 -(x+1) 推断 ~-1 的结果应该是 -0，然而实际上结果是 0，�
 两个波浪线时可用作截除数字值的小数部分：
 
       ~~-49.6; // -49
+      
+#### 数字字符串的解析
 
-### 显式转化为布尔值
+- 解析允许字符串中含有非数字字符，解析按从左到右的顺序，如果遇到非数字字符就停止
+- 转换不允许出现非数字字符，否则会失败并返回 NaN
 
+      parseInt( "40px" ); // 42 直解析数字字符串，其他类型会先强制转换成字符串
+      Number( "40px" ); // NaN
+
+PS: parseInt在ES5之前存在bug，会根据字符串的第一个字符来决定转换基数，避免这个问题需要强制：`parseInt(xxx,10)`
+### 隐式强制类型转换
+觉得不够明显的强制类型转换都可以归到隐式强制类型转换下，隐式转换虽然被人诟病，但它可以减少冗余，让代码更简洁
+
+#### 字符串 <=> 数字 （+/-）
+
+我们都知道 `+` 运算符即能用于数字加法，也能用于字符串拼接，依照的规则可以概括为：
+
+**如果 + 的其中一个操作数是字符串（或通过ToPrimitive操作能转换成字符串），则执行字符串拼接；否则执行数字加法**
+
+看个例子：
+
+     [1,3] + [5]  // "1,35"
+
+数组valueOf操作无法得到基本数据类型，使用toString方法两个数据就转换成对应了字符串
+
+同时需要注意的是：`a + ""` 会对 a 调用 valueOf 方法，而`String(a)` 则是直接调用 ToString操作
+
+`- `运算符是数字减法，因此 a - 0 会将 a 强制类型转换为数字，再看一个例子：
+
+      [3] - [1]; // 2
+
+数组先转换成字符串，然后再转换成Number进行运算
+#### 其他类型 => 布尔值
+
+以下情况数据会被强制转换为布尔值：
+
+- if (..) 语句中的条件判断表达式。
+- for ( .. ; .. ; .. ) 语句中的条件判断表达式（第二个）。
+- while (..) 和 do..while(..) 循环中的条件判断表达式。
+- ? : 中的条件判断表达式。
+- 逻辑运算符 ||（逻辑或）和 &&（逻辑与）左边的操作数（作为条件判断表达式）。
+
+逻辑运算符 `||` 和 `&&`, 返回值是两个操作数中的一个（且仅一个）；这与Java,php等语言返回布尔值不同，在 JavaScript（以及 Python 和 Ruby）返回的是某个操作数的值，所以更准确的称呼应该是“选择器运算符”或者“操作数选择器运算符”
+
+### == 与 ===
+宽松相等（==）与严格相等（===）里面的坑是最多的，也是让人吐槽最多的地方，主要集中在宽松相等的判定规则有时候让人琢磨不透。二者的区别可以这么理解：**== 允许在相等比较中进行强制类型转换，而 === 不允许**
+
+#### 字符串与数字之间的相等比较
+
+- 如果 Type(x) 是数字，Type(y) 是字符串，则返回 x == ToNumber(y) 的结果。
+- 如果 Type(x) 是字符串，Type(y) 是数字，则返回 ToNumber(x) == y 的结果。
+
+
+      0 == ""  // true
+      "42" == 42  // true
+      
+也就是说：**在==中，如果两边分别为Number 与 String类型，就将String类型转化为Number类型再比较**
+#### 其他类型与布尔值之间的相等比较
+- 如果 Type(x) 是布尔类型，则返回 ToNumber(x) == y 的结果；
+- 如果 Type(y) 是布尔类型，则返回 x == ToNumber(y) 的结果。
+
+
+     false == 0    // true
+     "42" == true // false  true先转化为1，再依据上面规则“42”会转化为数字42，故不相等
+
+也就是说：**在==中，如果两边分别为Boolean 与其他类型，就将Boolean类型转化为Number类型再比较**
+
+#### null 与 undefined之间的比较
+
+- 如果 x 为 null，y 为 undefined，则结果为 true。
+- 如果 x 为 undefined，y 为 null，则结果为 true
+
+也就是说：**在 == 中 null 和 undefined 相等（它们也与其自身相等），除此之外其他值都不存在这种情况**
+
+#### 对象与非对象之间的相等比较
+> 下面转化规则只提到了字符串和数字，没有布尔值，因为布尔值会先被转化为数字
+
+- 如果 Type(x) 是字符串或数字，Type(y) 是对象，则返回 x == ToPrimitive(y) 的结果
+- 如果 Type(x) 是对象，Type(y) 是字符串或数字，则返回 ToPromitive(x) == y 的结果
+
+
+    0==[]                           // true
+    Object('abc') == "abc"          // true
+    Object(undefined) == undefined  // false
+    Object(null) == null            // false
+
+也就是说：**在 == 中 对象会通过ToPromitive进行转换为基本类型，再进行后续比较**
+#### 其他少见情况
+先看如下代码：
+
+      "0" == false;     // true
+      false == 0;       // true
+      false == "";      // true
+      false == [];      // true  []转化为""  false 转化为 0 即0 == ""
+      "" == 0;          // true  ""转化为数字0
+      "" == [];         // true
+      0 == [];          // true
+      "" == 0;          // true
+      "" == [];         // true
+      0 == [];          // true
+
+      [] == ![];         // true  ![]转化为false  即 [] == false
+      [] == [];          // false  两个都是引用类型，直接比较引用对象
+
+      0 == "\n"          // true  Number("\n")==0
+
+其实，只要按上面的规则进行对照，都能迎刃而解，不过为了避免出错，可以遵循以下两个原则：
+
+- 如果两边的值中有 true 或者 false，千万不要使用 ==
+- 如果两边的值中有 []、"" 或者 0，尽量不要使用 ==
+
+这样可以最大程度的避免强制类型转换的坑。
 ## 语法
 
 
