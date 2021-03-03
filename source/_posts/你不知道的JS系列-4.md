@@ -403,6 +403,127 @@ PS: parseInt在ES5之前存在bug，会根据字符串的第一个字符来决�
 这样可以最大程度的避免强制类型转换的坑。
 ## 语法
 
+### 语句和表达式
+>更多详细内容可访问：[github笔记-js中表达式和语句](https://github.com/wangminghuan/MyNotes/blob/master/JavaScript/js%E4%B8%AD%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%92%8C%E8%AF%AD%E5%8F%A5.md)
+
+- 语句都有一个结果值, chrome下的开发控制台（JavaScript REPL——read/evaluate/print/loop）显示的就是语句的结果值。
+
+- 代码块的结果值就是最后一个语句的结果值
+
+### 逗号运算符
+
+逗号操作符可以在一条语句中执行多个操作，常用于声明多个变量；
+
+    var num1=1, num2=2, num3=3; 
+
+除此之外，逗号操作符还可以用于赋值。在用于赋值时，逗号操作符总会返回表达式中的最后一项：
+
+    var num = (5, 1, 4, 8, 0); // num 的值为 0 
+
+可以使用逗号运算符将多个表达式串联为一个语句：
+
+    var a = 42;
+    var a1 = 42;
+    var a2 = 42;
+    var b = (a++, a)  // 执行a, 再执行+1操作, 最终返回a的值
+    var c = a1++,a1   // 把a1赋值给c, 再执行+1操作, 然后又声明了一次a1
+    var d = (a2++)   // 括号无法提升+1的执行顺序，等同于 var d = a2++
+    
+    a // 43
+    a1 // 43
+    a2 // 43
+    b // 43  
+    c // 42
+    d // 42
+
+### 上下文规则
+js中同样的语法上下文不同，则会导致不同的结果：
+#### 大括号{}
+
+我们看一个例子：
+
+      var a = {
+        foo : bar()  //假设bar已经定义过
+      }
+去掉 var声明后，代码扔不会报错：
+
+    {
+      foo : bar()
+    }
+不过，此时上面的代码已经不是一个对象了，它是一个代码块，且foo 是语句 bar() 的标签，关于“标签语句”我们此处不再展开。那如果我们尝试这样改写，那么就会报错了：
+
+    {
+      "foo":bar()
+    }
+因为标签不允许使用双引号，所以 "foo" 并不是一个合法的标签。同样的我们需要注意：**JSON 的确是 JavaScript 语法的一个子集，但是 JSON 本身并不是合法的 JavaScript 语法**
+#### 代码块
+
+我们看下如下代码：
+
+    [] + {}   // "[object Object]"
+    {} + []   // 0
+   
+    
+
+原因如下：{} 出现在 + 运算符表达式中，会被当作一个值（空对象）来处理，而[] 强制类型转换后为 ""，因此会得到{} 执行`toString`后的结果；{} 先出现时，会被解析为空代码块，而代码块后面的分号可以省略，`+[]` 就被强制转换为0
+
+#### 对象解构
+{ .. } 也可用于“解构赋值”
+
+      var obj={
+        a:1,
+        b:2
+      }
+      var {a,b}=obj
+      console.log(a,b)  // 1,2
+
+      function add({a,b}){
+        return a+b
+      }
+      console.log(add(obj)) // 3
+#### 不存在的else if语法
+事实上 JavaScript 没有 else if, 只存在 if else
+
+    if(a==1){
+      console.log("if")
+    }else if(a==2){
+      console.log("else")
+    }
+   
+等同于：
+
+    if(a==1){
+      console.log("if)
+    }else {
+        if(a==2){
+            console.log("else)
+        }
+    }
+
+### 自动分号
+
+JavaScript 有时会自动为代码行补上缺失的分号，即自动分号插入（Automatic Semicolon Insertion，ASI），且ASI 只在换行符处起作用，而不会在代码行的中间插入分号。
+
+以下情况会执行ASI:
+
+-  表达式语句: `var a = 42, b`
+-  do..while 循环后面
+-  break、continue、return 和 yield（ES6）等关键字后
+
+ASI本质上更像一种“纠错机制”，所以能加分号的地方还是建议都手动加上。
+
+### 其他
+
+- 函数传递参数时，arguments 数组中的对应单元会和命名参数建立关联；否则不传参时不会建立关联
+- switch判断时，执行的判断规则等同"==="操作
+- try..catch..finally中，finally的返回值会“覆盖”try 和 catch 中 return 的返回值。
+- 除了js外，HTML 页面中的内容也会产生全局变量，如：`<div id="foo"></div>` 就会创建一个全局foo变量，其值为该dom节点
+- 对原生对象添加扩展功能时，注意向上兼容
+- 内联代码中不可以出现 `</script`> 字符串，一旦出现即被视为代码块结束：
+
+        <script>
+          var code = "<script>alert('Hello World')</scr" + "ipt>";  // 规避报错
+        </script>
 
 ## 参考
 - [ECMAScript 位运算符](https://www.w3school.com.cn/js/pro_js_operators_bitwise.asp)
