@@ -188,9 +188,9 @@ ES6中的箭头函数不适用四种标准规则，而是根据外层（函数�
     var a = "global";
     foo.call(obj);
 ## 对象
- JavaScript 中一共有七种主要类型（术语是“语言类型”）: `null/undefined/boolean/string/number/symbol/object`,具体可参见[重学前端系列-数据类型](/重学前端3-JavaScript部分-数据类型/)
+ JavaScript 中一共有七种主要类型（术语是“语言类型”）: `null/undefined/boolean/string/number/symbol/object`,具体可参见[重学前端系列-数据类型](/重学前端-JavaScript部分-数据类型/)
  
-前面六种称之为基本类型，剩下的都可以归到复杂类型下。同时JavaScript 中还有一些对象子类型，通常被称为内置对象：`String/Number/Boolean/Object/Function/Array/Date/RegExp/Error/Set/Map/Promise`, 更多关于对象部分可参见[重学前端系列-对象](/重学前端4-JavaScript部分-对象/)
+前面六种称之为基本类型，剩下的都可以归到复杂类型下。同时JavaScript 中还有一些对象子类型，通常被称为内置对象：`String/Number/Boolean/Object/Function/Array/Date/RegExp/Error/Set/Map/Promise`, 更多关于对象部分可参见[重学前端系列-对象](/重学前端-JavaScript部分-对象/)
 
 这些内置函数可以当作构造函数 （可以通过new调用）来使用，从而可以构造一个对应子类型的新对象。对于这些对象子类型，Object、Array、Function 和 RegExp（正则表达式）来说，无论使用文字形式还是构造形式，它们都是对象(不是字面量)，所以首选更简单的文字形式。建议只在需要那些额外选项时使用构造形式。
 
@@ -245,7 +245,7 @@ ES6 新增了 `Object.assign`方法来实现浅复制(内部也是通过遍历�
 - `Object.freeze`：会创建一个冻结对象（对象上调用seal方法，并把所有“数据访问” 属性标记为 `writable:false`）
 
 ### Getter && Setter
-此部分可参见[重学前端系列-对象](/重学前端4-JavaScript部分-对象/#访问器（getter-setter）属性)
+此部分可参见[重学前端系列-对象](/重学前端-JavaScript部分-对象/#访问器（getter-setter）属性)
 
 ### 存在性
 

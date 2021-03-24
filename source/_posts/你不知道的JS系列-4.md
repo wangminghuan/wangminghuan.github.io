@@ -11,7 +11,7 @@ categories: JavaScript
 <!-- more -->
 
 ## 类型与值
-> 更多内容可参考[重学前端3 - JavaScript部分-数据类型](/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF3-JavaScript%E9%83%A8%E5%88%86-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/)
+> 更多内容可参考[重学前端 - JavaScript部分-数据类型](/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF3-JavaScript%E9%83%A8%E5%88%86-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/)
 
 JavaScript 中的变量是没有类型的，只有值才有。变量可以随时持有任何类型的值。所以在对变量执行 typeof 操作时，得到的结果并不是该变量的类型，而是该变量持有的值的类型。
 
@@ -193,7 +193,7 @@ PS: 此处插一个知识点：ES6 允许Symbol到String的显式强制类型转
        
 ## 类型转换
 
-作为动态语言，JavaScript 中所有的类型转换可称之为：强制类型转换，同时分为显式与隐式；转换规则可参考[重学前端3-JavaScript部分](/重学前端3-JavaScript部分-数据类型/#类型转换)，里面介绍的比较详细，下面部分为补充部分
+作为动态语言，JavaScript 中所有的类型转换可称之为：强制类型转换，同时分为显式与隐式；转换规则可参考[重学前端-JavaScript部分](/重学前端-JavaScript部分-数据类型/#类型转换)，里面介绍的比较详细，下面部分为补充部分
 ### 类型转换规则
 #### ToString && ToNumber
 

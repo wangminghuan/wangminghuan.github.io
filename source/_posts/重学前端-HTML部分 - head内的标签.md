@@ -1,6 +1,6 @@
 ---
-title: 重学前端10 - HTML部分-head内的标签
-date: 2019-05-20 16:48:00
+title: 重学前端 - HTML部分-head内的标签
+date: 2019-05-20 08:30:00
 tags: [html]
 categories: 重学前端
 ---
@@ -56,7 +56,7 @@ charset 型 meta 标签非常关键，它描述了 HTML 文档自身的编码形
 	name 为 viewport 的 meta
 meta 标签可以被自由定义，只要写入和读取的双方约定好 name 和 content 的格式就可以了
 
-#### name 为 viewport 的 meta。
+#### name 为 viewport 的 meta
 
 这类 meta 的 name 属性为 viewport，它的 content 是一个复杂结构，是用逗号分隔的键值对，键值对的格式是 key=value。
 	
@@ -89,5 +89,6 @@ meta 标签可以被自由定义，只要写入和读取的双方约定好 name 
 	theme-color: 页面风格颜色，实际并不会影响页面，但是浏览器可能据此调整页面之外的 UI（如窗口边框或者 tab 的颜色）
 
 ## 参考文章
+
 1. [标签中http-equiv属性的属性值X-UA-Compatible详解](https://blog.csdn.net/changjiangbuxi/article/details/26054755)
 

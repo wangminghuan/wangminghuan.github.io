@@ -97,4 +97,4 @@ net 模块提供了创建基于流的 TCP 或 IPC 服务器(`net.createServer`)�
 
 ## net 模块与 http 模块
 
-NodeJs的net 模块用于创建基于流的 TCP 或 IPC 的服务器，而http模块主要是用来创建HTTP服务; TPC/IP协议是传输层协议，主要解决数据如何在网络中传输，而HTTP是应用层协议,日常中接触的更多。关于网络协议部分具体的可参考[重学前端6-浏览器部分-工作流程-请求/](https://blog.mhwang.club/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF6-%E6%B5%8F%E8%A7%88%E5%99%A8%E9%83%A8%E5%88%86-%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B-%E8%AF%B7%E6%B1%82/)
+NodeJs的net 模块用于创建基于流的 TCP 或 IPC 的服务器，而http模块主要是用来创建HTTP服务; TPC/IP协议是传输层协议，主要解决数据如何在网络中传输，而HTTP是应用层协议,日常中接触的更多。关于网络协议部分具体的可参考[重学前端-浏览器部分-工作流程-请求/](https://blog.mhwang.club/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF6-%E6%B5%8F%E8%A7%88%E5%99%A8%E9%83%A8%E5%88%86-%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B-%E8%AF%B7%E6%B1%82/)

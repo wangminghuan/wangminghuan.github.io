@@ -1,7 +1,7 @@
 
 ---
-title: 重学前端28 - CSS部分-动画与交互
-date: 2019-05-20 17:09:00
+title: 重学前端 - CSS部分-动画与交互
+date: 2019-05-25 15:00:00
 tags: [css]
 categories: 重学前端
 ---
@@ -9,7 +9,7 @@ categories: 重学前端
 CSS 中跟动画相关的属性有两个：animation 和 transition。
 <!-- more -->
 
-### animation 属性
+## animation 属性
 
 基本用法：
 
@@ -34,7 +34,7 @@ CSS 中跟动画相关的属性有两个：animation 和 transition。
 - animation-direction 动画的方向。
 
 
-### transition 属性
+## transition 属性
 它有四个部分：
 
 - transition-property 要变换的属性；

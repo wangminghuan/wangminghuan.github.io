@@ -1,6 +1,6 @@
 ---
-title: 重学前端31-HTML部分-ARIA
-date: 2019-06-11 08:54:23
+title: 重学前端 - HTML部分-ARIA
+date: 2019-05-20 11:00:00
 tags: [html]
 categories: 重学前端
 ---
@@ -13,30 +13,30 @@ HTML 其实是 SGML （一种古老的标记语言）中规定的一种格式，
 ## 基本语法
 HTML 作为 SGML 的子集，它遵循 SGML 的基本语法：包括标签、转义等。
 
-![](/29-1.jpg)
+![](/1.jpg)
 
-#### 标签语法
+### 标签语法
 - 开始标签：`<tagname>`
 
   带属性的开始标签： `<tagname attributename="attributevalue">`
 - 结束标签：`</tagname>`
 - 自闭合标签：`<tagname />`
 
-#### 文本语法
+### 文本语法
 
 在 HTML 中，规定了两种文本语法，一种是普通的文本节点，另一种是 CDATA 文本节点。
 
 文本节点看似是普通的文本，但是，其中有两种字符是必须做转义的：`< 和 &`。
 CDATA 也是一种文本，它存在的意义是语法上的意义：在 CDATA 节点内，不需要考虑多数的转义情况。只有字符组合 `]]>` 需要处理，这里不能使用转义，只能拆成两个 CDATA 节点。
 
-#### 注释语法
+### 注释语法
 注释语法以`<!--开头，以-->`结尾，注释的内容非常自由，除了`-->`都没有问题。
 
-#### DTD 语法（文档类型定义）
+### DTD 语法（文档类型定义）
 
 SGML 的 DTD 语法十分复杂，但是对 HTML 来说，其实 DTD 的选项是有限的，具体参见第二部分。
 
-#### ProcessingInstruction 语法（处理信息）
+### ProcessingInstruction 语法（处理信息）
 
 ProcessingInstruction 多数情况下，是给机器看的。HTML 中规定了可以有 ProcessingInstruction，但是并没有规定它的具体内容，所以可以把它视为一种保留的扩展机制。对浏览器而言，ProcessingInstruction 的作用类似于注释。
 
