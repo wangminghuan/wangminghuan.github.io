@@ -107,7 +107,7 @@
 <meta property="og:image" content="https://wangminghuan.github.io/你不知道的JS系列-2/1.png">
 <meta property="og:image" content="https://wangminghuan.github.io/你不知道的JS系列-2/2.png">
 <meta property="og:image" content="https://wangminghuan.github.io/你不知道的JS系列-2/3.png">
-<meta property="og:updated_time" content="2021-02-02T08:54:52.910Z">
+<meta property="og:updated_time" content="2021-03-24T03:27:45.284Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="你不知道的JS系列-2">
 <meta name="twitter:description" content="前言本篇主要为阅读《你不知道的JavaScript-上卷》中遇到自己遗漏的知识点，加上一些自己的理解进行了梳理整理，阅读章节为第一部分：this和对象">
@@ -417,7 +417,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2021-02-02 16:54:52" itemprop="dateModified" datetime="2021-02-02T16:54:52+08:00">2021-02-02</time>
+                <time title="修改时间：2021-03-24 11:27:45" itemprop="dateModified" datetime="2021-03-24T11:27:45+08:00">2021-03-24</time>
               
             
           </span>
@@ -601,8 +601,8 @@ var obj = {
 };
 var a = &quot;global&quot;;
 foo.call(obj);
-</code></pre><h2 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h2><p> JavaScript 中一共有七种主要类型（术语是“语言类型”）: <code>null/undefined/boolean/string/number/symbol/object</code>,具体可参见<a href="/重学前端3-JavaScript部分-数据类型/">重学前端系列-数据类型</a></p>
-<p>前面六种称之为基本类型，剩下的都可以归到复杂类型下。同时JavaScript 中还有一些对象子类型，通常被称为内置对象：<code>String/Number/Boolean/Object/Function/Array/Date/RegExp/Error/Set/Map/Promise</code>, 更多关于对象部分可参见<a href="/重学前端4-JavaScript部分-对象/">重学前端系列-对象</a></p>
+</code></pre><h2 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h2><p> JavaScript 中一共有七种主要类型（术语是“语言类型”）: <code>null/undefined/boolean/string/number/symbol/object</code>,具体可参见<a href="/重学前端-JavaScript部分-数据类型/">重学前端系列-数据类型</a></p>
+<p>前面六种称之为基本类型，剩下的都可以归到复杂类型下。同时JavaScript 中还有一些对象子类型，通常被称为内置对象：<code>String/Number/Boolean/Object/Function/Array/Date/RegExp/Error/Set/Map/Promise</code>, 更多关于对象部分可参见<a href="/重学前端-JavaScript部分-对象/">重学前端系列-对象</a></p>
 <p>这些内置函数可以当作构造函数 （可以通过new调用）来使用，从而可以构造一个对应子类型的新对象。对于这些对象子类型，Object、Array、Function 和 RegExp（正则表达式）来说，无论使用文字形式还是构造形式，它们都是对象(不是字面量)，所以首选更简单的文字形式。建议只在需要那些额外选项时使用构造形式。</p>
 <p>在对象中，属性名永远都是字符串（会被强制转化），数组中则是下标数字。</p>
 <h3 id="属性名"><a href="#属性名" class="headerlink" title="属性名"></a>属性名</h3><p>ES6之前属性名写法不支持变量，现在也开始支持了，主要场景是针对<code>Symbol</code>类型</p>
@@ -637,7 +637,7 @@ myObject.b; // undefined
 <li><code>Object.seal</code>：会创建一个“密封” 的对象（对对象所有属性调用preventExtensions方法，并把所有现有属性标记为 <code>configurable:false</code>）</li>
 <li><code>Object.freeze</code>：会创建一个冻结对象（对象上调用seal方法，并把所有“数据访问” 属性标记为 <code>writable:false</code>）</li>
 </ul>
-<h3 id="Getter-amp-amp-Setter"><a href="#Getter-amp-amp-Setter" class="headerlink" title="Getter &amp;&amp; Setter"></a>Getter &amp;&amp; Setter</h3><p>此部分可参见<a href="/重学前端4-JavaScript部分-对象/#访问器（getter-setter）属性">重学前端系列-对象</a></p>
+<h3 id="Getter-amp-amp-Setter"><a href="#Getter-amp-amp-Setter" class="headerlink" title="Getter &amp;&amp; Setter"></a>Getter &amp;&amp; Setter</h3><p>此部分可参见<a href="/重学前端-JavaScript部分-对象/#访问器（getter-setter）属性">重学前端系列-对象</a></p>
 <h3 id="存在性"><a href="#存在性" class="headerlink" title="存在性"></a>存在性</h3><ul>
 <li><p><code>for in</code> 操作符会检查属性是否在对象及其 <code>[[Prototype]]</code> 原型链中</p>
 <pre><code>1. for in 其实只是检测属性名是否存在
@@ -823,7 +823,7 @@ console.log(arr,newArr) ;//[1,2,3] true
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">93</span>
+                    <span class="site-state-item-count">91</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -971,7 +971,9 @@ console.log(arr,newArr) ;//[1,2,3] true
                     
                       
                     
-                    <span class="site-state-item-count">41</span>
+                      
+                    
+                    <span class="site-state-item-count">42</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
