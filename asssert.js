@@ -25,3 +25,11 @@ const { a: X, b: Y }={a:10,b:20}
 const {M,N}={M:10,N:20}
 console.log([X,Y])
 console.log([M,N])
+
+function foo(...arg){
+  console.log([...arg])
+}
+const a=10;
+const b=2;
+foo`Hello ${ a + b } world ${ a * b }`;
+// foo`jack${sex}`

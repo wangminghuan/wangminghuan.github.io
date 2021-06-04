@@ -66,4 +66,35 @@ ES6中可以将对象的属性简化:
 此时我们无法用简洁模式表达(或者说会产生其他隐患问题)，但需来取即可
 
 
-## super
+### super
+
+### 标签模板
+
+模板字符串可以紧跟在一个函数名后面，该函数将被调用来处理这个模板字符串。这被称为“标签模板”功能（tagged template）
+
+    const a=10;
+    const b=2;
+    function foo(...arg){
+      console.log([...arg])
+    }
+    foo`Hello ${ a + b } world ${ a * b }`; //  [[ 'Hello ', ' world ', '' ], 12, 20 ]
+
+从上面例子也可以看出等同于`foo([ 'Hello ', ' world ', '' ], 12, 20)`
+
+标签模板调用函数时，函数的第一个参数是一个数组，该数组的成员是模板字符串中那些没有变量替换的部分；被替换的部分作为后续参数依次传入。
+
+    
+### 箭头函数
+  
+在箭头函数内部，this 绑定不是动态的，而是词法的
+
+### for of 循环
+
+JavaScript 中默认为（或提供）iterable 的标准内建值包括：
+
+- Arrays 
+- Strings
+- Generators（迭代器）
+- Collections / TypedArrays ( 类数组）
+
+普通对象并不适用for of循环
