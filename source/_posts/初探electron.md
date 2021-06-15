@@ -2,6 +2,7 @@
 title: 初探electron
 date: 2019-05-17 15:13:25
 tags: [桌面应用]
+categories: Electron
 ---
 ## Electron
 Electron通过将Chromium和Node.js合并到同一个运行时环境中，并将其打包为Mac，Windows和Linux系统下的应用来实现这一目的。Electron和nwjs其实是一个作者，中间的种种可以访问参考2来查看，很有意思的一件事。
