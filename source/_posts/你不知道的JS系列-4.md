@@ -66,7 +66,7 @@ JS的七种类型已经提及无数遍了：null、 undefined 、boolean 、stri
         return (n === 0) && (1 / n === -Infinity);
       }
       /*
-       @desc  Number.isInteger ES6之前的profill
+       @desc  Number.isInteger ES6之前的polyfill
       */
       if (!Number.isInteger) {
         Number.isInteger = function(num) {
@@ -75,7 +75,7 @@ JS的七种类型已经提及无数遍了：null、 undefined 、boolean 、stri
       }
 
       /*
-       @desc  Number.isSafeInteger ES6之前的profill
+       @desc  Number.isSafeInteger ES6之前的polyfill
       */
       if (!Number.isSafeInteger) {
         Number.isSafeInteger = function(num) {
@@ -85,7 +85,7 @@ JS的七种类型已经提及无数遍了：null、 undefined 、boolean 、stri
       }
 
       /*
-       @desc  Number.isNaN ES6之前的profill
+       @desc  Number.isNaN ES6之前的polyfill
       */
       if (!Number.isNaN) {
         Number.isNaN = function(n) {
@@ -97,7 +97,7 @@ JS的七种类型已经提及无数遍了：null、 undefined 、boolean 、stri
       }
 
       /*
-       @desc  Object.is ES6之前的profill
+       @desc  Object.is ES6之前的polyfill
       */
       if (!Object.is) {
         Object.is = function(v1, v2) {
