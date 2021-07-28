@@ -6,7 +6,7 @@ categories: JavaScript
 ---
 ## 概述
 
-## 
+<!-- more -->
 
 ### 断言
 
