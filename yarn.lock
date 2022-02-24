@@ -34,9 +34,9 @@ amdefine@>=0.0.4:
   integrity sha1-SlKCrBZHKek2Gbz9OtFR+BfOkfU=
 
 ansi-regex@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.npm.taobao.org/ansi-regex/download/ansi-regex-5.0.0.tgz?cache=0&sync_timestamp=1618552978881&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fansi-regex%2Fdownload%2Fansi-regex-5.0.0.tgz#388539f55179bf39339c81af30a654d69f87cb75"
-  integrity sha1-OIU59VF5vzkznIGvMKZU1p+Hy3U=
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/ansi-regex/-/ansi-regex-5.0.1.tgz#082cb2c89c9fe8659a311a53bd6a4dc5301db304"
+  integrity sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==
 
 ansi-styles@^4.1.0:
   version "4.3.0"
@@ -603,10 +603,10 @@ hexo-server@^2.0.0:
     open "^7.0.0"
     serve-static "^1.14.1"
 
-hexo-theme-next@^8.4.0:
-  version "8.4.0"
-  resolved "https://registry.nlark.com/hexo-theme-next/download/hexo-theme-next-8.4.0.tgz#dc0887fea7da97c9507574045a45d46ecc6ad6b5"
-  integrity sha1-3AiH/qfal8lQdXQEWkXUbsxq1rU=
+hexo-theme-next@^8.10.0:
+  version "8.10.0"
+  resolved "https://registry.yarnpkg.com/hexo-theme-next/-/hexo-theme-next-8.10.0.tgz#9183f117397e49b50f2b3c1fe6a57f89c0cb3534"
+  integrity sha512-b7Jlzm1dlx3ED+SEfMiy9l8EKHRj5/C9/ZA+ng1NvwWTVHMkC+Mj+k8za/Ys4kmcNZo8Xj1OkHgjYNx4X9dvNA==
 
 hexo-util@^2.0.0, hexo-util@^2.1.0, hexo-util@^2.4.0:
   version "2.5.0"
