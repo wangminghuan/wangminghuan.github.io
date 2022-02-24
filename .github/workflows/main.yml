@@ -1,12 +1,18 @@
 # workflow name
-name: Hexo Blog CI
+name: Hexo Auto Deploy
 
 # master branch on push, auto run
 on: 
   push:
     branches:
       - master
-      
+env:
+  GIT_USER: wangminghuan
+  GIT_EMAIL: m.h.wang@foxmail.com
+  GIT_DEPLOY_REPO: wangminghuan/wangminghuan.github.io
+  GIT_DEPLOY_BRANCH: master
+  GIT_SOURCE_PERO: git@github.com:wangminghuan/wangminghuan.github.io.git
+
 jobs:
   build: 
     runs-on: ubuntu-latest 
@@ -39,8 +45,8 @@ jobs:
                 
     - name: Setup Git Infomation
       run: | 
-        git config --global user.name 'wangminghuan' 
-        git config --global user.email 'm.h.wang@foxmail.com'
+        git config --global user.name wangminghuan
+        git config --global user.email m.h.wang@foxmail.com
     - name: Deploy Hexo 
       run: |
         hexo clean
