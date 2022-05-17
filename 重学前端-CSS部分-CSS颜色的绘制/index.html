@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/fontawesome@5.15.3/all.min.css">
+  <link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/animejs@3.2.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wangminghuan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="概述最常见的颜色相关的属性就是 color 和 backgroud-color。css中颜色表示有一下几种方式：    属性 版本 继承性 简介    HEX CSS1 无 CSS颜色值十六进制(HEX)表示,语法如：#rrggbb或#rgb   RGB CSS2 无 CSS2 颜色 RGB表示方式   RGBA CSS3 无 CSS3 颜色值RGBA表示方式   HSL CSS3 无 CSS3">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学前端 - CSS部分-颜色的绘制">
+<meta property="og:url" content="https://wangminghuan.github.io/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-CSS%E9%83%A8%E5%88%86-CSS%E9%A2%9C%E8%89%B2%E7%9A%84%E7%BB%98%E5%88%B6/index.html">
+<meta property="og:site_name" content="WMH&#39;s Blog">
+<meta property="og:description" content="概述最常见的颜色相关的属性就是 color 和 backgroud-color。css中颜色表示有一下几种方式：    属性 版本 继承性 简介    HEX CSS1 无 CSS颜色值十六进制(HEX)表示,语法如：#rrggbb或#rgb   RGB CSS2 无 CSS2 颜色 RGB表示方式   RGBA CSS3 无 CSS3 颜色值RGBA表示方式   HSL CSS3 无 CSS3">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wangminghuan.github.io/30-1.png">
+<meta property="article:published_time" content="2019-05-25T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-05-17T10:04:10.893Z">
+<meta property="article:author" content="WMH">
+<meta property="article:tag" content="css">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wangminghuan.github.io/30-1.png">
+
+
+<link rel="canonical" href="https://wangminghuan.github.io/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-CSS%E9%83%A8%E5%88%86-CSS%E9%A2%9C%E8%89%B2%E7%9A%84%E7%BB%98%E5%88%B6/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wangminghuan.github.io/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-CSS%E9%83%A8%E5%88%86-CSS%E9%A2%9C%E8%89%B2%E7%9A%84%E7%BB%98%E5%88%B6/","path":"重学前端-CSS部分-CSS颜色的绘制/","title":"重学前端 - CSS部分-颜色的绘制"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>重学前端 - CSS部分-颜色的绘制 | WMH's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WMH's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-主页"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>主页</a></li>
+        <li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-分类"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RGB-%E9%A2%9C%E8%89%B2"><span class="nav-number">2.</span> <span class="nav-text">RGB 颜色</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CMYK-%E9%A2%9C%E8%89%B2"><span class="nav-number">3.</span> <span class="nav-text">CMYK 颜色</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HSL-%E9%A2%9C%E8%89%B2"><span class="nav-number">4.</span> <span class="nav-text">HSL 颜色</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RGBA"><span class="nav-number">5.</span> <span class="nav-text">RGBA</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%90%E5%8F%98"><span class="nav-number">6.</span> <span class="nav-text">渐变</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E6%B8%90%E5%8F%98"><span class="nav-number">6.1.</span> <span class="nav-text">线性渐变</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%BE%E5%B0%84%E6%80%A7%E6%B8%90%E5%8F%98"><span class="nav-number">6.2.</span> <span class="nav-text">放射性渐变</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BD%A2%E7%8A%B6"><span class="nav-number">7.</span> <span class="nav-text">形状</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A5%E5%85%85-svg-%E4%BD%9C%E4%B8%BA-dataURI"><span class="nav-number">8.</span> <span class="nav-text">补充 svg 作为 dataURI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="nav-number">9.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WMH"
+      src="/images/avatar2.png">
+  <p class="site-author-name" itemprop="name">WMH</p>
+  <div class="site-description" itemprop="description">just code it</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wangminghuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wangminghuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:m.h.wang@foxmail.com" title="E-Mail → mailto:m.h.wang@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weblog.wangminghuan.cn/" title="WebSite → https:&#x2F;&#x2F;weblog.wangminghuan.cn" rel="noopener" target="_blank"><i class="fa fa-book fa-fw"></i>WebSite</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/1657970003?topnav=1&wvr=6&topsug=1&is_all=1" title="微博 → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;1657970003?topnav&#x3D;1&amp;wvr&#x3D;6&amp;topsug&#x3D;1&amp;is_all&#x3D;1" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>微博</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-CSS%E9%83%A8%E5%88%86-CSS%E9%A2%9C%E8%89%B2%E7%9A%84%E7%BB%98%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.png">
+      <meta itemprop="name" content="WMH">
+      <meta itemprop="description" content="just code it">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WMH's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          重学前端 - CSS部分-颜色的绘制
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-05-25 16:00:00" itemprop="dateCreated datePublished" datetime="2019-05-25T16:00:00+00:00">2019-05-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-05-17 10:04:10" itemprop="dateModified" datetime="2022-05-17T10:04:10+00:00">2022-05-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">重学前端</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>最常见的颜色相关的属性就是 color 和 backgroud-color。css中颜色表示有一下几种方式：</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>版本</th>
+<th>继承性</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>HEX</td>
+<td>CSS1</td>
+<td>无</td>
+<td>CSS颜色值十六进制(HEX)表示,语法如：#rrggbb或#rgb</td>
+</tr>
+<tr>
+<td>RGB</td>
+<td>CSS2</td>
+<td>无</td>
+<td>CSS2 颜色 RGB表示方式</td>
+</tr>
+<tr>
+<td>RGBA</td>
+<td>CSS3</td>
+<td>无</td>
+<td>CSS3 颜色值RGBA表示方式</td>
+</tr>
+<tr>
+<td>HSL</td>
+<td>CSS3</td>
+<td>无</td>
+<td>CSS3 颜色值HSL表示方式</td>
+</tr>
+<tr>
+<td>HSLA</td>
+<td>CSS3</td>
+<td>无</td>
+<td>CSS3 颜色值HSLA表示方式</td>
+</tr>
+<tr>
+<td>Transparent</td>
+<td>CSS3</td>
+<td>无</td>
+<td>CSS3 颜色值透明(Transparent)表示方式(RGBA)</td>
+</tr>
+</tbody></table>
+<span id="more"></span>
+
+<h2 id="RGB-颜色"><a href="#RGB-颜色" class="headerlink" title="RGB 颜色"></a>RGB 颜色</h2><p>我们在计算机中，最常见的颜色表示法是 RGB 颜色，它符合光谱三原色理论：红、绿、蓝三种颜色的光可以构成所有的颜色。 0 - 255 的数字表示每一种颜色，这正好占据了一个字节，每一个颜色就占据三个字节。 </p>
+<p>红绿蓝三种颜色的光混合起来就是白光，没有光就是黑暗，所以在 RGB 表示法中，三色数值最大表示白色，三色数值为 0 表示黑色。  </p>
+<h2 id="CMYK-颜色"><a href="#CMYK-颜色" class="headerlink" title="CMYK 颜色"></a>CMYK 颜色</h2><p>颜料显示颜色的原理是它吸收了所有别的颜色的光，只反射一种颜色，所以颜料三原色其实是红、绿、蓝的补色，也就是：品红、黄、青。</p>
+<p>在印刷行业，使用的就是这样的三原色（品红、黄、青）来调配油墨，这种颜色的表示法叫做 CMYK，它用一个四元组来表示颜色。</p>
+<p>为什么它比三原色多了一种？在印刷行业中，黑色颜料价格最低，而品红、黄、青颜料价格较贵，如果要用三原色调配黑色，经济上是不划算的，所以印刷时会单独指定黑色。</p>
+<p>对 CMYK 颜色表示法来说，同一种颜色会有多种表示方案，但是我们参考印刷行业的习惯，会尽量优先使用黑色。</p>
+<h2 id="HSL-颜色"><a href="#HSL-颜色" class="headerlink" title="HSL 颜色"></a>HSL 颜色</h2><p>HSL颜色模型用一个值来表示人类认知中的颜色，专业的术语叫做色相（H）。加上颜色的纯度（S）和明度（L），就构成了一种颜色的表示。它是一种语义化的颜色。当我们对一张图片改变色相时，人们感知到的是“图片的颜色变了”。相比RGB颜色。</p>
+<h2 id="RGBA"><a href="#RGBA" class="headerlink" title="RGBA"></a>RGBA</h2><p>RGBA 是代表 Red（红色）、Green（绿色）、Blue（蓝色）和 Alpha 的色彩空间。RGBA 颜色被用来表示带透明度的颜色，实际上，Alpha 通道类似一种颜色值的保留字。在 CSS 中，Alpha 通道被用于透明度，所以我们的颜色表示被称作 RGBA，而不是 RGBO（Opacity）。</p>
+<p>为了方便使用，CSS 还规定了名称型的颜色，它内置了大量（140 种）的颜色名称。不过这里我要挑出两个颜色来讲一讲：金（gold）和银（silver）。</p>
+<p>如果你使用过这两个颜色，你会发现，金（gold）和银（silver）的视觉表现跟我们想象中的金色和银色相差甚远。与其被叫做金色和银色，它们看起来更像是难看的暗黄色和浅灰色。</p>
+<p>为什么会这样呢？在人类天然的色彩认知中，实际上混杂了很多其它因素，金色和银色不仅仅是一种颜色，它还意味着一定的镜面反光程度，在同样的光照条件下，金属会呈现出更亮的色彩，这并非是用一个色值可以描述的，这就引出了接下来要讲的渐变。</p>
+<h2 id="渐变"><a href="#渐变" class="headerlink" title="渐变"></a>渐变</h2><p>在 CSS 中，background-image这样的属性，可以设为渐变。CSS 中支持两种渐变，一种是线性渐变，一种是放射性渐变：</p>
+<h3 id="线性渐变"><a href="#线性渐变" class="headerlink" title="线性渐变"></a>线性渐变</h3><pre><code>linear-gradient(direction, color-stop1, color-stop2, ...);
+</code></pre>
+<p>direction 可以是方向，也可以是具体的角度：</p>
+<pre><code>to bottom
+to top
+to left
+to right
+to bottom left
+to bottom right
+to top left
+to top right
+120deg
+3.14rad
+</code></pre>
+<p>color-stop 是一个颜色和一个区段：</p>
+<pre><code>rgba(255,0,0,0)
+orange
+yellow 10%
+green 20%
+lime 28px
+</code></pre>
+<h3 id="放射性渐变"><a href="#放射性渐变" class="headerlink" title="放射性渐变"></a>放射性渐变</h3><pre><code>radial-gradient(shape size at position, start-color, ..., last-color);
+</code></pre>
+<h2 id="形状"><a href="#形状" class="headerlink" title="形状"></a>形状</h2><p>CSS 中的很多属性还会产生形状，比如我们常见的属性：</p>
+<pre><code>border
+box-shadow
+border-radius
+</code></pre>
+<p>这些产生形状的属性非常有趣，我们也能看到很多利用它们来产生的 CSS 黑魔法。winter建议把它们用于基本的用途，把 border 用于边框、把阴影用于阴影，把圆角用于圆角，所有其它的场景，都有一个更好的替代品：datauri+svg。</p>
+<h2 id="补充-svg-作为-dataURI"><a href="#补充-svg-作为-dataURI" class="headerlink" title="补充 svg 作为 dataURI"></a>补充 svg 作为 dataURI</h2><p>举个例子：</p>
+<pre><code>&lt;style&gt;
+.bg &#123;
+  background: url(&quot;data:image/svg+xml;utf8,&lt;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; width=&#39;30&#39; height=&#39;30&#39;&gt;&lt;circle cx=&#39;15&#39; cy=&#39;15&#39; r=&#39;10&#39; /&gt;&lt;/svg&gt;&quot;)  no-repeat;
+  background-size: 100% 100%;
+  height: 50px;
+  width: 50px;
+ &#125;
+.img&#123;
+    height: 50px;
+    width: 50px;
+    display: block;
+  &#125;
+  &lt;/style&gt;
+
+  &lt;img class=&quot;img&quot; src=&quot;data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSczMCcgaGVpZ2h0PSczMCc+PGNpcmNsZSBjeD0nMTUnIGN5PScxNScgcj0nMTAnIC8+PC9zdmc+&quot;&gt;
+  &lt;div class=&quot;bg&quot;&gt;&lt;/div&gt;
+</code></pre>
+<p>最终个效果：</p>
+<p><img src="/30-1.png"></p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://youhaosuda.com/blog/43">【译】在 dataURI 中使用 SVG 的最佳方法</a></li>
+<li><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000013237541">关于SVG</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/css/" rel="tag"># css</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-CSS%E9%83%A8%E5%88%86-%E5%8A%A8%E7%94%BB%E4%B8%8E%E4%BA%A4%E4%BA%92/" rel="prev" title="重学前端 - CSS部分-动画与交互">
+                  <i class="fa fa-chevron-left"></i> 重学前端 - CSS部分-动画与交互
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-%E6%B5%8F%E8%A7%88%E5%99%A8%E9%83%A8%E5%88%86-%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B-%E8%AF%B7%E6%B1%82/" rel="next" title="重学前端 - 浏览器部分-工作流程-请求">
+                  重学前端 - 浏览器部分-工作流程-请求 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMH</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://static.wangminghuan.cn/cdn/animejs@3.2.1/anime.min.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://static.wangminghuan.cn/cdn/hexo-generator-searchdb/search.js"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

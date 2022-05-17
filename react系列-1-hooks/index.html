@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/fontawesome@5.15.3/all.min.css">
+  <link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/animejs@3.2.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wangminghuan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="前言React 16.8 新增了hooks特性，这是一项激动人心的功能，可以让你在不编写 class 的情况下使用 state 以及其他的 React 特性。 React的组件创建方式，一种是类组件，一种是纯函数组件，并且React团队希望，组件不要变成复杂的容器，最好只是数据流的管道。开发者根据需要，组合管道即可。也就是说组件的最佳写法应该是函数，而不是类。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="react系列-1-hooks">
+<meta property="og:url" content="https://wangminghuan.github.io/react%E7%B3%BB%E5%88%97-1-hooks/index.html">
+<meta property="og:site_name" content="WMH&#39;s Blog">
+<meta property="og:description" content="前言React 16.8 新增了hooks特性，这是一项激动人心的功能，可以让你在不编写 class 的情况下使用 state 以及其他的 React 特性。 React的组件创建方式，一种是类组件，一种是纯函数组件，并且React团队希望，组件不要变成复杂的容器，最好只是数据流的管道。开发者根据需要，组合管道即可。也就是说组件的最佳写法应该是函数，而不是类。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wangminghuan.github.io/react%E7%B3%BB%E5%88%97-1-hooks/1.gif">
+<meta property="og:image" content="https://wangminghuan.github.io/react%E7%B3%BB%E5%88%97-1-hooks/2.gif">
+<meta property="article:published_time" content="2020-03-10T14:11:03.000Z">
+<meta property="article:modified_time" content="2022-05-17T10:04:10.833Z">
+<meta property="article:author" content="WMH">
+<meta property="article:tag" content="hooks">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wangminghuan.github.io/react%E7%B3%BB%E5%88%97-1-hooks/1.gif">
+
+
+<link rel="canonical" href="https://wangminghuan.github.io/react%E7%B3%BB%E5%88%97-1-hooks/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wangminghuan.github.io/react%E7%B3%BB%E5%88%97-1-hooks/","path":"react系列-1-hooks/","title":"react系列-1-hooks"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>react系列-1-hooks | WMH's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WMH's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-主页"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>主页</a></li>
+        <li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-分类"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFReact-Hooks"><span class="nav-number">2.</span> <span class="nav-text">什么是React Hooks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#React-Hooks%E7%9A%84%E9%92%A9%E5%AD%90"><span class="nav-number">3.</span> <span class="nav-text">React Hooks的钩子</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#userState-%E7%8A%B6%E6%80%81%E9%92%A9%E5%AD%90"><span class="nav-number">3.1.</span> <span class="nav-text">userState():状态钩子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#useContext-%E5%85%B1%E4%BA%AB%E7%8A%B6%E6%80%81%E9%92%A9%E5%AD%90"><span class="nav-number">3.2.</span> <span class="nav-text">useContext():共享状态钩子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#useReducer-Action%E9%92%A9%E5%AD%90"><span class="nav-number">3.3.</span> <span class="nav-text">useReducer():Action钩子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#useEffect-%E5%89%AF%E4%BD%9C%E7%94%A8%E9%92%A9%E5%AD%90"><span class="nav-number">3.4.</span> <span class="nav-text">useEffect():副作用钩子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84Hooks"><span class="nav-number">3.5.</span> <span class="nav-text">创建自己的Hooks</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WMH"
+      src="/images/avatar2.png">
+  <p class="site-author-name" itemprop="name">WMH</p>
+  <div class="site-description" itemprop="description">just code it</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wangminghuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wangminghuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:m.h.wang@foxmail.com" title="E-Mail → mailto:m.h.wang@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weblog.wangminghuan.cn/" title="WebSite → https:&#x2F;&#x2F;weblog.wangminghuan.cn" rel="noopener" target="_blank"><i class="fa fa-book fa-fw"></i>WebSite</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/1657970003?topnav=1&wvr=6&topsug=1&is_all=1" title="微博 → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;1657970003?topnav&#x3D;1&amp;wvr&#x3D;6&amp;topsug&#x3D;1&amp;is_all&#x3D;1" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>微博</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/react%E7%B3%BB%E5%88%97-1-hooks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.png">
+      <meta itemprop="name" content="WMH">
+      <meta itemprop="description" content="just code it">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WMH's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          react系列-1-hooks
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-03-10 14:11:03" itemprop="dateCreated datePublished" datetime="2020-03-10T14:11:03+00:00">2020-03-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-05-17 10:04:10" itemprop="dateModified" datetime="2022-05-17T10:04:10+00:00">2022-05-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/React-%E7%B3%BB%E5%88%97/" itemprop="url" rel="index"><span itemprop="name">React 系列</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>React 16.8 新增了hooks特性，这是一项激动人心的功能，可以让你在不编写 class 的情况下使用 state 以及其他的 React 特性。</p>
+<p>React的组件创建方式，一种是类组件，一种是纯函数组件，并且React团队希望，组件不要变成复杂的容器，最好只是数据流的管道。开发者根据需要，组合管道即可。也就是说组件的最佳写法应该是函数，而不是类。</p>
+<span id="more"></span>
+
+<p>但目前开发中我们基本都在使用类组件开发，因为纯函数组件有类组件不具备的多种特点，如：</p>
+<ul>
+<li>纯函数组件没有状态</li>
+<li>纯函数组件没有生命周期</li>
+<li>纯函数组件没有this</li>
+</ul>
+<p>我们使用类组件实现一个简答的计时器功能：</p>
+<pre><code>import React, &#123;Component&#125; from &#39;react&#39;;
+class AddCount extends Component &#123;
+  constructor(props)&#123;
+    super(props)
+    this.state=&#123;
+      count: 0
+    &#125;
+  &#125;
+  addcount = () =&gt; &#123;
+    this.setState(&#123;
+      count:this.state.count + 1
+    &#125;)
+  &#125;
+  render()&#123;
+    return (
+      &lt;&gt;
+        &lt;p&gt;&#123;this.state.count&#125;&lt;/p&gt;
+        &lt;button rimary&quot; onClick=&#123;this.addcount&#125;&gt;Add&lt;/button&gt;
+      &lt;/&gt;
+    )
+  &#125;
+&#125;
+export default AddCount
+</code></pre>
+<p>可以看到，一个小功能，但看起来却非常“重”，对于类组件，无论业务代码多少，constructor、render等都是必须的。</p>
+<p>类组件功能齐全却很重，纯函数很轻便却有上文几点重大限制，为了解决上述问题。React团队设计了React Hooks。</p>
+<h2 id="什么是React-Hooks"><a href="#什么是React-Hooks" class="headerlink" title="什么是React Hooks"></a>什么是React Hooks</h2><p>hooks,顾名思义，就是“钩子”的意思，因为函数组件没有状态，所以对于一个全功能的组件，，如果需要外部功能和副作用，就用钩子把外部代码”钩”进来。而React Hooks 就是我们所说的“钩子”。更进一步说，React Hooks就是加强版的函数组件。</p>
+<p>我们先将上述类组件改为函数组件：</p>
+<pre><code>import React, &#123;useState &#125; from &#39;react&#39;;
+const AddCount = () =&gt; &#123;
+  const [count, setCount] = useState(0);
+  const addcount = () =&gt; &#123;
+    let newCount = count
+    setCount(newCount+=1)
+  &#125; 
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Count: &#123;count&#125;&lt;/p&gt;
+      &lt;button onClick=&#123;addcount&#125;&gt;Add&lt;/button&gt;
+    &lt;/div&gt;
+  );
+&#125;;
+export default AddCount;
+</code></pre>
+<p>可以看到函数组件 + React Hooks的写法更简洁：没有了渲染逻辑，没有了生命周期等。</p>
+<p>下面介绍React Hooks的四种默认钩子：</p>
+<h2 id="React-Hooks的钩子"><a href="#React-Hooks的钩子" class="headerlink" title="React Hooks的钩子"></a>React Hooks的钩子</h2><h3 id="userState-状态钩子"><a href="#userState-状态钩子" class="headerlink" title="userState():状态钩子"></a>userState():状态钩子</h3><p>纯函数组件没有状态，useState()用于为函数组件引入状态</p>
+<p>在useState()中，它接受状态的初始值作为参数，即上例中计数的初始值，它返回一个数组：</p>
+<p>数组第一项是一个变量，指向状态的当前值。类似this.state<br>数组第二项是一个函数，用来更新状态,类似setState  </p>
+<h3 id="useContext-共享状态钩子"><a href="#useContext-共享状态钩子" class="headerlink" title="useContext():共享状态钩子"></a>useContext():共享状态钩子</h3><p>依旧从上面例子进行扩展，假设组件A与组件B共享状态:</p>
+<pre><code>import React, &#123;useContext,createContext, useState  &#125; from &#39;react&#39;;
+import &#123; Button &#125; from &#39;antd-mobile&#39;;
+const Count=()=&gt;&#123;
+  const [count,setCount]=useState(0);
+  const AppContext =createContext(&#123;&#125;)
+  const A=()=&gt;&#123;
+    const &#123; val &#125; = useContext(AppContext)
+    return(
+    &lt;p&gt;我是组件A，我接收到的count值为&#123;val&#125;&lt;/p&gt;
+    )
+  &#125;
+  const B=()=&gt;&#123;
+    const &#123; val &#125; = useContext(AppContext)
+    return(
+    &lt;p&gt;我是组件A，我接收到的count值为&#123;val&#125;&lt;/p&gt;
+    )
+  &#125;
+  return (
+    &lt;AppContext.Provider value=&#123;&#123;val: count&#125;&#125;&gt;
+      &lt;A&gt;&lt;/A&gt;
+      &lt;B&gt;&lt;/B&gt;
+      &lt;Button onClick=&#123;()=&gt;&#123;setCount(count+1)&#125;&#125;&gt;Add&lt;/Button&gt;
+    &lt;/AppContext.Provider&gt;
+  );
+&#125;
+export default Count;
+</code></pre>
+<p>运行结果：</p>
+<p><img src="1.gif"></p>
+<h3 id="useReducer-Action钩子"><a href="#useReducer-Action钩子" class="headerlink" title="useReducer():Action钩子"></a>useReducer():Action钩子</h3><p>因为react本身并不提供状态管理的功能，所以一般是通过外部库来解决，最常用到的就是redux。<br>redux 的核心概念是，组件发出 action 与状态管理器通信。状态管理器收到 action 以后，使用 Reducer 函数算出新的状态，<br>Reducer函数的形式是<code>(state, action) =&gt; newstate</code>。</p>
+<p>useReducers()钩子用来引入 Reducer 功能</p>
+<pre><code>const [state, dispatch] = useReducer(reducer, initialState)
+</code></pre>
+<p>Reducer 函数和状态的初始值作为参数，返回一个数组:</p>
+<p>数组的第一项是状态的当前值<br>数组的第一项是发送 action 的dispatch函数  </p>
+<p>我们依旧实现一个计数器：</p>
+<pre><code>import React, &#123;useReducer&#125; from &#39;react&#39;;
+const AddCount = () =&gt; &#123;
+  const reducer=(state,action)=&gt;&#123;
+
+    if(action.type===&quot;add&quot;)&#123;
+      return &#123;
+        ...state,
+        count:state.count+1
+      &#125;
+    &#125;else&#123;
+      return state
+    &#125;
+  &#125;
+  const addcount=()=&gt;&#123;
+    dispatch(&#123;
+      type:&quot;add&quot;
+    &#125;)
+  &#125;
+  const [state, dispatch] = useReducer(reducer, &#123;count:0&#125;)
+  return(
+    &lt;div&gt;
+      &lt;p&gt;Count: &#123;state.count&#125;&lt;/p&gt;
+      &lt;button onClick=&#123;addcount&#125;&gt;Add&lt;/button&gt;
+    &lt;/div&gt;
+  )
+&#125;
+export default AddCount
+</code></pre>
+<p>由于 Hooks 可以提供共享状态和 Reducer 函数，所以它在这些方面可以取代 Redux。但是，它没法提供中间件（middleware）和时间旅行（time travel），如果你需要这两个功能，还是要用 Redux。</p>
+<h3 id="useEffect-副作用钩子"><a href="#useEffect-副作用钩子" class="headerlink" title="useEffect():副作用钩子"></a>useEffect():副作用钩子</h3><p>useEffect()用来引入具有副作用的操作，最常见的就是向服务器请求数据。以前，放在componentDidMount里面的代码，现在可以放在useEffect()。</p>
+<pre><code>import React, &#123;useEffect,useState&#125; from &#39;react&#39;;
+const GetList = () =&gt; &#123;
+const [loading, setLoading] = useState(true);
+const [count, setCount] = useState(0);
+
+useEffect(() =&gt; &#123;
+  setLoading(true); 
+  fetch(`https://xxx.xxx.com/InterfaceApi/News/noticeList`)
+    .then(response =&gt; response.json())
+    .then(data =&gt; &#123;
+      setCount(data.data.count);
+      setLoading(false);
+    &#125;);
+&#125;, [])
+
+if (loading === true) &#123;
+  return &lt;p&gt;Loading ...&lt;/p&gt;
+&#125;
+  return(
+    &lt;div&gt;
+      &lt;p&gt;list lens: &#123;count&#125;&lt;/p&gt;
+    &lt;/div&gt;
+  )
+&#125;
+export default GetList
+</code></pre>
+<p>运行结果：</p>
+<p><img src="2.gif"></p>
+<h3 id="创建自己的Hooks"><a href="#创建自己的Hooks" class="headerlink" title="创建自己的Hooks"></a>创建自己的Hooks</h3><p>react提供给我们了四种默认React Hooks,有时候我们需要创建自己想要的Hooks,来满足更便捷的开发，其实无非就是根据业务场景对以上四种Hooks进行组装，从而得到满足自己需求的钩子，此处不再展开。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2019/09/react-hooks.html">React Hooks 入门教程 - 阮一峰</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/7e778adec7d1">React Hooks,彻底颠覆React,它的未来应该是这样的</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/hooks/" rel="tag"># hooks</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E5%88%97-2-MongoDB/" rel="prev" title="数据库系列-2-MongoDB">
+                  <i class="fa fa-chevron-left"></i> 数据库系列-2-MongoDB
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/%E6%98%AF%E6%97%B6%E5%80%99%E4%BA%86%E8%A7%A3%E4%B8%8BAPNG%EF%BC%8CWEBP%E4%BA%86/" rel="next" title="是时候了解下APNG，WEBP了">
+                  是时候了解下APNG，WEBP了 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMH</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://static.wangminghuan.cn/cdn/animejs@3.2.1/anime.min.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://static.wangminghuan.cn/cdn/hexo-generator-searchdb/search.js"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

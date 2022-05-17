@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/fontawesome@5.15.3/all.min.css">
+  <link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/animejs@3.2.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wangminghuan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="概述path 模块提供用于处理文件路径和目录路径的实用工具，path的几乎所有操作均不检测文件是否真是存在，只针对路径字符串本身进行解析。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nodejs系列-9-path模块">
+<meta property="og:url" content="https://wangminghuan.github.io/Nodejs%E7%B3%BB%E5%88%97-9-path%E6%A8%A1%E5%9D%97/index.html">
+<meta property="og:site_name" content="WMH&#39;s Blog">
+<meta property="og:description" content="概述path 模块提供用于处理文件路径和目录路径的实用工具，path的几乎所有操作均不检测文件是否真是存在，只针对路径字符串本身进行解析。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-10-17T14:00:53.000Z">
+<meta property="article:modified_time" content="2022-05-17T10:04:10.817Z">
+<meta property="article:author" content="WMH">
+<meta property="article:tag" content="note">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://wangminghuan.github.io/Nodejs%E7%B3%BB%E5%88%97-9-path%E6%A8%A1%E5%9D%97/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wangminghuan.github.io/Nodejs%E7%B3%BB%E5%88%97-9-path%E6%A8%A1%E5%9D%97/","path":"Nodejs系列-9-path模块/","title":"Nodejs系列-9-path模块"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Nodejs系列-9-path模块 | WMH's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WMH's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-主页"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>主页</a></li>
+        <li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-分类"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#path-dirname"><span class="nav-number">2.</span> <span class="nav-text">path.dirname</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#path-extname"><span class="nav-number">3.</span> <span class="nav-text">path.extname</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#path-basename"><span class="nav-number">4.</span> <span class="nav-text">path.basename</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#path-step-%E5%B1%9E%E6%80%A7"><span class="nav-number">5.</span> <span class="nav-text">path.step(属性)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#path-join"><span class="nav-number">6.</span> <span class="nav-text">path.join</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#path-resolve"><span class="nav-number">7.</span> <span class="nav-text">path.resolve</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#path-resolve-%E4%B8%8E-path-join-%E5%8C%BA%E5%88%AB"><span class="nav-number">7.1.</span> <span class="nav-text">path.resolve 与 path.join 区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#path-relative"><span class="nav-number">8.</span> <span class="nav-text">path.relative</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#path-parse"><span class="nav-number">9.</span> <span class="nav-text">path.parse</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WMH"
+      src="/images/avatar2.png">
+  <p class="site-author-name" itemprop="name">WMH</p>
+  <div class="site-description" itemprop="description">just code it</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wangminghuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wangminghuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:m.h.wang@foxmail.com" title="E-Mail → mailto:m.h.wang@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weblog.wangminghuan.cn/" title="WebSite → https:&#x2F;&#x2F;weblog.wangminghuan.cn" rel="noopener" target="_blank"><i class="fa fa-book fa-fw"></i>WebSite</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/1657970003?topnav=1&wvr=6&topsug=1&is_all=1" title="微博 → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;1657970003?topnav&#x3D;1&amp;wvr&#x3D;6&amp;topsug&#x3D;1&amp;is_all&#x3D;1" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>微博</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/Nodejs%E7%B3%BB%E5%88%97-9-path%E6%A8%A1%E5%9D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.png">
+      <meta itemprop="name" content="WMH">
+      <meta itemprop="description" content="just code it">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WMH's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Nodejs系列-9-path模块
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-10-17 14:00:53" itemprop="dateCreated datePublished" datetime="2019-10-17T14:00:53+00:00">2019-10-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-05-17 10:04:10" itemprop="dateModified" datetime="2022-05-17T10:04:10+00:00">2022-05-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Nodejs-%E7%B3%BB%E5%88%97/" itemprop="url" rel="index"><span itemprop="name">Nodejs 系列</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>path 模块提供用于处理文件路径和目录路径的实用工具，path的几乎所有操作均不检测文件是否真是存在，只针对路径字符串本身进行解析。</p>
+<span id="more"></span>
+<h2 id="path-dirname"><a href="#path-dirname" class="headerlink" title="path.dirname"></a>path.dirname</h2><p>方法返回 path 的目录名，类似于 Unix 的 dirname 命令</p>
+<pre><code>path.dirname(path)
+</code></pre>
+<p>例子：</p>
+<pre><code>const path =require(&quot;path&quot;);
+const static=path.join(__dirname,&#39;static/js/app.js&#39;);
+console.log(path.dirname(static))
+</code></pre>
+<p>运行结果：</p>
+<pre><code>D:\MyProject\DEMO-CODE\PATH\static\js
+</code></pre>
+<h2 id="path-extname"><a href="#path-extname" class="headerlink" title="path.extname"></a>path.extname</h2><p>方法返回 path 的扩展名，从最后一次出现 <code>.</code>（句点）字符到 path 最后一部分的字符串结束。没有则返回空</p>
+<pre><code>path.extname(path)
+</code></pre>
+<p>例子：</p>
+<pre><code>const path =require(&quot;path&quot;);
+const static=path.join(__dirname,&#39;static/js/app.js&#39;);
+console.log(path.extname(static))
+</code></pre>
+<p>运行结果：</p>
+<pre><code>.js
+</code></pre>
+<h2 id="path-basename"><a href="#path-basename" class="headerlink" title="path.basename"></a>path.basename</h2><p>方法返回 path 的最后一部分，类似于 Unix 的 basename 命令。</p>
+<pre><code>path.basename(path[, ext])
+</code></pre>
+<p>例子：</p>
+<pre><code>const path =require(&quot;path&quot;);
+const static=path.resolve(&#39;static&#39;,&#39;js&#39;,&#39;app.js&#39;);
+console.log(path.basename(static))
+console.log(path.basename(static,&#39;.js&#39;))
+</code></pre>
+<p>运行结果：</p>
+<pre><code>app.js
+app
+</code></pre>
+<h2 id="path-step-属性"><a href="#path-step-属性" class="headerlink" title="path.step(属性)"></a>path.step(属性)</h2><p>提供平台特定的路径片段分隔符：<br>    Windows 上是 <code>\</code>。<br>    POSIX 上是 <code>/</code>。  </p>
+<p>例子：</p>
+<pre><code>const path =require(&quot;path&quot;);
+const static=path.resolve(&#39;static&#39;,&#39;js&#39;,&#39;app.js&#39;);
+console.log(static.split(path.sep))
+</code></pre>
+<p>运行结果：</p>
+<pre><code>[ &#39;D:&#39;, &#39;MyProject&#39;, &#39;DEMO-CODE&#39;, &#39;PATH&#39;, &#39;static&#39;, &#39;js&#39;, &#39;app.js&#39; ]  
+</code></pre>
+<h2 id="path-join"><a href="#path-join" class="headerlink" title="path.join"></a>path.join</h2><p>方法使用平台特定的分隔符作为定界符将所有给定的 path 片段连接在一起，然后规范化生成的路径。Unix系统是<code>/</code>，Windows系统是<code>\</code>。</p>
+<pre><code>path.join([...paths])
+</code></pre>
+<p>例子:</p>
+<pre><code>const path =require(&quot;path&quot;);
+const static=path.join(&#39;static&#39;,&#39;js&#39;,&#39;app.js&#39;);
+console.log(static)
+</code></pre>
+<p>运行结果：</p>
+<pre><code>static\js\app.js
+</code></pre>
+<h2 id="path-resolve"><a href="#path-resolve" class="headerlink" title="path.resolve"></a>path.resolve</h2><p>方法将路径或路径片段的序列解析为绝对路径。如果没有传入 path 片段，则 path.resolve() 将返回当前工作目录的绝对路径</p>
+<pre><code>path.resolve([...paths])
+</code></pre>
+<p>例子：</p>
+<pre><code>const path =require(&quot;path&quot;);
+const static=path.resolve(&#39;static&#39;,&#39;js&#39;,&quot;app.js&quot;,&quot;..&quot;);
+console.log(static)
+console.log(path.resolve())
+</code></pre>
+<p>运行结果：</p>
+<pre><code>  D:\MyProject\DEMO-CODE\PATH\static\js
+  D:\MyProject\DEMO-CODE\PATH
+</code></pre>
+<h3 id="path-resolve-与-path-join-区别"><a href="#path-resolve-与-path-join-区别" class="headerlink" title="path.resolve 与 path.join 区别"></a>path.resolve 与 path.join 区别</h3><p>join是把各个path片段连接在一起； resolve把<code>／</code>当成根目录，在传入非<code>/</code>路径时，会自动加上当前目录形成一个绝对路径，而join仅仅用于路径拼接。</p>
+<pre><code>  const path =require(&quot;path&quot;);
+  const static=path.join(&#39;static&#39;,&#39;js&#39;,&#39;app.js&#39;);
+  const static1=path.join(&#39;../static&#39;,&#39;js&#39;,&#39;app.js&#39;);
+  const static2=path.resolve(&#39;static&#39;,&#39;js&#39;,&#39;app.js&#39;);
+  const static3=path.resolve(&#39;../static&#39;,&#39;js&#39;,&#39;app.js&#39;)
+  console.log(static)
+  console.log(static1)
+  console.log(static2)
+  console.log(static3)
+</code></pre>
+<p>运行结果：</p>
+<pre><code>  static\js\app.js
+  ..\static\js\app.js
+  D:\MyProject\DEMO-CODE\PATH\static\js\app.js
+  D:\MyProject\DEMO-CODE\static\js\app.js
+</code></pre>
+<p>join只会做拼接，而resolve将多个路径解析为一个规范化的绝对路径。其处理方式类似于对这些路径逐一进行cd操作，与cd操作不同的是，这引起路径可以是文件，并且可不必实际存在。</p>
+<h2 id="path-relative"><a href="#path-relative" class="headerlink" title="path.relative"></a>path.relative</h2><p>法根据当前工作目录返回 from 到 to 的相对路径。</p>
+<pre><code>path.relative(from, to)
+</code></pre>
+<p>例子，</p>
+<pre><code>const path =require(&quot;path&quot;);
+const static=path.resolve(&#39;static&#39;,&#39;js&#39;,&#39;app.js&#39;);
+const img=path.resolve(&#39;static&#39;,&#39;img&#39;,&#39;20190701223743,jpg&#39;);
+console.log(path.relative(img,static))
+</code></pre>
+<p>将返回从img目录进入static目录的相对路径</p>
+<pre><code>  ..\\..\\js\\app.js
+</code></pre>
+<p>如果两个不在一个盘符下，将返回参数to的路径</p>
+<pre><code>const path =require(&quot;path&quot;);
+const cDir=path.resolve(process.argv[0]);
+console.log(path.relative(img,cDir))
+</code></pre>
+<p>结果为：</p>
+<pre><code>  C:\\Program Files\\nodejs\\node.exe
+</code></pre>
+<h2 id="path-parse"><a href="#path-parse" class="headerlink" title="path.parse"></a>path.parse</h2><p>法返回一个对象，其属性表示 path 的重要元素。 尾部的目录分隔符将被忽略，</p>
+<pre><code>path.parse(path)
+</code></pre>
+<p>例子：</p>
+<pre><code>const path =require(&quot;path&quot;);
+const static=path.resolve(&#39;static&#39;,&#39;js&#39;,&#39;app.js&#39;);
+console.log(path.parse(static))
+</code></pre>
+<p>运行结果</p>
+<pre><code>&#123; root: &#39;D:\\&#39;,
+dir: &#39;D:\\MyProject\\DEMO-CODE\\PATH\\static\\js&#39;, //文件目录
+base: &#39;app.js&#39;, //文件名
+ext: &#39;.js&#39;, //文件扩展名
+name: &#39;app&#39; &#125; //文件名称
+</code></pre>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/note/" rel="tag"># note</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Nodejs%E7%B3%BB%E5%88%97-8-fs%E6%A8%A1%E5%9D%97/" rel="prev" title="Nodejs系列-8-fs模块">
+                  <i class="fa fa-chevron-left"></i> Nodejs系列-8-fs模块
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Nodejs%E7%B3%BB%E5%88%97-10-global%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F/" rel="next" title="Nodejs系列-10-global全局变量">
+                  Nodejs系列-10-global全局变量 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMH</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://static.wangminghuan.cn/cdn/animejs@3.2.1/anime.min.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://static.wangminghuan.cn/cdn/hexo-generator-searchdb/search.js"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

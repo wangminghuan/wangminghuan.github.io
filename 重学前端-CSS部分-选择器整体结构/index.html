@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/fontawesome@5.15.3/all.min.css">
+  <link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/animejs@3.2.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wangminghuan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="简单选择器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学前端 - CSS部分-选择器整体结构">
+<meta property="og:url" content="https://wangminghuan.github.io/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-CSS%E9%83%A8%E5%88%86-%E9%80%89%E6%8B%A9%E5%99%A8%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84/index.html">
+<meta property="og:site_name" content="WMH&#39;s Blog">
+<meta property="og:description" content="简单选择器">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/4c/ce/4c9ac78870342dc802137ea9c848c0ce.png">
+<meta property="article:published_time" content="2019-05-25T13:10:00.000Z">
+<meta property="article:modified_time" content="2022-05-17T10:04:10.893Z">
+<meta property="article:author" content="WMH">
+<meta property="article:tag" content="css">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://static001.geekbang.org/resource/image/4c/ce/4c9ac78870342dc802137ea9c848c0ce.png">
+
+
+<link rel="canonical" href="https://wangminghuan.github.io/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-CSS%E9%83%A8%E5%88%86-%E9%80%89%E6%8B%A9%E5%99%A8%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wangminghuan.github.io/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-CSS%E9%83%A8%E5%88%86-%E9%80%89%E6%8B%A9%E5%99%A8%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84/","path":"重学前端-CSS部分-选择器整体结构/","title":"重学前端 - CSS部分-选择器整体结构"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>重学前端 - CSS部分-选择器整体结构 | WMH's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WMH's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-主页"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>主页</a></li>
+        <li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-分类"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E9%80%89%E6%8B%A9%E5%99%A8"><span class="nav-number">1.</span> <span class="nav-text">简单选择器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E9%80%89%E6%8B%A9%E5%99%A8"><span class="nav-number">1.1.</span> <span class="nav-text">类型选择器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%A8%E4%BD%93%E9%80%89%E6%8B%A9%E5%99%A8"><span class="nav-number">1.2.</span> <span class="nav-text">全体选择器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#id-%E9%80%89%E6%8B%A9%E5%99%A8%E4%B8%8E-class-%E9%80%89%E6%8B%A9%E5%99%A8"><span class="nav-number">1.3.</span> <span class="nav-text">id 选择器与 class 选择器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%9E%E6%80%A7%E9%80%89%E6%8B%A9%E5%99%A8"><span class="nav-number">1.4.</span> <span class="nav-text">属性选择器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%AA%E7%B1%BB%E9%80%89%E6%8B%A9%E5%99%A8"><span class="nav-number">1.5.</span> <span class="nav-text">伪类选择器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%91%E7%BB%93%E6%9E%84%E5%85%B3%E7%B3%BB%E4%BC%AA%E7%B1%BB%E9%80%89%E6%8B%A9%E5%99%A8"><span class="nav-number">1.5.1.</span> <span class="nav-text">树结构关系伪类选择器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%93%BE%E6%8E%A5%E4%B8%8E%E8%A1%8C%E4%B8%BA%E4%BC%AA%E7%B1%BB%E9%80%89%E6%8B%A9%E5%99%A8"><span class="nav-number">1.5.2.</span> <span class="nav-text">链接与行为伪类选择器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%BB%E8%BE%91%E4%BC%AA%E7%B1%BB%E9%80%89%E6%8B%A9%E5%99%A8"><span class="nav-number">1.5.3.</span> <span class="nav-text">逻辑伪类选择器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">2.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WMH"
+      src="/images/avatar2.png">
+  <p class="site-author-name" itemprop="name">WMH</p>
+  <div class="site-description" itemprop="description">just code it</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wangminghuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wangminghuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:m.h.wang@foxmail.com" title="E-Mail → mailto:m.h.wang@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weblog.wangminghuan.cn/" title="WebSite → https:&#x2F;&#x2F;weblog.wangminghuan.cn" rel="noopener" target="_blank"><i class="fa fa-book fa-fw"></i>WebSite</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/1657970003?topnav=1&wvr=6&topsug=1&is_all=1" title="微博 → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;1657970003?topnav&#x3D;1&amp;wvr&#x3D;6&amp;topsug&#x3D;1&amp;is_all&#x3D;1" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>微博</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-CSS%E9%83%A8%E5%88%86-%E9%80%89%E6%8B%A9%E5%99%A8%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.png">
+      <meta itemprop="name" content="WMH">
+      <meta itemprop="description" content="just code it">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WMH's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          重学前端 - CSS部分-选择器整体结构
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-05-25 13:10:00" itemprop="dateCreated datePublished" datetime="2019-05-25T13:10:00+00:00">2019-05-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-05-17 10:04:10" itemprop="dateModified" datetime="2022-05-17T10:04:10+00:00">2022-05-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">重学前端</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="简单选择器"><a href="#简单选择器" class="headerlink" title="简单选择器"></a>简单选择器</h2><p><img src="https://static001.geekbang.org/resource/image/4c/ce/4c9ac78870342dc802137ea9c848c0ce.png"></p>
+<span id="more"></span>
+<h3 id="类型选择器"><a href="#类型选择器" class="headerlink" title="类型选择器"></a>类型选择器</h3><pre><code>span &#123;display:block&#125;
+</code></pre>
+<p><strong>命名空间</strong>：如果svg 和 html 中都有 a 元素，我们若要想区分选择 svg 中的 a 和 html 中的 a，就必须用带命名空间的类型选择器。</p>
+<pre><code>@namespace svg url(http://www.w3.org/2000/svg);
+@namespace html url(http://www.w3.org/1999/xhtml);
+
+html|a &#123;
+  color: red;
+&#125;
+
+svg|a &#123;
+  stroke:blue;
+  stroke-width:1;
+&#125;
+</code></pre>
+<h3 id="全体选择器"><a href="#全体选择器" class="headerlink" title="全体选择器"></a>全体选择器</h3><pre><code>* &#123;margin:0&#125;
+</code></pre>
+<h3 id="id-选择器与-class-选择器"><a href="#id-选择器与-class-选择器" class="headerlink" title="id 选择器与 class 选择器"></a>id 选择器与 class 选择器</h3><p>略</p>
+<h3 id="属性选择器"><a href="#属性选择器" class="headerlink" title="属性选择器"></a>属性选择器</h3><p>[attribute]    用于选取带有指定属性的元素。<br>[attribute=value]    用于选取带有指定属性和值的元素。<br>[attribute~=value]    用于选取属性值中包含指定词汇的元素。<br>[attribute|=value]    用于选取带有以指定值开头的属性值的元素，该值必须是整个单词。<br>[attribute^=value]    匹配属性值以指定值开头的每个元素。<br>[attribute$=value]    匹配属性值以指定值结尾的每个元素。<br>[attribute*=value]    匹配属性值中包含指定值的每个元素。</p>
+<h3 id="伪类选择器"><a href="#伪类选择器" class="headerlink" title="伪类选择器"></a>伪类选择器</h3><p>伪类选择器有普通型和函数型两种,带括号的就是函数型</p>
+<h4 id="树结构关系伪类选择器"><a href="#树结构关系伪类选择器" class="headerlink" title="树结构关系伪类选择器"></a>树结构关系伪类选择器</h4><ul>
+<li><p><code>:root</code> 伪类表示树的根元素，基本等同于html元素</p>
+<p>  在声明全局 CSS 变量时 :root 会很有用：</p>
+<pre><code>  :root &#123;
+    --main-color: hotpink;
+    --pane-padding: 5px 42px;
+  &#125;
+</code></pre>
+</li>
+<li><p><code>:empty</code> 伪类表示没有子节点的元素，选择每个没有任何子级的元素（包括文本节点）。</p>
+<pre><code>  p:empty&#123;
+    height: 20px;
+    background:#ff0000;
+  &#125;
+</code></pre>
+</li>
+<li><p><code>:nth-child(n)</code> ， <code>:nth-of-type(n)</code> </p>
+<pre><code>  p:nth-child(2)  选择每个p元素是其父级的第二个子元素 
+  p:nth-of-type(2)：选择每个p元素是其父级的第二个p元素
+</code></pre>
+</li>
+<li><p><code>:nth-last-child(n)</code>，<code>nth-last-of-type(n)</code> 的区别仅仅是从后往前数。</p>
+</li>
+<li><p><code>:first-child 和 :last-child</code> , <code>:first-of-type 和 :last-of-type</code>分别表示第一个和最后一个元素。</p>
+</li>
+<li><p><code>:only-child</code>，<code>only-of-type</code> 唯一个子元素和唯一一个同类型子元素。</p>
+</li>
+</ul>
+<h4 id="链接与行为伪类选择器"><a href="#链接与行为伪类选择器" class="headerlink" title="链接与行为伪类选择器"></a>链接与行为伪类选择器</h4><pre><code>:any-link 表示任意的链接，包括 a、area 和 link 标签都可能匹配到这个伪类。
+:link 表示未访问过的链接， :visited 表示已经访问过的链接。
+:hover 表示鼠标悬停在上的元素，
+:active 表示用户正在激活这个元素，如用户按下按钮，鼠标还未抬起时，这个按钮就处于激活状态
+:focus 表示焦点落在这个元素之上。
+:target 用于选中浏览器 URL 的 hash 部分所指示的元素。demo请访问：http://www.runoob.com/try/try.php?filename=trycss3_target
+</code></pre>
+<h4 id="逻辑伪类选择器"><a href="#逻辑伪类选择器" class="headerlink" title="逻辑伪类选择器"></a>逻辑伪类选择器</h4><p>:not(x) 伪类:它匹配不符合参数选择器X描述的元素。X不能包含另外一个否定选择器(函数型伪类)</p>
+<pre><code>:not(.cls)&#123;
+  color: aqua
+&#125;
+</code></pre>
+<p>css3 级标准中，not 只支持简单选择器，CSS4功能更强大，但目前还没有浏览器实现它。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
+<li><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2017/05/css-variables.html">CSS 变量教程</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/css/" rel="tag"># css</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-CSS%E9%83%A8%E5%88%86-@%E8%A7%84%E5%88%99/" rel="prev" title="重学前端 - CSS部分-@规则">
+                  <i class="fa fa-chevron-left"></i> 重学前端 - CSS部分-@规则
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-CSS%E9%83%A8%E5%88%86-%E4%BC%AA%E7%B1%BB%E4%BC%AA%E5%85%83%E7%B4%A0%E5%92%8C%E4%BC%98%E5%85%88%E7%BA%A7/" rel="next" title="重学前端 - CSS部分-伪类伪元素和优先级">
+                  重学前端 - CSS部分-伪类伪元素和优先级 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMH</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://static.wangminghuan.cn/cdn/animejs@3.2.1/anime.min.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://static.wangminghuan.cn/cdn/hexo-generator-searchdb/search.js"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

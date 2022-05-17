@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/fontawesome@5.15.3/all.min.css">
+  <link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/animejs@3.2.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wangminghuan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="本篇主要介绍ES6新增的命名方式：let&#x2F;const ，与解构赋值。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ES6系列-1-命名与解构赋值">
+<meta property="og:url" content="https://wangminghuan.github.io/ES6%E7%B3%BB%E5%88%97-1-%E5%91%BD%E5%90%8D%E4%B8%8E%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC/index.html">
+<meta property="og:site_name" content="WMH&#39;s Blog">
+<meta property="og:description" content="本篇主要介绍ES6新增的命名方式：let&#x2F;const ，与解构赋值。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-11-04T11:08:31.000Z">
+<meta property="article:modified_time" content="2022-05-17T10:04:10.801Z">
+<meta property="article:author" content="WMH">
+<meta property="article:tag" content="javascript">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://wangminghuan.github.io/ES6%E7%B3%BB%E5%88%97-1-%E5%91%BD%E5%90%8D%E4%B8%8E%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wangminghuan.github.io/ES6%E7%B3%BB%E5%88%97-1-%E5%91%BD%E5%90%8D%E4%B8%8E%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC/","path":"ES6系列-1-命名与解构赋值/","title":"ES6系列-1-命名与解构赋值"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ES6系列-1-命名与解构赋值 | WMH's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WMH's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-主页"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>主页</a></li>
+        <li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-分类"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E7%AB%A0-let%E5%92%8Cconst"><span class="nav-number">1.</span> <span class="nav-text">第一章 let和const</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#let"><span class="nav-number">1.1.</span> <span class="nav-text">let</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#const"><span class="nav-number">1.2.</span> <span class="nav-text">const</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%B6%E5%B1%82%E5%AF%B9%E8%B1%A1%E5%B1%9E%E6%80%A7"><span class="nav-number">1.3.</span> <span class="nav-text">顶层对象属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E5%A3%B0%E6%98%8E%E7%9A%84%E5%85%AD%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="nav-number">1.4.</span> <span class="nav-text">变量声明的六种方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9D%97%E7%BA%A7%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-number">1.5.</span> <span class="nav-text">块级作用域</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%8F%98%E9%87%8F%E7%9A%84%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC"><span class="nav-number">2.</span> <span class="nav-text">第二章 变量的解构赋值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E7%9A%84%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC"><span class="nav-number">2.1.</span> <span class="nav-text">数组的解构赋值</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="nav-number">2.1.1.</span> <span class="nav-text">基本用法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F"><span class="nav-number">2.1.2.</span> <span class="nav-text">注意</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E5%AE%9A%E9%BB%98%E8%AE%A4%E5%80%BC"><span class="nav-number">2.2.</span> <span class="nav-text">指定默认值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC"><span class="nav-number">2.3.</span> <span class="nav-text">对象的解构赋值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC"><span class="nav-number">2.4.</span> <span class="nav-text">字符串的解构赋值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E5%80%BC%E5%92%8C%E5%B8%83%E5%B0%94%E5%80%BC%E7%9A%84%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC"><span class="nav-number">2.5.</span> <span class="nav-text">数值和布尔值的解构赋值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E7%9A%84%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC"><span class="nav-number">2.6.</span> <span class="nav-text">函数参数的解构赋值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%86%E6%8B%AC%E5%8F%B7%E9%97%AE%E9%A2%98"><span class="nav-number">2.7.</span> <span class="nav-text">圆括号问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC%E7%9A%84%E7%94%A8%E9%80%94"><span class="nav-number">2.8.</span> <span class="nav-text">解构赋值的用途</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%A4%E6%8D%A2%E5%8F%98%E9%87%8F%E7%9A%84%E5%80%BC"><span class="nav-number">2.8.1.</span> <span class="nav-text">交换变量的值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%8E%E5%87%BD%E6%95%B0%E8%BF%94%E5%9B%9E%E5%A4%9A%E4%B8%AA%E5%80%BC"><span class="nav-number">2.8.2.</span> <span class="nav-text">从函数返回多个值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">2.8.3.</span> <span class="nav-text">函数参数的定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8F%90%E5%8F%96-JSON-%E6%95%B0%E6%8D%AE"><span class="nav-number">2.8.4.</span> <span class="nav-text">提取 JSON 数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E7%9A%84%E9%BB%98%E8%AE%A4%E5%80%BC"><span class="nav-number">2.8.5.</span> <span class="nav-text">函数参数的默认值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%81%8D%E5%8E%86-Map-%E7%BB%93%E6%9E%84"><span class="nav-number">2.8.6.</span> <span class="nav-text">遍历 Map 结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E6%A8%A1%E5%9D%97%E7%9A%84%E6%8C%87%E5%AE%9A%E6%96%B9%E6%B3%95-webpack%E4%B8%AD%E5%B8%B8%E8%A7%81"><span class="nav-number">2.8.7.</span> <span class="nav-text">输入模块的指定方法(webpack中常见)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="nav-number">3.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WMH"
+      src="/images/avatar2.png">
+  <p class="site-author-name" itemprop="name">WMH</p>
+  <div class="site-description" itemprop="description">just code it</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wangminghuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wangminghuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:m.h.wang@foxmail.com" title="E-Mail → mailto:m.h.wang@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weblog.wangminghuan.cn/" title="WebSite → https:&#x2F;&#x2F;weblog.wangminghuan.cn" rel="noopener" target="_blank"><i class="fa fa-book fa-fw"></i>WebSite</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/1657970003?topnav=1&wvr=6&topsug=1&is_all=1" title="微博 → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;1657970003?topnav&#x3D;1&amp;wvr&#x3D;6&amp;topsug&#x3D;1&amp;is_all&#x3D;1" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>微博</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/ES6%E7%B3%BB%E5%88%97-1-%E5%91%BD%E5%90%8D%E4%B8%8E%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.png">
+      <meta itemprop="name" content="WMH">
+      <meta itemprop="description" content="just code it">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WMH's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ES6系列-1-命名与解构赋值
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-11-04 11:08:31" itemprop="dateCreated datePublished" datetime="2019-11-04T11:08:31+00:00">2019-11-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-05-17 10:04:10" itemprop="dateModified" datetime="2022-05-17T10:04:10+00:00">2022-05-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ES6%E7%B3%BB%E5%88%97/" itemprop="url" rel="index"><span itemprop="name">ES6系列</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>本篇主要介绍ES6新增的命名方式：let/const ，与解构赋值。</p>
+<span id="more"></span>
+
+<h2 id="第一章-let和const"><a href="#第一章-let和const" class="headerlink" title="第一章 let和const"></a>第一章 let和const</h2><h3 id="let"><a href="#let" class="headerlink" title="let"></a>let</h3><ol>
+<li><p>ES6新增了let命令，用来声明变量。它的用法类似于var，但是所声明的变量，只在let命令所在的<strong>代码块内有效</strong>。也就是其声明的变量就绑定在这个区域中，不会再受到外界影响。</p>
+<pre><code> &#123;
+   let a = 10;
+   var b = 1;
+ &#125;
+ console.log(b);//1
+ console.log(a);//报错: a is not defined.
+</code></pre>
+<p>例子2：</p>
+<pre><code> for (let i = 0; i &lt; 3; i++) &#123;
+   let i = 100;
+   console.log(i);
+ &#125;
+ //输出 三次100，说明循环体内部是一个单独的作用域，如果换成var,则只会输出一次100。
+</code></pre>
+<p>特别对于for循环绑定事件获取索引问题可以很好的解决<a target="_blank" rel="noopener" href="https://github.com/wangminghuan/MyNotes/blob/master/%E5%85%B6%E4%BB%96/for%E5%BE%AA%E7%8E%AF%E7%BB%91%E5%AE%9A%E4%BA%8B%E4%BB%B6%E8%8E%B7%E5%8F%96%E7%B4%A2%E5%BC%95%E9%97%AE%E9%A2%98.md">点我了解更多</a></p>
+</li>
+<li><p>ES6明确规定，如果区块中存在let和const命令，这个区块对这些命令声明的变量，从一开始就形成了封闭作用域。凡是在声明之前就使用这些变量，就会报错。</p>
+</li>
+<li><p>let声明，一个代码块内不可重复声明，否则会报错，而var命名则不会。</p>
+<pre><code> function func(arg) &#123;
+   let arg; // 报错
+ &#125;
+ 
+ function func(arg) &#123;
+   &#123;
+     let arg; // 不报错
+   &#125;
+ &#125;
+</code></pre>
+</li>
+</ol>
+<h3 id="const"><a href="#const" class="headerlink" title="const"></a>const</h3><ol>
+<li><p>const声明一个只读的常量。一旦声明，常量的值就不能改变, </p>
+</li>
+<li><p>const一旦声明变量，就必须立即初始化，不能留到以后赋值。</p>
+</li>
+<li><p>const如果赋值一个对象时，保存的只是一个指向实际数据的指针</p>
+<pre><code> const obj=&#123;&#125;;
+ obj.name=&quot;123&quot;;//可以修改指针指向对象的数据
+ obj=null；//报错！，不可修改指针的指向
+</code></pre>
+</li>
+</ol>
+<h3 id="顶层对象属性"><a href="#顶层对象属性" class="headerlink" title="顶层对象属性"></a>顶层对象属性</h3><p>ES5中顶层对象的属性与全局变量挂钩，这也被认为是js语言设计最大的败笔之一，各种命名冲突，很多只有在运行过程中才被暴露出来。</p>
+<pre><code>let a=1;
+var b=2;
+const c=3;
+console.log(window.a);//undefined
+console.log(window.b);//2
+console.log(window.c);//undefined
+</code></pre>
+<p>目前在ES6中顶层对象依旧没有统一。</p>
+<ol>
+<li>浏览器里面，顶层对象是window，但 Node 和 Web Worker 没有window。</li>
+<li>浏览器和 Web Worker 里面，self也指向顶层对象，但是 Node 没有self。</li>
+<li>Node 里面，顶层对象是global，但其他环境都不支持。</li>
+</ol>
+<h3 id="变量声明的六种方式"><a href="#变量声明的六种方式" class="headerlink" title="变量声明的六种方式"></a>变量声明的六种方式</h3><p>待补充~</p>
+<h3 id="块级作用域"><a href="#块级作用域" class="headerlink" title="块级作用域"></a>块级作用域</h3><ol>
+<li>es6 支持通过 <code>&#123;&#125;</code>（花括号）创建块级作用域</li>
+<li>es6 允许块级作用域的任意嵌套，外层作用域无法读取内层作用域的变量。</li>
+<li>es5的块级作用域一般通过自执行函数（IIFE）来创建，块级作用域的出现，IIFE不再必要了。</li>
+<li>ES5 规定，函数只能在顶层作用域和函数作用域之中声明，不能在块级作用域声明。ES6进行了修正，允许块级作用域内声明函数，但该函数只能在当前作用域内生效。外部无法访问（具体不同的浏览器实现会不一样）</li>
+</ol>
+<h2 id="第二章-变量的解构赋值"><a href="#第二章-变量的解构赋值" class="headerlink" title="第二章 变量的解构赋值"></a>第二章 变量的解构赋值</h2><p>ES6 允许按照一定模式，从数组和对象中提取值，对变量进行赋值，这被称为解构（Destructuring）。</p>
+<h3 id="数组的解构赋值"><a href="#数组的解构赋值" class="headerlink" title="数组的解构赋值"></a>数组的解构赋值</h3><p>将等号右边的数组，按照一定的匹配模式赋值给左边的变量。</p>
+<h4 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h4><p>我们通常给变量赋值，采用下面写法：</p>
+<pre><code>let a = 1;
+let b = 2;
+let c = 3;
+</code></pre>
+<p>ES6 允许这样赋值</p>
+<pre><code>let [a, b, c] = [1, 2, 3];
+</code></pre>
+<p>上面代码表示，可以从数组中提取值，按照对应位置，对变量赋值。</p>
+<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><ol>
+<li>如果解构不成功，变量的值就等于undefined。  </li>
+<li>不完全解构，即等号左边的模式，只匹配一部分的等号右边的数组。这种情况下，解构依然可以成功。  </li>
+<li>如果等号的右边不是数组，（或者严格地说，不是可遍历的结构），那么将会报错。<pre><code> // 报错
+ let [foo] = 1;
+ let [foo] = false;
+ let [foo] = NaN;
+ let [foo] = undefined;
+ let [foo] = null;
+ let [foo] = &#123;&#125;;
+</code></pre>
+</li>
+</ol>
+<h3 id="指定默认值"><a href="#指定默认值" class="headerlink" title="指定默认值"></a>指定默认值</h3><p>解构赋值允许指定默认值。</p>
+<pre><code>let [foo = true] = [];
+foo // true
+
+let [x, y = &#39;b&#39;] = [&#39;a&#39;]; // x=&#39;a&#39;, y=&#39;b&#39;
+let [x, y = &#39;b&#39;] = [&#39;a&#39;, undefined]; // x=&#39;a&#39;, y=&#39;b&#39;
+</code></pre>
+<p>ES6 内部使用严格相等运算符（===），判断一个位置是否有值。所以，只有当一个数组成员严格等于undefined，默认值才会生效。</p>
+<h3 id="对象的解构赋值"><a href="#对象的解构赋值" class="headerlink" title="对象的解构赋值"></a>对象的解构赋值</h3><p>解构不仅可以用于数组，还可以用于对象。<br>对象的解构与数组有一个重要的不同。数组的元素是按次序排列的，变量的取值由它的位置决定；而对象的属性没有次序，变量必须与属性同名，才能取到正确的值（也可以将数组的索引认为是唯一的key，这样与对象的属性其实也是相通的）</p>
+<pre><code>let &#123; bar, foo &#125; = &#123; foo: &quot;aaa&quot;, bar: &quot;bbb&quot; &#125;;
+foo // &quot;aaa&quot;
+bar // &quot;bbb&quot;
+
+let &#123; baz &#125; = &#123; foo: &quot;aaa&quot;, bar: &quot;bbb&quot; &#125;;
+baz // undefined
+//可以这样理解：前面的部分只是变量声明，声明了变量foo和bar, 等号后面是对这两个变量进行赋值，foo的值为&#39;aaa&#39;，bar的为&#39;bbb&#39;。  
+</code></pre>
+<p>如果变量名与属性名不一致，必须写成下面这样(可以理解为变量名映射）</p>
+<pre><code>let &#123; foo: baz &#125; = &#123; foo: &quot;aaa&quot;, bar: &quot;bbb&quot; &#125;;
+console.log(baz);//foo是匹配的模式，baz才是变量。真正被赋值的是变量baz
+</code></pre>
+<p>与数组一样，解构也可以用于嵌套结构的对象:</p>
+<pre><code>let obj = &#123;
+  p: [
+    &#39;Hello&#39;,
+    &#123; y: &#39;World&#39; &#125;
+  ]
+&#125;;
+
+let &#123; p: [x, &#123; y &#125;] &#125; = obj;
+
+console.log(x,y);// Hello World
+console.log(p);// 报错
+</code></pre>
+<p>这时p是模式，不是变量，因此不会被赋值。如果p也要作为变量赋值，可以这样写：</p>
+<pre><code>let obj = &#123;
+  p: [
+    &#39;Hello&#39;,
+    &#123; y: &#39;World&#39; &#125;
+  ]
+&#125;;
+
+let &#123; p, p: [x, &#123; y &#125;] &#125; = obj;
+
+console.log(x,y);// Hello World
+console.log(p);// [&quot;Hello&quot;, &#123;y: &quot;World&quot;&#125;]
+</code></pre>
+<p>如果层级比较多，需要每一级都赋值的话，需要多次匹配</p>
+<pre><code>    const node = &#123;
+      loc: &#123;
+        start: &#123;
+          line: 1,
+          column: 5
+        &#125;
+      &#125;
+    &#125;;
+    
+    let &#123; loc, loc: &#123; start &#125;, loc: &#123; start: &#123; line &#125;&#125; &#125; = node;
+    line // 1
+    loc  // Object &#123;start: Object&#125;
+    start // Object &#123;line: 1, column: 5&#125;
+</code></pre>
+<h3 id="字符串的解构赋值"><a href="#字符串的解构赋值" class="headerlink" title="字符串的解构赋值"></a>字符串的解构赋值</h3><p>字符串也可以解构赋值。这是因为此时，字符串被转换成了一个类似数组的对象。</p>
+<pre><code>    const [a, b, c, d, e] = &#39;hello&#39;;
+    a // &quot;h&quot;
+    b // &quot;e&quot;
+    c // &quot;l&quot;
+    d // &quot;l&quot;
+    e // &quot;o&quot;
+</code></pre>
+<p>类似数组的对象都有一个length属性，因此还可以对这个属性解构赋值。</p>
+<pre><code>let &#123;length : len&#125; = &#39;hello&#39;;
+len // 5
+</code></pre>
+<h3 id="数值和布尔值的解构赋值"><a href="#数值和布尔值的解构赋值" class="headerlink" title="数值和布尔值的解构赋值"></a>数值和布尔值的解构赋值</h3><p>解构赋值时，如果等号右边是数值和布尔值，则会先转为对象,无法转换成对象的就报错（null 和 undefined）</p>
+<pre><code>let &#123;toString: s&#125; = 123;
+s === Number.prototype.toString // true
+
+let &#123;toString: s&#125; = true;
+s === Boolean.prototype.toString // true
+
+let &#123; prop: x &#125; = undefined; // TypeError
+let &#123; prop: y &#125; = null; // TypeError
+</code></pre>
+<h3 id="函数参数的解构赋值"><a href="#函数参数的解构赋值" class="headerlink" title="函数参数的解构赋值"></a>函数参数的解构赋值</h3><p>函数的参数也可以使用解构赋值。<br>例子1：</p>
+<pre><code>function add([x, y])&#123;
+  return x + y;
+&#125;
+
+add([1, 2]); // 3
+</code></pre>
+<p>例子2：</p>
+<pre><code>[[1, 2], [3, 4]].map(([a, b]) =&gt; a + b); //[3, 7]
+// 如果不好理解可以运行 [3, 7].map((item) =&gt; item); //[3, 7]
+</code></pre>
+<p>例子3：函数参数的解构也可以使用默认值。</p>
+<pre><code>function move(&#123;x = 0, y = 0&#125; = &#123;&#125;) &#123;
+  return [x, y];
+&#125;
+
+move(&#123;x: 3, y: 8&#125;); // [3, 8]
+move(&#123;x: 3&#125;); // [3, 0]
+move(&#123;&#125;); // [0, 0]
+move(); // [0, 0]
+</code></pre>
+<h3 id="圆括号问题"><a href="#圆括号问题" class="headerlink" title="圆括号问题"></a>圆括号问题</h3><p>结构语句中慎用圆括号，以下几种情况不要用圆括号，会报错：  </p>
+<ol>
+<li>变量声明语句</li>
+<li>函数参数</li>
+<li>赋值语句的模式</li>
+</ol>
+<p>可以使用圆括号的情况只有一种：<strong>赋值语句的非模式部分，可以使用圆括号</strong></p>
+<h3 id="解构赋值的用途"><a href="#解构赋值的用途" class="headerlink" title="解构赋值的用途"></a>解构赋值的用途</h3><h4 id="交换变量的值"><a href="#交换变量的值" class="headerlink" title="交换变量的值"></a>交换变量的值</h4><pre><code>    let x = 1;
+    let y = 2;
+    
+    [x, y] = [y, x];
+    console.log(x,y);//2,1
+</code></pre>
+<h4 id="从函数返回多个值"><a href="#从函数返回多个值" class="headerlink" title="从函数返回多个值"></a>从函数返回多个值</h4><p>函数只能返回一个值，如果要返回多个值，只能将它们放在数组或对象里返回。有了解构赋值，取出这些值就变得非常方便：</p>
+<pre><code>    // 返回一个数组
+    
+    function example() &#123;
+      return [1, 2, 3];
+    &#125;
+    let [a, b, c] = example();
+    
+    // 返回一个对象
+    
+    function example() &#123;
+      return &#123;
+        foo: 1,
+        bar: 2
+      &#125;;
+    &#125;
+    let &#123; foo, bar &#125; = example();
+</code></pre>
+<h4 id="函数参数的定义"><a href="#函数参数的定义" class="headerlink" title="函数参数的定义"></a>函数参数的定义</h4><pre><code>    // 参数是一组有次序的值
+    function f([x, y, z]) &#123; console.log(x+y+z) &#125;
+    f([1, 2, 3]); //6
+     // 参数是一组无次序的值
+    function f(&#123;x, y, z&#125;) &#123; console.log(2*x+y-z) &#125;
+    f(&#123;z: 3, y: 2, x: 1&#125;);//1
+</code></pre>
+<h4 id="提取-JSON-数据"><a href="#提取-JSON-数据" class="headerlink" title="提取 JSON 数据"></a>提取 JSON 数据</h4><p>解构赋值对提取 JSON 对象中的数据，尤其有用。  </p>
+<pre><code>    let jsonData = &#123;
+      id: 42,
+      status: &quot;OK&quot;,
+      data: [867, 5309]
+    &#125;;
+    
+    let &#123; id, status, data: number &#125; = jsonData;
+    
+    console.log(id, status, number);
+</code></pre>
+<h4 id="函数参数的默认值"><a href="#函数参数的默认值" class="headerlink" title="函数参数的默认值"></a>函数参数的默认值</h4><pre><code>    function share(&#123;
+        title=&quot;标题&quot;,
+        url=window.location.href,
+        content=&quot;分享描述&quot;
+    &#125;)&#123;
+        return JSON.stringify(&#123;
+            title:title,
+            shortLink:url,
+            content:content
+        &#125;)
+    &#125;
+    console.log(share(&quot;自定义标题&quot;));//&#123;&quot;title&quot;:&quot;标题&quot;,&quot;shortLink&quot;:&quot;http://zc.dev.bxd365.com/#/index&quot;,&quot;content&quot;:&quot;分享描述&quot;&#125;
+</code></pre>
+<h4 id="遍历-Map-结构"><a href="#遍历-Map-结构" class="headerlink" title="遍历 Map 结构"></a>遍历 Map 结构</h4><p>任何部署了 Iterator 接口的对象，都可以用for…of循环遍历。Map 结构原生支持 Iterator 接口，配合变量的解构赋值，获取键名和键值就非常方便。</p>
+<pre><code>    const map = new Map();
+    map.set(&#39;first&#39;, &#39;hello&#39;);
+    map.set(&#39;second&#39;, &#39;world&#39;);
+    
+    for (let [key, value] of map) &#123;
+      console.log(key + &quot; is &quot; + value);
+    &#125;
+    // first is hello
+    // second is world
+</code></pre>
+<p>如果只想获取键名，或者只想获取键值，可以写成下面这样：<br>        // 获取键名<br>        for (let [key] of map) {<br>          // …<br>        }</p>
+<pre><code>    // 获取键值
+    for (let [,value] of map) &#123;
+      // ...
+    &#125;
+</code></pre>
+<h4 id="输入模块的指定方法-webpack中常见"><a href="#输入模块的指定方法-webpack中常见" class="headerlink" title="输入模块的指定方法(webpack中常见)"></a>输入模块的指定方法(webpack中常见)</h4><pre><code>const &#123; SourceMapConsumer, SourceNode &#125; = require(&quot;source-map&quot;);
+</code></pre>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://es6.ruanyifeng.com/">阮一峰ES6入门</a></li>
+<li><a target="_blank" rel="noopener" href="https://my.oschina.net/u/2903254/blog/818796">ES6 的 Symbol 类型及使用案例</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/javascript/" rel="tag"># javascript</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/shell,%20terminal,%20TTY%E4%B8%8ECLI/" rel="prev" title="shell,terminal,TTY与CLI">
+                  <i class="fa fa-chevron-left"></i> shell,terminal,TTY与CLI
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/ES6%E7%B3%BB%E5%88%97-2-%E6%96%B0%E5%A2%9E%E7%B1%BB%E5%9E%8B%E4%B8%8E%E6%89%A9%E5%B1%95%E6%96%B9%E6%B3%95/" rel="next" title="ES6系列-2-新增类型与扩展方法">
+                  ES6系列-2-新增类型与扩展方法 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMH</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://static.wangminghuan.cn/cdn/animejs@3.2.1/anime.min.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://static.wangminghuan.cn/cdn/hexo-generator-searchdb/search.js"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

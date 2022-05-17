@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/fontawesome@5.15.3/all.min.css">
+  <link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/animejs@3.2.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wangminghuan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="前言本篇主要为阅读《你不知道的JavaScript-上卷》中遇到自己遗漏的知识点，加上一些自己的理解进行了梳理整理，阅读章节为第一部分：this和对象">
+<meta property="og:type" content="article">
+<meta property="og:title" content="你不知道的JS系列-2">
+<meta property="og:url" content="https://wangminghuan.github.io/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JS%E7%B3%BB%E5%88%97-2/index.html">
+<meta property="og:site_name" content="WMH&#39;s Blog">
+<meta property="og:description" content="前言本篇主要为阅读《你不知道的JavaScript-上卷》中遇到自己遗漏的知识点，加上一些自己的理解进行了梳理整理，阅读章节为第一部分：this和对象">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wangminghuan.github.io/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JS%E7%B3%BB%E5%88%97-2/1.png">
+<meta property="og:image" content="https://wangminghuan.github.io/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JS%E7%B3%BB%E5%88%97-2/2.png">
+<meta property="og:image" content="https://wangminghuan.github.io/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JS%E7%B3%BB%E5%88%97-2/3.png">
+<meta property="article:published_time" content="2021-01-16T11:57:04.000Z">
+<meta property="article:modified_time" content="2022-05-17T10:04:10.845Z">
+<meta property="article:author" content="WMH">
+<meta property="article:tag" content="你不知道的js">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wangminghuan.github.io/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JS%E7%B3%BB%E5%88%97-2/1.png">
+
+
+<link rel="canonical" href="https://wangminghuan.github.io/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JS%E7%B3%BB%E5%88%97-2/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wangminghuan.github.io/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JS%E7%B3%BB%E5%88%97-2/","path":"你不知道的JS系列-2/","title":"你不知道的JS系列-2"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>你不知道的JS系列-2 | WMH's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WMH's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-主页"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>主页</a></li>
+        <li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-分类"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8Ethis"><span class="nav-number">2.</span> <span class="nav-text">关于this</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E7%94%A8%E6%A0%88"><span class="nav-number">2.1.</span> <span class="nav-text">调用栈</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#this-%E7%BB%91%E5%AE%9A%E8%A7%84%E5%88%99"><span class="nav-number">3.</span> <span class="nav-text">this 绑定规则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4%E7%BB%91%E5%AE%9A"><span class="nav-number">3.1.</span> <span class="nav-text">默认绑定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%90%E5%BC%8F%E7%BB%91%E5%AE%9A"><span class="nav-number">3.2.</span> <span class="nav-text">隐式绑定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%98%BE%E5%BC%8F%E7%BB%91%E5%AE%9A"><span class="nav-number">3.3.</span> <span class="nav-text">显式绑定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#new%E7%BB%91%E5%AE%9A"><span class="nav-number">3.4.</span> <span class="nav-text">new绑定</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#this-%E7%BB%91%E5%AE%9A%E4%BC%98%E5%85%88%E7%BA%A7"><span class="nav-number">4.</span> <span class="nav-text">this 绑定优先级</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0"><span class="nav-number">5.</span> <span class="nav-text">箭头函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1"><span class="nav-number">6.</span> <span class="nav-text">对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%9E%E6%80%A7%E5%90%8D"><span class="nav-number">6.1.</span> <span class="nav-text">属性名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%9E%E6%80%A7%E4%B8%8E%E6%96%B9%E6%B3%95"><span class="nav-number">6.2.</span> <span class="nav-text">属性与方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E7%BB%84"><span class="nav-number">6.3.</span> <span class="nav-text">数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%8D%E5%88%B6"><span class="nav-number">6.4.</span> <span class="nav-text">对象的复制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E2%80%9C%E5%85%B6%E4%BB%96%E2%80%9D%E6%96%B9%E6%B3%95"><span class="nav-number">6.5.</span> <span class="nav-text">对象的“其他”方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Getter-amp-amp-Setter"><span class="nav-number">6.6.</span> <span class="nav-text">Getter &amp;&amp; Setter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%98%E5%9C%A8%E6%80%A7"><span class="nav-number">6.7.</span> <span class="nav-text">存在性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%8D%E5%8E%86"><span class="nav-number">6.8.</span> <span class="nav-text">遍历</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WMH"
+      src="/images/avatar2.png">
+  <p class="site-author-name" itemprop="name">WMH</p>
+  <div class="site-description" itemprop="description">just code it</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wangminghuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wangminghuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:m.h.wang@foxmail.com" title="E-Mail → mailto:m.h.wang@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weblog.wangminghuan.cn/" title="WebSite → https:&#x2F;&#x2F;weblog.wangminghuan.cn" rel="noopener" target="_blank"><i class="fa fa-book fa-fw"></i>WebSite</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/1657970003?topnav=1&wvr=6&topsug=1&is_all=1" title="微博 → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;1657970003?topnav&#x3D;1&amp;wvr&#x3D;6&amp;topsug&#x3D;1&amp;is_all&#x3D;1" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>微博</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JS%E7%B3%BB%E5%88%97-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.png">
+      <meta itemprop="name" content="WMH">
+      <meta itemprop="description" content="just code it">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WMH's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          你不知道的JS系列-2
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-01-16 11:57:04" itemprop="dateCreated datePublished" datetime="2021-01-16T11:57:04+00:00">2021-01-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-05-17 10:04:10" itemprop="dateModified" datetime="2022-05-17T10:04:10+00:00">2022-05-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本篇主要为阅读《你不知道的JavaScript-上卷》中遇到自己遗漏的知识点，加上一些自己的理解进行了梳理整理，阅读章节为第一部分：this和对象</p>
+<span id="more"></span>
+
+<h2 id="关于this"><a href="#关于this" class="headerlink" title="关于this"></a>关于this</h2><p><code>this</code>关键字是 JavaScript 中最复杂的机制之一, 在面向对象编程中，他是不可或缺的一份子。this到底是什么呢？不同于js中的词法作用域，this是一个很特别的存在:  </p>
+<pre><code>this 在任何情况下都不指向函数的词法作用域
+</code></pre>
+<p>this 实际上是在函数被调用时发生的绑定，它指向什么完全取决于函数在哪里被调用!!!!</p>
+<h3 id="调用栈"><a href="#调用栈" class="headerlink" title="调用栈"></a>调用栈</h3><p>利用chrome的调试工具，我们可以很清晰的看到函数的调用栈：</p>
+<pre><code>function baz() &#123; 
+  // 当前调用栈是：baz // 因此，当前调用位置是全局作用域 
+  console.log( &quot;baz&quot; ); 
+  bar(); // &lt;-- bar 的调用位置 
+&#125;
+function bar() &#123;
+  // 当前调用栈是 baz -&gt; bar // 因此，当前调用位置在 baz 中 
+  console.log( &quot;bar&quot; ); 
+  foo(); // &lt;-- foo 的调用位置 
+&#125;
+function foo() &#123; 
+  // 当前调用栈是 baz -&gt; bar -&gt; foo // 因此，当前调用位置在 bar 中 
+  console.log( &quot;foo&quot; ); 
+&#125;
+baz(); // &lt;-- baz 的调用位置
+</code></pre>
+<p>栈中第二个元素，这就是真正的调用位置：</p>
+<p><img src="./1.png"><br><img src="./2.png"><br><img src="./3.png"></p>
+<h2 id="this-绑定规则"><a href="#this-绑定规则" class="headerlink" title="this 绑定规则"></a>this 绑定规则</h2><p>在函数的执行过程中如何确定 this 的绑定对象，有以下四条规则：</p>
+<h3 id="默认绑定"><a href="#默认绑定" class="headerlink" title="默认绑定"></a>默认绑定</h3><p>最常见的函数调用方式就是：独立调用；此时函数内的this指向全局对象（非严格模式下）</p>
+<pre><code>function foo()&#123;
+  console.log(this.a)
+&#125;
+var a=1
+foo();// 1
+</code></pre>
+<h3 id="隐式绑定"><a href="#隐式绑定" class="headerlink" title="隐式绑定"></a>隐式绑定</h3><p>我们先看如下代码：</p>
+<pre><code>function foo() &#123; 
+  console.log( this.a ); 
+&#125;
+var obj = &#123; 
+  a: 2, 
+  foo: foo 
+&#125;;
+obj.foo(); // 2
+</code></pre>
+<p>通过obj对象来调用函数，被调用函数被obj对象“拥有”了，这就是一种隐式绑定，并且对象属性引用链的最后一层才会影响this，在上面例子上，继续添加：</p>
+<pre><code>var obj2 = &#123;
+  a:1,
+  obj:obj
+&#125;
+obj2.obj.foo(); // 2
+</code></pre>
+<p>但隐式绑定经常出现this丢失的问题：</p>
+<pre><code>function foo() &#123; 
+  console.log( this.a ); 
+&#125;
+var obj = &#123; 
+  a: 2, 
+  foo: foo 
+&#125;;
+var a=&quot;global&quot;;
+var bar=obj.foo;
+bar(); // global
+
+setTimeout(obj.foo,1000) // global
+</code></pre>
+<p>this隐式丢失是非常常见的（在回调函数更是常见），此时需要我们进行显示绑定</p>
+<h3 id="显式绑定"><a href="#显式绑定" class="headerlink" title="显式绑定"></a>显式绑定</h3><p>此时，我们请出<code>call</code>函数与<code>apply</code>函数以及<code>bind</code>函数, call 与 apply 功能基本相同以call为例，先说下这两个函数，依旧沿用上面的例子</p>
+<pre><code>function foo() &#123; 
+  console.log( this.a ); 
+&#125;
+var obj = &#123; 
+  a: 2, 
+  foo: foo 
+&#125;;
+var a=&quot;global&quot;;
+var bar=obj.foo;
+bar.call(obj); // 2
+</code></pre>
+<p>通过call可以强制将this指向obj对象，但对于回调函数，call/apply依旧无能为例，因为执行call/apply就相当于执行了函数，并没有返回新的函数，此时，就需要ES5中的bind函数登场了：</p>
+<pre><code>setTimeout(obj.foo.bind(obj),1000); // 2
+</code></pre>
+<p>JavaScript 语言和宿主环境中许多新的内置函数，都提供了一 个可选的参数，通常被称为“上下文”（context），其作用和 bind(..) 一样：</p>
+<pre><code>function foo() &#123; 
+  console.log( this.a ); 
+&#125;
+var obj = &#123; 
+  a: 2, 
+  foo: foo 
+&#125;;
+var a=&quot;global&quot;;
+
+[1].forEach(foo,obj);// 2
+</code></pre>
+<p>它们内部也是通过call/apply来进行了显示绑定</p>
+<h3 id="new绑定"><a href="#new绑定" class="headerlink" title="new绑定"></a>new绑定</h3><p>首先要跳出一个误区：JS中没有构造函数，所谓的构造函数，其实只是对函数的“构造调用”。</p>
+<p>用new调用过会自动执行以下操作：</p>
+<ul>
+<li>创建（或者说构造）一个全新的对象。</li>
+<li>这个新对象会被执行 [[ 原型 ]] 连接。</li>
+<li>这个新对象会绑定到函数调用的 this。</li>
+<li>如果函数没有返回其他对象，那么 new 表达式中的函数调用会自动返回这个新对象</li>
+</ul>
+<p>我们接着看代码：</p>
+<pre><code>function foo(a)&#123;
+  this.a=a;
+&#125;
+var bar=new foo(2);
+console.log(bar.a) //2
+</code></pre>
+<h2 id="this-绑定优先级"><a href="#this-绑定优先级" class="headerlink" title="this 绑定优先级"></a>this 绑定优先级</h2><p>对于正常函数调用来说，函数绑定this的优先级如下：</p>
+<pre><code>  new绑定 &gt;  显式绑定 &gt;  隐式绑定 &gt; 用默认绑定
+  
+</code></pre>
+<p>但，凡事总有例外:</p>
+<p>如果你把 null 或者 undefined 作为 this 的绑定对象传入 call、apply 或者 bind时，此时会执行默认规则，如对参数进行柯里化（关于柯里化会单独开篇再讲）：</p>
+<pre><code> function add(a,b)&#123;
+   console.log(&quot;a:&quot; + a + &quot;, b:&quot; + b);
+ &#125;
+ add.apply(null,[2,3]);// a:2, b:3
+</code></pre>
+<p>但这样用null来忽略this的指向还是不够”安全”，我们可以通过创建空对象来实现：</p>
+<pre><code>function add(a,b)&#123;
+   console.log(&quot;a:&quot; + a + &quot;, b:&quot; + b);
+ &#125;
+ add.apply(Object.create( null ),[2,3]);// a:2, b:3
+ 
+</code></pre>
+<h2 id="箭头函数"><a href="#箭头函数" class="headerlink" title="箭头函数"></a>箭头函数</h2><p>ES6中的箭头函数不适用四种标准规则，而是根据外层（函数或者全局）作用域来决定 this，箭头函数回归了词法作用域来替代this的机制</p>
+<pre><code>function foo() &#123;
+  setTimeout(() =&gt; &#123;
+    // 这里的 this 在此法上继承自 foo()
+    console.log(this.a); // 2
+  &#125;,100);
+  setTimeout(function()&#123;
+  console.log(this.a);// global
+  &#125;,200);
+&#125;
+var obj = &#123;
+  a:2
+&#125;;
+var a = &quot;global&quot;;
+foo.call(obj);
+</code></pre>
+<h2 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h2><p> JavaScript 中一共有七种主要类型（术语是“语言类型”）: <code>null/undefined/boolean/string/number/symbol/object</code>,具体可参见<a href="/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-JavaScript%E9%83%A8%E5%88%86-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">重学前端系列-数据类型</a></p>
+<p>前面六种称之为基本类型，剩下的都可以归到复杂类型下。同时JavaScript 中还有一些对象子类型，通常被称为内置对象：<code>String/Number/Boolean/Object/Function/Array/Date/RegExp/Error/Set/Map/Promise</code>, 更多关于对象部分可参见<a href="/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-JavaScript%E9%83%A8%E5%88%86-%E5%AF%B9%E8%B1%A1/">重学前端系列-对象</a></p>
+<p>这些内置函数可以当作构造函数 （可以通过new调用）来使用，从而可以构造一个对应子类型的新对象。对于这些对象子类型，Object、Array、Function 和 RegExp（正则表达式）来说，无论使用文字形式还是构造形式，它们都是对象(不是字面量)，所以首选更简单的文字形式。建议只在需要那些额外选项时使用构造形式。</p>
+<p>在对象中，属性名永远都是字符串（会被强制转化），数组中则是下标数字。</p>
+<h3 id="属性名"><a href="#属性名" class="headerlink" title="属性名"></a>属性名</h3><p>ES6之前属性名写法不支持变量，现在也开始支持了，主要场景是针对<code>Symbol</code>类型</p>
+<pre><code>var prefix = &quot;foo&quot;;
+var mySymbol=Symbol();
+var myObject = &#123; 
+  [prefix + &quot;bar&quot;]:&quot;hello&quot;, 
+  [prefix + &quot;baz&quot;]: &quot;world&quot;,
+  [mySymbol]:&quot;Hello World&quot;
+&#125;;
+console.log(myObject[mySymbol]) // Hello World
+</code></pre>
+<h3 id="属性与方法"><a href="#属性与方法" class="headerlink" title="属性与方法"></a>属性与方法</h3><p>对于对象来说，如果改属性值指向的是一个函数，我们经常会称之为“方法”，但这其实是个误解，函数不管在什么情况下都不会属于某个对象，只是属性引用值指向一个函数而已，这在JS中经常混用，知道即可。“函数”和“方法”在 JavaScript 中是可以互换的。</p>
+<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><p>数组也是对象，所以也可以把数组当“普通”对象使用：</p>
+<pre><code>var arr=[1,2,3];
+arr.type=&quot;array&quot;
+console.log(arr);// [1, 2, 3, type: &quot;array&quot;]
+console.log(arr.length); //3
+</code></pre>
+<p>我们可以给数组添加属性，但数组的长度并不会改变</p>
+<h3 id="对象的复制"><a href="#对象的复制" class="headerlink" title="对象的复制"></a>对象的复制</h3><p>对于 JSON 安全的对象来说，有一种巧妙的复制方法(可以实现深度复制)：</p>
+<pre><code> var newObj = JSON.parse( JSON.stringify( someObj ) );
+</code></pre>
+<p>ES6 新增了 <code>Object.assign</code>方法来实现浅复制(内部也是通过遍历使用 <code>= </code>操作符来赋值):</p>
+<pre><code> var newObj = Object.assign( &#123;&#125;, someObj )
+</code></pre>
+<h3 id="对象的“其他”方法"><a href="#对象的“其他”方法" class="headerlink" title="对象的“其他”方法"></a>对象的“其他”方法</h3><ul>
+<li><p><code>Object.preventExtensions</code>：禁止一个对象添加新属性并且保留已有属性</p>
+<pre><code>var myObject = &#123;
+  a:2
+&#125;;
+Object.preventExtensions( myObject );
+myObject.b = 3;
+myObject.b; // undefined
+</code></pre>
+</li>
+<li><p><code>Object.seal</code>：会创建一个“密封” 的对象（对对象所有属性调用preventExtensions方法，并把所有现有属性标记为 <code>configurable:false</code>）</p>
+</li>
+<li><p><code>Object.freeze</code>：会创建一个冻结对象（对象上调用seal方法，并把所有“数据访问” 属性标记为 <code>writable:false</code>）</p>
+</li>
+</ul>
+<h3 id="Getter-amp-amp-Setter"><a href="#Getter-amp-amp-Setter" class="headerlink" title="Getter &amp;&amp; Setter"></a>Getter &amp;&amp; Setter</h3><p>此部分可参见<a href="/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-JavaScript%E9%83%A8%E5%88%86-%E5%AF%B9%E8%B1%A1/#%E8%AE%BF%E9%97%AE%E5%99%A8%EF%BC%88getter-setter%EF%BC%89%E5%B1%9E%E6%80%A7">重学前端系列-对象</a></p>
+<h3 id="存在性"><a href="#存在性" class="headerlink" title="存在性"></a>存在性</h3><ul>
+<li><p><code>for in</code> 操作符会检查属性是否在对象及其 <code>[[Prototype]]</code> 原型链中</p>
+<pre><code>1. for in 其实只是检测属性名是否存在
+2. 不要在数组中调用for in 因为会得到除了数值索引外其他的属性值：
+   var arr=[1,2,3];
+   arr.type=&#39;8&#39;
+   for( var k in arr)&#123;
+    console.log(k);// 0,1,2,type
+   &#125;
+</code></pre>
+</li>
+<li><p><code>hasOwnProperty</code> 只会检查属性是否在当前对象中。</p>
+<pre><code>1. 如果担心myObejct.hasOwnProperty失败可以调用：Object.prototype.myObejct.call(hasOwnProperty)
+</code></pre>
+</li>
+<li><p><code>propertyIsEnumerable</code>:会检查给定的属性名是否直接存在于对象中（不包含原型链）并满足 <code>enumerable:true</code></p>
+</li>
+<li><p><code>Object.keys</code>:会返回一个数组，包含所有可枚举属性;</p>
+</li>
+<li><p><code>Object.getOwnPropertyNames</code>:会返回一个数组，包含所有属性，无论它们是否可枚举</p>
+</li>
+</ul>
+<h3 id="遍历"><a href="#遍历" class="headerlink" title="遍历"></a>遍历</h3><p>说起遍历首先想到的就是for循环，但for循环其实并不是在遍历值， 而是遍历下标来指向值， 如 <code>myArray[i]</code></p>
+<ul>
+<li><p>map：【不改变原数组】对数组中的每一项运行给定函数，返回每次函数调用的结果组成的数组</p>
+<pre><code>// 调用map时大多情况下是为了他的返回值的, 除了抛出异常以外，没有办法中止或跳出
+
+const arr=[1,2,3];
+const newArr=arr.map(v=&gt;v*10); 
+ // 箭头函数只有一个返回值时可以省略return，其他情况不能省略，不然得到是[undefined,undefined,undefined]
+console.log(arr,newArr)
+ // 结果：[1,2,3]  [10,20,30]
+</code></pre>
+</li>
+<li><p>forEach：【不改变原数组】对数组中的每一项运行给定函数。这个方法没有返回值</p>
+<pre><code> // 调用map时大多情况下是只是为了遍历, 除了抛出异常以外，没有办法中止或跳出
+const arr=[1,2,3];
+const newArr=arr.map(v=&gt;v*10);
+console.log(arr,newArr) // [1,2,3] undefined
+</code></pre>
+</li>
+<li><p>filter：【不改变原数组】对数组中的每一项运行给定函数，返回该函数会返回true 的项组成的数</p>
+<pre><code>const arr=[1,2,3];
+const newArr=arr.filter(v=&gt;v&gt;2);
+console.log(arr,newArr) // [1,2,3] [3]
+</code></pre>
+</li>
+<li><p>every：【不改变原数组】对数组中的每一项运行给定函数，如果该函数对每一项都返回true，则返回true</p>
+<pre><code>// 只要给定函数返回false立即跳出，并得到false;
+const arr=[1,2,3];
+const newArr=arr.every(v=&gt;&#123;
+  console.log(v);//1
+  return v&gt;1
+&#125;);
+console.log(arr,newArr) ;//[1,2,3] false
+</code></pre>
+</li>
+<li><p>some：【不改变原数组】对数组中的每一项运行给定函数，如果该函数对任一项返回true，则返回true，跳出不再遍历</p>
+<pre><code>// 只要给定函数返回true立即跳出，并得到true;
+const arr=[1,2,3];
+const newArr=arr.some(v=&gt;&#123;
+  console.log(v);//1,2
+  return v&gt;1
+&#125;);
+console.log(arr,newArr) ;//[1,2,3] true
+</code></pre>
+</li>
+</ul>
+<p>如何直接遍历值而不是数组下标（或者对象属性）？ ES6 增加了一种用来遍历数组的<code>for of</code>循环语法, 具体可参见<a href="/ES6%E7%B3%BB%E5%88%97-3-Iterator/">ES6系列:Iterator</a></p>
+<p>几种遍历的执行效率：</p>
+<pre><code>  for &gt; for-of &gt; forEach &gt; filter &gt; map &gt; for-in
+</code></pre>
+<p>ES6扩展了数组的方法，新增了entries/keys/values方法，返回的<code>iterator</code>对象用于<code>for of</code>循环，参见：<a href="/ES6%E7%B3%BB%E5%88%97-2-%E6%96%B0%E5%A2%9E%E7%B1%BB%E5%9E%8B%E4%B8%8E%E6%89%A9%E5%B1%95%E6%96%B9%E6%B3%95/#%E6%95%B0%E7%BB%84%E5%AE%9E%E4%BE%8B%E7%9A%84-entries-%EF%BC%8Ckeys-%E5%92%8C-values">ES6系列-新增类型与扩展方法</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js/" rel="tag"># 你不知道的js</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JS%E7%B3%BB%E5%88%97-1/" rel="prev" title="你不知道的JS系列-1">
+                  <i class="fa fa-chevron-left"></i> 你不知道的JS系列-1
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JS%E7%B3%BB%E5%88%97-3/" rel="next" title="你不知道的JS系列-3">
+                  你不知道的JS系列-3 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMH</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://static.wangminghuan.cn/cdn/animejs@3.2.1/anime.min.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://static.wangminghuan.cn/cdn/hexo-generator-searchdb/search.js"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/fontawesome@5.15.3/all.min.css">
+  <link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/animejs@3.2.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wangminghuan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="概述判断与循环, 在各个语言中基本都有对应实现，也是开始编程最基础的语法，本文学习下pyhon中是如何玩转这些的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python系列-3-条件与循环">
+<meta property="og:url" content="https://wangminghuan.github.io/Python%E7%B3%BB%E5%88%97-3-%E6%9D%A1%E4%BB%B6%E4%B8%8E%E5%BE%AA%E7%8E%AF/index.html">
+<meta property="og:site_name" content="WMH&#39;s Blog">
+<meta property="og:description" content="概述判断与循环, 在各个语言中基本都有对应实现，也是开始编程最基础的语法，本文学习下pyhon中是如何玩转这些的。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-07-31T09:01:39.000Z">
+<meta property="article:modified_time" content="2022-05-17T10:04:10.817Z">
+<meta property="article:author" content="WMH">
+<meta property="article:tag" content="note">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://wangminghuan.github.io/Python%E7%B3%BB%E5%88%97-3-%E6%9D%A1%E4%BB%B6%E4%B8%8E%E5%BE%AA%E7%8E%AF/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wangminghuan.github.io/Python%E7%B3%BB%E5%88%97-3-%E6%9D%A1%E4%BB%B6%E4%B8%8E%E5%BE%AA%E7%8E%AF/","path":"Python系列-3-条件与循环/","title":"Python系列-3-条件与循环"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Python系列-3-条件与循环 | WMH's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WMH's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-主页"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>主页</a></li>
+        <li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-分类"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD"><span class="nav-number">2.</span> <span class="nav-text">条件判断</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E7%9B%AE%E8%BF%90%E7%AE%97"><span class="nav-number">2.1.</span> <span class="nav-text">三目运算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF"><span class="nav-number">3.</span> <span class="nav-text">循环</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#while%E5%BE%AA%E7%8E%AF"><span class="nav-number">3.1.</span> <span class="nav-text">while循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#for%E5%BE%AA%E7%8E%AF"><span class="nav-number">3.2.</span> <span class="nav-text">for循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#range-%E5%87%BD%E6%95%B0"><span class="nav-number">3.3.</span> <span class="nav-text">range()函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-%E8%AF%AD%E5%8F%A5"><span class="nav-number">4.</span> <span class="nav-text">pass 语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E8%AF%AD%E5%8F%A5"><span class="nav-number">5.</span> <span class="nav-text">其他语句</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#with%E8%AF%AD%E5%8F%A5"><span class="nav-number">5.1.</span> <span class="nav-text">with语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#del-%E8%AF%AD%E5%8F%A5"><span class="nav-number">5.2.</span> <span class="nav-text">del 语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#return-%E8%AF%AD%E5%8F%A5"><span class="nav-number">5.3.</span> <span class="nav-text">return 语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#yeild-%E8%AF%AD%E5%8F%A5"><span class="nav-number">5.4.</span> <span class="nav-text">yeild 语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#assert-%E8%AF%AD%E5%8F%A5"><span class="nav-number">5.5.</span> <span class="nav-text">assert 语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#raise%E8%AF%AD%E5%8F%A5"><span class="nav-number">5.6.</span> <span class="nav-text">raise语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#global%E8%AF%AD%E5%8F%A5"><span class="nav-number">5.7.</span> <span class="nav-text">global语句</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WMH"
+      src="/images/avatar2.png">
+  <p class="site-author-name" itemprop="name">WMH</p>
+  <div class="site-description" itemprop="description">just code it</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wangminghuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wangminghuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:m.h.wang@foxmail.com" title="E-Mail → mailto:m.h.wang@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weblog.wangminghuan.cn/" title="WebSite → https:&#x2F;&#x2F;weblog.wangminghuan.cn" rel="noopener" target="_blank"><i class="fa fa-book fa-fw"></i>WebSite</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/1657970003?topnav=1&wvr=6&topsug=1&is_all=1" title="微博 → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;1657970003?topnav&#x3D;1&amp;wvr&#x3D;6&amp;topsug&#x3D;1&amp;is_all&#x3D;1" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>微博</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/Python%E7%B3%BB%E5%88%97-3-%E6%9D%A1%E4%BB%B6%E4%B8%8E%E5%BE%AA%E7%8E%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.png">
+      <meta itemprop="name" content="WMH">
+      <meta itemprop="description" content="just code it">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WMH's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python系列-3-条件与循环
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-07-31 09:01:39" itemprop="dateCreated datePublished" datetime="2020-07-31T09:01:39+00:00">2020-07-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-05-17 10:04:10" itemprop="dateModified" datetime="2022-05-17T10:04:10+00:00">2022-05-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>判断与循环, 在各个语言中基本都有对应实现，也是开始编程最基础的语法，本文学习下pyhon中是如何玩转这些的。</p>
+<span id="more"></span>
+
+<h2 id="条件判断"><a href="#条件判断" class="headerlink" title="条件判断"></a>条件判断</h2><p>py中只有<code>if else</code> 判断，没有<code>switch case</code>，语法格式如下：</p>
+<pre><code>if &lt;条件判断1&gt;:
+    &lt;执行1&gt;
+elif &lt;条件判断2&gt;:
+    &lt;执行2&gt;
+elif &lt;条件判断3&gt;:
+    &lt;执行3&gt;
+else:
+    &lt;执行4&gt;
+</code></pre>
+<p>举个例子:</p>
+<pre><code>s = input(&#39;birth: &#39;)
+birth = int(s)  # 此处一定要做类型转换，py不同与js不会做自动类型转换
+if birth &lt; 1990:
+    print(&#39;90前&#39;)
+else:
+    print(&#39;90后&#39;)
+</code></pre>
+<h3 id="三目运算"><a href="#三目运算" class="headerlink" title="三目运算"></a>三目运算</h3><p>Python 是一种极简主义的编程语言，它没有引入<code>? :</code>这个新的运算符，而是使用已有的 if else 关键字来实现相同的功能:</p>
+<pre><code>exp1 if contion else exp2
+</code></pre>
+<p>举个例子：</p>
+<pre><code>a=10
+b=a*-10 if a&gt;20 else a*10
+c=&#39;Leo&#39; if a&gt;100  else (&#39;Tom&#39; if a&gt;10 else &#39;Jack&#39;)
+print(b) # 100
+print(c) # Jack
+</code></pre>
+<h2 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h2><p>Python 中的循环语句有 for 和 while。</p>
+<h3 id="while循环"><a href="#while循环" class="headerlink" title="while循环"></a>while循环</h3><p>语法格式如下：</p>
+<pre><code>while 判断条件(condition)：
+    执行语句(statements)……
+</code></pre>
+<p>举个例子：</p>
+<pre><code>i=1
+while i&gt;=1:
+  print(i)
+  i += 1
+  if i == 15:
+    print(&quot;跳出&quot;)
+    break
+  elif i&gt;10:
+    print(&quot;继续&quot;)
+    continue
+print(&quot;循环结束&quot;)
+</code></pre>
+<p>当i为15的时候会跳出while循环，执行后面的语句</p>
+<h3 id="for循环"><a href="#for循环" class="headerlink" title="for循环"></a>for循环</h3><p>通过for in 进行循环，千万不要遗漏冒号(:)</p>
+<pre><code>lists = [&quot;C&quot;, &quot;C++&quot;, &quot;Perl&quot;, &quot;Python&quot;] 
+for item in lists:
+    print(item)
+print(&quot;循环结束&quot;)
+</code></pre>
+<p>可以通过break跳出循环：</p>
+<pre><code>maps=[1,3,4,7]
+for item in maps:
+  if(item&gt;3):
+    print(item)
+    break
+print(&#39;循环结束&#39;)
+</code></pre>
+<p>运行结果：</p>
+<pre><code>4
+循环结束
+</code></pre>
+<h3 id="range-函数"><a href="#range-函数" class="headerlink" title="range()函数"></a>range()函数</h3><p>可以使用内置range()函数。它会生成数列<br>    # 输出0-9<br>    for i in range(10):<br>      print(i)</p>
+<pre><code># 输出2-7
+for i in range(2,8):
+  print(i)
+
+# 指定步长输出：2,5
+for i in range(2,8,3):
+  print(i)
+  
+</code></pre>
+<h2 id="pass-语句"><a href="#pass-语句" class="headerlink" title="pass 语句"></a>pass 语句</h2><p>Python pass是空语句，是为了保持程序结构的完整性。pass 不做任何事情，一般用做占位语句，如下实例</p>
+<pre><code>  for l in &#39;Runoob&#39;: 
+    if l == &#39;o&#39;:
+        pass
+        print (&#39;执行 pass 块&#39;)
+    print (&#39;当前字母 :&#39;, l)
+  
+  print (&quot;Run over!&quot;)
+</code></pre>
+<p>执行结果：</p>
+<pre><code>  当前字母 : R
+  当前字母 : u
+  当前字母 : n
+  执行 pass 块
+  当前字母 : o
+  执行 pass 块
+  当前字母 : o
+  当前字母 : b
+  Run over!
+</code></pre>
+<h2 id="其他语句"><a href="#其他语句" class="headerlink" title="其他语句"></a>其他语句</h2><h3 id="with语句"><a href="#with语句" class="headerlink" title="with语句"></a>with语句</h3><p>python中的with语句使用于对资源进行访问的场合，保证不管处理过程中是否发生错误或者异常都会执行规定的<code>__exit__</code>（“清理”）操作，释放被访问的资源，比如: 有文件读写后自动关闭、线程中锁的自动获取和释放等</p>
+<p>与python中with语句有关的概念有：上下文管理协议、上下文管理器、运行时上下文、上下文表达式、处理资源的代码段。</p>
+<p>经常看到的是进行文件操作时会带有with语句</p>
+<pre><code>  with open( &#39;/path/to/file&#39;, &#39;r&#39; ) as f:
+    print( f.read() ) 
+</code></pre>
+<p>此处with的作用就是在读取结束后（包括出错后）执行close函数，不用我们每次调取。</p>
+<h3 id="del-语句"><a href="#del-语句" class="headerlink" title="del 语句"></a>del 语句</h3><p>del语句删除一些对象引用,只是删除引用，变为了一个可回收的对象，内存会不定期回收</p>
+<h3 id="return-语句"><a href="#return-语句" class="headerlink" title="return 语句"></a>return 语句</h3><p>返回函数执行结果, 与c++/nodejs等基本一致：</p>
+<pre><code>def add(x,y):
+    result = x + y
+    return result
+
+print(add(10,24))
+</code></pre>
+<h3 id="yeild-语句"><a href="#yeild-语句" class="headerlink" title="yeild 语句"></a>yeild 语句</h3><p>yeild 语句等同于yeild表达式，使用了yield 表达式的函数被称为生成器（generator）</p>
+<h3 id="assert-语句"><a href="#assert-语句" class="headerlink" title="assert 语句"></a>assert 语句</h3><p>当表达式为False时则触发AssertionError异常，代码终止</p>
+<pre><code>def testAssert(num):
+  if num&gt;0:
+    print(&quot;输入大于0，正常执行&quot;)
+  else:
+    print(&quot;输入小于0！&quot;)
+    assert False ,&#39;Not positive integer&#39;
+try:
+  n=input(&quot;请输入正整数：&quot;) 
+  testAssert(int(n))
+
+except Exception as ex:
+    print(&quot;发现错误:&quot;,ex)
+</code></pre>
+<p>执行<code>python main.py</code>,输入10：</p>
+<pre><code>  输入大于0，正常执行
+</code></pre>
+<p>执行<code>python main.py</code>,输入-10：</p>
+<pre><code>  输入小于0！
+  发现错误: Not positive integer
+</code></pre>
+<h3 id="raise语句"><a href="#raise语句" class="headerlink" title="raise语句"></a>raise语句</h3><p>raise语句是抛出一个异常，即使程序没有任何问题:</p>
+<pre><code>print(&#39;run&#39;)
+
+raise RuntimeError(&quot;没事找事，怎么了&quot;)
+</code></pre>
+<p>执行结果：</p>
+<pre><code>run
+Traceback (most recent call last):
+  File &quot;main.py&quot;, line 188, in &lt;module&gt;
+    raise RuntimeError(&quot;没事找事，怎么了&quot;)
+RuntimeError: 没事找事，怎么了
+</code></pre>
+<h3 id="global语句"><a href="#global语句" class="headerlink" title="global语句"></a>global语句</h3><p>global 语句是作用于整个当前代码块的声明。 它意味着所列出的标识符将被解读为全局变量</p>
+<pre><code>x=1
+y=0
+
+def foo():
+  x=2
+
+def fun():
+  global y  # 声明为全局变量
+  y=2
+
+foo()
+fun()
+
+print(x)   # 1
+print(y)   # 3
+</code></pre>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.runoob.com/python3/python3-conditional-statements.html">Python3 条件控制</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.runoob.com/python3/python3-loop.html">Python3 循环语句</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/note/" rel="tag"># note</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Python%E7%B3%BB%E5%88%97-2-%E8%BF%90%E7%AE%97%E7%AC%A6/" rel="prev" title="Python系列-2-运算符">
+                  <i class="fa fa-chevron-left"></i> Python系列-2-运算符
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Python%E7%B3%BB%E5%88%97-4-%E5%87%BD%E6%95%B0/" rel="next" title="Python系列-4-函数">
+                  Python系列-4-函数 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMH</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://static.wangminghuan.cn/cdn/animejs@3.2.1/anime.min.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://static.wangminghuan.cn/cdn/hexo-generator-searchdb/search.js"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

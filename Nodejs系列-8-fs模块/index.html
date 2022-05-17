@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/fontawesome@5.15.3/all.min.css">
+  <link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/animejs@3.2.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wangminghuan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="fs模块提供了一些与文件系统进行交互的 API，所有文件系统操作都具有同步和异步的形式。作为nodejs开发中最常用的模块之一，下面我们介绍一些常见API用法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nodejs系列-8-fs模块">
+<meta property="og:url" content="https://wangminghuan.github.io/Nodejs%E7%B3%BB%E5%88%97-8-fs%E6%A8%A1%E5%9D%97/index.html">
+<meta property="og:site_name" content="WMH&#39;s Blog">
+<meta property="og:description" content="fs模块提供了一些与文件系统进行交互的 API，所有文件系统操作都具有同步和异步的形式。作为nodejs开发中最常用的模块之一，下面我们介绍一些常见API用法。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-10-09T15:34:01.000Z">
+<meta property="article:modified_time" content="2022-05-17T10:04:10.817Z">
+<meta property="article:author" content="WMH">
+<meta property="article:tag" content="note">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://wangminghuan.github.io/Nodejs%E7%B3%BB%E5%88%97-8-fs%E6%A8%A1%E5%9D%97/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wangminghuan.github.io/Nodejs%E7%B3%BB%E5%88%97-8-fs%E6%A8%A1%E5%9D%97/","path":"Nodejs系列-8-fs模块/","title":"Nodejs系列-8-fs模块"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Nodejs系列-8-fs模块 | WMH's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WMH's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-主页"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>主页</a></li>
+        <li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-分类"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-readFile-amp-amp-fs-readFileSync"><span class="nav-number">1.</span> <span class="nav-text">fs.readFile &amp;&amp; fs.readFileSync</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-writeFile-amp-amp-fs-writeFileSync"><span class="nav-number">2.</span> <span class="nav-text">fs.writeFile &amp;&amp; fs.writeFileSync</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6"><span class="nav-number">2.1.</span> <span class="nav-text">文件描述符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-mkdir-amp-amp-fs-mkdirSync"><span class="nav-number">3.</span> <span class="nav-text">fs.mkdir &amp;&amp; fs.mkdirSync</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-readdir-amp-amp-fs-readdirSync"><span class="nav-number">4.</span> <span class="nav-text">fs.readdir &amp;&amp; fs.readdirSync</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-stat-amp-amp-fs-statSync"><span class="nav-number">5.</span> <span class="nav-text">fs.stat &amp;&amp; fs.statSync</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-existsSync"><span class="nav-number">6.</span> <span class="nav-text">fs.existsSync</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-copyFile-amp-amp-fs-copyFileSync"><span class="nav-number">7.</span> <span class="nav-text">fs.copyFile &amp;&amp; fs.copyFileSync</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-unlink-amp-amp-fs-unlinkSync"><span class="nav-number">8.</span> <span class="nav-text">fs.unlink &amp;&amp; fs.unlinkSync</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-rmdir-amp-amp-fs-rmdirSync"><span class="nav-number">9.</span> <span class="nav-text">fs.rmdir &amp;&amp; fs.rmdirSync</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-watchfile-amp-amp-fs-unwatchfile"><span class="nav-number">10.</span> <span class="nav-text">fs.watchfile &amp;&amp; fs.unwatchfile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-ReadStream-%E7%B1%BB"><span class="nav-number">11.</span> <span class="nav-text">fs.ReadStream 类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-WriteStream-%E7%B1%BB"><span class="nav-number">12.</span> <span class="nav-text">fs.WriteStream 类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-Stats-%E7%B1%BB"><span class="nav-number">13.</span> <span class="nav-text">fs.Stats 类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">14.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WMH"
+      src="/images/avatar2.png">
+  <p class="site-author-name" itemprop="name">WMH</p>
+  <div class="site-description" itemprop="description">just code it</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wangminghuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wangminghuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:m.h.wang@foxmail.com" title="E-Mail → mailto:m.h.wang@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weblog.wangminghuan.cn/" title="WebSite → https:&#x2F;&#x2F;weblog.wangminghuan.cn" rel="noopener" target="_blank"><i class="fa fa-book fa-fw"></i>WebSite</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/1657970003?topnav=1&wvr=6&topsug=1&is_all=1" title="微博 → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;1657970003?topnav&#x3D;1&amp;wvr&#x3D;6&amp;topsug&#x3D;1&amp;is_all&#x3D;1" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>微博</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/Nodejs%E7%B3%BB%E5%88%97-8-fs%E6%A8%A1%E5%9D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.png">
+      <meta itemprop="name" content="WMH">
+      <meta itemprop="description" content="just code it">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WMH's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Nodejs系列-8-fs模块
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-10-09 15:34:01" itemprop="dateCreated datePublished" datetime="2019-10-09T15:34:01+00:00">2019-10-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-05-17 10:04:10" itemprop="dateModified" datetime="2022-05-17T10:04:10+00:00">2022-05-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Nodejs-%E7%B3%BB%E5%88%97/" itemprop="url" rel="index"><span itemprop="name">Nodejs 系列</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>fs模块提供了一些与文件系统进行交互的 API，所有文件系统操作都具有同步和异步的形式。作为nodejs开发中最常用的模块之一，下面我们介绍一些常见API用法。</p>
+<span id="more"></span>
+
+<h2 id="fs-readFile-amp-amp-fs-readFileSync"><a href="#fs-readFile-amp-amp-fs-readFileSync" class="headerlink" title="fs.readFile &amp;&amp; fs.readFileSync"></a>fs.readFile &amp;&amp; fs.readFileSync</h2><p>readFile方法用于异步读取数据。</p>
+<pre><code>fs.readFile(path[, options], callback)
+</code></pre>
+<p>参数解释：</p>
+<pre><code>- path: 文件路径（相对或绝对），相对路径是相对于当前进程（process.cwd()）所在的路径
+- options &lt;Object&gt; | &lt;string&gt;
+    encoding &lt;string&gt; | &lt;null&gt; 默认值: null。
+    flag &lt;string&gt; 参阅支持的文件系统标志。默认值: &#39;r&#39;。
+- callback &lt;Function&gt;
+</code></pre>
+<p>示例：</p>
+<pre><code>const fs= require(&quot;fs&quot;);
+fs.readFile(&quot;demo.text&quot;,&quot;utf8&quot;,(err,data)=&gt;&#123;
+  if (err) &#123;
+    console.log(err)
+    return;
+  &#125;;
+  console.log(data);
+&#125;)
+</code></pre>
+<p>运行结果：</p>
+<pre><code>My name is Jack!
+</code></pre>
+<p>如果不指定编码方式，返回的是Buffer数据：</p>
+<pre><code>&lt;Buffer 89 50 4e 47 0d 0a 1a 0a 00 00 00 0d 49 48 44 52 00 00 01 c9 00 00 00 ff 08 06 00 00 00 9a 6b 2d 75 00 00 03 bc 49 44 41 54 78 9c ed d5 a1 11 c0 20 00 ... &gt;
+</code></pre>
+<p><code>readFileSync</code>与<code>readFile</code>类似，只是执行过程换成了同步模式。</p>
+<h2 id="fs-writeFile-amp-amp-fs-writeFileSync"><a href="#fs-writeFile-amp-amp-fs-writeFileSync" class="headerlink" title="fs.writeFile &amp;&amp; fs.writeFileSync"></a>fs.writeFile &amp;&amp; fs.writeFileSync</h2><p>writeFile方法用于写入文件。</p>
+<pre><code>fs.writeFile(file, data[, options], callback)
+</code></pre>
+<p>参数解释：</p>
+<pre><code>- file &lt;string&gt; | &lt;Buffer&gt; | &lt;URL&gt; | &lt;integer&gt; 文件名或文件描述符。
+- data &lt;string&gt; | &lt;Buffer&gt; | &lt;TypedArray&gt; | &lt;DataView&gt;
+- options &lt;Object&gt; | &lt;string&gt;
+  encoding &lt;string&gt; | &lt;null&gt; 默认值: &#39;utf8&#39;。
+  mode &lt;integer&gt; 默认值: 0o666。
+  flag &lt;string&gt; 参阅支持的文件系统标志。默认值: &#39;w&#39;。
+- callback &lt;Function&gt;
+</code></pre>
+<p>例子1，写入数据为字符串时，需指定字符编码，缺省时为utf8</p>
+<pre><code>fs.writeFile(&quot;./demo-1.txt&quot;,&quot;My job is coding&quot;,&quot;utf8&quot;,(err)=&gt;&#123;
+  if(err)&#123;
+    console.log(&quot;写入失败&quot;)
+    return;
+  &#125;
+  console.log(&quot;写入成功&quot;)
+&#125;)
+</code></pre>
+<p>例子2, 写入数据为二进制数据时，encoding 选项会被忽略, 我们将一个图片的base64字符串保存到本地</p>
+<pre><code>const base64Img=&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAE0lEQVQImWN8Eyz6nwEImBigAAAkPwJXo01dBgAAAABJRU5ErkJggg==&quot;
+const base64Data = base64Img.replace(/^data:image\/\w+;base64,/, &quot;&quot;);//过滤掉标识
+const data=Buffer.from(base64Data, &#39;base64&#39;);
+fs.writeFile(&quot;./red.png&quot;,data,(err)=&gt;&#123;
+  if(err)&#123;
+    console.log(&quot;写入失败&quot;)
+    return;
+  &#125;
+  console.log(&quot;写入成功&quot;)
+&#125;)
+</code></pre>
+<p>我们将一个gif图写入本地,图片二进制数据参见：<a target="_blank" rel="noopener" href="http://www.matthewflickinger.com/lab/whatsinagif/bits_and_bytes.asp">点我访问</a></p>
+<pre><code>const arr=[0x47,0x49,0x46,0x38,0x39,0x61,0x0A,0x00,0x0A,0x00,0x91,0x00,0x00,0xFF,0xFF,0xFF,0xFF,0x00,0x00,0x00,0x00,0xFF,0x00,0x00,0x00,0x21,0xF9,0x04,0x00,0x00,0x00,0x00,0x00,0x2C,0x00,0x00,0x00,0x00,0x0A,0x00,0x0A,0x00,0x00,0x02,0x16,0x8C,0x2D,0x99,0x87,0x2A,0x1C,0xDC,0x33,0xA0,0x02,0x75,0xEC,0x95,0xFA,0xA8,0xDE,0x60,0x8C,0x04,0x91,0x4C,0x01,0x00,0x3B];
+const data=Buffer.from(arr);
+fs.writeFile(&quot;./red.gif&quot;,data,(err)=&gt;&#123;
+  if(err)&#123;
+    console.log(&quot;写入失败&quot;);
+    return;
+  &#125;
+  console.log(&quot;写入成功&quot;)
+&#125;)
+</code></pre>
+<h3 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h3><p>在文件描述符的情况下，文件不会被替换！ 数据不一定写入到文件的开头，文件的原始数据可以保留在新写入的数据之前和/或之后，行为几乎与直接调用 <code>fs.write</code> 类似：</p>
+<pre><code>fs.open(&#39;./demo-1.txt&#39;, &#39;a+&#39;, (err,fd)=&gt;&#123;
+  if(err)&#123;
+    console.log(&quot;打开失败&quot;)
+  &#125;
+  fs.writeFileSync(fd,&quot;锄禾日当午;&quot;)
+  fs.writeFileSync(fd,&quot;汗滴禾下土&quot;)
+  fs.close(fd,function(err)&#123;
+    if(err)&#123;
+      console.log(&quot;关闭失败&quot;)
+      return;
+    &#125;
+    console.log(&#39;file closed&#39;);
+  &#125;)
+&#125;)
+</code></pre>
+<p>运行结果：</p>
+<pre><code>锄禾日当午;汗滴禾下土
+</code></pre>
+<p>下面例子也可以实现同样的功能：</p>
+<pre><code>fs.writeFileSync(&quot;./demo-1.txt&quot;,&quot;;&quot;+new Date().getTime().toString(),&#123;
+  flag:&quot;a+&quot;
+&#125;)
+fs.writeFileSync(&quot;./demo-1.txt&quot;,&quot;;&quot;+new Date().getTime().toString(),&#123;
+  flag:&quot;a+&quot;
+&#125;)
+</code></pre>
+<p>运行结果：</p>
+<pre><code>;1570873714714;1570873714715
+</code></pre>
+<p><code>writeFileSync</code>与<code>writeFile</code>类似</p>
+<h2 id="fs-mkdir-amp-amp-fs-mkdirSync"><a href="#fs-mkdir-amp-amp-fs-mkdirSync" class="headerlink" title="fs.mkdir &amp;&amp; fs.mkdirSync"></a>fs.mkdir &amp;&amp; fs.mkdirSync</h2><p>mkdir方法用于新建目录</p>
+<pre><code>fs.mkdir(path[, options], callback)
+</code></pre>
+<p>参数解释：</p>
+<pre><code>- path &lt;string&gt; | &lt;Buffer&gt; | &lt;URL&gt;
+- options &lt;Object&gt; | &lt;integer&gt;
+  recursive &lt;boolean&gt; 默认值: false。
+  mode &lt;integer&gt; Windows 上不支持。默认值: 0o777。
+- callback &lt;Function&gt;
+</code></pre>
+<p>例子：</p>
+<pre><code>fs.mkdir(&#39;./tmp/a/apple&#39;, &#123; recursive: true &#125;, (err) =&gt; &#123;
+  if (err) &#123;
+    console.log(&quot;创建失败&quot;);
+    return;
+  &#125;
+  console.log(&quot;创建成功&quot;)
+&#125;);
+</code></pre>
+<p>创建 /tmp/a/apple 目录，无论是否存在 /tmp 和 /tmp/a 目录。</p>
+<p><code>mkdirSync</code>与<code>mkdir</code>类似</p>
+<h2 id="fs-readdir-amp-amp-fs-readdirSync"><a href="#fs-readdir-amp-amp-fs-readdirSync" class="headerlink" title="fs.readdir &amp;&amp; fs.readdirSync"></a>fs.readdir &amp;&amp; fs.readdirSync</h2><p>readdir方法用于读取目录，返回一个所包含的文件和子目录的数组</p>
+<pre><code>fs.readdir(path[, options], callback)
+</code></pre>
+<p>参数解释：<br>    - path <string> | <Buffer> | <URL><br>    - options <string> | <Object><br>      encoding <string> 默认值: ‘utf8’。<br>      withFileTypes <boolean> 默认值: false。<br>    - callback <Function><br>      err <Error><br>      files &lt;string[]&gt; | &lt;Buffer[]&gt; | &lt;fs.Dirent[]&gt;<br>例子，读取文本的static文件夹：</p>
+<pre><code>  fs.readdir(&quot;./static&quot;,(err,files)=&gt;&#123;
+    if (err) &#123;
+      console.log(err);
+      return;
+    &#125;
+    console.log(files)
+  &#125;)
+</code></pre>
+<p>运行结果：</p>
+<pre><code>   [ &#39;css&#39;, &#39;img&#39;, &#39;index.html&#39;, &#39;js&#39; ]
+</code></pre>
+<p><code>readdirSync</code>与<code>readdir</code>类似</p>
+<h2 id="fs-stat-amp-amp-fs-statSync"><a href="#fs-stat-amp-amp-fs-statSync" class="headerlink" title="fs.stat &amp;&amp; fs.statSync"></a>fs.stat &amp;&amp; fs.statSync</h2><p>stat方法的参数是一个文件或目录，它产生一个对象，该对象包含了该文件或目录的具体信息。我们往往通过该方法，判断正在处理的到底是一个文件，还是一个目录。</p>
+<pre><code>fs.stat(path[, options], callback)
+</code></pre>
+<p>参数解释：<br>    - path <string> | <Buffer> | <URL><br>    - options <Object><br>      bigint <boolean> 返回的 fs.Stats 对象中的数值是否应为 bigint 型。默认值: false。<br>      callback <Function><br>    - err <Error><br>      stats &lt;fs.Stats&gt;<br>我们将上述例子中获取到的static进行遍历，获取对应文件的stat</p>
+<pre><code>  fs.readdir(&quot;./static&quot;,(err,files)=&gt;&#123;
+    if (err) &#123;
+      console.log(err);
+      return;
+    &#125;
+    files.map((file)=&gt;&#123;
+      fs.stat(path.join(__dirname,&quot;static&quot;, file),(err,stats)=&gt;&#123;
+          if (err) &#123;
+            console.log(err);
+            return;
+          &#125;
+        if (stats.isFile()) &#123;
+          console.log(&quot;%s is file&quot;, file);
+        &#125;else if (stats.isDirectory ()) &#123;
+          console.log(&quot;%s is a directory&quot;, file);
+        &#125;
+      &#125;);
+      
+    &#125;) 
+  &#125;)
+</code></pre>
+<p>运行结果：</p>
+<pre><code>  css is a directory
+  img is a directory
+  index.html is file
+  js is a directory
+</code></pre>
+<p>利用<code>fs.statSync</code> 与 <code>fs.readdirSync</code> 可以封装一个常用功能：遍历目录下的所有文件</p>
+<pre><code>  /**
+  *
+  * @desc 遍历目录下的所有文件
+  * @param &#123;p&#125;:要遍历目录路径
+  */
+  let localFileArr=[];
+  function readPathSync (p) &#123;
+    const stat = fs.statSync(p)
+    if (stat.isDirectory()) &#123;
+      const ls = fs.readdirSync(p).map(file =&gt; path.join(p, file))
+      for (let i = 0; i &lt; ls.length; i++) &#123;
+        arguments.callee(ls[i])
+      &#125;
+    &#125; else &#123;
+      localFileArr.push(p)
+    &#125;
+  &#125;
+</code></pre>
+<p>运行</p>
+<pre><code>  readPathSync(path.join(__dirname,&quot;static&quot;)); 
+  
+</code></pre>
+<p>可以得到static文件夹下的所有文件</p>
+<pre><code>[ &#39;C:\\Users\\wmh\\Desktop\\nodejs\\static\\css\\fonts\\element-icons.535877f.woff&#39;,
+  &#39;C:\\Users\\wmh\\Desktop\\nodejs\\static\\css\\style.css&#39;,
+  &#39;C:\\Users\\wmh\\Desktop\\nodejs\\static\\img\\1.png&#39;,
+  &#39;C:\\Users\\wmh\\Desktop\\nodejs\\static\\img\\2.png&#39;,
+  &#39;C:\\Users\\wmh\\Desktop\\nodejs\\static\\index.html&#39;,
+  &#39;C:\\Users\\wmh\\Desktop\\nodejs\\static\\js\\app.js&#39; ]
+</code></pre>
+<h2 id="fs-existsSync"><a href="#fs-existsSync" class="headerlink" title="fs.existsSync"></a>fs.existsSync</h2><p>用来判断给定路径是否存在:如果路径存在，则返回 true，否则返回 false。</p>
+<pre><code>fs.existsSync(path)
+</code></pre>
+<p>注意：<code>fs.exists</code> <strong>已废弃！！！</strong></p>
+<h2 id="fs-copyFile-amp-amp-fs-copyFileSync"><a href="#fs-copyFile-amp-amp-fs-copyFileSync" class="headerlink" title="fs.copyFile &amp;&amp; fs.copyFileSync"></a>fs.copyFile &amp;&amp; fs.copyFileSync</h2><p>拷贝文件到指定路径，V8.5+版本支持</p>
+<pre><code>fs.copyFile(src, dest[, flags], callback)
+</code></pre>
+<p>参数解释：</p>
+<pre><code>- src &lt;string&gt; | &lt;Buffer&gt; | &lt;URL&gt; 要拷贝的源文件名。
+- dest &lt;string&gt; | &lt;Buffer&gt; | &lt;URL&gt; 拷贝操作的目标文件名。
+- flags &lt;number&gt; 用于拷贝操作的修饰符。默认值: 0。
+- callback &lt;Function&gt;
+</code></pre>
+<p>例子：</p>
+<pre><code>fs.copyFile(&quot;./static/index.html&quot;,&quot;./test/test.html&quot;,()=&gt;&#123;
+  console.log(&quot;拷贝完成&quot;)
+&#125;)
+</code></pre>
+<p>因为拷贝时目标地址目录必须存在，所有一般使用过程中，我们需要做下处理：</p>
+<p>利用<code>fs.existsSync</code>、 <code>mkdirSync</code>与 <code>fs.readdirSync</code> 可以封装一个常用功能：拷贝目录下所有文件</p>
+<pre><code>/**
+* @desc 拷贝原目录下所有文件到目标目录
+* @param &#123;*&#125; src 原目录
+* @param &#123;*&#125; dest 目标目录
+*/
+function copySync (src, dest) &#123;
+  const stat = fs.statSync(src)
+  if (stat.isDirectory()) &#123;
+    //原地址是一个文件夹，判断目标文件夹是否存在
+    if (!fs.existsSync(dest)) fs.mkdirSync(dest)
+    const ls = fs.readdirSync(src).map(file =&gt; path.join(src, file))
+    for (let i = 0; i &lt; ls.length; i++) &#123;
+      arguments.callee(ls[i], path.join(dest, path.basename(ls[i])))
+    &#125;
+  &#125; else &#123;
+    //path.dirname() 方法返回 path 的目录名
+    //原地址是一个文件，先判断目标地址文件所在目录是否存在
+    if (!fs.existsSync(path.dirname(dest))) fs.mkdirSync(path.dirname(dest))
+    fs.copyFileSync(src, dest)
+  &#125;
+&#125;
+</code></pre>
+<p>执行：</p>
+<pre><code>copySync(path.join(__dirname,&quot;static&quot;),path.join(__dirname,&quot;_static&quot;))
+</code></pre>
+<p>完成文件夹拷贝</p>
+<h2 id="fs-unlink-amp-amp-fs-unlinkSync"><a href="#fs-unlink-amp-amp-fs-unlinkSync" class="headerlink" title="fs.unlink &amp;&amp; fs.unlinkSync"></a>fs.unlink &amp;&amp; fs.unlinkSync</h2><p>删除文件，当删除路径不是文件时，同步模式下会报错，所以，一般使用时与stat配合使用</p>
+<pre><code> fs.unlink(path, callback)
+</code></pre>
+<p>例子：</p>
+<pre><code>fs.unlink(&quot;./static/js&quot;,(err)=&gt;&#123;
+  if(err)&#123;
+    console.log(&#39;删除失败&#39;)
+    return
+  &#125;
+  console.log(&quot;删除成功&quot;)
+&#125;)
+</code></pre>
+<h2 id="fs-rmdir-amp-amp-fs-rmdirSync"><a href="#fs-rmdir-amp-amp-fs-rmdirSync" class="headerlink" title="fs.rmdir &amp;&amp; fs.rmdirSync"></a>fs.rmdir &amp;&amp; fs.rmdirSync</h2><p>删除文件夹(必须为空文件夹)，当删除路径不是文件夹时，同步模式下会报错，所以，一般使用时与stat配合使用(V12 新增了option选项)</p>
+<pre><code>fs.rmdir(path, callback)
+</code></pre>
+<p>参数说明：</p>
+<pre><code>- path &lt;string&gt; | &lt;Buffer&gt; | &lt;URL&gt;
+- callback &lt;Function&gt;
+  err &lt;Error&gt;
+</code></pre>
+<p>利用<code>fs.unlinkSync</code> 与 <code>fs.rmdirSync</code> 可以封装一个常用功能：删除目录下所有文件</p>
+<pre><code> /**
+  *
+  * @desc 删除目录下所有文件
+  * @param &#123;p&#125;:要删除的目录地址
+  */
+function removeSync (p) &#123;
+  const stat = fs.statSync(p)
+  if (stat.isDirectory()) &#123;
+    const ls = fs.readdirSync(p).map(file =&gt; path.join(p, file))
+    for (let i = 0; i &lt; ls.length; i++) &#123;
+      arguments.callee(ls[i])
+    &#125;
+    fs.rmdirSync(p)
+  &#125; else &#123;
+    fs.unlinkSync(p)
+  &#125;
+&#125;
+</code></pre>
+<p>运行：</p>
+<pre><code> removeSync(path.join(__dirname,&quot;static&quot;))
+</code></pre>
+<p>static目录被删除</p>
+<h2 id="fs-watchfile-amp-amp-fs-unwatchfile"><a href="#fs-watchfile-amp-amp-fs-unwatchfile" class="headerlink" title="fs.watchfile &amp;&amp; fs.unwatchfile"></a>fs.watchfile &amp;&amp; fs.unwatchfile</h2><p>watchfile方法监听一个文件，如果该文件发生变化，就会自动触发回调函数。</p>
+<pre><code>fs.watchFile(filename[, options], listener)
+</code></pre>
+<p>参数说明：</p>
+<pre><code>- filename &lt;string&gt; | &lt;Buffer&gt; | &lt;URL&gt;
+- options &lt;Object&gt;
+  persistent &lt;boolean&gt; 默认值: true。
+  interval &lt;integer&gt; 默认值: 5007。
+- listener &lt;Function&gt;
+  current &lt;fs.Stats&gt;
+  previous &lt;fs.Stats&gt;
+</code></pre>
+<p>每当访问文件时都会调用 listener 回调，例子:</p>
+<pre><code>fs.watchFile(&#39;./demo.txt&#39;,  (curr, prev)=&gt; &#123;
+  console.log(&#39;the current mtime is: &#39; + curr.mtime);
+  console.log(&#39;the previous mtime was: &#39; + prev.mtime);
+&#125;);
+
+fs.writeFile(&#39;./demo.txt&#39;, &quot;My Name is Tom&quot;, function (err) &#123;
+  if (err) throw err;
+
+  console.log(&quot;file write complete&quot;);   
+&#125;);
+</code></pre>
+<p>运行结果：</p>
+<pre><code>file write complete
+the current mtime is: Wed Oct 16 2019 18:48:30 GMT+0800 (GMT+08:00)
+the previous mtime was: Wed Oct 09 2019 18:08:38 GMT+0800 (GMT+08:00)
+</code></pre>
+<p><code>unwatchfile</code>方法用于解除对文件的监听。</p>
+<h2 id="fs-ReadStream-类"><a href="#fs-ReadStream-类" class="headerlink" title="fs.ReadStream 类"></a>fs.ReadStream 类</h2><p>我们经常用到的<code>fs.readFile</code>方法可以满足多数场景，但对于大文件，譬如超过10M文件的读取，<code>fs.readFile</code>就不是最优选择了，因为该方法将数据一次性全部读取到内存中,会造成系统的假死或引发其他问题，此时，我们需要使用<code>fs.ReadStream</code>类来处理数据；类似大文件场景下，对于写入数据，我们选择<code>fs.createWriteStream</code>类来处理：</p>
+<p>成功调用 fs.createReadStream() 将会返回一个新的 fs.ReadStream 对象。</p>
+<pre><code>      fs.createReadStream(path[, options])
+</code></pre>
+<p>我们读取本地一个文本文件：</p>
+<pre><code>const fs = require(&quot;fs&quot;);
+const path = require(&quot;path&quot;);
+
+let filename = path.resolve(&#39;demo.txt&#39;);
+let readStream = fs.createReadStream(filename,&#123;encoding:&#39;utf8&#39;&#125;);
+readStream.on(&quot;open&quot;,(data)=&gt;&#123;
+    console.log(&#39;打开了,触发open&#39;,data)
+&#125;)
+readStream.on(&quot;ready&quot;,()=&gt;&#123;
+  console.log(&#39;ReadStream已经ready,触发ready&#39;)
+&#125;)
+readStream.on(&quot;data&quot;,(data)=&gt;&#123;
+    console.log(&quot;数据来了！&quot;);
+    console.log(&quot;已经读取的字节数&quot;,readStream.bytesRead);
+&#125;)
+readStream.on(&quot;close&quot;,(data)=&gt;&#123;
+    console.log(&#39;读取结束，触发close&#39;)
+&#125;)
+console.log(&quot;读取文件路径为：&quot;+readStream.path)
+</code></pre>
+<p>运行结果：</p>
+<pre><code>读取文件路径为：C:\Users\wmh\Desktop\nodejs\demo.txt
+打开了,触发open 3
+ReadStream已经ready,触发ready
+数据来了！
+已经读取的字节数 11
+读取结束，触发close
+</code></pre>
+<h2 id="fs-WriteStream-类"><a href="#fs-WriteStream-类" class="headerlink" title="fs.WriteStream 类"></a>fs.WriteStream 类</h2><p>成功调用 fs.createWriteStream() 将会返回一个新的 fs.WriteStream 对象。</p>
+<pre><code>fs.createWriteStream(path[, options])
+</code></pre>
+<p>我们在上面例子的基础上，改为写入模式：</p>
+<pre><code>const fs = require(&quot;fs&quot;);
+const path = require(&quot;path&quot;);
+
+let filename = path.resolve(&#39;demo.txt&#39;);
+let writeStream = fs.createWriteStream(filename,&#123;encoding:&#39;utf8&#39;&#125;);
+writeStream.on(&quot;open&quot;,(data)=&gt;&#123;
+    console.log(&#39;打开了,触发open&#39;,data)
+&#125;)
+writeStream.on(&quot;ready&quot;,()=&gt;&#123;
+  console.log(&#39;触发ready&#39;)
+&#125;)
+writeStream.on(&quot;close&quot;,(data)=&gt;&#123;
+    console.log(&#39;写入结束，触发close&#39;)
+&#125;)
+console.log(&quot;写入文件路径为：&quot;+writeStream.path)
+writeStream.write(&quot;My name is Jack!&quot;)
+writeStream.end();
+</code></pre>
+<p>运行结果：</p>
+<pre><code>写入文件路径为：C:\Users\wmh\Desktop\nodejs\demo.txt
+打开了,触发open 3
+触发ready
+写入结束，触发close
+</code></pre>
+<h2 id="fs-Stats-类"><a href="#fs-Stats-类" class="headerlink" title="fs.Stats 类"></a>fs.Stats 类</h2><p>从 fs.stat()、fs.lstat() 和 fs.fstat() 及其同步的方法返回的对象都属于fs.Stats 类, 对象提供了关于文件的信息：</p>
+<pre><code>Stats &#123;
+  dev: 1217250464,
+  mode: 33206,
+  nlink: 1,
+  uid: 0,
+  gid: 0,
+  rdev: 0,
+  blksize: undefined,
+  ino: 1970324836979001,
+  size: 264,
+  blocks: undefined,
+  atimeMs: 1571293841813.9216,
+  mtimeMs: 1571293801942.3247,
+  ctimeMs: 1571293801942.3247,
+  birthtimeMs: 1571220882907.5747,
+  atime: 2019-10-17T06:30:41.814Z,
+  mtime: 2019-10-17T06:30:01.942Z,
+  ctime: 2019-10-17T06:30:01.942Z,
+  birthtime: 2019-10-16T10:14:42.908Z &#125;
+  
+</code></pre>
+<p>上图结果为Stats类型下的属性，还有一些方法：</p>
+<pre><code>stats.isBlockDevice() #如果 fs.Stats 对象描述块设备，则返回 true。
+
+stats.isCharacterDevice() #如果 fs.Stats 对象描述字符设备，则返回 true。
+
+stats.isDirectory()  #如果 fs.Stats 对象描述文件系统目录，则返回 true。
+
+stats.isFile() #如果 fs.Stats 对象描述常规文件，则返回 true。
+
+stats.isFIFO() #如果 fs.Stats 对象描述先进先出（FIFO）管道，则返回 true。
+
+stats.isSocket() #如果 fs.Stats 对象描述套接字，则返回 true。
+
+stats.isSymbolicLink() #如果 fs.Stats 对象描述符号链接，则返回 true。此方法仅在使用 fs.lstat() 时有效。
+</code></pre>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://javascript.ruanyifeng.com/nodejs/fs.html">fs 模块– JavaScript 标准参考教程（alpha）</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/note/" rel="tag"># note</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Nodejs%E7%B3%BB%E5%88%97-7-Buffer%E6%A8%A1%E5%9D%97/" rel="prev" title="Nodejs系列-7-Buffer模块">
+                  <i class="fa fa-chevron-left"></i> Nodejs系列-7-Buffer模块
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Nodejs%E7%B3%BB%E5%88%97-9-path%E6%A8%A1%E5%9D%97/" rel="next" title="Nodejs系列-9-path模块">
+                  Nodejs系列-9-path模块 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMH</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://static.wangminghuan.cn/cdn/animejs@3.2.1/anime.min.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://static.wangminghuan.cn/cdn/hexo-generator-searchdb/search.js"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

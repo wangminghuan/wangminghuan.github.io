@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/fontawesome@5.15.3/all.min.css">
+  <link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/animejs@3.2.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wangminghuan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="总流程一个 URL 变成一个屏幕上显示的网页的流程如下：  浏览器首先使用 HTTP 协议或者 HTTPS 协议，向服务端请求页面； 把请求回来的 HTML 代码经过解析，构建成 DOM 树； 计算 DOM 树上的 CSS 属性； 最后根据 CSS 属性对元素逐个进行渲染，得到内存中的位图； 一个可选的步骤是对位图进行合成，这会极大地增加后续绘制的速度； 合成之后，再绘制到界面上。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学前端 - 浏览器部分-工作流程-请求">
+<meta property="og:url" content="https://wangminghuan.github.io/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-%E6%B5%8F%E8%A7%88%E5%99%A8%E9%83%A8%E5%88%86-%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B-%E8%AF%B7%E6%B1%82/index.html">
+<meta property="og:site_name" content="WMH&#39;s Blog">
+<meta property="og:description" content="总流程一个 URL 变成一个屏幕上显示的网页的流程如下：  浏览器首先使用 HTTP 协议或者 HTTPS 协议，向服务端请求页面； 把请求回来的 HTML 代码经过解析，构建成 DOM 树； 计算 DOM 树上的 CSS 属性； 最后根据 CSS 属性对元素逐个进行渲染，得到内存中的位图； 一个可选的步骤是对位图进行合成，这会极大地增加后续绘制的速度； 合成之后，再绘制到界面上。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wangminghuan.github.io/6-1.jpg">
+<meta property="og:image" content="https://wangminghuan.github.io/6-2.png">
+<meta property="og:image" content="https://wangminghuan.github.io/6-3.png">
+<meta property="og:image" content="https://wangminghuan.github.io/6-4.jpg">
+<meta property="og:image" content="https://wangminghuan.github.io/6-5.png">
+<meta property="og:image" content="https://wangminghuan.github.io/6-6.png">
+<meta property="article:published_time" content="2019-06-01T08:00:00.000Z">
+<meta property="article:modified_time" content="2022-05-17T10:04:10.913Z">
+<meta property="article:author" content="WMH">
+<meta property="article:tag" content="浏览器">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wangminghuan.github.io/6-1.jpg">
+
+
+<link rel="canonical" href="https://wangminghuan.github.io/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-%E6%B5%8F%E8%A7%88%E5%99%A8%E9%83%A8%E5%88%86-%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B-%E8%AF%B7%E6%B1%82/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wangminghuan.github.io/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-%E6%B5%8F%E8%A7%88%E5%99%A8%E9%83%A8%E5%88%86-%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B-%E8%AF%B7%E6%B1%82/","path":"重学前端-浏览器部分-工作流程-请求/","title":"重学前端 - 浏览器部分-工作流程-请求"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>重学前端 - 浏览器部分-工作流程-请求 | WMH's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WMH's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-主页"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>主页</a></li>
+        <li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-分类"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E6%B5%81%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">总流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE"><span class="nav-number">2.</span> <span class="nav-text">网络协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%83%E5%B1%82%E7%BB%93%E6%9E%84"><span class="nav-number">2.1.</span> <span class="nav-text">七层结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E5%B1%82%E7%BB%93%E6%9E%84"><span class="nav-number">2.2.</span> <span class="nav-text">四层结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94%E5%B1%82%E7%BB%93%E6%9E%84"><span class="nav-number">2.3.</span> <span class="nav-text">五层结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94%E5%9B%BE"><span class="nav-number">2.4.</span> <span class="nav-text">对比图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-%E5%8D%8F%E8%AE%AE"><span class="nav-number">3.</span> <span class="nav-text">HTTP 协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95"><span class="nav-number">3.1.</span> <span class="nav-text">1 请求方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%8A%B6%E6%80%81%E7%A0%81"><span class="nav-number">3.2.</span> <span class="nav-text">2 状态码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-HTTP-%E5%A4%B4"><span class="nav-number">3.3.</span> <span class="nav-text">3 HTTP 头</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-HTTP-Request-Body"><span class="nav-number">3.4.</span> <span class="nav-text">4 HTTP Request Body</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-HTTPS"><span class="nav-number">3.5.</span> <span class="nav-text">5 HTTPS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-HTTP-2"><span class="nav-number">3.6.</span> <span class="nav-text">6 HTTP 2</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WMH"
+      src="/images/avatar2.png">
+  <p class="site-author-name" itemprop="name">WMH</p>
+  <div class="site-description" itemprop="description">just code it</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wangminghuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wangminghuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:m.h.wang@foxmail.com" title="E-Mail → mailto:m.h.wang@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weblog.wangminghuan.cn/" title="WebSite → https:&#x2F;&#x2F;weblog.wangminghuan.cn" rel="noopener" target="_blank"><i class="fa fa-book fa-fw"></i>WebSite</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/1657970003?topnav=1&wvr=6&topsug=1&is_all=1" title="微博 → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;1657970003?topnav&#x3D;1&amp;wvr&#x3D;6&amp;topsug&#x3D;1&amp;is_all&#x3D;1" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>微博</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-%E6%B5%8F%E8%A7%88%E5%99%A8%E9%83%A8%E5%88%86-%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B-%E8%AF%B7%E6%B1%82/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.png">
+      <meta itemprop="name" content="WMH">
+      <meta itemprop="description" content="just code it">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WMH's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          重学前端 - 浏览器部分-工作流程-请求
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-06-01 08:00:00" itemprop="dateCreated datePublished" datetime="2019-06-01T08:00:00+00:00">2019-06-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-05-17 10:04:10" itemprop="dateModified" datetime="2022-05-17T10:04:10+00:00">2022-05-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">重学前端</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="总流程"><a href="#总流程" class="headerlink" title="总流程"></a>总流程</h2><p>一个 URL 变成一个屏幕上显示的网页的流程如下：</p>
+<ol>
+<li>浏览器首先使用 HTTP 协议或者 HTTPS 协议，向服务端请求页面；</li>
+<li>把请求回来的 HTML 代码经过解析，构建成 DOM 树；</li>
+<li>计算 DOM 树上的 CSS 属性；</li>
+<li>最后根据 CSS 属性对元素逐个进行渲染，得到内存中的位图；</li>
+<li>一个可选的步骤是对位图进行合成，这会极大地增加后续绘制的速度；</li>
+<li>合成之后，再绘制到界面上。<span id="more"></span></li>
+</ol>
+<p><img src="/6-1.jpg"></p>
+<p>从 HTTP 请求回来，就产生了流式的数据，后续的 DOM 树构建、CSS 计算、渲染、合成、绘制，都是尽可能地流式处理前一步的产出：即不需要等到上一步骤完全结束，就开始处理上一步的输出，这样我们在浏览网页时，才会看到逐步出现的页面。</p>
+<h2 id="网络协议"><a href="#网络协议" class="headerlink" title="网络协议"></a>网络协议</h2><h3 id="七层结构"><a href="#七层结构" class="headerlink" title="七层结构"></a>七层结构</h3><p>为了使不同计算机厂家生产的计算机能够相互通信，以便在更大的范围内建立计算机网络，国际标准化组织（ISO）在1978年提出了“开放系统互联参考模型”，即著名的OSI/RM模型。它将计算机网络体系结构的通信协议划分为七层。  </p>
+<h3 id="四层结构"><a href="#四层结构" class="headerlink" title="四层结构"></a>四层结构</h3><p>但是由于OSI参考模型的过于庞大、复杂，所以出现了其他模型：TCP/IP协议栈是美国国防部高级研究计划局计算机网和其后继因特网使用的参考模型，并最终成为应用最广泛的模型。</p>
+<h3 id="五层结构"><a href="#五层结构" class="headerlink" title="五层结构"></a>五层结构</h3><p>五层结构只是OSI和TCP/IP的综合，实际应用还是TCP/IP的四层结构。为了方便可以把下两层称为网络接口层。</p>
+<h3 id="对比图"><a href="#对比图" class="headerlink" title="对比图"></a>对比图</h3><p><img src="/6-2.png"></p>
+<p><img src="/6-3.png"></p>
+<h2 id="HTTP-协议"><a href="#HTTP-协议" class="headerlink" title="HTTP 协议"></a>HTTP 协议</h2><p>因特网本身是基于TCP/IP模型的。用网络术语来说的话，HTTP(超文本传输协议)协议位于TCP的上层，是属于应用层的协议。HTTP 是纯粹的文本协议，它是规定了使用 TCP 协议来传输文本格式的一个应用层协议。HTTP协议大致分为以下部分：<br><img src="/6-4.jpg"></p>
+<h3 id="1-请求方法"><a href="#1-请求方法" class="headerlink" title="1 请求方法"></a>1 请求方法</h3><p>http请求方法标识此次 HTTP 请求希望执行的操作类型。方法有以下几种定义：</p>
+<ul>
+<li>GET </li>
+<li>POST</li>
+<li>HEAD</li>
+<li>PUT</li>
+<li>5DELECT</li>
+<li>CONNECT</li>
+<li>OPTIONS</li>
+<li>TRACE</li>
+</ul>
+<p>浏览器通过地址栏访问页面都是 GET 方法。表单提交产生 POST 方法。  </p>
+<p>HEAD 则是跟 GET 类似，只返回请求头，多数由 JavaScript 发起。  </p>
+<p>PUT 和 DELETE 分别表示添加资源和删除资源，但是实际上这只是语义上的一种约定，并没有强约束。  </p>
+<p>CONNECT 现在多用于 HTTPS 和 WebSocket。</p>
+<p>PUT 和 DELETE 分别表示添加资源和删除资源，但是实际上这只是语义上的一种约定，并没有强约束。</p>
+<p>OPTIONS 和 TRACE 一般用于调试，多数线上服务都不支持。</p>
+<h3 id="2-状态码"><a href="#2-状态码" class="headerlink" title="2 状态码"></a>2 状态码</h3><ol>
+<li>对我们前端来说，1xx 系列的状态码是非常陌生的，原因是 1xx 的状态被浏览器 http 库直接处理掉了，不会让上层应用知晓。</li>
+<li>2xx 系列的状态最熟悉的就是 200，这通常是网页请求成功的标志，也是大家最喜欢的状态码。</li>
+<li>3xx 系列比较复杂，301 和 302 两个状态表示当前资源已经被转移，只不过一个是永久性转移，一个是临时性转移。实际上 301 更接近于一种报错，提示客户端下次别来了。304 又是一个每个前端必知必会的状态，产生这个状态的前提是：客户端本地已经有缓存的版本，并且在 Request 中告诉了服务端，当服务端通过时间或者 tag，发现没有更新的时候，就会返回一个不含 body 的 304 状态。</li>
+</ol>
+<h3 id="3-HTTP-头"><a href="#3-HTTP-头" class="headerlink" title="3 HTTP 头"></a>3 HTTP 头</h3><p>HTTP 头可以看作一个键值对。</p>
+<p>先来看看 Request Header:</p>
+<p><img src="/6-5.png"></p>
+<p>接下来看一下 Response Header:</p>
+<p><img src="/6-6.png"></p>
+<h3 id="4-HTTP-Request-Body"><a href="#4-HTTP-Request-Body" class="headerlink" title="4 HTTP Request Body"></a>4 HTTP Request Body</h3><p>http 请求的 body 是比较自由的，只要浏览器端发送的 body 服务端认可就可以了。一些常见的 body 格式是：</p>
+<ul>
+<li>application/json</li>
+<li>application/x-www-form-urlencoded</li>
+<li>multipart/form-data</li>
+<li>text/xml</li>
+</ul>
+<p>我们使用 html 的 form 标签提交产生的 html 请求，默认会产生 application/x-www-form-urlencoded 的数据格式，当有文件上传时，则会使用 multipart/form-data。</p>
+<h3 id="5-HTTPS"><a href="#5-HTTPS" class="headerlink" title="5 HTTPS"></a>5 HTTPS</h3><p>HTTPS 有两个作用，一是确定请求的目标服务端身份，二是保证传输的数据不会被网络中间节点窃听或者篡改。</p>
+<p>HTTPS 是使用加密通道来传输 HTTP 的内容。但是 HTTPS 首先与服务端建立一条 TLS 加密通道。TLS 构建于 TCP 协议之上，它实际上是对传输的内容做一次加密，所以从传输内容上看，HTTPS 跟 HTTP 没有任何区别。</p>
+<h3 id="6-HTTP-2"><a href="#6-HTTP-2" class="headerlink" title="6 HTTP 2"></a>6 HTTP 2</h3><p>HTTP 2.0 最大的改进有两点，一是支持服务端推送，二是支持 TCP 连接复用。HTTP1.X的连接无法复用，这就会导致每次请求都经历三次握手和慢启动。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/hjxU-rjr-ISk0rzeQHAIeA">一文读懂HTTP/2 及 HTTP/3特性</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" rel="tag"># 浏览器</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-CSS%E9%83%A8%E5%88%86-CSS%E9%A2%9C%E8%89%B2%E7%9A%84%E7%BB%98%E5%88%B6/" rel="prev" title="重学前端 - CSS部分-颜色的绘制">
+                  <i class="fa fa-chevron-left"></i> 重学前端 - CSS部分-颜色的绘制
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-%E6%B5%8F%E8%A7%88%E5%99%A8%E9%83%A8%E5%88%86-%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B-css%E6%B8%B2%E6%9F%93/" rel="next" title="重学前端 - 浏览器部分-工作流程-css渲染">
+                  重学前端 - 浏览器部分-工作流程-css渲染 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMH</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://static.wangminghuan.cn/cdn/animejs@3.2.1/anime.min.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://static.wangminghuan.cn/cdn/hexo-generator-searchdb/search.js"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

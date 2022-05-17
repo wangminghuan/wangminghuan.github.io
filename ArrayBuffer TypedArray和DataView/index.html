@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/fontawesome@5.15.3/all.min.css">
+  <link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/animejs@3.2.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wangminghuan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="概述ArrayBuffer对象、TypedArray视图和DataView视图是 JavaScript 操作二进制数据的一个接口。这些对象早就存在，属于独立的规格（2011 年 2 月发布），ES6 将它们纳入了 ECMAScript 规格，并且增加了新的方法。它们都是以数组的语法处理二进制数据，所以统称为二进制数组。 这个接口的原始设计目的，与 WebGL 项目有关。浏览器与显卡之间的大量通信都">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ArrayBuffer TypedArray和DataView">
+<meta property="og:url" content="https://wangminghuan.github.io/ArrayBuffer%20TypedArray%E5%92%8CDataView/index.html">
+<meta property="og:site_name" content="WMH&#39;s Blog">
+<meta property="og:description" content="概述ArrayBuffer对象、TypedArray视图和DataView视图是 JavaScript 操作二进制数据的一个接口。这些对象早就存在，属于独立的规格（2011 年 2 月发布），ES6 将它们纳入了 ECMAScript 规格，并且增加了新的方法。它们都是以数组的语法处理二进制数据，所以统称为二进制数组。 这个接口的原始设计目的，与 WebGL 项目有关。浏览器与显卡之间的大量通信都">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wangminghuan.github.io/ArrayBuffer%20TypedArray%E5%92%8CDataView/1.png">
+<meta property="og:image" content="https://wangminghuan.github.io/ArrayBuffer%20TypedArray%E5%92%8CDataView/2.png">
+<meta property="og:image" content="https://wangminghuan.github.io/ArrayBuffer%20TypedArray%E5%92%8CDataView/3.png">
+<meta property="og:image" content="https://wangminghuan.github.io/ArrayBuffer%20TypedArray%E5%92%8CDataView/4.png">
+<meta property="og:image" content="https://wangminghuan.github.io/ArrayBuffer%20TypedArray%E5%92%8CDataView/4.png">
+<meta property="og:image" content="https://wangminghuan.github.io/ArrayBuffer%20TypedArray%E5%92%8CDataView/upload1.jpg">
+<meta property="og:image" content="https://wangminghuan.github.io/ArrayBuffer%20TypedArray%E5%92%8CDataView/upload2.jpg">
+<meta property="og:image" content="https://wangminghuan.github.io/ArrayBuffer%20TypedArray%E5%92%8CDataView/5.png">
+<meta property="og:image" content="https://wangminghuan.github.io/ArrayBuffer%20TypedArray%E5%92%8CDataView/audio1.jpg">
+<meta property="og:image" content="https://wangminghuan.github.io/ArrayBuffer%20TypedArray%E5%92%8CDataView/audio2.jpg">
+<meta property="og:image" content="https://wangminghuan.github.io/ArrayBuffer%20TypedArray%E5%92%8CDataView/6.png">
+<meta property="article:published_time" content="2019-09-12T17:29:21.000Z">
+<meta property="article:modified_time" content="2022-05-17T10:04:10.793Z">
+<meta property="article:author" content="WMH">
+<meta property="article:tag" content="二进制数据">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wangminghuan.github.io/ArrayBuffer%20TypedArray%E5%92%8CDataView/1.png">
+
+
+<link rel="canonical" href="https://wangminghuan.github.io/ArrayBuffer%20TypedArray%E5%92%8CDataView/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wangminghuan.github.io/ArrayBuffer%20TypedArray%E5%92%8CDataView/","path":"ArrayBuffer TypedArray和DataView/","title":"ArrayBuffer TypedArray和DataView"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ArrayBuffer TypedArray和DataView | WMH's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WMH's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-主页"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>主页</a></li>
+        <li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-分类"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B0%E7%BB%84%E7%9A%84%E7%BB%84%E6%88%90"><span class="nav-number">2.</span> <span class="nav-text">二进制数组的组成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ArrayBuffer-%E5%AF%B9%E8%B1%A1"><span class="nav-number">2.1.</span> <span class="nav-text">ArrayBuffer 对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TypedArray-%E8%A7%86%E5%9B%BE"><span class="nav-number">2.2.</span> <span class="nav-text">TypedArray 视图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DataView-%E8%A7%86%E5%9B%BE"><span class="nav-number">2.3.</span> <span class="nav-text">DataView 视图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ArrayBuffer-%E4%B8%8E%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E4%BA%92%E7%9B%B8%E8%BD%AC%E6%8D%A2"><span class="nav-number">2.4.</span> <span class="nav-text">ArrayBuffer 与字符串的互相转换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B0%E7%BB%84%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">二进制数组的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Ajax"><span class="nav-number">3.1.</span> <span class="nav-text">Ajax</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fetch"><span class="nav-number">3.2.</span> <span class="nav-text">Fetch</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%A9%E5%B1%95"><span class="nav-number">3.2.1.</span> <span class="nav-text">扩展</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WebSocket"><span class="nav-number">3.3.</span> <span class="nav-text">WebSocket</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Canvas"><span class="nav-number">3.4.</span> <span class="nav-text">Canvas</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#File-API"><span class="nav-number">3.5.</span> <span class="nav-text">File API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SharedArrayBuffer-%E5%92%8C-Atomics-%E5%AF%B9%E8%B1%A1"><span class="nav-number">3.6.</span> <span class="nav-text">SharedArrayBuffer 和 Atomics 对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Blob%E5%AF%B9%E8%B1%A1"><span class="nav-number">4.</span> <span class="nav-text">Blob对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="nav-number">4.1.</span> <span class="nav-text">构造函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#File%E5%AF%B9%E8%B1%A1"><span class="nav-number">5.</span> <span class="nav-text">File对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#FileReader"><span class="nav-number">5.1.</span> <span class="nav-text">FileReader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#URL-createObjectURL"><span class="nav-number">5.2.</span> <span class="nav-text">URL.createObjectURL</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="nav-number">6.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WMH"
+      src="/images/avatar2.png">
+  <p class="site-author-name" itemprop="name">WMH</p>
+  <div class="site-description" itemprop="description">just code it</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wangminghuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wangminghuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:m.h.wang@foxmail.com" title="E-Mail → mailto:m.h.wang@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weblog.wangminghuan.cn/" title="WebSite → https:&#x2F;&#x2F;weblog.wangminghuan.cn" rel="noopener" target="_blank"><i class="fa fa-book fa-fw"></i>WebSite</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/1657970003?topnav=1&wvr=6&topsug=1&is_all=1" title="微博 → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;1657970003?topnav&#x3D;1&amp;wvr&#x3D;6&amp;topsug&#x3D;1&amp;is_all&#x3D;1" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>微博</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/ArrayBuffer%20TypedArray%E5%92%8CDataView/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.png">
+      <meta itemprop="name" content="WMH">
+      <meta itemprop="description" content="just code it">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WMH's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ArrayBuffer TypedArray和DataView
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-09-12 17:29:21" itemprop="dateCreated datePublished" datetime="2019-09-12T17:29:21+00:00">2019-09-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-05-17 10:04:10" itemprop="dateModified" datetime="2022-05-17T10:04:10+00:00">2022-05-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>ArrayBuffer对象、TypedArray视图和DataView视图是 JavaScript 操作二进制数据的一个接口。这些对象早就存在，属于独立的规格（2011 年 2 月发布），ES6 将它们纳入了 ECMAScript 规格，并且增加了新的方法。它们都是以数组的语法处理二进制数据，所以统称为二进制数组。</p>
+<p>这个接口的原始设计目的，与 WebGL 项目有关。浏览器与显卡之间的大量通信都是通过二进制数据完成的，而传统的文本格式是32位整数，为了解决数据转化的效率低下问题，使得二者可以直接通过二进制进行通信，二进制数组就是在这种背景下诞生的。它很像 C 语言的数组，允许开发者以数组下标的形式，直接操作内存。</p>
+<span id="more"></span>
+
+<h2 id="二进制数组的组成"><a href="#二进制数组的组成" class="headerlink" title="二进制数组的组成"></a>二进制数组的组成</h2><p>由三类对象组成：  </p>
+<ul>
+<li><p>ArrayBuffer对象：代表内存之中的一段二进制数据，可以存放多种类型的数据。不同数据有不同的存储方式，这就叫做“视图”。可以通过“视图”进行操作。“视图”部署了数组接口，这意味着，可以用数组的方法操作内存。</p>
+</li>
+<li><p>TypedArray视图：共包括 9 种类型的视图，比如Uint8Array（无符号 8 位整数）数组视图, Int16Array（16 位整数）数组视图, Float32Array（32 位浮点数）数组视图等等。</p>
+</li>
+<li><p>DataView视图：可以自定义复合格式的视图，比如第一个字节是 Uint8（无符号 8 位整数）、第二、三个字节是 Int16（16 位整数）、第四个字节开始是 Float32（32 位浮点数）等等，此外还可以自定义字节序。</p>
+</li>
+</ul>
+<p>简单说，ArrayBuffer对象代表原始的二进制数据，TypedArray视图用来读写简单类型的二进制数据，DataView视图用来读写复杂类型的二进制数据</p>
+<h3 id="ArrayBuffer-对象"><a href="#ArrayBuffer-对象" class="headerlink" title="ArrayBuffer 对象"></a>ArrayBuffer 对象</h3><p>ArrayBuffer对象代表储存二进制数据的一段内存，它不能直接读写，只能通过视图（TypedArray视图和DataView视图)来读写，视图的作用是以指定格式解读二进制数据。</p>
+<p>ArrayBuffer也是一个构造函数，可以分配一段可以存放数据的连续内存区域。</p>
+<p><img src="1.png"></p>
+<p>可以看到，ArrayBuffer构造函数的参数是所需要的内存大小（单位字节）。</p>
+<h3 id="TypedArray-视图"><a href="#TypedArray-视图" class="headerlink" title="TypedArray 视图"></a>TypedArray 视图</h3><p>TypedArray视图一共包括 9 种类型，每一种视图都是一种构造函数（接受一个ArrayBuffer对象作为参数）: </p>
+<ul>
+<li>Int8Array：8 位有符号整数，长度 1 个字节。</li>
+<li>Uint8Array：8 位无符号整数，长度 1 个字节。</li>
+<li>Uint8ClampedArray：8 位无符号整数，长度 1 个字节，溢出处理不同。</li>
+<li>Int16Array：16 位有符号整数，长度 2 个字节。</li>
+<li>Uint16Array：16 位无符号整数，长度 2 个字节。</li>
+<li>Int32Array：32 位有符号整数，长度 4 个字节。</li>
+<li>Uint32Array：32 位无符号整数，长度 4 个字节。</li>
+<li>Float32Array：32 位浮点数，长度 4 个字节。</li>
+<li>Float64Array：64 位浮点数，长度 8 个字节。</li>
+</ul>
+<p>这 9 个构造函数生成的数组，统称为TypedArray视图。它们很像普通数组，都有length属性，都能用方括号运算符（[]）获取单个元素，所有数组的方法，在它们上面都能使用。普通数组与 TypedArray 数组的差异主要在以下方面: </p>
+<ul>
+<li>TypedArray 数组的所有成员，都是同一种类型。</li>
+<li>TypedArray 数组的成员是连续的，不会有空位。</li>
+<li>TypedArray 数组成员的默认值为 0。比如，new Array(10)返回一个普通数组，里面没有任何成员，只是 10 个空位；new Uint8Array(10)返回一个 TypedArray 数组，里面 10 个成员都是 0。</li>
+<li>TypedArray 数组只是一层视图，本身不储存数据，它的数据都储存在底层的ArrayBuffer对象之中，要获取底层对象必须使用buffer属性。</li>
+</ul>
+<p>譬如我们读取一个文件（文本文件）的二进制数据</p>
+<pre><code>  document.getElementById(&quot;select-file&quot;).addEventListener(&quot;change&quot;,(e)=&gt;&#123;
+        const files=e.target.files[0];
+        let fileReader = new FileReader();
+        fileReader.readAsArrayBuffer(files)
+        fileReader.onload = function () &#123;
+              let arrayBuffer = this.result;
+              console.log(arrayBuffer)
+              let uInt8data=new Uint8Array(arrayBuffer);
+              console.log(uInt8data)
+              console.log(uInt8data.buffer)
+        &#125;
+  &#125;)
+</code></pre>
+<p>结果如下：</p>
+<p><img src="2.png"></p>
+<h3 id="DataView-视图"><a href="#DataView-视图" class="headerlink" title="DataView 视图"></a>DataView 视图</h3><p>DataView视图提供更多操作选项，而且支持设定字节序。本来，在设计目的上，ArrayBuffer对象的各种TypedArray视图，是用来向网卡、声卡之类的本机设备传送数据，所以使用本机的字节序就可以了；而DataView视图的设计目的，是用来处理网络设备传来的数据，所以大端字节序或小端字节序是可以自行设定的。</p>
+<p>DataView视图支持的类型共8种，除不支持 Uint8ClampedArray 类型外，其他与TypedArray视图相同</p>
+<h3 id="ArrayBuffer-与字符串的互相转换"><a href="#ArrayBuffer-与字符串的互相转换" class="headerlink" title="ArrayBuffer 与字符串的互相转换"></a>ArrayBuffer 与字符串的互相转换</h3><p>ArrayBuffer 和字符串的相互转换，使用原生 TextEncoder 和 TextDecoder 方法:</p>
+<pre><code>  function arrayBufferToString(buffer)&#123;
+    const decoder = new TextDecoder(&#39;utf8&#39;)
+    return decoder.decode(buffer);//ArrayBuffer | Uint8Array | Int8Array | Uint16Array | Int16Array | Uint32Array | Int32Array,
+  &#125;
+  function stringToArrayBuffer(input)&#123;
+    const encoder = new TextEncoder()
+    const view = encoder.encode(input);//string
+    return view.buffer;
+  &#125;
+</code></pre>
+<p>我们转换上一步得到的文本文件，结果如下：</p>
+<p><img src="3.png"></p>
+<p>可以看到通过转换我们可以读取到文件中的内容（文本文件），而对于非utf8编码方式文件，得到的则是乱码。</p>
+<p>对于ArrayBuffer TypedArray 和DataView 更详细的用法可以参考阮一峰的ES6教程（参考文章1）</p>
+<h2 id="二进制数组的应用"><a href="#二进制数组的应用" class="headerlink" title="二进制数组的应用"></a>二进制数组的应用</h2><p>大量的 Web API 用到了ArrayBuffer对象和它的视图对象。</p>
+<h3 id="Ajax"><a href="#Ajax" class="headerlink" title="Ajax"></a>Ajax</h3><p>XHR第一版，服务器通过 AJAX 操作只能返回文本数据，即responseType属性默认为text。XMLHttpRequest第二版XHR2允许服务器返回二进制数据，这时分成两种情况。如果明确知道返回的二进制数据类型，可以把返回类型（responseType）设为arraybuffer：</p>
+<pre><code> let xhr = new XMLHttpRequest();
+  xhr.open(&#39;GET&#39;, &quot;http://minghuan-image.test.upcdn.net/test/zeus-3.0.txt&quot;);
+  xhr.responseType = &#39;arraybuffer&#39;;
+
+  xhr.onload = function () &#123;
+    let arrayBuffer = xhr.response;
+    console.log(arrayBuffer)
+  &#125;;
+
+  xhr.send();
+</code></pre>
+<p>运行结果：<br><img src="4.png"></p>
+<p>responseType支持以下几个参数：</p>
+<ul>
+<li>arraybuffer:    ArrayBuffer对象</li>
+<li>blob:    Blob对象</li>
+<li>document:    Document对象</li>
+<li>json: JS 对象，解析得到的从服务器返回来的JSON字符串</li>
+<li>text:    DOMString(默认)</li>
+</ul>
+<h3 id="Fetch"><a href="#Fetch" class="headerlink" title="Fetch"></a>Fetch</h3><p>之前文章<a target="_blank" rel="noopener" href="https://blog.mhwang.club/Fetch-and-XMLHttpRequest/">Fetch-and-XMLHttpRequest</a>中有提到过：Fetch得到的Response 下共有5个方法，其中包含arrayBuffer方法，所以通过Fetch也可以得到ArrayBuffer数据:</p>
+<pre><code> fetch(&quot;http://minghuan-image.test.upcdn.net/test/zeus-3.0.txt&quot;).then((res)=&gt;&#123;
+    return  res.arrayBuffer()
+  &#125;).then((data)=&gt;&#123;
+    console.log(data)
+  &#125;)
+</code></pre>
+<p>运行结果：</p>
+<p><img src="4.png"></p>
+<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>开发中遇到一个接口上传，不同于常规接受FormData，接口只接受二进制数据，代码如下：</p>
+<p>input表单</p>
+<pre><code>  &lt;input type=&quot;file&quot; @change=&quot;handleChange&quot;&gt;
+</code></pre>
+<p>监听变化完成上传：</p>
+<pre><code>  handleChange (e) &#123;
+        const files = e.target.files[0];
+        var fileReader = new FileReader();
+        fileReader.readAsArrayBuffer(files);
+        fileReader.onload = function () &#123;
+          const _buffer = (this.result)
+          fetch(&quot;http://xxx/upload&quot;, &#123;
+            body: _buffer,
+            method: &#39;POST&#39;,
+          &#125;).then((res) =&gt; &#123;
+            return res.json()
+          &#125;).then((data) =&gt; &#123;
+            console.log(data)
+          &#125;)
+        &#125;
+      &#125;
+</code></pre>
+<p>执行成功时的请求与返回截图如下:</p>
+<p><img src="upload1.jpg"><br><img src="upload2.jpg"></p>
+<h3 id="WebSocket"><a href="#WebSocket" class="headerlink" title="WebSocket"></a>WebSocket</h3><p>WebSocket可以通过ArrayBuffer，发送或接收二进制数据。</p>
+<pre><code>let socket = new WebSocket(&#39;ws://127.0.0.1:8081&#39;);
+socket.binaryType = &#39;arraybuffer&#39;;
+
+// Wait until socket is open
+socket.addEventListener(&#39;open&#39;, function (event) &#123;
+  // Send binary data
+  const typedArray = new Uint8Array(4);
+  socket.send(typedArray.buffer);
+&#125;);
+
+// Receive binary data
+socket.addEventListener(&#39;message&#39;, function (event) &#123;
+  const arrayBuffer = event.data;
+  // ···
+&#125;);
+</code></pre>
+<h3 id="Canvas"><a href="#Canvas" class="headerlink" title="Canvas"></a>Canvas</h3><p>网页Canvas元素输出的二进制像素数据，就是 TypedArray 数组</p>
+<pre><code>const canvas = document.getElementById(&#39;myCanvas&#39;);
+const ctx = canvas.getContext(&#39;2d&#39;);
+const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+const uint8ClampedArray = imageData.data;
+console.log(uint8ClampedArray)
+</code></pre>
+<p>运行结果：</p>
+<p><img src="5.png"></p>
+<p>可以看到，它的视图类型是一种针对Canvas元素的专有类型Uint8ClampedArray。这个视图类型的特点，就是专门针对颜色，把每个字节解读为无符号的 8 位整数，即只能取值 0 ～ 255，而且发生运算的时候自动过滤高位溢出。这为图像处理带来了巨大的方便。</p>
+<h3 id="File-API"><a href="#File-API" class="headerlink" title="File API"></a>File API</h3><p>在本文第二部分涉及到的二进制数据，均为File API得到的，实际上我们读取文件后，通过内置的reader.readAsArrayBuffer方法可以轻易将文件转化为ArrayBuffer, 然后可以在此基础上做其他二进制操作。</p>
+<h3 id="SharedArrayBuffer-和-Atomics-对象"><a href="#SharedArrayBuffer-和-Atomics-对象" class="headerlink" title="SharedArrayBuffer 和 Atomics 对象"></a>SharedArrayBuffer 和 Atomics 对象</h3><p>日常用到的不多，本文不做表述，具体可访问参考文章1</p>
+<h2 id="Blob对象"><a href="#Blob对象" class="headerlink" title="Blob对象"></a>Blob对象</h2><p>Blob(Binary Large Object 二进制大对象)术语最初来自数据库，早期数据库因为要存储声音、图片、以及可执行程序等二进制数据对象所以给该类对象取名为Blob。 在Web领域，Blob被定义为包含只读数据的类文件对象。Blob 表示的不一定是JavaScript原生格式的数据。File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。</p>
+<h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3><p>Blob() 构造函数返回一个新的 Blob 对象：</p>
+<p><code>new Blob( array, options )</code></p>
+<ul>
+<li><p>array 是一个由ArrayBuffer, ArrayBufferView, Blob, DOMString 等对象构成的 Array ，或者其他类似对象的混合体，它将会被放进 Blob。DOMStrings会被编码为UTF-8。</p>
+</li>
+<li><p>options 是一个可选的BlobPropertyBag字典，它可能会指定如下两个属性：<br>type，默认值为 “”，它代表了将会被放入到blob中的数组内容的MIME类型。<br>endings，默认值为”transparent”，用于指定包含行结束符\n的字符串如何被写入。它是以下两个值中的一个：”native”，代表行结束符会被更改为适合宿主操作系统文件系统的换行符，或者 “transparent”，代表会保持blob中保存的结束符不变。</p>
+<pre><code>var debug = &#123;hello: &quot;world&quot;&#125;;
+var blob = new Blob([JSON.stringify(debug, null, 2)], &#123;type : &#39;application/json&#39;&#125;);
+console.log(blob)
+</code></pre>
+</li>
+</ul>
+<p>我们也可以将本地选取的音频，直接转化为url在页面中播放</p>
+<p> input表单与audio控件</p>
+<pre><code>  &lt;input type=&quot;file&quot; @change=&quot;handleChange&quot;&gt;
+  &lt;audio :src=&quot;blobUrl&quot; controls=&quot;controls&quot;&gt;&lt;/audio&gt;
+</code></pre>
+<p><img src="audio1.jpg"></p>
+<p>方式一：通过FileReader读取文件，获取文件二进制数据，传入Blob对象，创建blob实例，创建URL：</p>
+<pre><code>  handleChange (e) &#123;
+      const target=e.target.files[0]
+      const fileReader = new FileReader();
+      fileReader.readAsArrayBuffer(target);
+      fileReader.onload = () =&gt; &#123;
+        const arrayBuffer = fileReader.result;
+        const unit8=new Uint8Array(arrayBuffer)
+        let _blob = new Blob([unit8],&#123;
+          type: &#39;audio/mp3&#39; 
+        &#125;)
+      this.blobUrl = URL.createObjectURL(_blob);
+    &#125;
+  &#125;
+</code></pre>
+<p>方式二：直接将文件传入<code>URL.createObjectURL</code>中,生成URL</p>
+<pre><code>  handleChange (e) &#123;
+    const target=e.target.files[0]
+    this.blobUrl = URL.createObjectURL(target);
+  &#125;
+</code></pre>
+<p><img src="audio2.jpg"></p>
+<h2 id="File对象"><a href="#File对象" class="headerlink" title="File对象"></a>File对象</h2><p>文件（File）接口提供有关文件的信息，并允许网页中的 JavaScript 访问其内容。</p>
+<p>通常情况下， File 对象是来自用户在一个 <code>&lt;input&gt;</code> 元素上选择文件后返回的 FileList 对象,也可以是来自由拖放操作生成的 DataTransfer 对象，或者来自 HTMLCanvasElement 上的 mozGetAsFile() API。在Gecko中，特权代码可以创建代表任何本地文件的File对象，而无需用户交互。</p>
+<p>File 对象是特殊类型的 Blob，且可以用在任意的 Blob 类型的 context 中：比如说， </p>
+<ul>
+<li>FileReader()</li>
+<li>URL.createObjectURL()</li>
+<li>createImageBitmap()</li>
+<li>XMLHttpRequest.send() </li>
+</ul>
+<p>都可以接收 Blob 或 File 对象来进行对应处理。</p>
+<p>从Blob中读取内容的唯一方法是使用 FileReader(具体使用参照5.1介绍):</p>
+<pre><code>  var reader = new FileReader();
+  reader.readAsArrayBuffer(blob);
+  reader.onload = function (e) &#123;
+    let arrayBuffer = e.target.result;
+    console.log(arrayBuffer)
+  &#125;
+</code></pre>
+<p>运行结果：</p>
+<p><img src="6.png"> </p>
+<h3 id="FileReader"><a href="#FileReader" class="headerlink" title="FileReader"></a>FileReader</h3><p>FileReader对象允许Web应用程序异步读取存储在用户计算机上的文件（或原始数据缓冲区）的内容，使用 File 或 Blob 对象指定要读取的文件或数据。</p>
+<p>它有一下几个方法：</p>
+<ul>
+<li>FileReader.abort()：中止读取操作。在返回时，readyState属性为DONE。</li>
+<li>FileReader.readAsArrayBuffer()：开始读取指定的 Blob中的内容, 一旦完成, result 属性中保存的将是被读取文件的 ArrayBuffer 数据对象.</li>
+<li>FileReader.readAsBinaryString()：开始读取指定的Blob中的内容。一旦完成，result属性中将包含所读取文件的原始二进制数据。</li>
+<li>FileReader.readAsDataURL()：开始读取指定的Blob中的内容。一旦完成，result属性中将包含一个data: URL格式的字符串以表示所读取文件的内容。</li>
+<li>FileReader.readAsText()：开始读取指定的Blob中的内容。一旦完成，result属性中将包含一个字符串以表示所读取的文件内容。</li>
+</ul>
+<h3 id="URL-createObjectURL"><a href="#URL-createObjectURL" class="headerlink" title="URL.createObjectURL"></a>URL.createObjectURL</h3><p>URL.createObjectURL() 静态方法会创建一个 DOMString，其中包含一个表示参数中给出的对象的URL，该对象表示指定的 File 对象或 Blob 对象。</p>
+<p>得到的URL字符串可以用在html的任何可以使用url的地方，比如img的src ; audio/video的src和source标签等。</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ol>
+<li><a target="_blank" rel="noopener" href="http://es6.ruanyifeng.com/#docs/arraybuffer">阮一峰 ECMAScript 6 入门 之 ArrayBuffer</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Blob">MDN文档- Blob</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/File">MDN文档- File</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B0%E6%8D%AE/" rel="tag"># 二进制数据</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%95%B0%E6%8D%AE%E5%BA%93-IndexedDB/" rel="prev" title="浏览器数据库 IndexedDB">
+                  <i class="fa fa-chevron-left"></i> 浏览器数据库 IndexedDB
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/jenkins%E6%90%AD%E5%BB%BA%E5%89%8D%E7%AB%AF%E4%B8%8A%E7%BA%BF%E7%B3%BB%E7%BB%9F%E5%B0%8F%E8%AF%95/" rel="next" title="jenkins搭建前端上线系统小试">
+                  jenkins搭建前端上线系统小试 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMH</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://static.wangminghuan.cn/cdn/animejs@3.2.1/anime.min.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://static.wangminghuan.cn/cdn/hexo-generator-searchdb/search.js"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/fontawesome@5.15.3/all.min.css">
+  <link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/animejs@3.2.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wangminghuan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="概述MVC &#x2F; MVP &#x2F; MVVM 等软件领域的设计模式，相信大家就算不知道是什么，也听说过。对于这些设计模式，我们可以不知道，不了解，也不会影响日常的开发，但如果你想走的更远，这些是绕不过去的坎。前端作为软件行业的新兴领域，对这些设计模式在又该怎么理解，本文记录一下自己的理解，不一定都对，按需选用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MVC&#x2F;MVP&#x2F;MVVM的个人理解">
+<meta property="og:url" content="https://wangminghuan.github.io/MVC-MVP-MVVM%E7%9A%84%E4%B8%AA%E4%BA%BA%E7%90%86%E8%A7%A3/index.html">
+<meta property="og:site_name" content="WMH&#39;s Blog">
+<meta property="og:description" content="概述MVC &#x2F; MVP &#x2F; MVVM 等软件领域的设计模式，相信大家就算不知道是什么，也听说过。对于这些设计模式，我们可以不知道，不了解，也不会影响日常的开发，但如果你想走的更远，这些是绕不过去的坎。前端作为软件行业的新兴领域，对这些设计模式在又该怎么理解，本文记录一下自己的理解，不一定都对，按需选用。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wangminghuan.github.io/MVC-MVP-MVVM%E7%9A%84%E4%B8%AA%E4%BA%BA%E7%90%86%E8%A7%A3/6.png">
+<meta property="og:image" content="https://wangminghuan.github.io/MVC-MVP-MVVM%E7%9A%84%E4%B8%AA%E4%BA%BA%E7%90%86%E8%A7%A3/3.png">
+<meta property="og:image" content="https://wangminghuan.github.io/MVC-MVP-MVVM%E7%9A%84%E4%B8%AA%E4%BA%BA%E7%90%86%E8%A7%A3/8.png">
+<meta property="og:image" content="https://wangminghuan.github.io/MVC-MVP-MVVM%E7%9A%84%E4%B8%AA%E4%BA%BA%E7%90%86%E8%A7%A3/9.png">
+<meta property="og:image" content="https://wangminghuan.github.io/MVC-MVP-MVVM%E7%9A%84%E4%B8%AA%E4%BA%BA%E7%90%86%E8%A7%A3/1.jpg">
+<meta property="article:published_time" content="2021-08-26T16:28:03.000Z">
+<meta property="article:modified_time" content="2022-05-17T10:04:10.809Z">
+<meta property="article:author" content="WMH">
+<meta property="article:tag" content="MVC">
+<meta property="article:tag" content="MVVM">
+<meta property="article:tag" content="MVP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wangminghuan.github.io/MVC-MVP-MVVM%E7%9A%84%E4%B8%AA%E4%BA%BA%E7%90%86%E8%A7%A3/6.png">
+
+
+<link rel="canonical" href="https://wangminghuan.github.io/MVC-MVP-MVVM%E7%9A%84%E4%B8%AA%E4%BA%BA%E7%90%86%E8%A7%A3/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wangminghuan.github.io/MVC-MVP-MVVM%E7%9A%84%E4%B8%AA%E4%BA%BA%E7%90%86%E8%A7%A3/","path":"MVC-MVP-MVVM的个人理解/","title":"MVC/MVP/MVVM的个人理解"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>MVC/MVP/MVVM的个人理解 | WMH's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WMH's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-主页"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>主页</a></li>
+        <li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-分类"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6%E9%A2%86%E5%9F%9F%E7%9A%84%E5%8F%91%E5%B1%95%E5%8F%B2"><span class="nav-number">2.</span> <span class="nav-text">软件领域的发展史</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVC%E7%9A%84%E5%87%BA%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">MVC的出现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVP%E6%9D%A5%E4%BA%86"><span class="nav-number">4.</span> <span class="nav-text">MVP来了</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVVM%E7%9A%84%E6%97%B6%E4%BB%A3"><span class="nav-number">5.</span> <span class="nav-text">MVVM的时代</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E6%9D%9F%E8%AF%AD"><span class="nav-number">6.</span> <span class="nav-text">结束语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WMH"
+      src="/images/avatar2.png">
+  <p class="site-author-name" itemprop="name">WMH</p>
+  <div class="site-description" itemprop="description">just code it</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wangminghuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wangminghuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:m.h.wang@foxmail.com" title="E-Mail → mailto:m.h.wang@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weblog.wangminghuan.cn/" title="WebSite → https:&#x2F;&#x2F;weblog.wangminghuan.cn" rel="noopener" target="_blank"><i class="fa fa-book fa-fw"></i>WebSite</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/1657970003?topnav=1&wvr=6&topsug=1&is_all=1" title="微博 → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;1657970003?topnav&#x3D;1&amp;wvr&#x3D;6&amp;topsug&#x3D;1&amp;is_all&#x3D;1" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>微博</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/MVC-MVP-MVVM%E7%9A%84%E4%B8%AA%E4%BA%BA%E7%90%86%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.png">
+      <meta itemprop="name" content="WMH">
+      <meta itemprop="description" content="just code it">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WMH's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MVC/MVP/MVVM的个人理解
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-08-26 16:28:03" itemprop="dateCreated datePublished" datetime="2021-08-26T16:28:03+00:00">2021-08-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-05-17 10:04:10" itemprop="dateModified" datetime="2022-05-17T10:04:10+00:00">2022-05-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>MVC / MVP / MVVM 等软件领域的设计模式，相信大家就算不知道是什么，也听说过。对于这些设计模式，我们可以不知道，不了解，也不会影响日常的开发，但如果你想走的更远，这些是绕不过去的坎。前端作为软件行业的新兴领域，对这些设计模式在又该怎么理解，本文记录一下自己的理解，不一定都对，按需选用。</p>
+<span id="more"></span>
+<h2 id="软件领域的发展史"><a href="#软件领域的发展史" class="headerlink" title="软件领域的发展史"></a>软件领域的发展史</h2><p>变成领域发展最初是没有交互界面的，当时的“程序员”主要是一些数学家，他们依靠计算机实现复杂运算的。随着机器的发展和软件的需求扩大和细化，开始出现了用户界面（User Interface）。因为有了更高UI的需求，所以代码才正式被分化为描述做什么（业务逻辑）和有什么（UI）的两部分。</p>
+<p>当需求变得庞大，解决方案也会变得庞大；当解决方案变得庞大，就会出现细分；软件从处理一件事务发展到了要处理许多事务，各事务间有包含、顺序、主次等等的关系，变得越来越复杂。因为数据与逻辑庞大了，所以数据与逻辑就分离了，然后事件和业务分离了，大致可以分化成以下原子：</p>
+<ul>
+<li>界面</li>
+<li>数据</li>
+<li>事件</li>
+<li>业务</li>
+</ul>
+<h2 id="MVC的出现"><a href="#MVC的出现" class="headerlink" title="MVC的出现"></a>MVC的出现</h2><p>MVC全名是Model View Controller，它是Xerox PARC在二十世纪八十年代为编程语言Smalltalk－80发明的一种软件设计模式：</p>
+<ul>
+<li>Model（模型）表示应用程序核心（如数据库）</li>
+<li>View（视图）显示效果（HTML页面）</li>
+<li>Controller（控制器）处理输入（业务逻辑）</li>
+</ul>
+<p>首先要明确的一点就是：<strong>MVC只是一个设计上的指导原则，并没有明确的架构</strong>。一个经典的设计模式如下：</p>
+<p><img src="./6.png"></p>
+<p>MVC 模型有很多变种和数据流动方式，最传统的 MVC 模型把视图渲染和数据处理做了隔离，通过控制器接收 View 操作，传递给数据模型，数据 ready 后由数据模型驱动视图渲染。但因为 View 的更新由 Model 处理，所以 Model 难免要和 View 的实现耦合，于是就有了改良版MVP的出现。</p>
+<h2 id="MVP来了"><a href="#MVP来了" class="headerlink" title="MVP来了"></a>MVP来了</h2><p>MVP 是 Model View Presenter 的缩写，相比MVC而言，View与Model没有变化，将Controller换成了Presenter，同时改变了通信方向</p>
+<p><img src="./3.png"></p>
+<p>View 和 Model 完全隔离，Model 不再负责业务逻辑和视图变化，只负责底层数据处理。</p>
+<p>譬如，在Egg.js中，它的模型设计更贴近MVP：</p>
+<pre><code>egg-project
+├── package.json
+├── app.js (可选)
+├── agent.js (可选)
+├── app
+|   ├── router.js
+│   ├── controller
+│   |   └── home.js
+│   ├── service (可选)
+│   |   └── user.js
+│   ├── middleware (可选)
+│   |   └── response_time.js
+│   ├── schedule (可选)
+│   |   └── my_task.js
+│   ├── public (可选)
+│   |   └── reset.css
+│   ├── view (可选)
+│   |   └── home.tpl
+│   └── extend (可选)
+├── config
+└── test
+</code></pre>
+<ul>
+<li>View：作为用户的<strong>视图表现</strong>部分，常见的展示形式如浏览器作为载体的网页、原生APP应用界面、桌面应用界面等，用于提供用户界面以便收集、响应用户行为产生的数据；</li>
+<li>Controller：作为<strong>控制器层</strong>部分，控制用户界面（View）的数据流转途径，主要行为包含接收用户数据请求、发送请求至业务层（Service）、获取业务层（Service）数据响应，将响应数据发送至用户界面（View），或生成相应的模板界面发送至用户；</li>
+<li>Service：作为<strong>业务处理层</strong>部分，主要负责收集及对数据进行相应的运算处理，主要行为包含收集控制器请求数据、数据有效性验证、运算、请求数据模型（Model）、接收数据模型（Model）响应消息、响应结果至控制器等；</li>
+<li>Model：作为<strong>数据模型层</strong>部分，主要用于将数据持久化（OUT）、查询持久化数据（IN），常见行为如对数据库进行操作、缓存数据库数据等；</li>
+</ul>
+<p><img src="./8.png"></p>
+<p>可以看出 MVP 相对于 MVC 数据与视图分离做的更为出色，在大部分时候使用 MVC 其实是在使用 MVP。</p>
+<h2 id="MVVM的时代"><a href="#MVVM的时代" class="headerlink" title="MVVM的时代"></a>MVVM的时代</h2><p>MVVM由微软架构师Ken Cooper和Ted Peters开发，它是马丁·福勒的PM（Presentation Model）设计模式的变体</p>
+<p><img src="./9.png"></p>
+<p>MVVM 也被称为 model-view-binder。MVVM 中，VM 是 ViewModel。View 与 ViewModel 之间采用数据绑定，绑定是双向的，避免了开发人员写一些同步 ViewModel 和 View 的重复逻辑。通过数据绑定，View 发生变化会自动反映到 ViewModel，ViewModel 产生的变化也会自动更新 View。</p>
+<p>对于Vue.js，普遍认为他是基于MVVM设计的，我们一般都是这么划分的：</p>
+<ul>
+<li>Model：对应的是组件中的 data、props 属性</li>
+<li>View：组件中 template 的部分</li>
+<li>ViewModel。继承自 Vue 类的组件实例</li>
+</ul>
+<p>但官网有这么一句话：</p>
+<p><img src="./1.jpg"></p>
+<p>对于这个问题，可以参考这里：<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/327050991">为什么尤雨溪尤大说VUE没有完全遵循MVVM？</a>。</p>
+<h2 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h2><p>架构是一个演变的过程。它指的不是随着历史的演变，而是随着项目演变的。其实不比过于纠结到底是MVC,MVP,还是MVVM, 对于这种设计思想可以统称为MV*模式，在不同的项目中，能救解决实际问题他就有可能成为最佳实践的范本。</p>
+<p>并且在实际框架中，组成成分之间都不会泾渭分明，几种组成成分之间常常有难以划分的模糊地带。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://eggjs.org/zh-cn/basics/structure.html">Egg官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/aa9bdaf7c929">Egg 框架简述 (一)：简单的骨架认知</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/winter-cn/archive/2012/09/16/2687184.html">winter-Web前端开发：为何选择MVVM而非MVC</a></li>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/MVC">维基百科-MVC</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.yuque.com/sunluyong/node/mvc">语雀-MVC、MVP、MVVM</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/9037026513a2">简书-关于 Vue、React 与 MVVM</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MVC/" rel="tag"># MVC</a>
+              <a href="/tags/MVVM/" rel="tag"># MVVM</a>
+              <a href="/tags/MVP/" rel="tag"># MVP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/CSS3%E4%B8%AD%E7%9A%84var/" rel="prev" title="CSS3中的var">
+                  <i class="fa fa-chevron-left"></i> CSS3中的var
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/JavaScript%E4%B8%AD%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="next" title="JavaScript中的设计模式">
+                  JavaScript中的设计模式 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMH</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://static.wangminghuan.cn/cdn/animejs@3.2.1/anime.min.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://static.wangminghuan.cn/cdn/hexo-generator-searchdb/search.js"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

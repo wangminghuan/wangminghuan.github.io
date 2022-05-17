@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/fontawesome@5.15.3/all.min.css">
+  <link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/animejs@3.2.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wangminghuan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="vue 的数据绑定内部是如何实现的，本文一探究竟。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vue系列-1-数据绑定原理">
+<meta property="og:url" content="https://wangminghuan.github.io/vue%E7%B3%BB%E5%88%97-1-%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="WMH&#39;s Blog">
+<meta property="og:description" content="vue 的数据绑定内部是如何实现的，本文一探究竟。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wangminghuan.github.io/vue%E7%B3%BB%E5%88%97-1-%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A%E5%8E%9F%E7%90%86/1.png">
+<meta property="og:image" content="https://wangminghuan.github.io/vue%E7%B3%BB%E5%88%97-1-%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A%E5%8E%9F%E7%90%86/2.png">
+<meta property="og:image" content="https://wangminghuan.github.io/vue%E7%B3%BB%E5%88%97-1-%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A%E5%8E%9F%E7%90%86/3.png">
+<meta property="article:published_time" content="2019-11-08T18:29:20.000Z">
+<meta property="article:modified_time" content="2022-05-17T10:04:10.837Z">
+<meta property="article:author" content="WMH">
+<meta property="article:tag" content="note">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wangminghuan.github.io/vue%E7%B3%BB%E5%88%97-1-%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A%E5%8E%9F%E7%90%86/1.png">
+
+
+<link rel="canonical" href="https://wangminghuan.github.io/vue%E7%B3%BB%E5%88%97-1-%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A%E5%8E%9F%E7%90%86/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wangminghuan.github.io/vue%E7%B3%BB%E5%88%97-1-%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A%E5%8E%9F%E7%90%86/","path":"vue系列-1-数据绑定原理/","title":"vue系列-1-数据绑定原理"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>vue系列-1-数据绑定原理 | WMH's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WMH's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-主页"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>主页</a></li>
+        <li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-分类"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#VUE%E8%AE%BE%E8%AE%A1%E6%80%9D%E6%83%B3%E4%B9%8BMVVM%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">VUE设计思想之MVVM模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E6%84%8F%E5%9B%BE"><span class="nav-number">1.1.</span> <span class="nav-text">示意图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E5%8E%9F%E7%90%86"><span class="nav-number">1.2.</span> <span class="nav-text">设计原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Vue-js%E4%B8%8EMVVM%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%81%94%E7%B3%BB"><span class="nav-number">1.3.</span> <span class="nav-text">Vue.js与MVVM模型的联系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A%E6%96%B9%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">数据双向绑定方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#defineProperty-%E4%B8%8E-proxy-%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E5%8A%AB%E6%8C%81%E5%AF%B9%E6%AF%94"><span class="nav-number">3.</span> <span class="nav-text">defineProperty 与 proxy 实现数据劫持对比</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#defineProperty"><span class="nav-number">3.1.</span> <span class="nav-text">defineProperty</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Proxy"><span class="nav-number">3.2.</span> <span class="nav-text">Proxy</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A%E6%A8%A1%E5%BC%8F%E7%AE%80%E6%98%93demo"><span class="nav-number">4.</span> <span class="nav-text">双向绑定模式简易demo</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#model%E5%B1%82%E5%90%91view%E5%B1%82%E7%9A%84%E6%98%A0%E5%B0%84"><span class="nav-number">4.1.</span> <span class="nav-text">model层向view层的映射</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#model%E5%B1%82%E5%90%91view%E5%B1%82%E7%9A%84%E5%8A%A8%E6%80%81%E7%BB%91%E5%AE%9A"><span class="nav-number">4.2.</span> <span class="nav-text">model层向view层的动态绑定</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%8C%E5%A2%9E%E5%8A%A0observe%EF%BC%8C%E5%AE%9E%E7%8E%B0view%E5%B1%82%E7%9A%84%E6%95%B0%E6%8D%AE%E5%8F%98%E5%8C%96%E5%90%91model%E5%B1%82%E7%9A%84%E7%BB%91%E5%AE%9A"><span class="nav-number">4.2.1.</span> <span class="nav-text">第一步，增加observe，实现view层的数据变化向model层的绑定</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%8C%E5%A2%9E%E5%8A%A0watcher%E5%92%8Cpubsub%EF%BC%8C%E5%AE%9E%E7%8E%B0%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A%EF%BC%88%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81%EF%BC%89"><span class="nav-number">4.2.2.</span> <span class="nav-text">第二步，增加watcher和pubsub，实现双向绑定（完整代码）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WMH"
+      src="/images/avatar2.png">
+  <p class="site-author-name" itemprop="name">WMH</p>
+  <div class="site-description" itemprop="description">just code it</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wangminghuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wangminghuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:m.h.wang@foxmail.com" title="E-Mail → mailto:m.h.wang@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weblog.wangminghuan.cn/" title="WebSite → https:&#x2F;&#x2F;weblog.wangminghuan.cn" rel="noopener" target="_blank"><i class="fa fa-book fa-fw"></i>WebSite</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/1657970003?topnav=1&wvr=6&topsug=1&is_all=1" title="微博 → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;1657970003?topnav&#x3D;1&amp;wvr&#x3D;6&amp;topsug&#x3D;1&amp;is_all&#x3D;1" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>微博</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/vue%E7%B3%BB%E5%88%97-1-%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A%E5%8E%9F%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.png">
+      <meta itemprop="name" content="WMH">
+      <meta itemprop="description" content="just code it">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WMH's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          vue系列-1-数据绑定原理
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-11-08 18:29:20" itemprop="dateCreated datePublished" datetime="2019-11-08T18:29:20+00:00">2019-11-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-05-17 10:04:10" itemprop="dateModified" datetime="2022-05-17T10:04:10+00:00">2022-05-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Vue-%E7%B3%BB%E5%88%97/" itemprop="url" rel="index"><span itemprop="name">Vue 系列</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>vue 的数据绑定内部是如何实现的，本文一探究竟。</p>
+<span id="more"></span>
+
+<h2 id="VUE设计思想之MVVM模式"><a href="#VUE设计思想之MVVM模式" class="headerlink" title="VUE设计思想之MVVM模式"></a>VUE设计思想之MVVM模式</h2><h3 id="示意图"><a href="#示意图" class="headerlink" title="示意图"></a>示意图</h3><p><img src="1.png"></p>
+<ol>
+<li>view:视图层,对应DOM</li>
+<li>model:数据层,就是业务逻辑相关的数据对象(js对象等)</li>
+<li>viewModel:连接数据和视图的中间件</li>
+</ol>
+<h3 id="设计原理"><a href="#设计原理" class="headerlink" title="设计原理"></a>设计原理</h3><ol>
+<li>在MVVM架构下View和model是不能直接通讯的,需要ViewModel来做通讯。</li>
+<li>ViewModel通常要实现一个observer（观察者），当model变化时，通知view层自动更新；当用户操作view层时，通知model层数据变化，这就是实现了数据跟视图的双向绑定。</li>
+</ol>
+<h3 id="Vue-js与MVVM模型的联系"><a href="#Vue-js与MVVM模型的联系" class="headerlink" title="Vue.js与MVVM模型的联系"></a>Vue.js与MVVM模型的联系</h3><p>可以这样理解vue框架对应MVVM模型关系：</p>
+<p><img src="2.png"></p>
+<pre><code>Observer相当于Model层：观察vue实例中的data数据，当数据发生变化时，通知Watcher订阅者。
+
+Compile指令解析器位于View层，初始化View的视图，将数据变化与更新函数绑定，传给Watcher订阅者。
+
+Watcher是整个模型的核心，对应ViewModel层，连接Observer和Compile。所有的Watchers存于Dep订阅器中，Watcher将Observer监听到的数据变化对应相应的回调函数，处理数据，反馈给View层更新界面视图。
+</code></pre>
+<h2 id="数据双向绑定方式"><a href="#数据双向绑定方式" class="headerlink" title="数据双向绑定方式"></a>数据双向绑定方式</h2><p>目前实现数据双向绑定的方式大约有以下几种：</p>
+<ol>
+<li><p>订阅者-发布者模式（backbone.js）<br>更新数据方式通常做法是 vm.set(‘property’, value)，该方式有点 low，看起来没那么友好</p>
+</li>
+<li><p>脏值检查（angular.js）</p>
+</li>
+<li><p>数据劫持（vue.js）<br>Object.defineProperty()来劫持各个属性的 setter，getter，在数据变动时发布消息给订阅者，触发相应的监听回调（vue3.x 改为proxy实现）</p>
+</li>
+</ol>
+<h2 id="defineProperty-与-proxy-实现数据劫持对比"><a href="#defineProperty-与-proxy-实现数据劫持对比" class="headerlink" title="defineProperty 与 proxy 实现数据劫持对比"></a>defineProperty 与 proxy 实现数据劫持对比</h2><h3 id="defineProperty"><a href="#defineProperty" class="headerlink" title="defineProperty"></a>defineProperty</h3><p>Vue2.x的数据劫持就是利用Object.defineProperty来实现的（vue中可以直接改变data，vue内部的watcher机制会监听到这些数据的变化从而刷新页面，而react则是手动驱使setState去改变内部的state，从而使得页面刷新）  </p>
+<p>下面我们简单模拟下数据劫持的过程：</p>
+<pre><code>function observe(obj) &#123;
+    if (!obj || typeof obj !== &quot;object&quot;) &#123;
+      return;
+    &#125;
+    Object.keys(obj).forEach(function (key) &#123;
+      defineReactive(obj, key, obj[key])
+    &#125;)
+  &#125;
+
+function defineReactive(obj, key, value) &#123;
+
+  observe(value); //监听属性内部对象的变化
+  Object.defineProperty(obj, key, &#123;
+    enumerable: true,
+    configurable: false, //不能删除
+    get: function () &#123;
+      return value
+    &#125;,
+    set: function (newVal) &#123;
+      console.log(&quot;监听到属性&quot; + key + &quot;变化了&quot;, value + &quot;--&gt;&quot; + newVal);
+      value = newVal
+    &#125;
+  &#125;)
+&#125;
+const obj = &#123;
+  name: &quot;jack&quot;,
+  age: &quot;14&quot;,
+  desc: &#123;
+    job: &quot;coder&quot;,
+    worker: &quot;bj&quot;
+  &#125;
+&#125;
+observe(obj)
+</code></pre>
+<p>我们接下来修改对象的属性</p>
+<pre><code>obj.name=&quot;mike&quot;
+//监听到属性name变化了 jack--&gt;mike
+
+obj.desc.job=&quot;teacher&quot;
+//监听到属性job变化了 coder--&gt;teacher
+</code></pre>
+<p>这样，便实现了数据的劫持。</p>
+<h3 id="Proxy"><a href="#Proxy" class="headerlink" title="Proxy"></a>Proxy</h3><p>Vue3.0将放弃Object.defineProperty，改用性能更好的Proxy, 为什么说Proxy的性能比Object.defineProperty更好?原因有如下几点：</p>
+<ul>
+<li>Object.defineProperty只能监听属性，而Proxy能监听整个对象，省去对非对象或数组类型的劫持，也能做到监听。</li>
+<li>Object.defineProperty不能监测到数组变化</li>
+</ul>
+<p>下面我们用Proxy于Reflect再来简单模拟下数据劫持的过程：</p>
+<pre><code>  class Observables&#123;
+      constructor(target, handler = &#123;
+          set(target, key, value, receiver)&#123;
+            console.log(&quot;监听到属性&quot; + key + &quot;变化了&quot;,  &quot;--&gt;&quot; + value);
+            return Reflect.set(target, key, value, receiver);
+          &#125;
+        &#125;)&#123;
+        if( this.isObject(target) &amp;&amp; this.isArray(target) )&#123;
+          throw new TypeError(&#39;target 不是数组或对象&#39;)
+        &#125;
+
+        this._target = JSON.parse( JSON.stringify(target) );  // 避免引用修改  数组不考虑
+        this._handler = handler;
+
+        return new Proxy(this._observables(this._target), this._handler);
+      &#125;
+      isArray(o)&#123;
+        return Object.prototype.toString.call(o) === `[object Array]`
+      &#125;
+      isObject(o)&#123;
+        return Object.prototype.toString.call(o) === `[object Object]`
+      &#125;
+      // 为每一项为Array或者Object类型数据变为代理
+      _observables(target)&#123;
+          // 遍历对象中的每一项
+          for( const key in target )&#123;
+            // 如果对象为Object或者Array
+            if( this.isObject(target[key]) || this.isArray(target[key]) )&#123;
+              // 递归遍历
+              this._observables(target[key]);
+              // 转为Proxy
+              target[key] = new Proxy(target[key], this._handler);
+            &#125;
+          &#125;
+          // 将转换好的target返回出去
+          return target;
+      &#125;
+    &#125;
+    const obj = &#123;
+        name: &quot;jack&quot;,
+        age: &quot;14&quot;,
+        desc: &#123;
+          job: &quot;coder&quot;,
+          worker: &quot;bj&quot;
+        &#125;,
+        arr:[1,2,4]
+  &#125;
+  const ob = new Observables(obj);
+</code></pre>
+<p>我们接下来修改对象的属性：</p>
+<pre><code>  ob.name=&quot;Jam&quot;
+  // 监听到属性name变化了 --&gt;Jam
+  ob.name=&quot;Tom&quot;
+  // 监听到属性name变化了 --&gt;Tom
+  ob.arr.push(8)
+  //监听到属性3变化了 --&gt;8
+  //监听到属性length变化了 --&gt;4
+</code></pre>
+<p>下面简单介绍下vue实现双向绑定的思路：（利用Object.defineProperty 方法和订阅发布模式）</p>
+<h2 id="双向绑定模式简易demo"><a href="#双向绑定模式简易demo" class="headerlink" title="双向绑定模式简易demo"></a>双向绑定模式简易demo</h2><p><img src="3.png"></p>
+<p>黑色的线代表初始化观察者列表等等，红色的线是活动过程中，Model层的状态改变向View层更新的过程</p>
+<h3 id="model层向view层的映射"><a href="#model层向view层的映射" class="headerlink" title="model层向view层的映射"></a>model层向view层的映射</h3><pre><code> //将dom对象转化为文档碎片，同时进行占位符合指令解析
+
+  function domToFragment(node,vm)&#123;
+      var fragment=document.createDocumentFragment();
+      var children;
+      // 注意这里是赋值操作，返回的值为node.firstChild的值，当node.firstChild为null或者undefined时候，循环就会结束
+        //对子节点进行编译，并添加到fragment中
+      while(children=node.firstChild)&#123;
+        //第一步：解析模板
+        compile(children,vm)
+        // parentNode.append()可以同时传入多个节点或字符串，没有返回值；(有兼容性问题)
+        // 而parentNode.appendChild()只能传一个节点，且不直接支持传字符串(需要parentNode.appendChild(document.createTextElement(&#39;字符串&#39;))代替)，返回追加的Node节点
+        //第二步：占位符和指令解析
+        fragment.append(children);
+      &#125;
+      return fragment;
+  &#125;
+  //解析模板-占位符和指令解析
+  function compile(node,vm)&#123;
+    var reg = /\&#123;\&#123;(.*)\&#125;\&#125;/;
+  // 1    Element    一个元素    
+  // 2    Attr    一个属性    
+  // 3    Text    一个元素的文本内容 或属性    
+    if(node.nodeType === 1)&#123;
+         var attrs=node.attributes;
+         for(var i=0,lens=attrs.length;i&lt;lens;i++)&#123;
+           if(attrs[i].nodeName==&quot;f-model&quot;)&#123;
+              var bindName=attrs[i].nodeValue;
+              node.value=vm.data[bindName]
+           &#125;
+           node.removeAttribute(&#39;f-model&#39;);
+         &#125;
+    &#125; else if(node.nodeType === 3)&#123;
+          if(reg.test(node.nodeValue))&#123;
+                var bindName=RegExp.$1.trim();
+                node.nodeValue=vm.data[bindName]
+          &#125;
+    &#125; 
+  &#125;
+   function MVVM(option)&#123;
+         this.data=option.data;
+         var id=option.el;
+         var dom=domToFragment(document.getElementById(id),this);
+         document.getElementById(id).appendChild(dom);
+   &#125;
+   new MVVM(&#123;
+     el:&quot;app&quot;,
+     data:&#123;
+       text:&quot;Hello World&quot;
+     &#125;
+   &#125;)
+</code></pre>
+<p>上面的代码就简单实现了将输入框内容及文本节点内容与数据绑定。下一步要做的就是数据对象的响应式</p>
+<h3 id="model层向view层的动态绑定"><a href="#model层向view层的动态绑定" class="headerlink" title="model层向view层的动态绑定"></a>model层向view层的动态绑定</h3><h4 id="第一步，增加observe，实现view层的数据变化向model层的绑定"><a href="#第一步，增加observe，实现view层的数据变化向model层的绑定" class="headerlink" title="第一步，增加observe，实现view层的数据变化向model层的绑定"></a>第一步，增加observe，实现view层的数据变化向model层的绑定</h4><pre><code>   //观察者对象
+  //将所有属性通过Object.defineProperty进行监听
+  function observe(obj) &#123;
+      if (!obj || typeof obj !== &quot;object&quot;) &#123;
+        return;
+      &#125;
+      Object.keys(obj).forEach(function (key) &#123;
+        defineReactive(obj, key, obj[key])
+      &#125;)
+    &#125;
+
+    function defineReactive(obj, key, value) &#123;
+
+      observe(value); //监听属性内部对象的变化
+      Object.defineProperty(obj, key, &#123;
+        enumerable: true,
+        configurable: false, //不能再定义
+        get: function () &#123;
+          return value
+        &#125;,
+        set: function (newVal) &#123;
+          console.log(&quot;监听到属性&quot; + key + &quot;变化了&quot;, value + &quot;--&gt;&quot; + newVal);
+          value = newVal
+        &#125;
+      &#125;)
+    &#125;
+    ....//省略，同上
+    function compile(node,vm)&#123;
+    ...//省略，同上
+    if(node.nodeType === 1)&#123;
+
+          node.addEventListener(&#39;input&#39;,function(e)&#123;
+              vm.data[bindName] = e.target.value;
+            &#125;);
+       &#125;
+     ...//省略，同上
+     &#125;
+    function MVVM(option)&#123;
+         ...
+         observe(this.data,this)//增加行，应用观察者
+         ...
+   &#125;
+</code></pre>
+<h4 id="第二步，增加watcher和pubsub，实现双向绑定（完整代码）"><a href="#第二步，增加watcher和pubsub，实现双向绑定（完整代码）" class="headerlink" title="第二步，增加watcher和pubsub，实现双向绑定（完整代码）"></a>第二步，增加watcher和pubsub，实现双向绑定（完整代码）</h4><pre><code>//订阅发布模式
+  function PubSub()&#123;
+    this.handlers=[];
+  &#125;
+  PubSub.prototype=&#123;
+    on:function(sub)&#123;
+       this.handlers.push(sub)
+    &#125;,
+    emit:function()&#123;
+      //触发所有的订阅者更新
+      this.handlers.forEach(function(item)&#123;
+        item.update();
+      &#125;);
+    &#125;
+  &#125;
+
+  function Watcher(vm, node, bindname)&#123;
+      PubSub.target=this;
+      //完成watcher的初始化
+      this.name = bindname;
+      this.node = node;
+      this.vm = vm;
+      this.update(); //初次绑定时进行更新
+      PubSub.target = null; //保证Dep.target唯一
+  &#125;
+  Watcher.prototype=&#123;
+    get:function()&#123;
+        this.value=this.vm.data[this.name]
+    &#125;,
+    update:function()&#123;
+      this.get();
+      this.node.nodeValue = this.value;  
+    &#125;
+  &#125;
+
+
+   //观察者对象
+  //将所有属性通过Object.defineProperty进行监听
+  function observe(obj) &#123;
+      if (!obj || typeof obj !== &quot;object&quot;) &#123;
+        return;
+      &#125;
+      Object.keys(obj).forEach(function (key) &#123;
+        defineReactive(obj, key, obj[key])
+      &#125;)
+    &#125;
+
+    function defineReactive(obj, key, value) &#123;
+
+      observe(value); //监听属性内部对象的变化
+      var _sub = new PubSub();
+      Object.defineProperty(obj, key, &#123;
+        enumerable: true,
+        configurable: false, //不能再定义
+        get: function () &#123;
+          //PubSub.target存在，将目标元素添加到当前data属性的观察者列表中, 
+          // PubSub.target 就是Watcher构造函数本身，订阅函数会将其作为参数添加到订阅列表中，执行时会调用update方法
+          if(PubSub.target)&#123;
+            _sub.on(PubSub.target)
+          &#125;
+          return value
+        &#125;,
+        set: function (newVal) &#123;
+          value = newVal;
+          //数据更新则触发订阅函数的订阅功能
+          _sub.emit()
+        &#125;
+      &#125;)
+    &#125;
+
+  //将dom对象转化为文档碎片，同时进行占位符合指令解析
+
+  function domToFragment(node,vm)&#123;
+      var fragment=document.createDocumentFragment();
+      var children;
+      // 注意这里是赋值操作，返回的值为node.firstChild的值，当node.firstChild为null或者undefined时候，循环就会结束
+        //对子节点进行编译，并添加到fragment中
+      while(children=node.firstChild)&#123;
+        //第一步：解析模板
+        compile(children,vm)
+        // parentNode.append()可以同时传入多个节点或字符串，没有返回值；(有兼容性问题)
+        // 而parentNode.appendChild()只能传一个节点，且不直接支持传字符串(需要parentNode.appendChild(document.createTextElement(&#39;字符串&#39;))代替)，返回追加的Node节点
+        //第二步：占位符和指令解析
+        fragment.append(children);
+      &#125;
+      return fragment;
+  &#125;
+  //解析模板-占位符和指令解析
+  function compile(node,vm)&#123;
+    var reg = /\&#123;\&#123;(.*)\&#125;\&#125;/;
+  // 1    Element    一个元素    
+  // 2    Attr    一个属性    
+  // 3    Text    一个元素的文本内容 或属性    
+    if(node.nodeType === 1)&#123;
+         var attrs=node.attributes;
+         for(var i=0,lens=attrs.length;i&lt;lens;i++)&#123;
+           if(attrs[i].nodeName==&quot;f-model&quot;)&#123;
+              var bindName=attrs[i].nodeValue;
+              node.value=vm.data[bindName];
+              node.addEventListener(&#39;input&#39;,function(e)&#123;
+                  vm.data[bindName] = e.target.value;
+                &#125;);
+              node.removeAttribute(&#39;f-model&#39;);
+           &#125;
+         &#125;
+    &#125; else if(node.nodeType === 3)&#123;
+          if(reg.test(node.nodeValue))&#123;
+                var bindName=RegExp.$1.trim();
+                // node.nodeValue=vm.data[bindName]
+                new Watcher(vm, node, bindName); //为该页面元素node生产watcher
+          &#125;
+    &#125; 
+  &#125;
+   function MVVM(option)&#123;
+         this.data=option.data;
+         observe(this.data,this)
+         var id=option.el;
+         var dom=domToFragment(document.getElementById(id),this);
+         document.getElementById(id).appendChild(dom);
+   &#125;
+   var mv=new MVVM(&#123;
+     el:&quot;app&quot;,
+     data:&#123;
+       text:&quot;Hello World&quot;,
+       text2:&quot;yyy&quot;
+     &#125;
+   &#125;)
+</code></pre>
+<p>整个双向绑定的流程大致如下： </p>
+<ol>
+<li>compile解析模板-占位符和指令解析，compile函数创建时对绑定变量进行监听（通过watcher函数）  </li>
+<li>watcher函数定义一个update方法，该方法会将数据变化反应在view层。  </li>
+<li>observe劫持属性，执行时做了以下几件事：a）通过observe将data内的数据进行劫持；b)监听input事件，change的同时改变data的值；  </li>
+<li>observe劫持时，通过订阅发布模式绑定数据，在get时订阅，在set时发布，触发watcher函数的update方法更新。</li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/itkingone/article/details/79152951">Vue 数据绑定详细原理剖析</a></li>
+<li><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000009397476">Vue.js入门（一）–MVVM框架理解</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/note/" rel="tag"># note</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/ES6%E7%B3%BB%E5%88%97-6-%E5%BC%82%E6%AD%A5/" rel="prev" title="ES6系列-6-异步">
+                  <i class="fa fa-chevron-left"></i> ES6系列-6-异步
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/%E8%AF%A6%E8%B0%88Object.defineProperty/" rel="next" title="详谈Object.defineProperty">
+                  详谈Object.defineProperty <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMH</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://static.wangminghuan.cn/cdn/animejs@3.2.1/anime.min.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://static.wangminghuan.cn/cdn/hexo-generator-searchdb/search.js"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

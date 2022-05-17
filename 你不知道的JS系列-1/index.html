@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/fontawesome@5.15.3/all.min.css">
+  <link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/animejs@3.2.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wangminghuan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="前言本篇主要为阅读《你不知道的JavaScript-上卷》中遇到自己遗漏的知识点，加上一些自己的理解进行了梳理整理，阅读章节为第一部分：作用域和闭包">
+<meta property="og:type" content="article">
+<meta property="og:title" content="你不知道的JS系列-1">
+<meta property="og:url" content="https://wangminghuan.github.io/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JS%E7%B3%BB%E5%88%97-1/index.html">
+<meta property="og:site_name" content="WMH&#39;s Blog">
+<meta property="og:description" content="前言本篇主要为阅读《你不知道的JavaScript-上卷》中遇到自己遗漏的知识点，加上一些自己的理解进行了梳理整理，阅读章节为第一部分：作用域和闭包">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-01-14T18:18:54.000Z">
+<meta property="article:modified_time" content="2022-05-17T10:04:10.845Z">
+<meta property="article:author" content="WMH">
+<meta property="article:tag" content="你不知道的js">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://wangminghuan.github.io/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JS%E7%B3%BB%E5%88%97-1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wangminghuan.github.io/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JS%E7%B3%BB%E5%88%97-1/","path":"你不知道的JS系列-1/","title":"你不知道的JS系列-1"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>你不知道的JS系列-1 | WMH's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WMH's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-主页"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>主页</a></li>
+        <li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-分类"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">编译原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%8D%E6%B3%95%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-number">3.</span> <span class="nav-text">词法作用域</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#eval"><span class="nav-number">3.1.</span> <span class="nav-text">eval</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#with"><span class="nav-number">3.2.</span> <span class="nav-text">with</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%A5%E9%94%99"><span class="nav-number">4.</span> <span class="nav-text">报错</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-number">5.</span> <span class="nav-text">函数作用域</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IIFE"><span class="nav-number">5.1.</span> <span class="nav-text">IIFE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A5%E5%85%85%EF%BC%9A%E7%AB%8B%E5%8D%B3%E6%89%A7%E8%A1%8C%E5%87%BD%E6%95%B0%E7%9A%84%E5%8E%9F%E7%90%86"><span class="nav-number">5.2.</span> <span class="nav-text">补充：立即执行函数的原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9D%97%E7%BA%A7%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-number">6.</span> <span class="nav-text">块级作用域</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#with-1"><span class="nav-number">6.1.</span> <span class="nav-text">with</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#try-catch"><span class="nav-number">6.2.</span> <span class="nav-text">try&#x2F;catch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#let-amp-amp-const"><span class="nav-number">6.3.</span> <span class="nav-text">let &amp;&amp; const</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A3%B0%E6%98%8E%E6%8F%90%E5%8D%87"><span class="nav-number">7.</span> <span class="nav-text">声明提升</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AD%E5%8C%85"><span class="nav-number">8.</span> <span class="nav-text">闭包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-number">8.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA"><span class="nav-number">8.2.</span> <span class="nav-text">创建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97"><span class="nav-number">8.3.</span> <span class="nav-text">模块</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%A8%A1%E5%9D%97%E4%BE%9D%E8%B5%96%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="nav-number">8.3.1.</span> <span class="nav-text">创建一个模块依赖加载器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8B%93%E5%B1%95"><span class="nav-number">9.</span> <span class="nav-text">拓展</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WMH"
+      src="/images/avatar2.png">
+  <p class="site-author-name" itemprop="name">WMH</p>
+  <div class="site-description" itemprop="description">just code it</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wangminghuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wangminghuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:m.h.wang@foxmail.com" title="E-Mail → mailto:m.h.wang@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weblog.wangminghuan.cn/" title="WebSite → https:&#x2F;&#x2F;weblog.wangminghuan.cn" rel="noopener" target="_blank"><i class="fa fa-book fa-fw"></i>WebSite</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/1657970003?topnav=1&wvr=6&topsug=1&is_all=1" title="微博 → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;1657970003?topnav&#x3D;1&amp;wvr&#x3D;6&amp;topsug&#x3D;1&amp;is_all&#x3D;1" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>微博</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JS%E7%B3%BB%E5%88%97-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.png">
+      <meta itemprop="name" content="WMH">
+      <meta itemprop="description" content="just code it">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WMH's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          你不知道的JS系列-1
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-01-14 18:18:54" itemprop="dateCreated datePublished" datetime="2021-01-14T18:18:54+00:00">2021-01-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-05-17 10:04:10" itemprop="dateModified" datetime="2022-05-17T10:04:10+00:00">2022-05-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本篇主要为阅读《你不知道的JavaScript-上卷》中遇到自己遗漏的知识点，加上一些自己的理解进行了梳理整理，阅读章节为第一部分：作用域和闭包</p>
+<span id="more"></span>
+
+<h2 id="编译原理"><a href="#编译原理" class="headerlink" title="编译原理"></a>编译原理</h2><p>通常会将 JavaScript 归类为“动态”或“解释执行”语言，但事实上它是一门编译语言，但它并非同C++等语言是进行提前编译的（词法分析:拆词-&gt;语法分析:AST抽象语法树-&gt;代码生成：AST转为可执行代码），它的编译过程是在JS引擎中完成的（代码执行前进行编译）：</p>
+<ul>
+<li>引擎从头到尾参与js的编译与执行过程</li>
+<li>编译器（js中也可以称为解释器）则是引擎的好朋友，负责语法解析与代码生成等工作</li>
+<li>作用域也是引擎的好朋友，通过一套严格规则来确定当前执行代码对这些标识符的访问权限</li>
+</ul>
+<p>PS: 解释器将代码编译为中间码，中间码最终由引擎编译为机器码执行</p>
+<h2 id="词法作用域"><a href="#词法作用域" class="headerlink" title="词法作用域"></a>词法作用域</h2><p>同多数编程语言一样，JS的作用域为词法作用域（也成为静态作用域），也就是作用域是根据你编写代码时变量与块作用域写在哪里决定的，而非运行时决定。</p>
+<p>请看下面例子：</p>
+<pre><code>    var val=1;
+    function foo()&#123;
+      console.log(val)
+    &#125;
+    function bar()&#123;
+     var val=2;
+      foo()
+    &#125;
+    bar() ;//运行结果为：1
+</code></pre>
+<p>这是因为函数foo在函数bar中调用，但其作用域在定义时已经确定，即只能访问到foo函数内部跟全局作用域。</p>
+<p>JavaScript 中有两种机制可以“欺骗词法作用域”：</p>
+<h3 id="eval"><a href="#eval" class="headerlink" title="eval"></a>eval</h3><p>看下面的例子:</p>
+<pre><code>    var a=1;
+    function foo(str,b)&#123;
+    eval(str);
+    console.log(a,b)
+    &#125;
+    var str=&quot;var a=2&quot;;
+    foo(str,4) // 运行结果为：2,4  
+</code></pre>
+<p>在执行eval之后，引擎并不知道eval是以动态的方式进入的，并对词法环境进行修改。所以这个时候词法作用域就会被破坏。</p>
+<p>严格模式的程序中，eval 在运行时有其自己的词法作用域</p>
+<h3 id="with"><a href="#with" class="headerlink" title="with"></a>with</h3><p>with通常被当作重复引用一个对象中的多个属性的快捷方式，可以不需要重复引用对象本身。<br>with将对象的属性当作作用域中的标识符来处理，从而创建了一个新的词法作用域（运行阶段）。</p>
+<pre><code>function foo(obj)&#123;  
+    with(obj)&#123;  
+        a = 2;  
+    &#125;  
+&#125;  
+var o1 = &#123; a : 3 &#125;;  
+var o2 = &#123; b : 3 &#125;;  
+  
+foo(o1);  
+console.log( o1.a );    // 2
+  
+foo(o2);  
+console.log( o2.b );    // 3
+console.log( a );       // 2，表明a泄漏到全局作用域上了！
+</code></pre>
+<p>with在严格模式下已经无法使用。最重要的时，由于eval 和 with 会绕开js引擎在编译阶段进行的性能优化，导致运行变慢；这些在js语言精粹中也有提及，都是js设计中的“糟粕”，不要再使用了。</p>
+<h2 id="报错"><a href="#报错" class="headerlink" title="报错"></a>报错</h2><ul>
+<li>ReferenceError：作用域中遍寻不到所需的变量，引擎就会抛出该异常；</li>
+<li>TypeError：作用域判别成功了，但是对结果的操作是非法或不合理的；</li>
+</ul>
+<h2 id="函数作用域"><a href="#函数作用域" class="headerlink" title="函数作用域"></a>函数作用域</h2><p>JS的词法作用域是基于函数的，在ES6语法中的块级作用域出现之前，我们创建作用域通常都是基于函数的，也经常看到如下代码：</p>
+<pre><code>(function()&#123;
+  var a=1;
+  console.log(a)
+&#125;)();
+console.log(a); //ReferenceError 引用报错
+</code></pre>
+<h3 id="IIFE"><a href="#IIFE" class="headerlink" title="IIFE"></a>IIFE</h3><p>上述函数被称为立即执行函数表达式，也称为IIFE（Immediately Invoked Function Expression），它还有其他写法：</p>
+<pre><code>(function()&#123;
+  var a=1;
+  console.log(a)
+&#125;());
+</code></pre>
+<p>两种写法是一致的，不过第一种经常出现在一些第三方库中，将全局对象的引用作为函数参数传递进去：</p>
+<pre><code>  var a=2;
+  (function ( global ) &#123;
+  var a = 3;
+  console.log( a ); // 3
+  console.log( global.a ); // 2
+  &#125;)( window );
+</code></pre>
+<p>这种写法使得函数对全局对象的引用更清晰直观。</p>
+<p>IIFE 还有一种变化的用途是倒置代码的运行顺序， 将需要运行的函数放在第二位， 在 IIFE执行之后当作参数传递进去。 这种模式在<a href="/%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E5%8C%96%E8%BF%9B%E5%8C%96%E5%8F%B2/#UMD">UMD项目</a>中被广泛使用。 </p>
+<h3 id="补充：立即执行函数的原理"><a href="#补充：立即执行函数的原理" class="headerlink" title="补充：立即执行函数的原理"></a>补充：立即执行函数的原理</h3><blockquote>
+<p>更多可参考《Javascript高级程序设计》第七章：函数表达式</p>
+</blockquote>
+<p>对于函数表达式：</p>
+<pre><code>  var foo = function()&#123;
+    console.log(&quot;foo&quot;)
+  &#125;
+</code></pre>
+<p>进行调用：</p>
+<pre><code>  foo(); 
+</code></pre>
+<p>也可以合并为：</p>
+<pre><code>  var foo = function()&#123;
+    console.log(&quot;foo&quot;)
+  &#125;();
+</code></pre>
+<p>我们来进一步简化：</p>
+<pre><code>function foo()&#123;
+    console.log(&quot;foo&quot;)
+  &#125;();
+</code></pre>
+<p>上面代码会直接报错，因为解析器遇到 <code>function</code> 关键字时会把后面的内容解析为函数声明，函数声明语句后面加上一对圆括号，只是函数声明语句与分组操作符的组合而已。由于分组操作符不能为空，所以报错；括号内传入一个表达式则不会再报错，但等同于：</p>
+<pre><code>  function foo()&#123;
+    console.log(&quot;foo&quot;)
+  &#125;;
+ (1); // 只是一个函数声明 + 一个表达式
+</code></pre>
+<p>所以，如何让解析器将代码直接解析成表达式，而非函数声明才是关键，因为javascript中的圆括号不能包含语句，都会被解析为表达式，所以：</p>
+<pre><code> (function foo()&#123;
+    console.log(&quot;foo&quot;)
+  &#125;())
+</code></pre>
+<p>函数名称多数情况下基本无用，可以省略，这样就变成了我们经常看到的形式：<br>     (function(){<br>        console.log(“foo”)<br>      }())<br>当然，我们可以直接左侧部分强制解析为函数表达式，然后加上括号直接调用，就变成了另外一种常见方式：</p>
+<pre><code> (function()&#123;
+    console.log(&quot;foo&quot;)
+  &#125;)()
+</code></pre>
+<p>当然，除了圆括号，其他运算符也能达到目的（强制引擎解析为函数表达式）：</p>
+<pre><code>!function()&#123; /* code */ &#125;();
+~function()&#123; /* code */ &#125;();
+-function()&#123; /* code */ &#125;();
++function()&#123; /* code */ &#125;();
+true &amp;&amp; function()&#123; /* code */ &#125;();
+</code></pre>
+<p>但以上写法多多少少都存在一些副作用(如：修改函数返回值)，更推荐的写法依旧是圆括号。</p>
+<h2 id="块级作用域"><a href="#块级作用域" class="headerlink" title="块级作用域"></a>块级作用域</h2><p>块作用域是一个用来对之前的最小授权原则进行扩展的工具， 将代码从在函数中隐藏信息扩展为在块中隐藏信息。<br>在ES6之前，JS是不不支持块级作用域的，但深入研究后，其实是有其他替代方案的。</p>
+<h3 id="with-1"><a href="#with-1" class="headerlink" title="with"></a>with</h3><p>with会创建一个块级作用域，但他会引发其他问题，因为不再推荐使用</p>
+<h3 id="try-catch"><a href="#try-catch" class="headerlink" title="try/catch"></a>try/catch</h3><p>没错，try/catch的catch分句会创建一个块级作用域：</p>
+<pre><code>try &#123;
+  throw 1;
+&#125; catch (a) &#123;
+  a = 2;
+  console.log( a );
+&#125;
+console.log(a) ; //ReferenceError: a is not defined
+</code></pre>
+<p>但是try/catch在chrome中有性能问题（虽然从语法上看不应该运行缓慢）</p>
+<h3 id="let-amp-amp-const"><a href="#let-amp-amp-const" class="headerlink" title="let &amp;&amp; const"></a>let &amp;&amp; const</h3><p>let 关键字可以将变量绑定到所在的任意作用域中。 换句话说， let为其声明的变量隐式地了所在的块作用域。</p>
+<pre><code>var foo = true;
+if (foo) &#123;
+  let bar = foo * 2;
+  console.log( bar );
+&#125;
+console.log( bar ); // ReferenceError
+</code></pre>
+<p>const 与 let基本等同，只是其定义的值无法修改。</p>
+<p>函数作用域和块作用域的行为是一样的，可以总结为：任何声明在某个作用域内的变量，都将附属于这个作用域</p>
+<h2 id="声明提升"><a href="#声明提升" class="headerlink" title="声明提升"></a>声明提升</h2><p>先看两个例子：</p>
+<pre><code>console.log(a)
+var a=1;
+</code></pre>
+<p>对，没有报错，运行结果是 undefined</p>
+<pre><code>a = 2;
+var a;
+console.log(a);
+</code></pre>
+<p>大多数会认为a又被赋值了，所以输出应该是undefined, 但输出结果是2。</p>
+<p>所以，到底发生了什么，先有鸡（赋值）还是先有蛋（声明）？</p>
+<p>上面讲到过引擎会对代码先进行编译，编译阶段中的一部分工作就是找到所有的声明，并用合适的作用域将它们关联起来。</p>
+<p>譬如：var a=1; 引擎会将它分成两个部分，var a 和 a=1; 第一个定义声明是在编译阶段进行的。第二个赋值声明会被留在原地等待执行阶段，也就是说，所有的声明（变量与函数）都会在编译阶段先被处理。</p>
+<pre><code>foo();
+function foo() &#123; 
+  console.log( a ); // undefined
+  var a = 2;
+&#125;
+</code></pre>
+<p>上面的代码中函数foo 会被提升到当前作用域中，foo中的变量a也被提升到了函数作用域内的顶部，值得注意的是，函数表达式(包括具名函数)的作用域并不会提升。</p>
+<pre><code>  foo(); // TypeError 
+  bar(); // ReferenceError
+  var foo = function bar() &#123; 
+    // ... 
+  &#125;
+</code></pre>
+<p>如果多处“重复声明”，函数声明的优先级最高，其次才是变量。</p>
+<pre><code>  foo(); // 1
+  var foo;
+  function foo() &#123; 
+    console.log( 1 ); 
+  &#125;
+  foo = function() &#123; 
+    console.log( 2 );
+  &#125;;
+  foo();//2  
+</code></pre>
+<p>后面出现的函数声明可以覆盖前面的，也可以这样理解，foo执行时，引擎其实已经把<code>function foo&#123;...&#125;</code> 提升到最顶部，后面再次调用foo时，后面的函数表达式覆盖了函数声明，此时变输出2</p>
+<p>不过我们要尽量避免重复声明，会引发意想不到的问题！</p>
+<h2 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h2><p>闭包，总是笼罩着一层神秘色彩，关于这块内容其实理解的一直不够透彻。其实自己在日常书写中有意无意都会创建闭包，只是，我们不知道”它”叫闭包而已。</p>
+<h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>当函数可以记住并访问所在的词法作用域，即使函数是在当前词法作用域之外执行，这时就产生了闭包；通俗理解的闭包就是：能够读取其他函数内部变量的函数。对，闭包的直观判断就是函数。</p>
+<pre><code>  function foo() &#123;
+    var a = 2;
+    function bar() &#123; 
+      console.log( a ); 
+    &#125;
+    return bar; 
+  &#125;
+  var baz = foo(); 
+  baz(); // 2 在函数外部访问到了其他函数内部的变量
+</code></pre>
+<p>当然，也可以使用其他方式对函数的值进行传递:</p>
+<pre><code>var fn;
+function foo()&#123;
+  var a=1;
+  fn=function()&#123;
+    console.log(a)
+  &#125;
+&#125;
+function bar()&#123;
+  fn(); // 快看，这就是闭包
+&#125;
+foo();  // 必须先执行，才能形成之传递
+bar(); // 1
+</code></pre>
+<h3 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h3><p>上述都是人为刻意的创建闭包，回归到我们日常开发中，只要使用了回调函数，其实就是在使用闭包！！！</p>
+<p>譬如经常看到的多个li标签点击展示索引值的问题：</p>
+<pre><code>const list=document.querySelectorAll(&quot;li&quot;);
+for(var i=0;i&lt;list.length;i++)&#123;
+    list[i].addEventListener(&quot;click&quot;,function()&#123;
+      alert(i)
+    &#125;)
+&#125;
+</code></pre>
+<p>但是，如果按上述代码执行，无论怎么点击，alert的结果永远是一样的（list.length-1）</p>
+<p>这是因为每次循环执行的代码都被封闭在一个共享的作用域中，此时，我们需要创建一个闭包作用域，使得每次循环都是独立的作用域，将上述代码进行改写：</p>
+<pre><code>const list=document.querySelectorAll(&quot;li&quot;);
+for(var i=0;i&lt;list.length;i++)&#123;
+  (function(j)&#123;
+    list[j].addEventListener(&quot;click&quot;,function()&#123;
+      alert(j)
+    &#125;)
+  &#125;)(i);
+&#125;
+</code></pre>
+<p>当然，如果使用ES6语法，利用let创建的块级作用域可以更简单的实现：</p>
+<pre><code>const list=document.querySelectorAll(&quot;li&quot;);
+for(let i=0;i&lt;list.length;i++)&#123;
+    list[i].addEventListener(&quot;click&quot;,function()&#123;
+      alert(i)
+    &#125;)
+&#125;
+</code></pre>
+<h3 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h3><p>考虑下面代码，创建一个coolMod模块</p>
+<pre><code>function coolMod()&#123;
+  var something=&quot;cool&quot;;
+  var another=[1,2,3];
+  function doSomething()&#123;
+    console.log(something)
+  &#125;
+  function doAnother()&#123;
+    console.log(another)
+  &#125;
+  return &#123;
+    doSomething:doSomething,
+    doAnother:doAnother
+  &#125;
+&#125;
+var foo = coolMod(); // 也可以将coolMod改为立即调用函数，变为单例模式
+foo.doSomething(); 
+foo.doAnother(); 
+</code></pre>
+<p>doSomething() 和 doAnother() 函数具有涵盖模块实例内部作用域的闭包</p>
+<p>从coolMod模块也可以看出，模块模式需要具备两个必要条件：</p>
+<ul>
+<li>为创建内部作用域而调用了一个包装函数</li>
+<li>包装函数的返回 值必须至少包括一个对内部函数的引用，这样就会创建涵盖整个包装函数内部作用域的闭包。</li>
+</ul>
+<p>模块模式另一个简单但强大的变化用法是，命名将要作为公共 API 返回的对象：通过在模块实例的内部保留对公共 API 对象的内部引用，可以从内部对模块实例进行修改。</p>
+<pre><code>  var foo = (function coolMod(id) &#123;
+  function change() &#123;
+    // 修改公共 API 
+    publicAPI.identify = identify2;
+  &#125;
+  function identify1() &#123;
+    console.log(id);
+  &#125;
+  function identify2() &#123;
+    console.log(id.toUpperCase());
+  &#125;
+  var publicAPI = &#123;
+    change: change,
+    identify: identify1
+  &#125;;
+  return publicAPI;
+  &#125;)(&#39;foo mod&#39;);
+  foo.identify(); //foo mod
+  foo.change();
+  foo.identify(); // FOO MOD
+</code></pre>
+<h4 id="创建一个模块依赖加载器"><a href="#创建一个模块依赖加载器" class="headerlink" title="创建一个模块依赖加载器"></a>创建一个模块依赖加载器</h4><p>创建一个模块依赖加载器，这里只是介绍下核心逻辑：</p>
+<pre><code>var MyModules = (function Manager() &#123;
+  var modules = &#123;&#125;;
+  function define(name, deps, impl) &#123;
+    for (var i = 0; i &lt; deps.length; i++) &#123; 
+      deps[i] = modules[deps[i]]; 
+    &#125; 
+    modules[name] = impl.apply(impl, deps); 
+    // 核心逻辑，将定义的模块函数挂载到内部modules对象下，并对外暴露API
+    // apply 用法回忆：function fn(a,b)&#123;return a+b&#125;; fn.apply(fn,[1,2]);
+  &#125;
+  function get(name) &#123;
+    return modules[name];
+  &#125;
+  return &#123;
+    define: define,
+    get: get
+  &#125;
+&#125;)();
+</code></pre>
+<p>可以看到闭包的写法，下面开始定义一个模块<code>bar</code></p>
+<pre><code>MyModules.define( &quot;bar&quot;, [], function() &#123;
+  function hello(who) &#123;
+    return &quot;Let me introduce: &quot; + who;
+  &#125;
+  return &#123; hello: hello &#125;; 
+&#125;);
+</code></pre>
+<p><code>bar</code>模块不依赖任何内容，同时对外暴露<code>hello</code>方法；<br>再定义一个<code>foo</code>模块，他依赖bar模块：</p>
+<pre><code> MyModules.define( &quot;foo&quot;, [&quot;bar&quot;], function(bar) &#123; 
+    function awesome(name) &#123; 
+      console.log(bar.hello( name ).toUpperCase()); 
+    &#125;
+  return &#123; awesome: awesome &#125;; 
+  &#125;);
+</code></pre>
+<p>可以看到<code>foo</code>模块的<code>awesome</code>方法依赖<code>bar</code>的<code>hello</code>方法，我们执行下两个模块，并调用下foo模块对外暴露的<code>awesome</code>方法</p>
+<pre><code>var bar = MyModules.get( &quot;bar&quot; );
+var foo = MyModules.get( &quot;foo&quot; );
+foo.awesome(&#39;jack&#39;); // LET ME INTRODUCE: JACK
+</code></pre>
+<p>requireJS等模块加载库逻辑会比这个复杂许多，但基本核心思想大致相同，可以看到里面存在大量闭包的用法。</p>
+<p>ES6语法开始支持的原生的模块语法，import 可以将一个模块中的一个或多个 API 导入到当前作用域中，并分别绑定在一个变量上，而上面的例子是将整个模块的 API 导入并绑定到一个变量上；export 会将当前模块的变量/函数导出为公共API, 而上面例子是通过函数return出去；</p>
+<p>ES6 的模块文件是一个独立的作用域，不需要再创建函数作用域闭包来处理了</p>
+<h2 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/20127472">知乎-JavaScript中圆括号() 和 方括号[] 的特殊用法疑问？</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js/" rel="tag"># 你不知道的js</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/web-server%E5%BC%80%E5%8F%91%E4%B9%8Bnginx/" rel="prev" title="web server开发之nginx">
+                  <i class="fa fa-chevron-left"></i> web server开发之nginx
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JS%E7%B3%BB%E5%88%97-2/" rel="next" title="你不知道的JS系列-2">
+                  你不知道的JS系列-2 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMH</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://static.wangminghuan.cn/cdn/animejs@3.2.1/anime.min.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://static.wangminghuan.cn/cdn/hexo-generator-searchdb/search.js"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

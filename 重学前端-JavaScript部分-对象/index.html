@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/fontawesome@5.15.3/all.min.css">
+  <link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/animejs@3.2.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wangminghuan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="面向对象与基于对象什么是面向对象Object（对象）在英文中，是一切事物的总称，这和面向对象编程的抽象思维有互通之处。 在《面向对象分析与设计》这本书中，Grady Booch 替我们做了总结，他认为，从人类的认知角度来说，对象应该是下列事物之一：  一个可以触摸或者可以看见的东西； 人的智力可以理解的东西； 可以指导思考或行动（进行想象或施加动作）的东西。  有了对象的自然定义后，我们就可以描述">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学前端 - JavaScript部分-对象">
+<meta property="og:url" content="https://wangminghuan.github.io/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-JavaScript%E9%83%A8%E5%88%86-%E5%AF%B9%E8%B1%A1/index.html">
+<meta property="og:site_name" content="WMH&#39;s Blog">
+<meta property="og:description" content="面向对象与基于对象什么是面向对象Object（对象）在英文中，是一切事物的总称，这和面向对象编程的抽象思维有互通之处。 在《面向对象分析与设计》这本书中，Grady Booch 替我们做了总结，他认为，从人类的认知角度来说，对象应该是下列事物之一：  一个可以触摸或者可以看见的东西； 人的智力可以理解的东西； 可以指导思考或行动（进行想象或施加动作）的东西。  有了对象的自然定义后，我们就可以描述">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wangminghuan.github.io/4-1.png">
+<meta property="article:published_time" content="2019-07-10T01:00:00.000Z">
+<meta property="article:modified_time" content="2022-05-17T10:04:10.897Z">
+<meta property="article:author" content="WMH">
+<meta property="article:tag" content="js">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wangminghuan.github.io/4-1.png">
+
+
+<link rel="canonical" href="https://wangminghuan.github.io/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-JavaScript%E9%83%A8%E5%88%86-%E5%AF%B9%E8%B1%A1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wangminghuan.github.io/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-JavaScript%E9%83%A8%E5%88%86-%E5%AF%B9%E8%B1%A1/","path":"重学前端-JavaScript部分-对象/","title":"重学前端 - JavaScript部分-对象"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>重学前端 - JavaScript部分-对象 | WMH's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WMH's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-主页"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>主页</a></li>
+        <li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-分类"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B8%8E%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.</span> <span class="nav-text">面向对象与基于对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.1.</span> <span class="nav-text">什么是面向对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JavaScript%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%89%B9%E5%BE%81"><span class="nav-number">1.2.</span> <span class="nav-text">JavaScript对象的特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JavaScript-%E5%AF%B9%E8%B1%A1%E7%9A%84%E4%B8%A4%E7%B1%BB%E5%B1%9E%E6%80%A7"><span class="nav-number">1.3.</span> <span class="nav-text">JavaScript 对象的两类属性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%B1%9E%E6%80%A7"><span class="nav-number">1.3.1.</span> <span class="nav-text">数据属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%BF%E9%97%AE%E5%99%A8%EF%BC%88getter-setter%EF%BC%89%E5%B1%9E%E6%80%A7"><span class="nav-number">1.3.2.</span> <span class="nav-text">访问器（getter&#x2F;setter）属性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9D%9F%E8%AF%AD"><span class="nav-number">1.4.</span> <span class="nav-text">结束语</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E5%9E%8B%E4%B8%8E%E7%B1%BB"><span class="nav-number">2.</span> <span class="nav-text">原型与类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E7%B1%BB%E5%92%8C%E5%9F%BA%E4%BA%8E%E5%8E%9F%E5%9E%8B%E7%9A%84%E5%B7%AE%E5%BC%82"><span class="nav-number">2.1.</span> <span class="nav-text">基于类和基于原型的差异</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JavaScript%E7%9A%84%E5%8E%9F%E5%9E%8B"><span class="nav-number">2.2.</span> <span class="nav-text">JavaScript的原型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A9%E6%9C%9F%E7%89%88%E6%9C%AC%E4%B8%AD%E7%9A%84%E7%B1%BB%E4%B8%8E%E5%8E%9F%E5%9E%8B"><span class="nav-number">2.3.</span> <span class="nav-text">早期版本中的类与原型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ES6%E4%B8%AD%E7%9A%84%E7%B1%BB%E4%B8%8E%E5%8E%9F%E5%9E%8B"><span class="nav-number">2.4.</span> <span class="nav-text">ES6中的类与原型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript%E5%AF%B9%E8%B1%A1%E5%88%86%E7%B1%BB"><span class="nav-number">3.</span> <span class="nav-text">JavaScript对象分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E7%B1%BB"><span class="nav-number">3.1.</span> <span class="nav-text">分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%BF%E4%B8%BB%E5%AF%B9%E8%B1%A1"><span class="nav-number">3.2.</span> <span class="nav-text">宿主对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E7%BD%AE%E5%AF%B9%E8%B1%A1-%E5%9B%BA%E6%9C%89%E5%AF%B9%E8%B1%A1"><span class="nav-number">3.3.</span> <span class="nav-text">内置对象-固有对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E7%BD%AE%E5%AF%B9%E8%B1%A1-%E5%8E%9F%E7%94%9F%E5%AF%B9%E8%B1%A1"><span class="nav-number">3.4.</span> <span class="nav-text">内置对象-原生对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E8%A1%8C%E4%B8%BA%E7%9A%84%E5%AF%B9%E8%B1%A1"><span class="nav-number">3.5.</span> <span class="nav-text">特殊行为的对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E5%AF%B9%E8%B1%A1%E6%9D%A5%E6%A8%A1%E6%8B%9F%E5%87%BD%E6%95%B0%E4%B8%8E%E6%9E%84%E9%80%A0%E5%99%A8%EF%BC%9A%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1%E4%B8%8E%E6%9E%84%E9%80%A0%E5%99%A8%E5%AF%B9%E8%B1%A1"><span class="nav-number">3.6.</span> <span class="nav-text">用对象来模拟函数与构造器：函数对象与构造器对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JavaScript-%E5%85%A8%E5%B1%80%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%B1%9E%E6%80%A7"><span class="nav-number">3.7.</span> <span class="nav-text">JavaScript 全局对象的属性</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WMH"
+      src="/images/avatar2.png">
+  <p class="site-author-name" itemprop="name">WMH</p>
+  <div class="site-description" itemprop="description">just code it</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wangminghuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wangminghuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:m.h.wang@foxmail.com" title="E-Mail → mailto:m.h.wang@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weblog.wangminghuan.cn/" title="WebSite → https:&#x2F;&#x2F;weblog.wangminghuan.cn" rel="noopener" target="_blank"><i class="fa fa-book fa-fw"></i>WebSite</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/1657970003?topnav=1&wvr=6&topsug=1&is_all=1" title="微博 → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;1657970003?topnav&#x3D;1&amp;wvr&#x3D;6&amp;topsug&#x3D;1&amp;is_all&#x3D;1" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>微博</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-JavaScript%E9%83%A8%E5%88%86-%E5%AF%B9%E8%B1%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.png">
+      <meta itemprop="name" content="WMH">
+      <meta itemprop="description" content="just code it">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WMH's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          重学前端 - JavaScript部分-对象
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-07-10 01:00:00" itemprop="dateCreated datePublished" datetime="2019-07-10T01:00:00+00:00">2019-07-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-05-17 10:04:10" itemprop="dateModified" datetime="2022-05-17T10:04:10+00:00">2022-05-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">重学前端</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="面向对象与基于对象"><a href="#面向对象与基于对象" class="headerlink" title="面向对象与基于对象"></a>面向对象与基于对象</h2><h3 id="什么是面向对象"><a href="#什么是面向对象" class="headerlink" title="什么是面向对象"></a>什么是面向对象</h3><p>Object（对象）在英文中，是一切事物的总称，这和面向对象编程的抽象思维有互通之处。</p>
+<p>在《面向对象分析与设计》这本书中，Grady Booch 替我们做了总结，他认为，从人类的认知角度来说，对象应该是下列事物之一：</p>
+<ol>
+<li>一个可以触摸或者可以看见的东西；</li>
+<li>人的智力可以理解的东西；</li>
+<li>可以指导思考或行动（进行想象或施加动作）的东西。</li>
+</ol>
+<p>有了对象的自然定义后，我们就可以描述编程语言中的对象了。在不同的编程语言中，设计者也利用各种不同的语言特性来抽象描述对象，最为成功的流派是使用“类”的方式来描述对象，这诞生了诸如 C++、Java 等流行的编程语言。而 JavaScript 早年却选择了一个更为冷门的方式：原型。</p>
+<span id="more"></span>
+<h3 id="JavaScript对象的特征"><a href="#JavaScript对象的特征" class="headerlink" title="JavaScript对象的特征"></a>JavaScript对象的特征</h3><ol>
+<li>对象具有唯一标识性：即使完全相同的两个对象，也并非同一个对象。</li>
+<li>对象有状态：对象具有状态，同一对象可能处于不同状态之下。</li>
+<li>对象具有行为：即对象的状态，可能因为它的行为产生变迁。</li>
+</ol>
+<p>我们先来看第一个特征，对象具有唯一标识性。一般而言，各种语言的对象唯一标识性都是用内存地址来体现的， 对象具有唯一标识的内存地址，所以具有唯一的标识。</p>
+<p>关于对象的第二个和第三个特征“状态和行为”，不同语言会使用不同的术语来抽象描述它们，比如 C++ 中称它们为“成员变量”和“成员函数”，Java 中则称它们为“属性”和“方法”。 </p>
+<p>在 JavaScript 中，将状态和行为统一抽象为“属性”，考虑到 JavaScript 中将函数设计成一种特殊对象，所以 JavaScript 中的行为和状态都能用属性来抽象。</p>
+<pre><code>var o = &#123; 
+    d: 1,
+    f() &#123;
+        console.log(this.d);
+    &#125;    
+&#125;;
+//o 是对象，d 是一个属性，而函数 f 也是一个属性。
+</code></pre>
+<p><strong>在实现了对象基本特征的基础上, winter认为，JavaScript 中对象独有的特色是：对象具有高度的动态性，这是因为 JavaScript 赋予了使用者在运行时为对象添改状态和行为的能力。</strong></p>
+<pre><code>var o = &#123; a: 1 &#125;;
+o.b = 2;
+console.log(o.a, o.b); //1 2
+</code></pre>
+<p>JavaScript 允许运行时向对象添加属性，这就跟绝大多数基于类的、静态的对象设计完全不同(如Java)。</p>
+<h3 id="JavaScript-对象的两类属性"><a href="#JavaScript-对象的两类属性" class="headerlink" title="JavaScript 对象的两类属性"></a>JavaScript 对象的两类属性</h3><h4 id="数据属性"><a href="#数据属性" class="headerlink" title="数据属性"></a>数据属性</h4><p>它比较接近于其它语言的属性概念。数据属性具有四个特征:</p>
+<ol>
+<li>value：就是属性的值。</li>
+<li>writable：决定属性能否被赋值(修改)。</li>
+<li>enumerable：决定 for in 能否枚举该属性。</li>
+<li>configurable：决定该属性能否被删除或者改变特征值。</li>
+</ol>
+<p>在大多数情况下，我们只关心数据属性的值即可。我们可以使用<code>Object.defineProperty</code>来定义属性：  </p>
+<pre><code>var o = &#123;
+  a: 1
+&#125;;
+Object.defineProperty(o, &quot;b&quot;, &#123;
+  value: 2,
+  writable: false,
+  enumerable: true,
+  configurable: false
+&#125;);
+//a 和 b 都是数据属性，但特征值变化了
+Object.getOwnPropertyDescriptor(o, &quot;a&quot;); // &#123;value: 1, writable: true, enumerable: true, configurable: true&#125;
+Object.getOwnPropertyDescriptor(o, &quot;b&quot;); // &#123;value: 2, writable: false, enumerable: true, configurable: false&#125;
+
+o.b = 3;
+delete o.b; // configurable为false后无法删除属性
+console.log(o.b); // 2，b的值不会发生变化
+
+Object.defineProperty(o, &quot;b&quot;, &#123;
+  value: 10,
+  writable: true,
+  enumerable: true,
+  configurable: true
+&#125;); // TypeError: Cannot redefine property: b
+</code></pre>
+<p>对于configurable属性来说，如果通过<code>defineProperty</code>修改成 false, 那便无法再修改回来（单向操作，无法撤销）。</p>
+<h4 id="访问器（getter-setter）属性"><a href="#访问器（getter-setter）属性" class="headerlink" title="访问器（getter/setter）属性"></a>访问器（getter/setter）属性</h4><p>访问器属性也有四个特征:</p>
+<ol>
+<li>getter：函数或 undefined，在取属性值时被调用。</li>
+<li>setter：函数或 undefined，在设置属性值时被调用。</li>
+<li>enumerable：决定 for in 能否枚举该属性。</li>
+<li>configurable：决定该属性能否被删除或者改变特征值。</li>
+</ol>
+<p>访问器属性使得属性在读和写时执行代码，它允许使用者在写和读属性时，得到完全不同的值，它可以视为一种函数的语法糖。</p>
+<pre><code>const k=&#123;
+  get age()&#123;
+   console.log(&quot;get&quot;)
+   return 5
+  &#125;,
+  set age(val)&#123;
+    console.log(&quot;set:&quot;+val)
+  &#125;
+&#125;
+k.age=2;// set:2
+k.age;// 5
+</code></pre>
+<p>访问器属性跟数据属性不同，每次访问属性都会执行 getter 或者 setter 函数。</p>
+<h3 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h3><p>实际上 JavaScript 对象的运行时是一个“属性的集合”，属性以字符串或者 Symbol 为 key，以数据属性特征值或者访问器属性特征值为 value。</p>
+<h2 id="原型与类"><a href="#原型与类" class="headerlink" title="原型与类"></a>原型与类</h2><h3 id="基于类和基于原型的差异"><a href="#基于类和基于原型的差异" class="headerlink" title="基于类和基于原型的差异"></a>基于类和基于原型的差异</h3><p>第一部分提到过：在不同的编程语言中，设计者也利用各种不同的语言特性来抽象描述对象：  </p>
+<p>最为成功的流派是使用“类”的方式来描述对象，这诞生了诸如 C++、Java 等流行的编程语言。这个流派叫做<strong>基于类的编程语言</strong>。   </p>
+<p>还有一种就是<strong>基于原型的编程语言</strong>，它们利用原型来描述对象。我们的 JavaScript 就是其中代表。</p>
+<p>“基于类”的编程提倡使用一个关注分类和类之间关系开发模型。在这类语言中，总是先有类，再从类去实例化一个对象。类与类之间又可能会形成继承、组合等关系。类又往往与语言的类型系统整合，形成一定编译时的能力。</p>
+<p>而“基于原型”的编程看起来更为提倡程序员去关注一系列对象实例的行为，而后才去关心如何将这些对象，划分到最近的使用方式相似的原型对象，而不是将它们分成类。</p>
+<p>JavaScript 并非第一个使用原型的语言，在它之前，self、kevo 等语言已经开始使用原型来描述对象了。原型系统的“复制操作”有两种实现思路：</p>
+<ol>
+<li>一个是并不真的去复制一个原型对象，而是使得新对象持有一个原型的引用；</li>
+<li>另一个是切实地复制对象，从此两个对象再无关联。</li>
+</ol>
+<p>显然JavaScript选择的是第一种方案。</p>
+<h3 id="JavaScript的原型"><a href="#JavaScript的原型" class="headerlink" title="JavaScript的原型"></a>JavaScript的原型</h3><p>原型系统可以说相当简单，可以用两条概括：</p>
+<ol>
+<li>如果所有对象都有私有字段 [[prototype]]，就是对象的原型；</li>
+<li>读一个属性，如果对象本身没有，则会继续访问对象的原型，直到原型为空或者找到为止。</li>
+</ol>
+<p>这个模型在ES的各个版本中并没有很大改变，但在ES6中提供了一系列的内置函数，可以更直接的访问操作原型。三个方法分别是：</p>
+<ol>
+<li>Object.create 根据指定的原型创建新对象，原型可以是 null；<pre><code> //关于Object.create的补充
+ ECMAScript 5 通过新增 Object.create() 方法规范化了原型式继承。
+ 这个方法接收两个参数：一个用作新对象原型的对象和（可选的）一个为新对象定义额外属性的对象。
+ 在传入一个参数的情况下，Object.create() 与 object() 方法的行为相同。
+ //object 方法如下：
+ function object(o)&#123;
+     function F()&#123;&#125;
+     F.prototype = o;
+     return new F();
+ &#125;
+</code></pre>
+</li>
+<li>Object.getPrototypeOf 获得一个对象的原型；</li>
+<li>Object.setPrototypeOf 设置一个对象的原型。</li>
+</ol>
+<p>利用这三个方法，可以安全抛开类的思想，利用原型链来实现抽象和复用：</p>
+<pre><code>var cat = &#123;
+  say()&#123;
+      console.log(&quot;meow~&quot;);
+  &#125;,
+  jump()&#123;
+      console.log(&quot;jump&quot;);
+  &#125;
+&#125;
+    
+var tiger = Object.create(cat,  &#123;
+  say:&#123;
+      writable:true,
+      configurable:true,
+      enumerable:true,
+      value:function()&#123;
+          console.log(&quot;roar!&quot;);
+      &#125;
+  &#125;
+&#125;)
+
+
+var anotherCat = Object.create(cat);
+
+anotherCat.say();//&quot;meow~&quot;
+var anotherTiger = Object.create(tiger);
+
+anotherTiger.say();//&quot;roar!&quot;
+</code></pre>
+<h3 id="早期版本中的类与原型"><a href="#早期版本中的类与原型" class="headerlink" title="早期版本中的类与原型"></a>早期版本中的类与原型</h3><p>在早期版本的 JavaScript 中，“类”的定义是一个私有属性 [[class]]，语言标准为内置类型诸如 Number、String、Date 等指定了 [[class]] 属性，以表示它们的类。语言使用者唯一可以访问 [[class]] 属性的方式是 Object.prototype.toString。  </p>
+<pre><code>var o = new Object;
+var n = new Number;
+var s = new String;
+var b = new Boolean;
+var d = new Date;
+var arg = function()&#123; return arguments &#125;();
+var r = new RegExp;
+var f = new Function;
+var arr = new Array;
+var e = new Error;
+console.log([o, n, s, b, d, arg, r, f, arr, e].map(v =&gt; Object.prototype.toString.call(v))); 
+//运行结果：
+//[&quot;[object Object]&quot;, &quot;[object Number]&quot;, &quot;[object String]&quot;, &quot;[object Boolean]&quot;, &quot;[object Date]&quot;, &quot;[object Arguments]&quot;, &quot;[object RegExp]&quot;, &quot;[object Function]&quot;, &quot;[object Array]&quot;, &quot;[object Error]&quot;]
+</code></pre>
+<p>在 ES3 和之前的版本，JS 中类的概念是相当弱的，它仅仅是运行时的一个字符串属性。在 ES5 开始，[[class]] 私有属性被 Symbol.toStringTag 代替，Object.prototype.toString 的意义从命名上不再跟 class 相关。我们甚至可以自定义 Object.prototype.toString 的行为:</p>
+<pre><code>var o = &#123; [Symbol.toStringTag]: &quot;MyObject&quot; &#125;;
+console.log(Object.prototype.toString.call(o));//[object MyObject]
+console.log(o + &quot;&quot;);//[object MyObject] 对于Object类型,如果toString方法没有被改写过（如Number类型），通过加法也可以触发；
+</code></pre>
+<p>对于new运算符：它接受一个构造器和一组调用参数，实际上做了几件事：</p>
+<ol>
+<li>以构造器的 prototype 属性（注意与私有字段 [[prototype]] 的区分）为原型，创建新对象；</li>
+<li>将 this 和调用参数传给构造器，执行；</li>
+<li>如果构造器返回的是对象，则返回，否则返回第一步创建的对象。</li>
+</ol>
+<p>没有 Object.create、Object.setPrototypeOf 的早期版本中，new 运算是唯一一个可以指定 [[prototype]] 的方法，我们甚至可以用它来实现一个 Object.create 的不完整的 pollyfill，见以下代码（同上面object方法）：</p>
+<pre><code>function object(o)&#123;
+    function F()&#123;&#125;
+    F.prototype = o;
+    return new F();
+&#125;
+</code></pre>
+<p>但是这个函数无法做到与原生的 Object.create 一致，一个是不支持第二个参数，另一个是不支持 null 作为原型，所以意义已经不大了。</p>
+<h3 id="ES6中的类与原型"><a href="#ES6中的类与原型" class="headerlink" title="ES6中的类与原型"></a>ES6中的类与原型</h3><p>ES6 中加入了新特性 class，new 跟 function 搭配的怪异行为终于可以退休了。在任何场景，推荐使用 ES6 的语法来定义类，而令 function 回归原本的函数语义。</p>
+<p>同时，ES6 中引入了 class 关键字，并且在标准中删除了所有 [[class]] 相关的私有属性描述，类的概念正式从属性升级成语言的基础设施，从此，基于类的编程方式成为了 JavaScript 的官方编程范式。</p>
+<p>此外，最重要的是，类提供了继承能力（extends）</p>
+<h2 id="JavaScript对象分类"><a href="#JavaScript对象分类" class="headerlink" title="JavaScript对象分类"></a>JavaScript对象分类</h2><h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><p>我们可以把对象分为以下种类：</p>
+<ol>
+<li>宿主对象（host Objects）：由 JavaScript 宿主环境提供的对象，它们的行为完全由宿主环境决定。</li>
+<li>内置对象（Built-in Objects）：由 JavaScript 语言提供的对象<ul>
+<li>固有对象（Intrinsic Objects ）：由标准规定，随着 JavaScript 运行时创建而自动创建的对象实例。</li>
+<li>原生对象（Native Objects）：可以由用户通过 Array、RegExp 等内置构造器或者特殊语法创建的对象。  </li>
+<li>普通对象（Ordinary Objects）：由{}语法、Object 构造器或者 class 关键字定义类创建的对象，它能够被原型继承。</li>
+</ul>
+</li>
+</ol>
+<p>这里主要介绍处理普通对象之外的其他对象</p>
+<h3 id="宿主对象"><a href="#宿主对象" class="headerlink" title="宿主对象"></a>宿主对象</h3><p>JavaScript 宿主对象千奇百怪，但是前端最熟悉的无疑是浏览器环境中的宿主了。浏览器对象中有一个window全局对象，实际上，这个全局对象 window 上的属性，一部分来自 JavaScript 语言，一部分来自浏览器环境。  </p>
+<p>宿主对象也分为固有的和用户可创建的两种，比如 document.createElement 就可以创建一些 dom 对象。    </p>
+<p>宿主也会提供一些构造器，比如我们可以使用 new Image 来创建 img 元素，这些我们会在浏览器的 API 部分详细讲解。  </p>
+<h3 id="内置对象-固有对象"><a href="#内置对象-固有对象" class="headerlink" title="内置对象-固有对象"></a>内置对象-固有对象</h3><p>固有对象是由标准规定，随着 JavaScript 运行时创建而自动创建的对象实例。</p>
+<p>可以点击<a target="_blank" rel="noopener" href="https://www.ecma-international.org/ecma-262/9.0/index.html#sec-well-known-intrinsic-objects">这个链接</a>查看固有对象。</p>
+<h3 id="内置对象-原生对象"><a href="#内置对象-原生对象" class="headerlink" title="内置对象-原生对象"></a>内置对象-原生对象</h3><p>我们把 JavaScript 中，能够通过语言本身的构造器创建的对象称作原生对象。在 JavaScript 标准中，提供了 30 多个构造器。按照winter的理解，按照不同应用场景，可以把原生对象分成了以下几个种类：</p>
+<p><img src="/4-1.png"><br>通过这些构造器，我们可以用 new 运算创建新的对象，所以我们把这些对象称作原生对象。几乎所有这些构造器的能力都是无法用纯 JavaScript 代码实现的，它们也无法用 class/extend 语法来继承（作者说的不能继承是指无法完全一模一样，只能继承部分方法，具体可以参见<a target="_blank" rel="noopener" href="http://es6.ruanyifeng.com/#docs/class-extends#%E5%8E%9F%E7%94%9F%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E7%9A%84%E7%BB%A7%E6%89%BF">原生构造函数的继承</a>）</p>
+<h3 id="特殊行为的对象"><a href="#特殊行为的对象" class="headerlink" title="特殊行为的对象"></a>特殊行为的对象</h3><p>除了上面介绍的对象之外，在固有对象和原生对象中，有一些对象的行为跟正常对象有很大区别。</p>
+<ol>
+<li>Array：Array 的 length 属性根据最大的下标自动发生变化。</li>
+<li>Object.prototype：作为所有正常对象的默认原型，不能再给它设置原型了。</li>
+<li>String：为了支持下标运算，String 的正整数属性访问会去字符串里查找。</li>
+<li>Arguments：arguments 的非负整数型下标属性跟对应的变量联动。</li>
+<li>模块的 namespace 对象：特殊的地方非常多，跟一般对象完全不一样，尽量只用于 import 吧。</li>
+<li>类型数组和数组缓冲区：跟内存块相关联，下标运算比较特殊。</li>
+<li>bind 后的 function：跟原来的函数相关联。</li>
+</ol>
+<h3 id="用对象来模拟函数与构造器：函数对象与构造器对象"><a href="#用对象来模拟函数与构造器：函数对象与构造器对象" class="headerlink" title="用对象来模拟函数与构造器：函数对象与构造器对象"></a>用对象来模拟函数与构造器：函数对象与构造器对象</h3><p>在 JavaScript 中，还有一个看待对象的不同视角，这就是用对象来模拟函数和构造器。  </p>
+<p>函数对象的定义是：具有 [[call]] 私有字段的对象; </p>
+<p>构造器对象的定义是：具有私有字段 [[construct]] 的对象;</p>
+<p>任何对象只需要实现 [[call]]，它就是一个函数对象，可以去作为函数被调用。而如果它能实现 [[construct]]，它就是一个构造器对象，可以作为构造器被调用。</p>
+<p>用户用 function 关键字创建的函数必定同时是函数和构造器。不过，它们表现出来的行为效果却并不相同。</p>
+<p>对于宿主和内置对象来说，它们实现 [[call]]（作为函数被调用）和 [[construct]]（作为构造器被调用）不总是一致的。比如内置对象 Date 在作为构造器调用时产生新的对象，作为函数时，则产生字符串，见以下代码：</p>
+<pre><code>console.log(new Date,typeof new Date); // Tue Mar 05 2019 18:09:07 GMT+0800 (中国标准时间) &quot;object&quot;
+console.log( Date(),typeof Date()); // Tue Mar 05 2019 18:09:07 GMT+0800 (中国标准时间) string
+</code></pre>
+<p>而浏览器宿主环境中，提供的 Image 构造器，则根本不允许被作为函数调用。</p>
+<pre><code>console.log(new Image); 
+console.log(Image());// 抛出错误
+</code></pre>
+<p>再比如基本类型（String、Number、Boolean），它们的构造器被当作函数调用，则产生类型转换的效果。</p>
+<p>在 ES6 之后 =&gt; 语法创建的函数仅仅是函数，它们无法被当作构造器使用，见以下代码：</p>
+<pre><code>new (a =&gt; 0) // error
+</code></pre>
+<p>对于用户使用 function 语法或者 Function 构造器创建的对象来说，[[call]] 和 [[construct]] 行为总是相似的，它们执行同一段代码。我们大致可以认为，它们 [[construct]] 的执行过程如下：</p>
+<ol>
+<li>以 Object.protoype 为原型创建一个新对象；</li>
+<li>以新对象为 this，执行函数的 [[call]]；</li>
+<li>如果 [[call]] 的返回值是对象，那么，返回这个对象，否则返回第一步创建的新对象。</li>
+</ol>
+<p>这样的规则造成了个有趣的现象，如果我们的构造器返回了一个新的对象，那么 new 创建的新对象就变成了一个构造函数之外完全无法访问的对象，这一定程度上可以实现“私有”。</p>
+<pre><code>function cls()&#123;
+  this.a = 100;
+  return &#123;
+      getValue:() =&gt; this.a
+  &#125;
+&#125;
+var o = new cls();
+o.getValue(); //100
+//a 在外面永远无法访问到
+</code></pre>
+<h3 id="JavaScript-全局对象的属性"><a href="#JavaScript-全局对象的属性" class="headerlink" title="JavaScript 全局对象的属性"></a>JavaScript 全局对象的属性</h3><ol>
+<li><p>三个值：</p>
+<pre><code> Infinity、NaN、undefined。
+</code></pre>
+</li>
+<li><p>九个函数：</p>
+<pre><code> eval、isFinite、isNaN、parseFloat、parseInt、decodeURI、decodeURIComponent、
+ encodeURI、encodeURIComponent
+</code></pre>
+</li>
+<li><p>一些构造器：  </p>
+<pre><code> Array、Date、RegExp、Promise、Proxy、Map、WeakMap、Set、WeapSet、
+ Function、Boolean、String、Number、Symbol、Object、Error、EvalError、
+ RangeError、ReferenceError、SyntaxError、TypeError
+</code></pre>
+</li>
+<li><p>四个用于当作命名空间的对象：</p>
+<pre><code> Atomics、JSON、Math、Reflect
+</code></pre>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/js/" rel="tag"># js</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-JavaScript%E9%83%A8%E5%88%86-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" rel="prev" title="重学前端 - JavaScript部分-数据类型">
+                  <i class="fa fa-chevron-left"></i> 重学前端 - JavaScript部分-数据类型
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-JavaScript%E9%83%A8%E5%88%86-%E6%89%A7%E8%A1%8C(%E4%B8%80)/" rel="next" title="重学前端 - JavaScript部分-执行(一)">
+                  重学前端 - JavaScript部分-执行(一) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMH</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://static.wangminghuan.cn/cdn/animejs@3.2.1/anime.min.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://static.wangminghuan.cn/cdn/hexo-generator-searchdb/search.js"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

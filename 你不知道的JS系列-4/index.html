@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/fontawesome@5.15.3/all.min.css">
+  <link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/animejs@3.2.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wangminghuan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="前言本篇开始，记录在阅读《你不知道的JavaScript-中卷》中遇到的自己遗漏的知识点，阅读章节为第一部分：类型和语法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="你不知道的JS系列-4">
+<meta property="og:url" content="https://wangminghuan.github.io/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JS%E7%B3%BB%E5%88%97-4/index.html">
+<meta property="og:site_name" content="WMH&#39;s Blog">
+<meta property="og:description" content="前言本篇开始，记录在阅读《你不知道的JavaScript-中卷》中遇到的自己遗漏的知识点，阅读章节为第一部分：类型和语法">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-02-19T17:15:03.000Z">
+<meta property="article:modified_time" content="2022-05-17T10:04:10.845Z">
+<meta property="article:author" content="WMH">
+<meta property="article:tag" content="你不知道的js">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://wangminghuan.github.io/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JS%E7%B3%BB%E5%88%97-4/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wangminghuan.github.io/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JS%E7%B3%BB%E5%88%97-4/","path":"你不知道的JS系列-4/","title":"你不知道的JS系列-4"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>你不知道的JS系列-4 | WMH's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WMH's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-主页"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>主页</a></li>
+        <li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-分类"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E4%B8%8E%E5%80%BC"><span class="nav-number">2.</span> <span class="nav-text">类型与值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E7%BB%84"><span class="nav-number">2.1.</span> <span class="nav-text">数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">2.2.</span> <span class="nav-text">字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E5%AD%97"><span class="nav-number">2.3.</span> <span class="nav-text">数字</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E7%94%9F%E5%87%BD%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">原生函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#String-Number-Boolean"><span class="nav-number">3.1.</span> <span class="nav-text">String &#x2F; Number &#x2F; Boolean</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Array"><span class="nav-number">3.2.</span> <span class="nav-text">Array</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Object-Function-RegExp"><span class="nav-number">3.3.</span> <span class="nav-text">Object &#x2F; Function &#x2F; RegExp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Date-Error"><span class="nav-number">3.4.</span> <span class="nav-text">Date &#x2F; Error</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Symbol"><span class="nav-number">3.5.</span> <span class="nav-text">Symbol</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="nav-number">4.</span> <span class="nav-text">类型转换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E8%A7%84%E5%88%99"><span class="nav-number">4.1.</span> <span class="nav-text">类型转换规则</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ToString-amp-amp-ToNumber"><span class="nav-number">4.1.1.</span> <span class="nav-text">ToString &amp;&amp; ToNumber</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ToBoolean"><span class="nav-number">4.1.2.</span> <span class="nav-text">ToBoolean</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%98%BE%E5%BC%8F%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="nav-number">4.2.</span> <span class="nav-text">显式强制类型转换</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%A5%E6%9C%9F%E8%BD%AC%E6%8D%A2%E4%B8%BA%E6%95%B0%E5%AD%97"><span class="nav-number">4.2.1.</span> <span class="nav-text">日期转换为数字</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">4.2.2.</span> <span class="nav-text">位运算符(~)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E5%AD%97%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E8%A7%A3%E6%9E%90"><span class="nav-number">4.2.3.</span> <span class="nav-text">数字字符串的解析</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%90%E5%BC%8F%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="nav-number">4.3.</span> <span class="nav-text">隐式强制类型转换</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2-lt-gt-%E6%95%B0%E5%AD%97-%EF%BC%88-%EF%BC%89"><span class="nav-number">4.3.1.</span> <span class="nav-text">字符串 &lt;&#x3D;&gt; 数字 （+&#x2F;-）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E7%B1%BB%E5%9E%8B-gt-%E5%B8%83%E5%B0%94%E5%80%BC"><span class="nav-number">4.3.2.</span> <span class="nav-text">其他类型 &#x3D;&gt; 布尔值</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E"><span class="nav-number">4.4.</span> <span class="nav-text">&#x3D;&#x3D; 与 &#x3D;&#x3D;&#x3D;</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%8E%E6%95%B0%E5%AD%97%E4%B9%8B%E9%97%B4%E7%9A%84%E7%9B%B8%E7%AD%89%E6%AF%94%E8%BE%83"><span class="nav-number">4.4.1.</span> <span class="nav-text">字符串与数字之间的相等比较</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E7%B1%BB%E5%9E%8B%E4%B8%8E%E5%B8%83%E5%B0%94%E5%80%BC%E4%B9%8B%E9%97%B4%E7%9A%84%E7%9B%B8%E7%AD%89%E6%AF%94%E8%BE%83"><span class="nav-number">4.4.2.</span> <span class="nav-text">其他类型与布尔值之间的相等比较</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#null-%E4%B8%8E-undefined%E4%B9%8B%E9%97%B4%E7%9A%84%E6%AF%94%E8%BE%83"><span class="nav-number">4.4.3.</span> <span class="nav-text">null 与 undefined之间的比较</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E4%B8%8E%E9%9D%9E%E5%AF%B9%E8%B1%A1%E4%B9%8B%E9%97%B4%E7%9A%84%E7%9B%B8%E7%AD%89%E6%AF%94%E8%BE%83"><span class="nav-number">4.4.4.</span> <span class="nav-text">对象与非对象之间的相等比较</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%B0%91%E8%A7%81%E6%83%85%E5%86%B5"><span class="nav-number">4.4.5.</span> <span class="nav-text">其他少见情况</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E5%8F%A5%E5%92%8C%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">5.1.</span> <span class="nav-text">语句和表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%97%E5%8F%B7%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">5.2.</span> <span class="nav-text">逗号运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E8%A7%84%E5%88%99"><span class="nav-number">5.3.</span> <span class="nav-text">上下文规则</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%A7%E6%8B%AC%E5%8F%B7"><span class="nav-number">5.3.1.</span> <span class="nav-text">大括号{}</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%9D%97"><span class="nav-number">5.3.2.</span> <span class="nav-text">代码块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E8%A7%A3%E6%9E%84"><span class="nav-number">5.3.3.</span> <span class="nav-text">对象解构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%8D%E5%AD%98%E5%9C%A8%E7%9A%84else-if%E8%AF%AD%E6%B3%95"><span class="nav-number">5.3.4.</span> <span class="nav-text">不存在的else if语法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E5%88%86%E5%8F%B7"><span class="nav-number">5.4.</span> <span class="nav-text">自动分号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">5.5.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WMH"
+      src="/images/avatar2.png">
+  <p class="site-author-name" itemprop="name">WMH</p>
+  <div class="site-description" itemprop="description">just code it</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wangminghuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wangminghuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:m.h.wang@foxmail.com" title="E-Mail → mailto:m.h.wang@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weblog.wangminghuan.cn/" title="WebSite → https:&#x2F;&#x2F;weblog.wangminghuan.cn" rel="noopener" target="_blank"><i class="fa fa-book fa-fw"></i>WebSite</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/1657970003?topnav=1&wvr=6&topsug=1&is_all=1" title="微博 → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;1657970003?topnav&#x3D;1&amp;wvr&#x3D;6&amp;topsug&#x3D;1&amp;is_all&#x3D;1" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>微博</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JS%E7%B3%BB%E5%88%97-4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.png">
+      <meta itemprop="name" content="WMH">
+      <meta itemprop="description" content="just code it">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WMH's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          你不知道的JS系列-4
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-02-19 17:15:03" itemprop="dateCreated datePublished" datetime="2021-02-19T17:15:03+00:00">2021-02-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-05-17 10:04:10" itemprop="dateModified" datetime="2022-05-17T10:04:10+00:00">2022-05-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本篇开始，记录在阅读《你不知道的JavaScript-中卷》中遇到的自己遗漏的知识点，阅读章节为第一部分：类型和语法</p>
+<span id="more"></span>
+
+<h2 id="类型与值"><a href="#类型与值" class="headerlink" title="类型与值"></a>类型与值</h2><blockquote>
+<p>更多内容可参考<a href="/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF3-JavaScript%E9%83%A8%E5%88%86-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">重学前端 - JavaScript部分-数据类型</a></p>
+</blockquote>
+<p>JavaScript 中的变量是没有类型的，只有值才有。变量可以随时持有任何类型的值。所以在对变量执行 typeof 操作时，得到的结果并不是该变量的类型，而是该变量持有的值的类型。</p>
+<p>JS的七种类型已经提及无数遍了：null、 undefined 、boolean 、string 、number 、object 和 symbol; 除了object外，其他都被称为基本类型。</p>
+<p>基本类型的值只能通过复制来赋值，而Object只能通过引用进行复制，与指针不同，无论多少个引用，最终指向的都是同一个值（函数的参数传递也遵循该规则）。</p>
+<p>下面补充几种常见类型中的知识点：</p>
+<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><ul>
+<li>使用 delete 运算符可以将单元从数组中删除，但是单元删除后，数组的 length 属性并不会发生变化</li>
+<li>类数组转换（如NodeList, arguments）常用方法：<pre><code>Array.prototype.slice.call( document.querySelectorAll(&quot;.goods-info&quot;) )
+Array.from( arguments )
+</code></pre>
+</li>
+</ul>
+<h3 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h3><ul>
+<li>字符串经常被当作”字符数组”，因为字符串的很多方法都与字符串数组类似，但二者不一样：字符串不可修改，数组值可修改</li>
+<li>字符串可以调用数组的多数方法，除了<code>reverse</code>（字符串值不可变）<pre><code>Array.prototype.map.call(&quot;abc&quot;, function(v)&#123;
+  return v.toUpperCase() + &quot;.&quot;;
+  &#125;).join(&quot;&quot;); //A.B.C
+</code></pre>
+</li>
+</ul>
+<h3 id="数字"><a href="#数字" class="headerlink" title="数字"></a>数字</h3><ul>
+<li><p>JavaScript 没有真正意义上的整数: <code>42.0 === 42</code></p>
+</li>
+<li><p><code>toPrecision</code> 方法用来指定有效数位的显示位数：</p>
+<pre><code>  (42.59).toPrecision(5) //&quot;42.590&quot;
+  (42.59).toPrecision(3) //&quot;42.6&quot;
+</code></pre>
+</li>
+<li><p><code>42..tofixed(3)</code> 与 <code>42 .tofixed(3)</code> 可以被引擎正常解析，但不推荐使用</p>
+</li>
+<li><p>数字类型有几个特殊值：<code>NaN</code>、<code>+Infinity</code>、<code>-Infinity</code> 和 <code>-0</code>。NaN 是一个特殊值，它和自身也不相等, 表示值是“不是数字的数字”，是数字类型运算过程中产生的错误值。<code>window.isNaN</code> 的检测有bug: <code>window.isNaN(&#39;foo&#39;)===true</code>, 推荐使用ES6的 <code>Number.isNaN</code></p>
+</li>
+<li><p>JavaScript存在 <code>0</code> 与 <code>-0</code>, 且 <code>-0===0</code>，判断方法见下方isNegZero方法；符号用来表示其他信息（如移动方向），所以存在是有必要的</p>
+</li>
+<li><p><a href="/ES6%E7%B3%BB%E5%88%97-2-%E6%96%B0%E5%A2%9E%E7%B1%BB%E5%9E%8B%E4%B8%8E%E6%89%A9%E5%B1%95%E6%96%B9%E6%B3%95/">ES6 提供了二进制和八进制数值的新的写法</a></p>
+</li>
+<li><p>几个polyfill写法：</p>
+<pre><code>/*
+ @desc 判断两个小数是否相等
+*/
+
+if (!Number.EPSILON) &#123;  // Number.EPSILON为指定误差，ES6 下无需添加 
+  Number.EPSILON = Math.pow(2,-52);
+&#125;
+function numbersCloseEnoughToEqual(n1,n2) &#123;
+  return Math.abs( n1 - n2 ) &lt; Number.EPSILON;
+&#125;
+console.log(numbersCloseEnoughToEqual( 0.1+0.2, 0.3 )); // true
+console.log(numbersCloseEnoughToEqual( 0.0000001, 0.0000002 )); // false
+
+/*
+ @desc 判断是否为-0
+*/
+function isNegZero(n) &#123;
+  n = Number( n );
+  return (n === 0) &amp;&amp; (1 / n === -Infinity);
+&#125;
+/*
+ @desc  Number.isInteger ES6之前的polyfill
+*/
+if (!Number.isInteger) &#123;
+  Number.isInteger = function(num) &#123;
+    return typeof num == &quot;number&quot; &amp;&amp; num % 1 == 0;
+  &#125;;
+&#125;
+
+/*
+ @desc  Number.isSafeInteger ES6之前的polyfill
+*/
+if (!Number.isSafeInteger) &#123;
+  Number.isSafeInteger = function(num) &#123;
+    return Number.isInteger( num ) &amp;&amp;
+      Math.abs( num ) &lt;= Number.MAX_SAFE_INTEGER;
+  &#125;; 
+&#125;
+
+/*
+ @desc  Number.isNaN ES6之前的polyfill
+*/
+if (!Number.isNaN) &#123;
+  Number.isNaN = function(n) &#123;
+    return (
+      typeof n === &quot;number&quot; &amp;&amp;
+      window.isNaN( n )
+    ); 
+ &#125;;
+&#125;
+
+/*
+ @desc  Object.is ES6之前的polyfill
+*/
+if (!Object.is) &#123;
+  Object.is = function(v1, v2) &#123;
+    // 判断是否是-0
+    if (v1 === 0 &amp;&amp; v2 === 0) &#123;
+      return 1 / v1 === 1 / v2;
+    &#125;
+    // 判断是否是NaN
+    if (v1 !== v1) &#123;
+      return v2 !== v2;
+    &#125;
+    // 其他情况
+    return v1 === v2;
+  &#125;;
+&#125;
+</code></pre>
+</li>
+</ul>
+<h2 id="原生函数"><a href="#原生函数" class="headerlink" title="原生函数"></a>原生函数</h2><p>下面介绍下与数据类型相关的十个内建函数, 之前也已经介绍过，每一种基本类型在对象中都有对应的内置函数，且在操作过程中，引擎会自动进行装箱/拆箱转换</p>
+<h3 id="String-Number-Boolean"><a href="#String-Number-Boolean" class="headerlink" title="String / Number / Boolean"></a>String / Number / Boolean</h3><p>对于字符串/数字/布尔类型的数据，多数情况下都是使用字面量进行操作的（性能更优），基本很少使用对应的内置函数进行创建：</p>
+<pre><code>var a = new String( &quot;abc&quot; );
+var b = new Number( 42 );
+var c = new Boolean( true );
+
+// 通过new关键字创建的是字符串的封装对象，而非基本类型值
+a.valueOf(); // &quot;abc&quot;
+b.valueOf(); // 42
+c.valueOf(); // true 
+</code></pre>
+<p>不推荐使用构造函数来创建基本数据类型，会产生很多副作用</p>
+<h3 id="Array"><a href="#Array" class="headerlink" title="Array"></a>Array</h3><p>构造函数 <code>Array()</code> 不要求必须带 <code>new</code> 关键字 <code>new Array(3)</code> 与 <code>Array(3)</code>是等效的, 返回的都是一个数组；不过构造函数调用时返回的稀疏数组（将包含至少一个“空单元”的数组称为“稀疏数组”）令人有些困惑：</p>
+<pre><code>  Array(3)  //[empty × 3]
+</code></pre>
+<p>不同浏览器展示的结果有些不同，上面结果为chrome 88 版本下的结果，接下来对这个稀疏数组进行方法调用：</p>
+<pre><code> Array(3).map((item)=&gt;&#123;console.log(item)&#125;) // 不执行
+ Array(3).join(&quot;-&quot;)  // &quot;--&quot;
+</code></pre>
+<p>map方法对于只有空单元的数据不执行，而join方法却可以。我们可以通过下述方式来创建包含 undefined 单元（而非“空单元”）的数组来避免上述问题的发生：</p>
+<pre><code>Array.apply(null,&#123;length:3&#125;) // [undefined, undefined, undefined]
+</code></pre>
+<h3 id="Object-Function-RegExp"><a href="#Object-Function-RegExp" class="headerlink" title="Object / Function / RegExp"></a>Object / Function / RegExp</h3><p>除了RegExp外，Object 与 Function这两个构造函数很少用到，不是必须也不建议使用。</p>
+<p>PS: 在chrome 88下测试，<code>new</code> 关键字可以省略，且JavaScript 有一处奇特的语法，即构造函数没有参数时可以不用带<code>()</code>调用</p>
+<pre><code>  Function() instanceof Function       // true
+  new Function() instanceof Function   // true
+
+  Object() instanceof Object           // true
+  new Object() instanceof Object       // true
+
+  new RegExp instanceof RegExp          // true
+  RegExp() instanceof RegExp           // true
+</code></pre>
+<h3 id="Date-Error"><a href="#Date-Error" class="headerlink" title="Date / Error"></a>Date / Error</h3><p>Date 与 Error是经常用到的两个内置函数</p>
+<pre><code>  (new Date()).getTime()     // 获取当前时间戳
+  throw new Error(&quot;error&quot;)  // 抛出错误
+</code></pre>
+<p>在chrome 88下测试，<code>Error(&#39;error&#39;)</code> 等同于 <code>new Error(&#39;error&#39;)</code>, 但是Date 加new与不加new调用时，结果不一致：</p>
+<pre><code> var d=Date();           // &quot;Mon Feb 22 2021 17:05:10 GMT+0800 (中国标准时间)&quot;
+ d instanceof Date;      // false
+ typeof d;               // string
+
+ var _d=new Date();      // Mon Feb 22 2021 17:06:50 GMT+0800 (中国标准时间)
+ _d instanceof Date      // true
+</code></pre>
+<p>所以，如果就是需要进行构造函数调用，建议加上<code>new</code>关键字，以免产生意想不到的结果，同时也便于理解。</p>
+<h3 id="Symbol"><a href="#Symbol" class="headerlink" title="Symbol"></a>Symbol</h3><p>作为ES6新进成员，此处不再赘述，Symbol函数只能直接调用，无法通过构造函数调用：</p>
+<p><code>new Symbol(&#39;&#39;)</code> 会直接报错：<code>Uncaught TypeError: Symbol is not a constructor</code></p>
+<p>很显然，Symbol并非构造函数~</p>
+<p>PS: 此处插一个知识点：ES6 允许Symbol到String的显式强制类型转换，隐式强制转换会报错：</p>
+<pre><code>  var s1 = Symbol( &quot;cool&quot; );
+  String( s1 );  // &quot;Symbol(cool)&quot;
+  s1 + &#39;&#39;;       // Uncaught TypeError: Cannot convert a Symbol value to a string
+   
+</code></pre>
+<h2 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h2><p>作为动态语言，JavaScript 中所有的类型转换可称之为：强制类型转换，同时分为显式与隐式；转换规则可参考<a href="/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-JavaScript%E9%83%A8%E5%88%86-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/#%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2">重学前端-JavaScript部分</a>，里面介绍的比较详细，下面部分为补充部分</p>
+<h3 id="类型转换规则"><a href="#类型转换规则" class="headerlink" title="类型转换规则"></a>类型转换规则</h3><h4 id="ToString-amp-amp-ToNumber"><a href="#ToString-amp-amp-ToNumber" class="headerlink" title="ToString &amp;&amp; ToNumber"></a>ToString &amp;&amp; ToNumber</h4><p>从 ES5 开始，使用 Object.create(null) 创建的对象 [[Prototype]] 属性为 null，并且没有 valueOf() 和 toString() 方法，因此无法进行强制类型转换</p>
+<pre><code>  String(Object.create(null)) // Cannot convert object to primitive value
+  Number(Object.create(null)) // Cannot convert object to primitive value
+</code></pre>
+<p>补充：<strong>JSON 字符串化</strong></p>
+<p>执行<code>JSON.stringify(...)</code>即可得到JSON字符串化的结果，那内部的实现逻辑又是怎样？</p>
+<p>类似其他类型转化为字符串时调用内部的<code>toString</code>方法，JSON转化为字符串时调用内部的<code>toJSON</code>方法，不同的是：得到结果后还会再进行一步字符串化操作：</p>
+<pre><code>  var o=&#123;
+    a:1,
+    toJSON: function()&#123;
+      return &#123;
+        b:this.a *10
+      &#125;
+    &#125;
+  &#125;
+  JSON.stringify(o) // &quot;&#123;&quot;b&quot;:10&#125;&quot;
+</code></pre>
+<p><code>toJSON()</code> 需要“返回一个能够被字符串化的安全的 JSON 值”。</p>
+<p><strong>JSON.stringify(value[, replacer [, space]])</strong></p>
+<ul>
+<li>replacer: 可选参数，它可以是数组或者函数<pre><code>  var a=&#123;
+    b: 42,
+    c: &quot;42&quot;,
+    d: [1,2,3]
+  &#125;
+  /*replacer为数组时，只有包含在这个数组中的属性名才会被序列化到最终的 JSON 字符串中*/
+  JSON.stringify(a, [&quot;b&quot;,&quot;c&quot;]) // &quot;&#123;&quot;b&quot;:42,&quot;c&quot;:&quot;42&quot;&#125;&quot;
+  
+  /* replacer为函数时，在序列化过程中，被序列化的值的每个属性都会经过该函数的转换和处理
+  在开始时, replacer 函数会被传入一个空字符串作为 key 值，代表着要被 stringify 的这个对象。随后每个对象或数组上的属性会被依次传入
+  */
+  JSON.stringify(a, function(k,v)&#123;
+    if(k!==&#39;d&#39;) return v
+  &#125;)
+  // &quot;&#123;&quot;b&quot;:42,&quot;c&quot;:&quot;42&quot;&#125;&quot;
+</code></pre>
+</li>
+<li>space:可选参数，指定缩进用的空白字符串，用于美化输出</li>
+</ul>
+<p>总结：整个转换过程遵循如下原则：</p>
+<ul>
+<li>字符串、数字、布尔值和 null 的 JSON.stringify(..) 规则与 ToString 基本相同。</li>
+<li>如果传递给 JSON.stringify(..) 的对象中定义了 toJSON() 方法，那么该方法会在字符<br>串化前调用，以便将对象转换为安全的 JSON 值。</li>
+</ul>
+<h4 id="ToBoolean"><a href="#ToBoolean" class="headerlink" title="ToBoolean"></a>ToBoolean</h4><p>以下为可以显式转换为false的值：</p>
+<ul>
+<li>undefined</li>
+<li>null</li>
+<li>false</li>
+<li>+0、-0 和 NaN</li>
+<li>“”</li>
+</ul>
+<p>JavaScript 代码中会出现假值对象，如document.all：它是一个类数组对象，包含了页面上的所有元素。但现在在多数浏览器上强制转换结果却是false:</p>
+<pre><code>  Boolean(document.all)  // false
+</code></pre>
+<p>这个是浏览器厂商因为一些其他因素强制改写的结果，注意避免掉坑。</p>
+<h3 id="显式强制类型转换"><a href="#显式强制类型转换" class="headerlink" title="显式强制类型转换"></a>显式强制类型转换</h3><p>String(..) , Number(..) , Boolean(..), .toString(..)方法都可以实现类型强制转换。除此以外还有一些其他情况：</p>
+<h4 id="日期转换为数字"><a href="#日期转换为数字" class="headerlink" title="日期转换为数字"></a>日期转换为数字</h4><pre><code>      +new Date() === +new Date;
+      +new Date() === Date.now();
+      +new Date() === new Date().getTime();
+</code></pre>
+<h4 id="位运算符"><a href="#位运算符" class="headerlink" title="位运算符(~)"></a>位运算符(~)</h4><p>按位非（NOT）运算符~经常出现，它可以用在以下两种情况下：<strong>判断x的值是否大于-1</strong> 和 <strong>截除掉数字值的小数部分</strong></p>
+<p>可以记住以下等式：<code>~x = -(x+1)</code>，多数情况下都是适用的。在查找索引过程中可以这样改写：</p>
+<pre><code>  var msg=&quot;Hello World&quot;
+  if(!~msg.indexOf(&quot;success&quot;))&#123;
+    // 只有msg.indexOf(&quot;success&quot;)==-1的情况下才执行
+    console.log(&quot;error&quot;)
+  &#125;
+</code></pre>
+<p>PS: 由 -(x+1) 推断 ~-1 的结果应该是 -0，然而实际上结果是 0，因为它是字位操作而非数学运算。</p>
+<p>两个波浪线时可用作截除数字值的小数部分：</p>
+<pre><code>  ~~-49.6; // -49
+  
+</code></pre>
+<h4 id="数字字符串的解析"><a href="#数字字符串的解析" class="headerlink" title="数字字符串的解析"></a>数字字符串的解析</h4><ul>
+<li><p>解析允许字符串中含有非数字字符，解析按从左到右的顺序，如果遇到非数字字符就停止</p>
+</li>
+<li><p>转换不允许出现非数字字符，否则会失败并返回 NaN</p>
+<pre><code>parseInt( &quot;40px&quot; ); // 42 直解析数字字符串，其他类型会先强制转换成字符串
+Number( &quot;40px&quot; ); // NaN
+</code></pre>
+</li>
+</ul>
+<p>PS: parseInt在ES5之前存在bug，会根据字符串的第一个字符来决定转换基数，避免这个问题需要强制：<code>parseInt(xxx,10)</code></p>
+<h3 id="隐式强制类型转换"><a href="#隐式强制类型转换" class="headerlink" title="隐式强制类型转换"></a>隐式强制类型转换</h3><p>觉得不够明显的强制类型转换都可以归到隐式强制类型转换下，隐式转换虽然被人诟病，但它可以减少冗余，让代码更简洁</p>
+<h4 id="字符串-lt-gt-数字-（-）"><a href="#字符串-lt-gt-数字-（-）" class="headerlink" title="字符串 &lt;=&gt; 数字 （+/-）"></a>字符串 &lt;=&gt; 数字 （+/-）</h4><p>我们都知道 <code>+</code> 运算符即能用于数字加法，也能用于字符串拼接，依照的规则可以概括为：</p>
+<p><strong>如果 + 的其中一个操作数是字符串（或通过ToPrimitive操作能转换成字符串），则执行字符串拼接；否则执行数字加法</strong></p>
+<p>看个例子：</p>
+<pre><code> [1,3] + [5]  // &quot;1,35&quot;
+</code></pre>
+<p>数组valueOf操作无法得到基本数据类型，使用toString方法两个数据就转换成对应了字符串</p>
+<p>同时需要注意的是：<code>a + &quot;&quot;</code> 会对 a 调用 valueOf 方法，而<code>String(a)</code> 则是直接调用 ToString操作</p>
+<p><code>- </code>运算符是数字减法，因此 a - 0 会将 a 强制类型转换为数字，再看一个例子：</p>
+<pre><code>  [3] - [1]; // 2
+</code></pre>
+<p>数组先转换成字符串，然后再转换成Number进行运算</p>
+<h4 id="其他类型-gt-布尔值"><a href="#其他类型-gt-布尔值" class="headerlink" title="其他类型 =&gt; 布尔值"></a>其他类型 =&gt; 布尔值</h4><p>以下情况数据会被强制转换为布尔值：</p>
+<ul>
+<li>if (..) 语句中的条件判断表达式。</li>
+<li>for ( .. ; .. ; .. ) 语句中的条件判断表达式（第二个）。</li>
+<li>while (..) 和 do..while(..) 循环中的条件判断表达式。</li>
+<li>? : 中的条件判断表达式。</li>
+<li>逻辑运算符 ||（逻辑或）和 &amp;&amp;（逻辑与）左边的操作数（作为条件判断表达式）。</li>
+</ul>
+<p>逻辑运算符 <code>||</code> 和 <code>&amp;&amp;</code>, 返回值是两个操作数中的一个（且仅一个）；这与Java,php等语言返回布尔值不同，在 JavaScript（以及 Python 和 Ruby）返回的是某个操作数的值，所以更准确的称呼应该是“选择器运算符”或者“操作数选择器运算符”</p>
+<h3 id="与"><a href="#与" class="headerlink" title="== 与 ==="></a>== 与 ===</h3><p>宽松相等（==）与严格相等（===）里面的坑是最多的，也是让人吐槽最多的地方，主要集中在宽松相等的判定规则有时候让人琢磨不透。二者的区别可以这么理解：**== 允许在相等比较中进行强制类型转换，而 === 不允许**</p>
+<h4 id="字符串与数字之间的相等比较"><a href="#字符串与数字之间的相等比较" class="headerlink" title="字符串与数字之间的相等比较"></a>字符串与数字之间的相等比较</h4><ul>
+<li>如果 Type(x) 是数字，Type(y) 是字符串，则返回 x == ToNumber(y) 的结果。</li>
+<li>如果 Type(x) 是字符串，Type(y) 是数字，则返回 ToNumber(x) == y 的结果。</li>
+</ul>
+<pre><code>  0 == &quot;&quot;  // true
+  &quot;42&quot; == 42  // true
+  
+</code></pre>
+<p>也就是说：<strong>在==中，如果两边分别为Number 与 String类型，就将String类型转化为Number类型再比较</strong></p>
+<h4 id="其他类型与布尔值之间的相等比较"><a href="#其他类型与布尔值之间的相等比较" class="headerlink" title="其他类型与布尔值之间的相等比较"></a>其他类型与布尔值之间的相等比较</h4><ul>
+<li>如果 Type(x) 是布尔类型，则返回 ToNumber(x) == y 的结果；</li>
+<li>如果 Type(y) 是布尔类型，则返回 x == ToNumber(y) 的结果。</li>
+</ul>
+<pre><code> false == 0    // true
+ &quot;42&quot; == true // false  true先转化为1，再依据上面规则“42”会转化为数字42，故不相等
+</code></pre>
+<p>也就是说：<strong>在==中，如果两边分别为Boolean 与其他类型，就将Boolean类型转化为Number类型再比较</strong></p>
+<h4 id="null-与-undefined之间的比较"><a href="#null-与-undefined之间的比较" class="headerlink" title="null 与 undefined之间的比较"></a>null 与 undefined之间的比较</h4><ul>
+<li>如果 x 为 null，y 为 undefined，则结果为 true。</li>
+<li>如果 x 为 undefined，y 为 null，则结果为 true</li>
+</ul>
+<p>也就是说：<strong>在 == 中 null 和 undefined 相等（它们也与其自身相等），除此之外其他值都不存在这种情况</strong></p>
+<h4 id="对象与非对象之间的相等比较"><a href="#对象与非对象之间的相等比较" class="headerlink" title="对象与非对象之间的相等比较"></a>对象与非对象之间的相等比较</h4><blockquote>
+<p>下面转化规则只提到了字符串和数字，没有布尔值，因为布尔值会先被转化为数字</p>
+</blockquote>
+<ul>
+<li>如果 Type(x) 是字符串或数字，Type(y) 是对象，则返回 x == ToPrimitive(y) 的结果</li>
+<li>如果 Type(x) 是对象，Type(y) 是字符串或数字，则返回 ToPromitive(x) == y 的结果</li>
+</ul>
+<pre><code>0==[]                           // true
+Object(&#39;abc&#39;) == &quot;abc&quot;          // true
+Object(undefined) == undefined  // false
+Object(null) == null            // false
+</code></pre>
+<p>也就是说：<strong>在 == 中 对象会通过ToPromitive进行转换为基本类型，再进行后续比较</strong></p>
+<h4 id="其他少见情况"><a href="#其他少见情况" class="headerlink" title="其他少见情况"></a>其他少见情况</h4><p>先看如下代码：</p>
+<pre><code>  &quot;0&quot; == false;     // true
+  false == 0;       // true
+  false == &quot;&quot;;      // true
+  false == [];      // true  []转化为&quot;&quot;  false 转化为 0 即0 == &quot;&quot;
+  &quot;&quot; == 0;          // true  &quot;&quot;转化为数字0
+  &quot;&quot; == [];         // true
+  0 == [];          // true
+  &quot;&quot; == 0;          // true
+  &quot;&quot; == [];         // true
+  0 == [];          // true
+
+  [] == ![];         // true  ![]转化为false  即 [] == false
+  [] == [];          // false  两个都是引用类型，直接比较引用对象
+
+  0 == &quot;\n&quot;          // true  Number(&quot;\n&quot;)==0
+</code></pre>
+<p>其实，只要按上面的规则进行对照，都能迎刃而解，不过为了避免出错，可以遵循以下两个原则：</p>
+<ul>
+<li>如果两边的值中有 true 或者 false，千万不要使用 ==</li>
+<li>如果两边的值中有 []、”” 或者 0，尽量不要使用 ==</li>
+</ul>
+<p>这样可以最大程度的避免强制类型转换的坑。</p>
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><h3 id="语句和表达式"><a href="#语句和表达式" class="headerlink" title="语句和表达式"></a>语句和表达式</h3><blockquote>
+<p>更多详细内容可访问：<a target="_blank" rel="noopener" href="https://github.com/wangminghuan/MyNotes/blob/master/JavaScript/js%E4%B8%AD%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%92%8C%E8%AF%AD%E5%8F%A5.md">github笔记-js中表达式和语句</a></p>
+</blockquote>
+<ul>
+<li><p>语句都有一个结果值, chrome下的开发控制台（JavaScript REPL——read/evaluate/print/loop）显示的就是语句的结果值。</p>
+</li>
+<li><p>代码块的结果值就是最后一个语句的结果值</p>
+</li>
+</ul>
+<h3 id="逗号运算符"><a href="#逗号运算符" class="headerlink" title="逗号运算符"></a>逗号运算符</h3><p>逗号操作符可以在一条语句中执行多个操作，常用于声明多个变量；</p>
+<pre><code>var num1=1, num2=2, num3=3; 
+</code></pre>
+<p>除此之外，逗号操作符还可以用于赋值。在用于赋值时，逗号操作符总会返回表达式中的最后一项：</p>
+<pre><code>var num = (5, 1, 4, 8, 0); // num 的值为 0 
+</code></pre>
+<p>可以使用逗号运算符将多个表达式串联为一个语句：</p>
+<pre><code>var a = 42;
+var a1 = 42;
+var a2 = 42;
+var b = (a++, a)  // 执行a, 再执行+1操作, 最终返回a的值
+var c = a1++,a1   // 把a1赋值给c, 再执行+1操作, 然后又声明了一次a1
+var d = (a2++)   // 括号无法提升+1的执行顺序，等同于 var d = a2++
+
+a // 43
+a1 // 43
+a2 // 43
+b // 43  
+c // 42
+d // 42
+</code></pre>
+<h3 id="上下文规则"><a href="#上下文规则" class="headerlink" title="上下文规则"></a>上下文规则</h3><p>js中同样的语法上下文不同，则会导致不同的结果：</p>
+<h4 id="大括号"><a href="#大括号" class="headerlink" title="大括号{}"></a>大括号{}</h4><p>我们看一个例子：</p>
+<pre><code>  var a = &#123;
+    foo : bar()  //假设bar已经定义过
+  &#125;
+</code></pre>
+<p>去掉 var声明后，代码扔不会报错：</p>
+<pre><code>&#123;
+  foo : bar()
+&#125;
+</code></pre>
+<p>不过，此时上面的代码已经不是一个对象了，它是一个代码块，且foo 是语句 bar() 的标签，关于“标签语句”我们此处不再展开。那如果我们尝试这样改写，那么就会报错了：</p>
+<pre><code>&#123;
+  &quot;foo&quot;:bar()
+&#125;
+</code></pre>
+<p>因为标签不允许使用双引号，所以 “foo” 并不是一个合法的标签。同样的我们需要注意：<strong>JSON 的确是 JavaScript 语法的一个子集，但是 JSON 本身并不是合法的 JavaScript 语法</strong></p>
+<h4 id="代码块"><a href="#代码块" class="headerlink" title="代码块"></a>代码块</h4><p>我们看下如下代码：</p>
+<pre><code>[] + &#123;&#125;   // &quot;[object Object]&quot;
+&#123;&#125; + []   // 0
+</code></pre>
+<p>原因如下：{} 出现在 + 运算符表达式中，会被当作一个值（空对象）来处理，而[] 强制类型转换后为 “”，因此会得到{} 执行<code>toString</code>后的结果；{} 先出现时，会被解析为空代码块，而代码块后面的分号可以省略，<code>+[]</code> 就被强制转换为0</p>
+<h4 id="对象解构"><a href="#对象解构" class="headerlink" title="对象解构"></a>对象解构</h4><p>{ .. } 也可用于“解构赋值”</p>
+<pre><code>  var obj=&#123;
+    a:1,
+    b:2
+  &#125;
+  var &#123;a,b&#125;=obj
+  console.log(a,b)  // 1,2
+
+  function add(&#123;a,b&#125;)&#123;
+    return a+b
+  &#125;
+  console.log(add(obj)) // 3
+</code></pre>
+<h4 id="不存在的else-if语法"><a href="#不存在的else-if语法" class="headerlink" title="不存在的else if语法"></a>不存在的else if语法</h4><p>事实上 JavaScript 没有 else if, 只存在 if else</p>
+<pre><code>if(a==1)&#123;
+  console.log(&quot;if&quot;)
+&#125;else if(a==2)&#123;
+  console.log(&quot;else&quot;)
+&#125;
+</code></pre>
+<p>等同于：</p>
+<pre><code>if(a==1)&#123;
+  console.log(&quot;if)
+&#125;else &#123;
+    if(a==2)&#123;
+        console.log(&quot;else)
+    &#125;
+&#125;
+</code></pre>
+<h3 id="自动分号"><a href="#自动分号" class="headerlink" title="自动分号"></a>自动分号</h3><p>JavaScript 有时会自动为代码行补上缺失的分号，即自动分号插入（Automatic Semicolon Insertion，ASI），且ASI 只在换行符处起作用，而不会在代码行的中间插入分号。</p>
+<p>以下情况会执行ASI:</p>
+<ul>
+<li> 表达式语句: <code>var a = 42, b</code></li>
+<li> do..while 循环后面</li>
+<li> break、continue、return 和 yield（ES6）等关键字后</li>
+</ul>
+<p>ASI本质上更像一种“纠错机制”，所以能加分号的地方还是建议都手动加上。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><ul>
+<li><p>函数传递参数时，arguments 数组中的对应单元会和命名参数建立关联；否则不传参时不会建立关联</p>
+</li>
+<li><p>switch判断时，执行的判断规则等同”===”操作</p>
+</li>
+<li><p>try..catch..finally中，finally的返回值会“覆盖”try 和 catch 中 return 的返回值。</p>
+</li>
+<li><p>除了js外，HTML 页面中的内容也会产生全局变量，如：<code>&lt;div id=&quot;foo&quot;&gt;&lt;/div&gt;</code> 就会创建一个全局foo变量，其值为该dom节点</p>
+</li>
+<li><p>对原生对象添加扩展功能时，注意向上兼容</p>
+</li>
+<li><p>内联代码中不可以出现 <code>&lt;/script</code>&gt; 字符串，一旦出现即被视为代码块结束：</p>
+<pre><code>  &lt;script&gt;
+    var code = &quot;&lt;script&gt;alert(&#39;Hello World&#39;)&lt;/scr&quot; + &quot;ipt&gt;&quot;;  // 规避报错
+  &lt;/script&gt;
+</code></pre>
+</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.w3school.com.cn/js/pro_js_operators_bitwise.asp">ECMAScript 位运算符</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js/" rel="tag"># 你不知道的js</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JS%E7%B3%BB%E5%88%97-3/" rel="prev" title="你不知道的JS系列-3">
+                  <i class="fa fa-chevron-left"></i> 你不知道的JS系列-3
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/JavaScript%E4%B8%AD%E7%9A%84Number%E4%B8%8E%E7%B2%BE%E5%BA%A6/" rel="next" title="JavaScript中的Number与精度">
+                  JavaScript中的Number与精度 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMH</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://static.wangminghuan.cn/cdn/animejs@3.2.1/anime.min.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://static.wangminghuan.cn/cdn/hexo-generator-searchdb/search.js"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

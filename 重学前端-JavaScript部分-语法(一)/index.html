@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/fontawesome@5.15.3/all.min.css">
+  <link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/animejs@3.2.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wangminghuan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="概述本文我们开始介绍语法部分相关内容">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重学前端-JavaScript部分-语法(一)">
+<meta property="og:url" content="https://wangminghuan.github.io/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-JavaScript%E9%83%A8%E5%88%86-%E8%AF%AD%E6%B3%95(%E4%B8%80)/index.html">
+<meta property="og:site_name" content="WMH&#39;s Blog">
+<meta property="og:description" content="概述本文我们开始介绍语法部分相关内容">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wangminghuan.github.io/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-JavaScript%E9%83%A8%E5%88%86-%E8%AF%AD%E6%B3%95(%E4%B8%80)/2.jpg">
+<meta property="og:image" content="https://wangminghuan.github.io/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-JavaScript%E9%83%A8%E5%88%86-%E8%AF%AD%E6%B3%95(%E4%B8%80)/3.jpg">
+<meta property="og:image" content="https://wangminghuan.github.io/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-JavaScript%E9%83%A8%E5%88%86-%E8%AF%AD%E6%B3%95(%E4%B8%80)/1.jpg">
+<meta property="article:published_time" content="2019-07-10T05:00:00.000Z">
+<meta property="article:modified_time" content="2022-05-17T10:04:10.901Z">
+<meta property="article:author" content="WMH">
+<meta property="article:tag" content="js">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wangminghuan.github.io/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-JavaScript%E9%83%A8%E5%88%86-%E8%AF%AD%E6%B3%95(%E4%B8%80)/2.jpg">
+
+
+<link rel="canonical" href="https://wangminghuan.github.io/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-JavaScript%E9%83%A8%E5%88%86-%E8%AF%AD%E6%B3%95(%E4%B8%80)/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wangminghuan.github.io/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-JavaScript%E9%83%A8%E5%88%86-%E8%AF%AD%E6%B3%95(%E4%B8%80)/","path":"重学前端-JavaScript部分-语法(一)/","title":"重学前端-JavaScript部分-语法(一)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>重学前端-JavaScript部分-语法(一) | WMH's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WMH's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-主页"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>主页</a></li>
+        <li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-分类"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%84%9A%E6%9C%AC%E4%B8%8E%E6%A8%A1%E5%9D%97"><span class="nav-number">2.</span> <span class="nav-text">脚本与模块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">2.1.</span> <span class="nav-text">模块的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E4%BD%93"><span class="nav-number">2.2.</span> <span class="nav-text">函数体</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JS%E8%AF%AD%E6%B3%95%E7%9A%84%E5%85%A8%E5%B1%80%E6%9C%BA%E5%88%B6"><span class="nav-number">3.</span> <span class="nav-text">JS语法的全局机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E5%A4%84%E7%90%86"><span class="nav-number">3.1.</span> <span class="nav-text">预处理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#var-%E5%A3%B0%E6%98%8E"><span class="nav-number">3.1.1.</span> <span class="nav-text">var 声明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#function-%E5%A3%B0%E6%98%8E"><span class="nav-number">3.1.2.</span> <span class="nav-text">function 声明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#class-%E5%A3%B0%E6%98%8E"><span class="nav-number">3.1.3.</span> <span class="nav-text">class 声明</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E5%BA%8F%E5%88%97"><span class="nav-number">3.2.</span> <span class="nav-text">指令序列</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E6%8F%92%E5%85%A5%E5%88%86%E5%8F%B7%E8%A7%84%E5%88%99"><span class="nav-number">4.</span> <span class="nav-text">自动插入分号规则</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WMH"
+      src="/images/avatar2.png">
+  <p class="site-author-name" itemprop="name">WMH</p>
+  <div class="site-description" itemprop="description">just code it</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wangminghuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wangminghuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:m.h.wang@foxmail.com" title="E-Mail → mailto:m.h.wang@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weblog.wangminghuan.cn/" title="WebSite → https:&#x2F;&#x2F;weblog.wangminghuan.cn" rel="noopener" target="_blank"><i class="fa fa-book fa-fw"></i>WebSite</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/1657970003?topnav=1&wvr=6&topsug=1&is_all=1" title="微博 → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;1657970003?topnav&#x3D;1&amp;wvr&#x3D;6&amp;topsug&#x3D;1&amp;is_all&#x3D;1" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>微博</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-JavaScript%E9%83%A8%E5%88%86-%E8%AF%AD%E6%B3%95(%E4%B8%80)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.png">
+      <meta itemprop="name" content="WMH">
+      <meta itemprop="description" content="just code it">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WMH's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          重学前端-JavaScript部分-语法(一)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-07-10 05:00:00" itemprop="dateCreated datePublished" datetime="2019-07-10T05:00:00+00:00">2019-07-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-05-17 10:04:10" itemprop="dateModified" datetime="2022-05-17T10:04:10+00:00">2022-05-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">重学前端</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文我们开始介绍语法部分相关内容</p>
+<span id="more"></span>
+
+<h2 id="脚本与模块"><a href="#脚本与模块" class="headerlink" title="脚本与模块"></a>脚本与模块</h2><p>ES6之前，JS中只有一种源文件，称之为脚本；ES6之后，出现了另外一种源文件，称之为：模块</p>
+<h3 id="模块的使用"><a href="#模块的使用" class="headerlink" title="模块的使用"></a>模块的使用</h3><p>我们可以在script标签中加入<code>type=&quot;module&quot;</code> 属性，这时候加载的文件就是模块，反之则为脚本</p>
+<pre><code>  &lt;script type=&quot;module&quot; src=&quot;xxxxx.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p>在脚本文件中我们可以使用import声明与export声明</p>
+<p><img src="./2.jpg"></p>
+<p>关于import 与 export的用法可以参考<a href="/ES6%E7%B3%BB%E5%88%97-5-Class%E4%B8%8EModule/">ES6系列-5-Class与Module</a></p>
+<h3 id="函数体"><a href="#函数体" class="headerlink" title="函数体"></a>函数体</h3><p>宏任务中可能会执行的代码包括“脚本”、“模块”和“函数体”，函数体其实也是一个语句的列表。跟脚本和模块比起来，函数体中的语句列表中多了 return 语句可以用，函数体实际上有四种，下图做了对比</p>
+<p><img src="./3.jpg"></p>
+<h2 id="JS语法的全局机制"><a href="#JS语法的全局机制" class="headerlink" title="JS语法的全局机制"></a>JS语法的全局机制</h2><p> JavaScript 语法的全局机制：预处理和指令序言，这两个机制对于我们解释一些 JavaScript 的语法现象非常重要</p>
+<h3 id="预处理"><a href="#预处理" class="headerlink" title="预处理"></a>预处理</h3><p>JavaScript 执行前，会对脚本、模块和函数体中的语句进行预处理。预处理过程将会提前处理 var、函数声明、class、const 和 let 这些语句，以确定其中变量的意义。</p>
+<h4 id="var-声明"><a href="#var-声明" class="headerlink" title="var 声明"></a>var 声明</h4><p>在预处理阶段，var 的作用能够穿透一切语句结构（包括<code>if(false)</code>也无法阻挡），它只认脚本、模块和函数体三种语法结构。在ES6出现之前，为了模拟函数作用域，经常使用IIFE</p>
+<h4 id="function-声明"><a href="#function-声明" class="headerlink" title="function 声明"></a>function 声明</h4><p>在全局（脚本、模块和函数体），function 声明表现跟 var 相似，不同之处在于，function 声明不但在作用域中加入变量，还会给它赋值：</p>
+<pre><code>console.log(foo); // 打印出函数体
+function foo()&#123;&#125;
+</code></pre>
+<p>如果出现在<code>if(false)</code>下，仍然会产生变量，只是不会被提前赋值</p>
+<pre><code>console.log(foo); // undefined 
+if(true) &#123;
+    function foo()&#123;&#125; // 如果没有此处代码，上面console部分会报错
+&#125;
+</code></pre>
+<h4 id="class-声明"><a href="#class-声明" class="headerlink" title="class 声明"></a>class 声明</h4><p>class 声明在全局的行为跟 function 和 var 都不一样</p>
+<p>提前使用会报错，这符合正常预期</p>
+<pre><code>console.log(c); // 报错 Uncaught ReferenceError: c is not defined
+class c&#123;&#125;
+</code></pre>
+<p>但下面这种情况仍然会报错</p>
+<pre><code>var c = 1;
+function foo()&#123;
+    console.log(c); // ReferenceError: Cannot access &#39;c&#39; before initialization
+    class c &#123;&#125;
+&#125;
+foo();
+</code></pre>
+<p>这说明，class 声明也是会被预处理的，它会在作用域中创建变量，并且要求访问它时抛出错误。class 的声明作用不会穿透 if 等语句结构，所以只有写在全局环境才会有声明作用</p>
+<h3 id="指令序列"><a href="#指令序列" class="headerlink" title="指令序列"></a>指令序列</h3><p>脚本和模块都支持一种特别的语法，叫做指令序言（Directive Prologs）。的目的是留给 JavaScript 的引擎和实现者一些统一的表达方式，在静态扫描时指定 JavaScript 代码的一些特性。</p>
+<p>“use strict”是 JavaScript 标准中规定的唯一一种指令序言</p>
+<h2 id="自动插入分号规则"><a href="#自动插入分号规则" class="headerlink" title="自动插入分号规则"></a>自动插入分号规则</h2><p>因为JavaScript 语言提供了相对可用的分号自动补全规则，所以很多开发者倾向于不写分号。<br>分号自动补全规则有三条：</p>
+<ul>
+<li>有换行符，且下一个符号是不符合语法的，那么就尝试插入分号。</li>
+<li>有换行符，且语法中规定此处不能有换行符，那么就自动插入分号。</li>
+<li>源代码结束处，不能形成完整的脚本或者模块结构，那么就自动插入分号。</li>
+</ul>
+<p>但在实际应用中，还有一个no LineTerminator here 规则：表示它所在的结构中的这一位置不能插入换行符</p>
+<p><img src="./1.jpg"></p>
+<p>举个例子：</p>
+<pre><code>function foo()&#123;
+  return 
+  1
+&#125;
+foo(); // undefined;
+</code></pre>
+<p>上面例子中，根据no LineTerminator here规则，return后面不能插入换行符，但现在存在换行符，那个一句分号自动补全规则的第二条：<code>有换行符，且语法中规定此处不能有换行符，那么就自动插入分号</code>，引擎会在return后面直接插入分号，那么执行结果就不难理解了。</p>
+<p>日常开发中还会出现几种不写分号，极易造成错误的情况：</p>
+<ul>
+<li><p>以括号开头的语句</p>
+<pre><code>(function(a)&#123;
+    console.log(a);
+&#125;)()/*这里没有被自动插入分号*/
+(function(a)&#123;
+    console.log(a);
+&#125;)()
+</code></pre>
+</li>
+<li><p>以数组开头的语句</p>
+<pre><code>var a = [[]]/*这里没有被自动插入分号*/
+[3, 2, 1, 0].forEach(e =&gt; console.log(e))
+</code></pre>
+</li>
+<li><p>以正则表达式开头的语句</p>
+<pre><code>var x = 1, g = &#123;test:()=&gt;0&#125;, b = 1/*这里没有被自动插入分号*/
+/(a)/g.test(&quot;abc&quot;)
+console.log(RegExp.$1)
+</code></pre>
+</li>
+<li><p>以模板字符串开头的语句</p>
+<pre><code>var f = function()&#123;
+  return &quot;&quot;;
+&#125;
+var g = f/*这里没有被自动插入分号*/
+`Template`.match(/(a)/);
+console.log(RegExp.$1)
+</code></pre>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/js/" rel="tag"># js</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-JavaScript%E9%83%A8%E5%88%86-%E8%AF%8D%E6%B3%95/" rel="prev" title="重学前端 - JavaScript部分-词法">
+                  <i class="fa fa-chevron-left"></i> 重学前端 - JavaScript部分-词法
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-JavaScript%E9%83%A8%E5%88%86-%E8%AF%AD%E6%B3%95(%E4%BA%8C)/" rel="next" title="重学前端-JavaScript部分-语法(二)">
+                  重学前端-JavaScript部分-语法(二) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMH</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://static.wangminghuan.cn/cdn/animejs@3.2.1/anime.min.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://static.wangminghuan.cn/cdn/hexo-generator-searchdb/search.js"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

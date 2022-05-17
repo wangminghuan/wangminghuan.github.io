@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/fontawesome@5.15.3/all.min.css">
+  <link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/animejs@3.2.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wangminghuan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="概述WebAssembly（缩写为Wasm）是一种新的编码方式，编码标准。它并不是一门编程语言，而是一份字节码标准，需要用高级编程语言编译出字节码放到 WebAssembly 虚拟机中才能运行， 浏览器厂商需要做的就是根据 WebAssembly 规范实现虚拟机。wasm格式的文件，接近java的字节码，它是通过编译工具（如Emscripten）从高级语言（如C &#x2F; C ++ &#x2F; Rust）等编译">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅谈WebAssembly">
+<meta property="og:url" content="https://wangminghuan.github.io/%E6%B5%85%E8%B0%88WebAssembly/index.html">
+<meta property="og:site_name" content="WMH&#39;s Blog">
+<meta property="og:description" content="概述WebAssembly（缩写为Wasm）是一种新的编码方式，编码标准。它并不是一门编程语言，而是一份字节码标准，需要用高级编程语言编译出字节码放到 WebAssembly 虚拟机中才能运行， 浏览器厂商需要做的就是根据 WebAssembly 规范实现虚拟机。wasm格式的文件，接近java的字节码，它是通过编译工具（如Emscripten）从高级语言（如C &#x2F; C ++ &#x2F; Rust）等编译">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wangminghuan.github.io/%E6%B5%85%E8%B0%88WebAssembly/01.png">
+<meta property="og:image" content="https://wangminghuan.github.io/%E6%B5%85%E8%B0%88WebAssembly/02.png">
+<meta property="og:image" content="https://wangminghuan.github.io/%E6%B5%85%E8%B0%88WebAssembly/03.png">
+<meta property="og:image" content="https://wangminghuan.github.io/%E6%B5%85%E8%B0%88WebAssembly/06.png">
+<meta property="og:image" content="https://wangminghuan.github.io/%E6%B5%85%E8%B0%88WebAssembly/07.jpg">
+<meta property="og:image" content="https://wangminghuan.github.io/%E6%B5%85%E8%B0%88WebAssembly/08.png">
+<meta property="og:image" content="https://wangminghuan.github.io/%E6%B5%85%E8%B0%88WebAssembly/09.png">
+<meta property="article:published_time" content="2019-12-24T16:38:07.000Z">
+<meta property="article:modified_time" content="2022-05-17T10:04:10.877Z">
+<meta property="article:author" content="WMH">
+<meta property="article:tag" content="WebAssembly">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wangminghuan.github.io/%E6%B5%85%E8%B0%88WebAssembly/01.png">
+
+
+<link rel="canonical" href="https://wangminghuan.github.io/%E6%B5%85%E8%B0%88WebAssembly/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wangminghuan.github.io/%E6%B5%85%E8%B0%88WebAssembly/","path":"浅谈WebAssembly/","title":"浅谈WebAssembly"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>浅谈WebAssembly | WMH's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WMH's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-主页"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>主页</a></li>
+        <li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-分类"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81WebAssembly"><span class="nav-number">2.</span> <span class="nav-text">为什么需要WebAssembly</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WebAssembly-%E6%9C%89%E4%BB%80%E4%B9%88%E4%BC%98%E7%82%B9"><span class="nav-number">3.</span> <span class="nav-text">WebAssembly 有什么优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WebAssembly-%E6%98%AF%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%E7%9A%84"><span class="nav-number">4.</span> <span class="nav-text">WebAssembly 是如何工作的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E6%B5%8F%E8%A7%88%E5%99%A8%E4%BD%BF%E7%94%A8WebAssembly"><span class="nav-number">5.</span> <span class="nav-text">在浏览器使用WebAssembly</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AA%E4%BA%BA%E7%9C%8B%E6%B3%95"><span class="nav-number">6.</span> <span class="nav-text">个人看法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WMH"
+      src="/images/avatar2.png">
+  <p class="site-author-name" itemprop="name">WMH</p>
+  <div class="site-description" itemprop="description">just code it</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wangminghuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wangminghuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:m.h.wang@foxmail.com" title="E-Mail → mailto:m.h.wang@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weblog.wangminghuan.cn/" title="WebSite → https:&#x2F;&#x2F;weblog.wangminghuan.cn" rel="noopener" target="_blank"><i class="fa fa-book fa-fw"></i>WebSite</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/1657970003?topnav=1&wvr=6&topsug=1&is_all=1" title="微博 → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;1657970003?topnav&#x3D;1&amp;wvr&#x3D;6&amp;topsug&#x3D;1&amp;is_all&#x3D;1" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>微博</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/%E6%B5%85%E8%B0%88WebAssembly/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.png">
+      <meta itemprop="name" content="WMH">
+      <meta itemprop="description" content="just code it">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WMH's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          浅谈WebAssembly
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-12-24 16:38:07" itemprop="dateCreated datePublished" datetime="2019-12-24T16:38:07+00:00">2019-12-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-05-17 10:04:10" itemprop="dateModified" datetime="2022-05-17T10:04:10+00:00">2022-05-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>WebAssembly（缩写为Wasm）是一种新的编码方式，编码标准。它并不是一门编程语言，而是一份字节码标准，需要用高级编程语言编译出字节码放到 WebAssembly 虚拟机中才能运行， 浏览器厂商需要做的就是根据 WebAssembly 规范实现虚拟机。<br>wasm格式的文件，接近java的字节码，它是通过编译工具（如Emscripten）从高级语言（如C / C ++ / Rust）等编译而来，他可以同js文件一样运行在客户端与服务端。2019年12月5日，W3C WebAssembly 工作组发布 WebAssembly 正式推荐标准（W3C Recommendation）。</p>
+<p>WebAssembly具有巨大的意义——它提供了一条途径，以使得以各种语言编写的代码都可以以接近原生的速度在Web中运行。</p>
+<p><img src="./01.png"></p>
+<span id="more"></span>
+
+<h2 id="为什么需要WebAssembly"><a href="#为什么需要WebAssembly" class="headerlink" title="为什么需要WebAssembly"></a>为什么需要WebAssembly</h2><ul>
+<li> javascript语言本身的缺陷，如，没有静态变量类型、语法太灵活导致开发大型 Web 项目困难。</li>
+<li> 解释性语言的执行效率相比底层语言要慢很多，性能问题无法突破。</li>
+</ul>
+<h2 id="WebAssembly-有什么优点"><a href="#WebAssembly-有什么优点" class="headerlink" title="WebAssembly 有什么优点"></a>WebAssembly 有什么优点</h2><ul>
+<li>体积小：由于浏览器运行时只加载编译成的字节码，一样的逻辑比用字符串描述的 JS 文件体积要小很多；</li>
+<li>加载快：由于文件体积小，再加上无需解释执行，WebAssembly 能更快的加载并实例化，减少运行前的等待时间；</li>
+<li>兼容性问题少：WebAssembly 是非常底层的字节码规范，制订好后很少变动，就算以后发生变化,也只需在从高级语言编译成字节码过程中做兼容。可能出现兼容性问题的地方在于 JS 和 WebAssembly 桥接的 JS 接口。</li>
+</ul>
+<h2 id="WebAssembly-是如何工作的"><a href="#WebAssembly-是如何工作的" class="headerlink" title="WebAssembly 是如何工作的"></a>WebAssembly 是如何工作的</h2><p>我们都知道，机器只能识别0与1，但是这些机器码对人来说是难以阅读与理解的，对于js开发人员来说，JS运行环境中都存在着JavaScript引擎，它的工作就是把你的人类语言转化成机器所理解的语言，而翻译的过程一般有两种模式：</p>
+<ul>
+<li>使用解释器，翻译的过程基本上是一行一行及时生效的。</li>
+<li>使用编译器，在执行前翻译。<br>两种方式各有利弊，实际的浏览器厂商开始引入了编译器来解决解释器重复执行的问题，此处有兴趣的可以了解下浏览器的<a target="_blank" rel="noopener" href="https://hacks.mozilla.org/2017/02/a-crash-course-in-just-in-time-jit-compilers/">JIT模式</a></li>
+</ul>
+<p>一般高级语言不会直接通过编译器直接将语言转化为机器语言（如，汇编），这样效率比较低，通常编译器将把高级语言翻译成一种更低级的语言，但比机器码的等级高。这就是中间代码（IR）：</p>
+<p><img src="./02.png"></p>
+<p>编译器的“前端”将高级编程语言转换为IR。编译器的“后端”将 IR 转换成目标机器的汇编代码。<br>而WebAssembly 字节码不能直接在任何一种 CPU 架构上运行，它是一种抹平了不同 CPU 架构的机器码，由于非常接近机器码，可以非常快的被翻译为对应架构的机器码（它比 JavaScript 代码更快更直接的转换成机器代码，但它们不直接和特定硬件的特定机器代码对应）：</p>
+<p><img src="./03.png"></p>
+<p>浏览器加载wasm文件后，可以迅速将WebAssembly 字节码转化为机器码，因而执行效率非常高。</p>
+<h2 id="在浏览器使用WebAssembly"><a href="#在浏览器使用WebAssembly" class="headerlink" title="在浏览器使用WebAssembly"></a>在浏览器使用WebAssembly</h2><p>对于JavaScript调用wasm（目前还不能像js文件那样直接引用，只能通过 JS 去加载和执行），一般采用如下步骤：</p>
+<ol>
+<li><p>加载wasm的字节码。</p>
+</li>
+<li><p>将获取到字节码后转换成 ArrayBuffer，只有这种结构才能被正确编译。编译时会对上述ArrayBuffer进行验证。验证通过方可编译。编译后会通过Promise resolve一个 WebAssembly.Module。</p>
+</li>
+<li><p>在获取到 module 后需要通过 WebAssembly.Instance API 去同步的实例化 module。</p>
+</li>
+<li><p>上述第2、3步骤可以用instaniate 异步API等价代替。</p>
+</li>
+<li><p>之后就可以和像使用JavaScript模块一样调用了。</p>
+</li>
+</ol>
+<p>完整的步骤，也可以参见下面的流程图：</p>
+<p><img src="./06.png"></p>
+<p>我们看一个实际的demo : <a target="_blank" rel="noopener" href="https://roblin.cn/wasm/">通过wasm实现的一种视频播放器</a></p>
+<p>查看源码可以看到：</p>
+<p><img src="./07.jpg"></p>
+<p>控制台里面有.wasm调用：</p>
+<p><img src="./08.png"></p>
+<p><img src="./09.png"></p>
+<p>当然，在WebAssembly也可以调用js, 例如通过<code>WebAssembly.instantiate</code>方法等，此处不再详细介绍。</p>
+<h2 id="个人看法"><a href="#个人看法" class="headerlink" title="个人看法"></a>个人看法</h2><p>WebAssembly可以说是web领域的一种扩展，他与javascript是互补，它更多是用在需要大量计算的场景，如大型游戏等，并不是要取代(也无法取代)javascript。其学习成本还是比较高的，而且还有许多性能问题需要去解决，目前成熟的产品似乎只有Google Earth，Egret Engine等，现阶段了解即可，因为几乎没有什么应用场景。WebAssembly依旧任重而道远，且看web的翻天覆地变化吧~</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.ibm.com/developerworks/cn/web/wa-lo-webassembly-status-and-reality/index.html">WebAssembly 现状与实战</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.w3.org/TR/2019/REC-wasm-web-api-1-20191205/">W3C-WebAssembly Web API</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/WebAssembly/Using_the_JavaScript_API">MDN-使用WebAssembly JavaScript API</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/bff8aa23fe4d">几张图看懂WebAssembly</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/MgaanmCN3EIn8GTbXGAD6A">20分钟上手WebAssembly</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/WebAssembly/" rel="tag"># WebAssembly</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/%E8%AF%A6%E8%B0%88Object.defineProperty/" rel="prev" title="详谈Object.defineProperty">
+                  <i class="fa fa-chevron-left"></i> 详谈Object.defineProperty
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/%E7%A7%81%E6%9C%89npm%E4%BB%93%E5%BA%93%E6%90%AD%E5%BB%BA/" rel="next" title="私有npm仓库搭建">
+                  私有npm仓库搭建 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMH</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://static.wangminghuan.cn/cdn/animejs@3.2.1/anime.min.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://static.wangminghuan.cn/cdn/hexo-generator-searchdb/search.js"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

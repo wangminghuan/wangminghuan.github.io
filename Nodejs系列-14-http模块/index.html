@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/fontawesome@5.15.3/all.min.css">
+  <link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/animejs@3.2.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wangminghuan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="Http概述http模块主要用于搭建HTTP服务。大体上可以分为两个部分：客户端http请求 与 服务端http响应">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nodejs系列-14-http模块">
+<meta property="og:url" content="https://wangminghuan.github.io/Nodejs%E7%B3%BB%E5%88%97-14-http%E6%A8%A1%E5%9D%97/index.html">
+<meta property="og:site_name" content="WMH&#39;s Blog">
+<meta property="og:description" content="Http概述http模块主要用于搭建HTTP服务。大体上可以分为两个部分：客户端http请求 与 服务端http响应">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-10-17T14:09:48.000Z">
+<meta property="article:modified_time" content="2022-05-17T10:04:10.809Z">
+<meta property="article:author" content="WMH">
+<meta property="article:tag" content="note">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://wangminghuan.github.io/Nodejs%E7%B3%BB%E5%88%97-14-http%E6%A8%A1%E5%9D%97/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wangminghuan.github.io/Nodejs%E7%B3%BB%E5%88%97-14-http%E6%A8%A1%E5%9D%97/","path":"Nodejs系列-14-http模块/","title":"Nodejs系列-14-http模块"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Nodejs系列-14-http模块 | WMH's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WMH's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-主页"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>主页</a></li>
+        <li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-分类"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Http%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">Http概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AFhttp%E8%AF%B7%E6%B1%82"><span class="nav-number">2.</span> <span class="nav-text">客户端http请求</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#http-request"><span class="nav-number">2.1.</span> <span class="nav-text">http.request</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#http-get"><span class="nav-number">2.2.</span> <span class="nav-text">http.get</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#http-ClientRequest"><span class="nav-number">2.3.</span> <span class="nav-text">http.ClientRequest</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AFhttp%E5%93%8D%E5%BA%94"><span class="nav-number">3.</span> <span class="nav-text">服务端http响应</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#http-Server"><span class="nav-number">3.1.</span> <span class="nav-text">http.Server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#http-createServer"><span class="nav-number">3.2.</span> <span class="nav-text">http.createServer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#http-ServerResponse"><span class="nav-number">3.3.</span> <span class="nav-text">http.ServerResponse</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WMH"
+      src="/images/avatar2.png">
+  <p class="site-author-name" itemprop="name">WMH</p>
+  <div class="site-description" itemprop="description">just code it</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wangminghuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wangminghuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:m.h.wang@foxmail.com" title="E-Mail → mailto:m.h.wang@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weblog.wangminghuan.cn/" title="WebSite → https:&#x2F;&#x2F;weblog.wangminghuan.cn" rel="noopener" target="_blank"><i class="fa fa-book fa-fw"></i>WebSite</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/1657970003?topnav=1&wvr=6&topsug=1&is_all=1" title="微博 → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;1657970003?topnav&#x3D;1&amp;wvr&#x3D;6&amp;topsug&#x3D;1&amp;is_all&#x3D;1" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>微博</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/Nodejs%E7%B3%BB%E5%88%97-14-http%E6%A8%A1%E5%9D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.png">
+      <meta itemprop="name" content="WMH">
+      <meta itemprop="description" content="just code it">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WMH's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Nodejs系列-14-http模块
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-10-17 14:09:48" itemprop="dateCreated datePublished" datetime="2019-10-17T14:09:48+00:00">2019-10-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-05-17 10:04:10" itemprop="dateModified" datetime="2022-05-17T10:04:10+00:00">2022-05-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Nodejs-%E7%B3%BB%E5%88%97/" itemprop="url" rel="index"><span itemprop="name">Nodejs 系列</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="Http概述"><a href="#Http概述" class="headerlink" title="Http概述"></a>Http概述</h2><p>http模块主要用于搭建HTTP服务。大体上可以分为两个部分：客户端http请求 与 服务端http响应</p>
+<span id="more"></span>
+
+<h2 id="客户端http请求"><a href="#客户端http请求" class="headerlink" title="客户端http请求"></a>客户端http请求</h2><p>利用http模块向服务器发送http请求：</p>
+<h3 id="http-request"><a href="#http-request" class="headerlink" title="http.request"></a>http.request</h3><pre><code>http.request(url[, options][, callback])
+</code></pre>
+<p>我们将远端js文件下载到本地</p>
+<pre><code>  const http = require(&quot;http&quot;);
+  const fs=require(&quot;fs&quot;);
+  const path=require(&quot;path&quot;);
+  const options = &#123;
+    hostname: &#39;s29.9956.cn&#39;,
+    port: 80,
+    path: &#39;/static/common/js/vue.min.js?v=1549865000&#39;,
+    method: &#39;GET&#39;,
+    headers: &#123;
+      &#39;Content-Type&#39;: &#39;application/x-www-form-urlencoded&#39;,
+    &#125;
+  &#125;;
+  let filename = path.resolve(&#39;vue.js&#39;);
+  let writeStream = fs.createWriteStream(filename,&#123;encoding:&#39;utf8&#39;&#125;);
+  const req = http.request(options, (res) =&gt; &#123;
+    console.log(`状态码: $&#123;res.statusCode&#125;`);
+    console.log(`响应头: $&#123;JSON.stringify(res.headers)&#125;`);
+    res.setEncoding(&#39;utf8&#39;);
+    res.on(&#39;data&#39;, (chunk) =&gt; &#123;
+      console.log(`数据写入中...`);
+      writeStream.write(chunk)
+    &#125;);
+    res.on(&#39;end&#39;, () =&gt; &#123;
+      console.log(&#39;响应中已无数据&#39;);
+      writeStream.end();
+    &#125;);
+  &#125;);
+
+  req.on(&#39;error&#39;, (e) =&gt; &#123;
+    console.error(`请求遇到问题: $&#123;e.message&#125;`);
+  &#125;);
+  req.end(); //使用 http.request() 时，必须始终调用 req.end() 来表示请求的结束，即使没有数据被写入请求主体。
+</code></pre>
+<p>运行结果：</p>
+<pre><code>  状态码: 200
+  响应头: &#123;&quot;server&quot;:&quot;Tengine&quot;,&quot;content-type&quot;:&quot;application/javascript; charset=utf-8&quot;,&quot;content-length&quot;:&quot;85310&quot;,&quot;connection&quot;:&quot;close&quot;,&quot;vary&quot;:&quot;Accept-Encoding&quot;,&quot;date&quot;:&quot;Fri, 16 Aug 2019 11:19:19 GMT&quot;,&quot;last-modified&quot;:&quot;Thu, 27 Jun 2019 02:03:26 GMT&quot;,&quot;etag&quot;:&quot;\&quot;5d1423ee-14d3e\&quot;&quot;,&quot;accept-ranges&quot;:&quot;bytes&quot;,&quot;ali-swift-global-savetime&quot;:&quot;1565954359&quot;,&quot;via&quot;:&quot;cache21.l2cn1807[0,200-0,H], cache22.l2cn1807[0,0], kunlun4.cn698[0,200-0,H], kunlun2.cn698[0,0]&quot;,&quot;age&quot;:&quot;5519659&quot;,&quot;x-cache&quot;:&quot;HIT TCP_MEM_HIT dirn:11:519083382&quot;,&quot;x-swift-savetime&quot;:&quot;Mon, 09 Sep 2019 10:23:15 GMT&quot;,&quot;x-swift-cachetime&quot;:&quot;7776000&quot;,&quot;timing-allow-origin&quot;:&quot;*&quot;,&quot;eagleid&quot;:&quot;3da864a015714740181924794e&quot;&#125;
+  数据写入中...
+  数据写入中...
+  数据写入中...
+  响应中已无数据
+</code></pre>
+<p>最终文件被下载到本地</p>
+<h3 id="http-get"><a href="#http-get" class="headerlink" title="http.get"></a>http.get</h3><p>由于大多数请求都是没有主体的 GET 请求，因此 Node.js 提供了这个便捷的方法。 这个方法与 http.request() 的唯一区别是它将方法设置为 GET 并自动调用 req.end()：</p>
+<pre><code>http.get(url[, options][, callback])
+</code></pre>
+<p>例子：</p>
+<pre><code>const http = require(&quot;http&quot;);
+http.get(&quot;http://pv.sohu.com/cityjson?ie=utf-8&quot;,(res)=&gt;&#123;
+  res.setEncoding(&#39;utf8&#39;);
+  let rawData = &#39;&#39;;
+  res.on(&#39;data&#39;, (chunk) =&gt; &#123; rawData += chunk; &#125;);
+  res.on(&#39;end&#39;, () =&gt; &#123;
+    console.log(rawData)
+  &#125;);
+&#125;).on(&#39;error&#39;, (e) =&gt; &#123;
+  console.error(`出现错误: $&#123;e.message&#125;`);
+&#125;);
+</code></pre>
+<p>运行结果：</p>
+<pre><code>var returnCitySN = &#123;&quot;cip&quot;: &quot;115.60.61.16&quot;, &quot;cid&quot;: &quot;410100&quot;, &quot;cname&quot;: &quot;河南省郑州市&quot;&#125;;
+</code></pre>
+<h3 id="http-ClientRequest"><a href="#http-ClientRequest" class="headerlink" title="http.ClientRequest"></a>http.ClientRequest</h3><p>http.ClientRequest是由http.request或者是http.get返回产生的对象，表示一个已经产生而且正在进行中的HTPP请求。</p>
+<p>一般会显式地在这个对象上绑定监听函数来监听整个请求的状态，如：<code>req.on(&quot;error&quot;)</code> 监听异常，<code>req.end()</code>结束发起的http请求</p>
+<h2 id="服务端http响应"><a href="#服务端http响应" class="headerlink" title="服务端http响应"></a>服务端http响应</h2><p>通过http模块在服务端创建http服务，处理客户端的请求返回对应相应数据</p>
+<h3 id="http-Server"><a href="#http-Server" class="headerlink" title="http.Server"></a>http.Server</h3><p>通过实例化http.Server即可创建http服务, http.Server是一个基于事件的服务器，它是继承自EventEmitter，http.Server提供的事件如下：</p>
+<pre><code>- request：当客户端请求到来时，该事件被触发，提供两个参数req和res，表示请求和响应信息，是最常用的事件
+- connection：当TCP连接建立时，该事件被触发，提供一个参数socket，是net.Socket的实例
+- close：当服务器关闭时，触发事件（注意不是在用户断开连接时） 
+- listen：启动一个服务器来监听连接，listen存在多个可能的参数
+    server.listen(handle[, backlog][, callback])
+    server.listen(options[, callback])
+    server.listen(path[, backlog][, callback]) 用于 IPC 服务器。
+    server.listen([port[, host[, backlog]]][, callback]) 用于 TCP 服务器。
+</code></pre>
+<p>例子：</p>
+<pre><code>  const http=require(&quot;http&quot;);
+  const server=new http.Server();
+  server.listen(8080)
+  server.on(&quot;request&quot;,function(req,res)&#123;
+      res.writeHead(200,&#123;
+          &quot;content-type&quot;:&quot;text/plain&quot;
+      &#125;);
+      res.write(&quot;hello nodejs&quot;);
+      res.end();
+  &#125;);
+  server.on(&quot;close&quot;,()=&gt;&#123;
+    console.log(&quot;http服务关闭&quot;)
+  &#125;)
+
+  server.on(&quot;connection&quot;,()=&gt;&#123;
+    console.log(&quot;TCP连接建立&quot;)
+  &#125;)
+  setTimeout(()=&gt;&#123;
+    server.close()
+  &#125;,5000)
+</code></pre>
+<p>打开本机浏览器访问<code>http://localhost:8080/</code>,得到内容：</p>
+<pre><code>  hello nodejs
+</code></pre>
+<p>服务端运行结果：</p>
+<pre><code>  TCP连接建立
+  http服务关闭
+</code></pre>
+<h3 id="http-createServer"><a href="#http-createServer" class="headerlink" title="http.createServer"></a>http.createServer</h3><p>我们也可以使用http.createServer方法来创建服务，塔返回了一个http.Server对象</p>
+<pre><code>http.createServer([options][, requestlistener])
+</code></pre>
+<p>参数说明：</p>
+<pre><code>- options &lt;Object&gt;
+  IncomingMessage &lt;http.IncomingMessage&gt; 指定要使用的 IncomingMessage 类。用于扩展原始的 IncomingMessage。默认值: IncomingMessage。
+  ServerResponse &lt;http.ServerResponse&gt; 指定要使用的 ServerResponse 类。用于扩展原始 ServerResponse。默认值: ServerResponse。
+- requestListener &lt;Function&gt;
+</code></pre>
+<p>我们在本地开启一个http服务，且根据不同地址返回不同的内容，根目录请求返回一个本地文件：</p>
+<pre><code>const http = require(&#39;http&#39;);
+const fs = require(&#39;fs&#39;);
+
+const service=http.createServer( (request, response)=&gt;&#123;
+  if (request.url == &quot;/&quot;) &#123;
+    response.writeHead(200, &#123; &quot;Content-Type&quot;: &quot;text/html&quot; &#125;);
+    fs.createReadStream(`$&#123;__dirname&#125;/index.html`).pipe(response);
+  &#125;else&#123;
+    response.writeHead(404, &#123; &quot;Content-Type&quot;: &quot;text/plain&quot; &#125;);
+    response.end(&quot;404 error! File not found.&quot;);
+  &#125;
+  
+&#125;)
+service.listen(8080);
+console.log(&#39;Server running on port 8080.&#39;);
+</code></pre>
+<h3 id="http-ServerResponse"><a href="#http-ServerResponse" class="headerlink" title="http.ServerResponse"></a>http.ServerResponse</h3><p>http.ServerResponse是返回给客户端的信息，决定了用户最终看到的内容，一般也由http.Server的request事件发送，并作为第二个参数传递，它有三个重要的成员函数，</p>
+<ul>
+<li>res.writeHead(statusCode,[heasers])：向请求的客户端发送响应头，该函数在一个请求中最多调用一次，如果不调用，则会自动生成一个响应头</li>
+<li>res.write(data,[encoding])：想请求的客户端发送相应内容，data是一个buffer或者字符串，如果data是字符串，则需要制定编码方式，默认为utf-8，在res.end调用之前可以多次调用</li>
+<li>res.end([data],[encoding])：结束响应，告知客户端所有发送已经结束，当所有要返回的内容发送完毕时，该函数必需被调用一次，两个可选参数与res.write()相同。如果不调用这个函数，客户端将用于处于等待状态。</li>
+</ul>
+<p>上述例子均有调用。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/ab2741f78858">浅析nodejs的http模块</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/note/" rel="tag"># note</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Nodejs%E7%B3%BB%E5%88%97-13-dgram%E6%A8%A1%E5%9D%97/" rel="prev" title="Nodejs系列-13-dgram模块">
+                  <i class="fa fa-chevron-left"></i> Nodejs系列-13-dgram模块
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Nodejs%E7%B3%BB%E5%88%97-15-child_process%E6%A8%A1%E5%9D%97/" rel="next" title="Nodejs系列-15-child_process模块">
+                  Nodejs系列-15-child_process模块 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMH</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://static.wangminghuan.cn/cdn/animejs@3.2.1/anime.min.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://static.wangminghuan.cn/cdn/hexo-generator-searchdb/search.js"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/fontawesome@5.15.3/all.min.css">
+  <link rel="stylesheet" href="https://static.wangminghuan.cn/cdn/animejs@3.2.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wangminghuan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="概述随着各种“微服务”的流行，“微前端”的概念也被创造出来，在浏览知乎时看到好几篇文章都与“微前端”相关，而qiankun更是各类文章绕不开的话题。对于这种新兴的概念我们不表，技术终究是用来为业务服务的，不是越新越好，譬如：你可能不需要微前端中就比较中肯，微前端不是银弹，适合自己的才是最好的。 说了一大推，我们回到qiankun上，因为他不是iframe, 所以我一直比较好奇：它是如果实现应用之间">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅析qiankun中的样式隔离与JS沙箱机制">
+<meta property="og:url" content="https://wangminghuan.github.io/%E6%B5%85%E6%9E%90qiankun%E4%B8%AD%E7%9A%84%E6%A0%B7%E5%BC%8F%E9%9A%94%E7%A6%BB%E4%B8%8EJS%E6%B2%99%E7%AE%B1%E6%9C%BA%E5%88%B6/index.html">
+<meta property="og:site_name" content="WMH&#39;s Blog">
+<meta property="og:description" content="概述随着各种“微服务”的流行，“微前端”的概念也被创造出来，在浏览知乎时看到好几篇文章都与“微前端”相关，而qiankun更是各类文章绕不开的话题。对于这种新兴的概念我们不表，技术终究是用来为业务服务的，不是越新越好，譬如：你可能不需要微前端中就比较中肯，微前端不是银弹，适合自己的才是最好的。 说了一大推，我们回到qiankun上，因为他不是iframe, 所以我一直比较好奇：它是如果实现应用之间">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wangminghuan.github.io/%E6%B5%85%E6%9E%90qiankun%E4%B8%AD%E7%9A%84%E6%A0%B7%E5%BC%8F%E9%9A%94%E7%A6%BB%E4%B8%8EJS%E6%B2%99%E7%AE%B1%E6%9C%BA%E5%88%B6/2.gif">
+<meta property="og:image" content="https://wangminghuan.github.io/%E6%B5%85%E6%9E%90qiankun%E4%B8%AD%E7%9A%84%E6%A0%B7%E5%BC%8F%E9%9A%94%E7%A6%BB%E4%B8%8EJS%E6%B2%99%E7%AE%B1%E6%9C%BA%E5%88%B6/1.gif">
+<meta property="article:published_time" content="2021-07-28T11:31:02.000Z">
+<meta property="article:modified_time" content="2022-05-17T10:04:10.873Z">
+<meta property="article:author" content="WMH">
+<meta property="article:tag" content="qiankun">
+<meta property="article:tag" content="隔离">
+<meta property="article:tag" content="沙箱">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wangminghuan.github.io/%E6%B5%85%E6%9E%90qiankun%E4%B8%AD%E7%9A%84%E6%A0%B7%E5%BC%8F%E9%9A%94%E7%A6%BB%E4%B8%8EJS%E6%B2%99%E7%AE%B1%E6%9C%BA%E5%88%B6/2.gif">
+
+
+<link rel="canonical" href="https://wangminghuan.github.io/%E6%B5%85%E6%9E%90qiankun%E4%B8%AD%E7%9A%84%E6%A0%B7%E5%BC%8F%E9%9A%94%E7%A6%BB%E4%B8%8EJS%E6%B2%99%E7%AE%B1%E6%9C%BA%E5%88%B6/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wangminghuan.github.io/%E6%B5%85%E6%9E%90qiankun%E4%B8%AD%E7%9A%84%E6%A0%B7%E5%BC%8F%E9%9A%94%E7%A6%BB%E4%B8%8EJS%E6%B2%99%E7%AE%B1%E6%9C%BA%E5%88%B6/","path":"浅析qiankun中的样式隔离与JS沙箱机制/","title":"浅析qiankun中的样式隔离与JS沙箱机制"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>浅析qiankun中的样式隔离与JS沙箱机制 | WMH's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WMH's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-主页"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>主页</a></li>
+        <li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-分类"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B7%E5%BC%8F%E9%9A%94%E7%A6%BB"><span class="nav-number">2.</span> <span class="nav-text">样式隔离</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Shadow-DOM"><span class="nav-number">2.1.</span> <span class="nav-text">Shadow DOM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dynamic-Stylesheet"><span class="nav-number">2.2.</span> <span class="nav-text">Dynamic Stylesheet</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JS%E6%B2%99%E7%AE%B1"><span class="nav-number">3.</span> <span class="nav-text">JS沙箱</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#legacySandBox"><span class="nav-number">3.1.</span> <span class="nav-text">legacySandBox</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#proxySandBox"><span class="nav-number">3.2.</span> <span class="nav-text">proxySandBox</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#snapshotSandBox"><span class="nav-number">3.3.</span> <span class="nav-text">snapshotSandBox</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WMH"
+      src="/images/avatar2.png">
+  <p class="site-author-name" itemprop="name">WMH</p>
+  <div class="site-description" itemprop="description">just code it</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wangminghuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wangminghuan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:m.h.wang@foxmail.com" title="E-Mail → mailto:m.h.wang@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weblog.wangminghuan.cn/" title="WebSite → https:&#x2F;&#x2F;weblog.wangminghuan.cn" rel="noopener" target="_blank"><i class="fa fa-book fa-fw"></i>WebSite</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/1657970003?topnav=1&wvr=6&topsug=1&is_all=1" title="微博 → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;1657970003?topnav&#x3D;1&amp;wvr&#x3D;6&amp;topsug&#x3D;1&amp;is_all&#x3D;1" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>微博</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangminghuan.github.io/%E6%B5%85%E6%9E%90qiankun%E4%B8%AD%E7%9A%84%E6%A0%B7%E5%BC%8F%E9%9A%94%E7%A6%BB%E4%B8%8EJS%E6%B2%99%E7%AE%B1%E6%9C%BA%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.png">
+      <meta itemprop="name" content="WMH">
+      <meta itemprop="description" content="just code it">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WMH's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          浅析qiankun中的样式隔离与JS沙箱机制
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-07-28 11:31:02" itemprop="dateCreated datePublished" datetime="2021-07-28T11:31:02+00:00">2021-07-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-05-17 10:04:10" itemprop="dateModified" datetime="2022-05-17T10:04:10+00:00">2022-05-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%89%8D%E7%AB%AF%E6%9D%82%E7%83%A9/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>随着各种“微服务”的流行，“微前端”的概念也被创造出来，在浏览知乎时看到好几篇文章都与“微前端”相关，而<a target="_blank" rel="noopener" href="https://qiankun.umijs.org/zh/guide">qiankun</a>更是各类文章绕不开的话题。对于这种新兴的概念我们不表，技术终究是用来为业务服务的，不是越新越好，譬如：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/392152863">你可能不需要微前端</a>中就比较中肯，微前端不是银弹，适合自己的才是最好的。</p>
+<p>说了一大推，我们回到qiankun上，因为他不是iframe, 所以我一直比较好奇：它是如果实现应用之间的样式与运行时的隔离？</p>
+<span id="more"></span>
+
+<h2 id="样式隔离"><a href="#样式隔离" class="headerlink" title="样式隔离"></a>样式隔离</h2><p>通常的实践是通过约定 css 前缀的方式来避免样式冲突，但这属于人为约定，无法保证结果。我们试图从纯技术角度来解决这个问题</p>
+<h3 id="Shadow-DOM"><a href="#Shadow-DOM" class="headerlink" title="Shadow DOM"></a>Shadow DOM</h3><p>shadow DOM并不是一个特别新的概念，html中的video标签就是使用shadow DOM的一个案例。使用它时，你在html只会看到一个video标签，但实际上播放器上还有一系列按钮和其他操作，这些就都是封装到shadow dom中的，对外界是不可见的。所以Shadow DOM天然实现了样式隔离。</p>
+<p><img src="./2.gif"></p>
+<p>更多请访问：<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/Web_Components/Using_shadow_DOM">MDN-使用 shadow DOM</a></p>
+<h3 id="Dynamic-Stylesheet"><a href="#Dynamic-Stylesheet" class="headerlink" title="Dynamic Stylesheet"></a>Dynamic Stylesheet</h3><p>动态插入/移除样式DOM, 没错，这是一个及其简单的方式。原理是浏览器会对所有的样式表的插入、移除做整个 CSSOM 的重构，从而达到 插入、卸载 样式的目的：</p>
+<p><img src="./1.gif"></p>
+<p>qiankun采用就是这种方案。但这个方案并非完美，它只解决了子应用之间的样式隔离，对于主应用与子应用之间的样式隔离并未解决，参见：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/392152863">你可能不需要微前端</a></p>
+<h2 id="JS沙箱"><a href="#JS沙箱" class="headerlink" title="JS沙箱"></a>JS沙箱</h2><p>因为各个应用之间的全局变量会互相污染，所以JS沙箱比样式隔离的问题更棘手，社区的普遍玩法是给一些全局副作用加各种前缀从而避免冲突。但其实我们都明白，口头约定这种东西并不靠谱，而且对于已经开发完毕的老系统，这种约定方案并不适用。</p>
+<p>其实这部分才是我一直好奇的地方，翻看几篇博客，大致明白了原理：</p>
+<p>qiankun的沙箱隔离机制主要分为三种：</p>
+<ul>
+<li>legacySandBox</li>
+<li>proxySandBox</li>
+<li>snapshotSandBox</li>
+</ul>
+<p>其中 legacySandBox、proxySandBox 是基于 Proxy API 来实现的，在不支持 Proxy API 的低版本浏览器中，会降级为 snapshotSandBox</p>
+<p>这里我们梳理下主要设计思路，具体的代码实现可参考源码或文末的链接</p>
+<h3 id="legacySandBox"><a href="#legacySandBox" class="headerlink" title="legacySandBox"></a>legacySandBox</h3><p>legacySandBox 的本质上还是操作 window 对象，但是他会存在三个状态池，分别用于子应用卸载时还原主应用的状态和子应用加载时还原子应用的状态</p>
+<ul>
+<li>addedPropsMapInSandbox： 存储在子应用运行时期间新增的全局变量，用于卸载子应用时还原主应用全局变量；</li>
+<li>modifiedPropsOriginalValueMapInSandbox：存储在子应用运行期间更新的全局变量，用于卸载子应用时还原主应用全局变量；</li>
+<li>currentUpdatedPropsValueMap：存储子应用全局变量的更新，用于运行时切换后还原子应用的状态；</li>
+</ul>
+<p>同样会对window造成污染(虽然污染已经降到了最低)，但是性能比快照沙箱好，不用遍历window对象。</p>
+<h3 id="proxySandBox"><a href="#proxySandBox" class="headerlink" title="proxySandBox"></a>proxySandBox</h3><p>在 qiankun 中，proxySandBox 用于多实例场景。一般我们的中后台系统同一时间只会加载一个子应用的运行时。但是也存在同一时间加载多个子应用的场景。</p>
+<p>原理大致如下：激活沙箱后，每次对window取值的时候，先从自己沙箱环境的fakeWindow里面找，如果不存在，就从rawWindow(外部的window)里去找；当对沙箱内部的window对象赋值的时候，会直接操作fakeWindow，而不会影响到rawWindow。</p>
+<h3 id="snapshotSandBox"><a href="#snapshotSandBox" class="headerlink" title="snapshotSandBox"></a>snapshotSandBox</h3><p>对于不支持proxy的浏览器，会降级为此模式。主要的原理就是在子应用激活 / 卸载时分别去通过快照的形式记录/还原状态来实现沙箱的。通过对当前的 window 和记录的快照做 diff 来实现沙箱。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/78362028">可能是你见过最完善的微前端解决方案</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/dc74e3705e4f">浏览器新特性–shadow DOM</a></li>
+<li><a target="_blank" rel="noopener" href="https://juejin.cn/post/6920110573418086413">15分钟快速理解qiankun的js沙箱原理及其实现</a></li>
+<li><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000038219823">解密微前端：从qiankun看沙箱隔离</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/qiankun/" rel="tag"># qiankun</a>
+              <a href="/tags/%E9%9A%94%E7%A6%BB/" rel="tag"># 隔离</a>
+              <a href="/tags/%E6%B2%99%E7%AE%B1/" rel="tag"># 沙箱</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/web%E6%8A%93%E5%8C%85%E4%B8%AD%E7%9A%84%E9%82%A3%E4%BA%9B%E4%BA%8B/" rel="prev" title="web抓包中的那些事">
+                  <i class="fa fa-chevron-left"></i> web抓包中的那些事
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/CSS3%E4%B8%AD%E7%9A%84var/" rel="next" title="CSS3中的var">
+                  CSS3中的var <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WMH</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://static.wangminghuan.cn/cdn/animejs@3.2.1/anime.min.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://static.wangminghuan.cn/cdn/hexo-generator-searchdb/search.js"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
