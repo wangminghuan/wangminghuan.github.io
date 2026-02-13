@@ -874,19 +874,18 @@ vendors:
   # The default CDN provider of third-party plugins.
   # Available values: local | jsdelivr | unpkg | cdnjs
   # Dependencies for `plugins: local`: https://github.com/next-theme/plugins
-  plugins: jsdelivr
+  plugins: unpkg
 
   # In the following settings, you can specify the CDN link for each plugin.
   # If left blank, the default CDN provider set by `plugins` option will be used.
 
   # Anime.js
   # For more information: https://animejs.com
-  anime:
+  anime: https://static.wangminghuan.cn/cdn/animejs@3.2.1/anime.min.js
 
   # Font Awesome
   # For more information: https://fontawesome.com
-  fontawesome:
-
+  fontawesome: https://static.wangminghuan.cn/cdn/fontawesome@5.15.3/all.min.css
   # Prism
   prism:
   prism_autoloader:
@@ -944,7 +943,7 @@ vendors:
 
   # Animate.css
   # Warning: motion won't work with animate.css version 3.2.0 or later
-  animate_css:
+  animate_css: https://static.wangminghuan.cn/cdn/animejs@3.2.1/animate.min.css
 
   # NProgress.js
   nprogress_js:
