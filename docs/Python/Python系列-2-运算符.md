@@ -6,7 +6,7 @@ categories: Python
 ---
 ## 概述
 了解完基本数据类型后，我们学习下Python中的运算符
-<!-- more -->
+
 
 ## 算数运算符
 

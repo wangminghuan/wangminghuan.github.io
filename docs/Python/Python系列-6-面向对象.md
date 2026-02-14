@@ -7,7 +7,7 @@ categories: Python
 ## 概述
  
 上一篇中已经提到了Python中的类，这里我们再详细介绍下
-<!-- more -->
+
 
 ## 类的写法
 

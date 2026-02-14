@@ -10,7 +10,7 @@ categories: JavaScript
 
 谈到Web Worker 与 Service Worker，经常出现的高频词汇还有PWA，离线应用，缓存等，我们先了解下，这些名词的含义：
 
-<!-- more -->
+
 ## Application Cache
 
 应用缓存，最早HTML5 规范中设计了应用缓存（Application Cache）这么一个新的概念。通过它，我们可以做离线应用。在控制台中我们也能发现它的身影：

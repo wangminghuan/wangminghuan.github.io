@@ -13,7 +13,8 @@
   "author": "WMH",
   "license": "ISC",
   "dependencies": {
+    "v-viewer": "^3.0.23",
     "vitepress": "^1.6.4",
-    "vitepress-plugin-auto-sidebar": "^1.4.0"
+    "vitepress-sidebar": "^1.33.1"
   }
 }

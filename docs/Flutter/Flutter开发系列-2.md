@@ -7,7 +7,7 @@ tags: [Flutter, Dart]
 
 本次我们简要学习下Dart中的核心语法功能，并以Javascript的角度看Dart，做下简单的对比，以便快速掌握Dart
 
-<!-- more -->
+
 ## Dart核心语法
 
 ### 变量与类型

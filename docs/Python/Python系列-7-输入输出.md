@@ -9,7 +9,7 @@ categories: Python
 
 本文我们学习下输入输出函数，之前多次用到的print就是输出函数，可以再控制台打印数据，类似nodejs的console.log。但是Python的输出函数更强大。还有输入函数input 与 File对象的一些方法
 
-<!-- more -->
+
 ## input
 
 使用input([prompt])读取一行，将其转换为string类型并返回：

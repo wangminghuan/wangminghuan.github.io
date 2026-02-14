@@ -7,7 +7,7 @@ categories: web
 ## 概述
 现有的浏览器存储方案有，cookie, localStorage, sessionStorage,他们都可以进行存储，但仅限于key-value形式，而且只能存储字符串，且Cookie 的大小不超过4KB，且每次请求都会发送回服务器；LocalStorage 在 2.5MB 到 10MB 之间（各家浏览器不同），而且不提供搜索功能，不能建立自定义的索引。所以，需要一种新的解决方案，于是 IndexedDB 就诞生了。
 
-<!-- more -->
+
 
 ## IndexedDB 简介
 

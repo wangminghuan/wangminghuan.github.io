@@ -6,7 +6,7 @@ categories: JavaScript
 ---
 ## 概述
 本文小探一下Fetch相关内容
-<!-- more -->
+
 ## 关于AJAX
 2005 年，Jesse James Garrett 发表了一篇在线文章，题为“Ajax: A new Approach to Web Applications”（http://www.adaptivepath.com/ideas/essays/archives/000385.php）。他在这篇文章里介绍了一种技术，用他的话说，就叫 Ajax，是对 `Asynchronous JavaScript + XML` 的简写。这一技术能够向服务器请求额外的数据而无须卸载页面，会带来更好的用户体验。Garrett 还解释了怎样使用这一技术改变自从 Web 诞生以来就一直沿用的“单击，等待”的交互模式。
 

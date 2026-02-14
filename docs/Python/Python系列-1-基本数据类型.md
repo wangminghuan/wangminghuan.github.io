@@ -11,7 +11,7 @@ categories: Python
 
 学习一门语言，先从基本数据类型开始吧。
 
-<!-- more -->
+
 
 ![](./image/8846137095.png)
 

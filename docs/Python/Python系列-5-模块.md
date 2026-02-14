@@ -7,7 +7,7 @@ categories: Python
 ## 概述
 
 关于模块的概念，都已有了概念，本章我们学习下python的模块, 看看它的模块化怎么玩儿。
-<!-- more -->
+
 
 ## python中的模块
 

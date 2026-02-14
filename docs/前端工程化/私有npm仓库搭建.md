@@ -11,7 +11,7 @@ categories: 前端工程化
 在开发中经常会遇到一些公共的组件调用，将代码抽离成模块后，想通过npm进行管理，但很多时候这些代码是包含业务相关功能的，是不能对外发布的，这个时候就亟需搭建一个私有npm仓库来进行存放。
 
 查阅资料可以发现，类似的开源库基本有以下两种： cnpm 和 sinopia(verdaccio)。本文选用的为verdaccio，它是sinopia的fork版本（sinopia2015年已经停止更新），不同于cnpm的繁琐，verdaccio基本是属于傻瓜式的操作。那么废话不多，开始搭建。
-<!-- more -->
+
 
 ## verdaccio 安装
 

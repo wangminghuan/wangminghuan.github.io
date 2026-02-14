@@ -8,12 +8,12 @@ categories: Web框架
 ## 概述
 Nodejs天生就是异步操作，非阻塞I/O操作，使得它在服务端有着一些其他语言没有的天生优势。那么如何创建Web Server？koa2也用了两年，主要用来在服务端搭建web服务（编写spa主模板路由，api反向代理等简单功能），也未系统学习过。它跟Egg.js又各自有什么优缺点，最近正好有时间，从头细致捋一遍koa，并与egg做下对比。
 
-<!-- more -->
+
 
 ## 原生nodejs
 
 框架只是nodejs底层api的再封装，我们使用nodejs的api可以很简单的实现一个web server:
-
+```
     const http=require("http")
     var url = require('url');
     http.createServer((req,res)=>{
@@ -28,8 +28,8 @@ Nodejs天生就是异步操作，非阻塞I/O操作，使得它在服务端有�
     }).listen(8008,()=>{
       console.log('web server started at port 8008')
     })
-
-运行一下，访问http://localhost:8008/ 与 http://localhost:8008/list 分别返回不用的内容。
+```
+运行一下，访问`http://localhost:8008/` 与 `http://localhost:8008/list` 分别返回不用的内容。
 
 但实际应用中不会这么简单，如何处理本地静态文件，如何解析get/post请求参数与返回内容，如何管理路由，如何管理cookie等等，都是需要考虑的。于是就出现了web server 框架, 其中最著名的当属express
 

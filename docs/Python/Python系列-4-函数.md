@@ -13,7 +13,7 @@ categories: Python
 4. 函数内容以冒号（:）开始
 5. return 表示函数结束，无返回内容默认返回None
 
-<!-- more -->
+
 
 ## 函数定义
 

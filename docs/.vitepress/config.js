@@ -1,10 +1,13 @@
 import { defineConfig } from 'vitepress';
-import { getSidebar } from 'vitepress-plugin-auto-sidebar';
-import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-export default defineConfig({
+import { withSidebar } from 'vitepress-sidebar';
+// 侧边栏配置
+const sidebarConfig = [{
+  documentRootPath: 'docs',
+  basePath: '/',
+  resolvePath: '/',
+  useTitleFromFileHeading: true
+}]
+export default defineConfig(withSidebar({
   title: "WMH's Blog",
   description: "just code it",
   base: '/',
@@ -19,13 +22,6 @@ export default defineConfig({
       { text: '首页', link: '/' },
       { text: 'AI系列', link: '/AI/主流大模型概述' },
     ],
-    sidebar: getSidebar({
-      contentRoot: resolve(__dirname, '../'),
-      contentDirs: ['AI','JavaScript','Nodejs','Python','Flutter'],
-      collapsible: true,
-      collapsed: true,
-      useFrontmatter: true
-    }),
     logo: '/logo.svg',
     outline: "deep",
     outlineTitle: "目录",
@@ -71,4 +67,4 @@ export default defineConfig({
       },
     }
   }
-})
+},sidebarConfig))

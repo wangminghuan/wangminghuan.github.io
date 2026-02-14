@@ -12,7 +12,7 @@ WebAssembly具有巨大的意义——它提供了一条途径，以使得以各
 
 ![](./image/5130602603.png)
 
-<!-- more -->
+
 
 ## 为什么需要WebAssembly
 

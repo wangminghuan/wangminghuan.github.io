@@ -9,7 +9,7 @@ categories: Web框架
 
 之前我们介绍过koa了，文本了解下Egg。如官网文档所说：Egg是继承于Koa, 对于企业级应用koa还略显单薄，Egg将koa作为基础框架，在它的模型基础上做了一些增强。
 
-<!-- more -->
+
 
 ## 项目脚手架
 
@@ -17,7 +17,7 @@ Egg官网有配套的脚手架，用于快速初始化egg项目
 
     npm init egg --type=simple
 
-关于此脚手架的执行原理，可参照：[你不知道的npm init](/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84npm%20init/)
+关于此脚手架的执行原理，可参照：你不知道的npm init
 
 ## Egg VS Koa
 

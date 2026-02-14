@@ -7,7 +7,7 @@ categories: JavaScript
 ## 概述
 Object.defineProperty()的作用就是直接在一个对象上定义一个新属性，或者修改一个已经存在的属性，并返回这个对象。
 
-<!-- more -->
+
 
 ## 语法
 

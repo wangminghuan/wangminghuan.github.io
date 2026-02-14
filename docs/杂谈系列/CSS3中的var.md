@@ -8,7 +8,7 @@ categories: CSS
 ## 概述
 CSS3中增加了变量函数var, 当然这些变量在less/sass等css预编译语言中早有实现，CSS标准也已经支持，并且也有着不错的兼容性：
 
-<!-- more -->
+
 ![](./image/7480021025.png)
 
 

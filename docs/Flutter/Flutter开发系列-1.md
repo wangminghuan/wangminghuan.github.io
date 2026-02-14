@@ -7,7 +7,7 @@ tags: [Flutter, Dart]
 ## 概述
 遥想1.0正式版发布时自己曾折腾过一段，后来渐渐又遗忘了，正好有个需求需要用到Flutter，如今Flutter3.0正式版已发布，此系列文章均基于：3.0.3稳定版。
 
-<!-- more -->
+
 
 ## 安装
 Flutter的安装教程网上一搜一大把，依照[Flutter中文网](https://flutter.cn/docs/get-started/install)的安装流程一般没什么问题，我简单罗列下步骤（Windows 10 64位）

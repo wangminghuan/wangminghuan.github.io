@@ -8,14 +8,14 @@ categories: Web Server
 
 本篇开始，我们详细了解下Web Server（通常也代表http server），以及我们经常看到的，入nginx, tomcat, apache都是什么，都在什么场景下使用。
 
-<!-- more -->
+
 ## HTTP 服务的本质
 
 HTTP服务器本质上也是一种应用程序——它通常运行在服务器之上，绑定服务器的IP地址并监听某一个tcp端口来接收并处理HTTP请求，这样客户端（一般来说是IE, Firefox，Chrome这样的浏览器）就能够通过HTTP协议来获取服务器上的网页（HTML格式）、文档（PDF格式）、音频（MP4格式）、视频（MOV格式）等等资源。下图描述的就是这一过程
 
 ![](./image/4362703912.jpg)
 
-不同的语言都有相关类库可以实现简单的HTTP 服务，如 [NodeJs](/web%E5%BC%80%E5%8F%91%E6%A1%86%E6%9E%B6%E4%B9%8Bkoa2/#%E5%8E%9F%E7%94%9Fnodejs) , Python, Java等，它们都能够通过绑定IP地址并监听tcp端口来提供HTTP服务。
+不同的语言都有相关类库可以实现简单的HTTP 服务，如 NodeJs, Python, Java等，它们都能够通过绑定IP地址并监听tcp端口来提供HTTP服务。
 
 ## Ngixn
 

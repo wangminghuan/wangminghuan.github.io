@@ -6,7 +6,7 @@ categories: JavaScript
 ---
 ## 概述
 本文将介绍一下我们在各种项目中见到的 xx.shim.js 和 xx.polyfill.js，这两个文件命名各自有什么含义。
-<!-- more -->
+
 
 ##  shim 
 
