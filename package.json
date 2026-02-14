@@ -1,35 +1,19 @@
 {
-  "name": "vitepress-blog",
+  "name": "vite-blog",
   "version": "1.0.0",
-  "description": "WMH's Blog powered by VitePress",
+  "description": "",
+  "private": true,
   "type": "module",
   "scripts": {
     "dev": "vitepress dev docs",
     "build": "vitepress build docs",
-    "preview": "vitepress preview docs",
-    "deploy": "npm run build && npx gh-pages -d docs/.vitepress/dist"
+    "preview": "vitepress preview docs"
   },
-  "devDependencies": {
-    "@vueuse/core": "^10.0.0",
-    "@types/node": "^22.10.7",
-    "gray-matter": "^4.0.3",
-    "vite": "^6.0.10",
-    "vite-plugin-vitepress-auto-nav": "^3.0.0",
-    "vitepress": "^1.6.1",
-    "vue": "^3.5.13"
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "keywords": [
-    "blog",
-    "vitepress",
-    "documentation"
-  ],
+  "keywords": [],
   "author": "WMH",
-  "license": "MIT",
+  "license": "ISC",
   "dependencies": {
-    "v-viewer": "^3.0.21",
-    "viewerjs": "^1.11.7"
+    "vitepress": "^1.6.4",
+    "vitepress-plugin-auto-sidebar": "^1.4.0"
   }
 }

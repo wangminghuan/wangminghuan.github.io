@@ -1,50 +1,31 @@
-// docs/.vitepress/config.js
-import { defineConfig } from 'vitepress'
-import AutoNav from "vite-plugin-vitepress-auto-nav";
-
+import { defineConfig } from 'vitepress';
+import { getSidebar } from 'vitepress-plugin-auto-sidebar';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 export default defineConfig({
-  srcDir: './src',
   title: "WMH's Blog",
   description: "just code it",
+  base: '/',
   lang: 'zh-CN',
   lastUpdated: true,
   markdown: {
     lineNumbers: true,
     defaultHighlightLang: "js",
   },
-  // 构建输出目录
-  outDir: '../dist',
-  // Vite配置
-  vite: {
-    plugins: [
-      AutoNav({
-        itemsSetting: {
-          AI系列: { sort: 0 },
-          前端系列: { sort: 1 }
-        },
-      })
-    ],
-    server: {
-      port: 3000,
-      open: true
-    }
-  },
-  
-  // 主题配置
   themeConfig: {
-    // 导航栏
     nav: [
-       {
-        text: "前端系列",
-        link: "/前端系列/Nodejs/Nodejs系列-1-基础",
-        activeMatch: "/前端系列/",
-      },
-      {
-        text: "AI系列",
-        link: "/AI系列/LLM/LLM系列-1-速览",
-        activeMatch: "/AI系列/",
-      }
+      { text: '首页', link: '/' },
+      { text: 'AI系列', link: '/AI/主流大模型概述' },
     ],
+    sidebar: getSidebar({
+      contentRoot: resolve(__dirname, '../'),
+      contentDirs: ['AI','JavaScript','Nodejs','Python','Flutter'],
+      collapsible: true,
+      collapsed: true,
+      useFrontmatter: true
+    }),
     logo: '/logo.svg',
     outline: "deep",
     outlineTitle: "目录",
