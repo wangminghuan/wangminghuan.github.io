@@ -6,7 +6,7 @@ on:
   # 在针对 `main` 分支的推送上运行。如果你
   # 使用 `master` 分支作为默认分支，请将其更改为 `master`
   push:
-    branches: [master]
+    branches: [master]  # 根据实际默认分支调整
 
   # 允许你从 Actions 选项卡手动运行此工作流程
   workflow_dispatch:
@@ -38,13 +38,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: yarn # 或 pnpm / npm
+          cache: npm # 改为 npm，与项目使用的包管理器一致
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Install dependencies
-        run: yarn install # 或 pnpm install / yarn install / bun install
+        run: npm install # 改为 npm install，与项目使用的包管理器一致
       - name: Build with VitePress
-        run: yarn build # 或 pnpm docs:build / yarn docs:build / bun run docs:build
+        run: npm run build # 改为 npm run build，与 package.json 中的脚本一致
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
