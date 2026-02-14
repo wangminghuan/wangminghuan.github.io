@@ -1,0 +1,60 @@
+<template>
+  <div class="previewable" @click="preview">
+    <img v-bind="$attrs" :src="srcWiteBase" :style="{ width: cssWidth }" />
+  </div>
+</template>
+
+<script setup>
+import { withBase } from "vitepress";
+import { computed,defineProps } from "vue";
+import { api } from "v-viewer";
+
+const props = defineProps({
+  src: String,
+  width: {
+    type: [Number, String],
+    default: 'auto'
+  },
+});
+
+const cssWidth = computed(() => {
+  const width = Number(props.width) || props.width;
+  return typeof width === "string" ? width : width + "px";
+});
+
+const srcWiteBase = computed(() => {
+  return withBase(props.src);
+});
+
+function preview() {
+  api({ images: [srcWiteBase.value] });
+}
+</script>
+
+<style>
+.previewable {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.previewable::before {
+  content: "🔍";
+  transition: 0.3s all;
+  opacity: 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.previewable:hover::before {
+  opacity: 1;
+}
+</style>
