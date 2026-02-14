@@ -1,6 +1,8 @@
 欢迎访问我的博客：https://weblog.wangminghuan.cn  
-备用站点：https://blog.wangminghuan.cn 
 
+## 静态部署在Vercel
+- https://vercel.com/wangminghuans-projects/
+- github不再部署，采用cname文件指向vercel
 
 ## 参考文档
 - https://vitepress-sidebar.cdget.com/introduction

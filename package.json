@@ -15,8 +15,5 @@
   "dependencies": {
     "vitepress": "^1.6.4",
     "vitepress-sidebar": "^1.33.1"
-  },
-  "overrides": {
-    "esbuild": "^0.21.5"
   }
 }
