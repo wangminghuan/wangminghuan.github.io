@@ -63,7 +63,7 @@ peerDependencies的作用举个例子：A模块是B模块的插件，然而用�
 
 npm 官方提供了 npm init 命令帮助我们快速初始化 package.json 文件, 相信大家都用过，需要一步步确认。同时还支持添加参数 ` -y`（yes的意思） 来快速初始化
 
-![](./1.png)
+![](./image/3274734950.png)
 
 随着技术的快速发展，发现初始化 package.json 已经无法满足大家的需求了，越来越多的项目需要进行整个项目的初始化。很多项目也会开发针对自己项目的脚手架工具，例如 vue-cli, create-react-app。运行这些工具需要先使用 `npm install -g` 全局安装这些脚手架工具，然后利用脚手架再来初始化项目，如vue项目的初始化：
 
@@ -85,7 +85,7 @@ npm 官方提供了 npm init 命令帮助我们快速初始化 package.json 文�
 
 此时本地项目就会安装对应的node_modules:
     
-![](./2.png)
+![](./image/3763525134.png)
 
 如果想使用`vue`命令的话，运行
 
@@ -93,7 +93,7 @@ npm 官方提供了 npm init 命令帮助我们快速初始化 package.json 文�
 
 那么毫无意外，一定会报错，因为只有全局安装的包才可以直接调用，或者直接指定路径调用
 
-![](./3.png)
+![](./image/5378139973.png)
 
 又或者通过自定义script脚本，通过npm 来进行调用：
 
@@ -102,11 +102,11 @@ npm 官方提供了 npm init 命令帮助我们快速初始化 package.json 文�
         "vue":"./node_modules/.bin/vue -V"
       }
 
-![](./4.png)
+![](./image/2025284004.png)
 
 但npx 出现以后，我们可以更优雅的执行本地命令
 
-![](./5.png)
+![](./image/7225993279.png)
 
 npx 的原理很简单，就是运行的时候，会到node_modules/.bin路径和环境变量$PATH里面，检查命令是否存在
 
@@ -118,11 +118,11 @@ npx另一个重要的优点是，可以执行未安装的包的命令，例如�
 
 发现本地或全局都没有安装`create-react-app` 会先执行安装，安装完毕后，调用`create-react-app`命令初始化项目：
 
-![](./6.png)
+![](./image/9263023100.png)
 
 并且create-react-app会在下载使用完被删除
 
-![](./7.png)
+![](./image/0542391914.png)
 
 此时我们再回过头来看最初的问题：`npm init egg --type=simple` 又是怎么完成初始化的？
 
@@ -141,7 +141,7 @@ npx另一个重要的优点是，可以执行未安装的包的命令，例如�
 
 运行后，发现与上面的`npx create-react-app my-app`结果是一致的
 
-![](./8.png)
+![](./image/2441773366.png)
 
 `--type=simple`肯定是参数，所以 `npm init egg` 其实就是 `npx create-egg`
 

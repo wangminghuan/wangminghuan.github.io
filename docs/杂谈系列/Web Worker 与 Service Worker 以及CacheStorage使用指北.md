@@ -15,7 +15,7 @@ categories: JavaScript
 
 应用缓存，最早HTML5 规范中设计了应用缓存（Application Cache）这么一个新的概念。通过它，我们可以做离线应用。在控制台中我们也能发现它的身影：
 
-![](./1.png)
+![](./image/0115510717.png)
 
 然而，由于这个 API 的设计有太多的缺陷，被很多人吐槽，最终被废弃。废弃的原因有兴趣的可以查看：[为什么app cache没有得到大规模应用？它有哪些硬伤吗？](https://www.zhihu.com/question/29876535)
 
@@ -28,7 +28,7 @@ categories: JavaScript
 CacheStorage 接口表示 Cache 对象的存储。它提供了一个 ServiceWorker 、其它类型worker或者 window 范围内可以访问到的所有命名cache的主目录（它并不是一定要和service workers一起使用，即使它是在service workers规范中定义的），并维护一份字符串名称到相应 Cache 对象的映射。
 
 
-![](./2.png)
+![](./image/9803119758.png)
 
 ## Web Worker
 
@@ -76,7 +76,7 @@ html文件逻辑如下（省略部分公共部分）：
 
 得到执行结果为：
 
-![](./4-1.png)
+![](./image/4491928645.png)
 
 - 主线程采用new命令，调用Worker()构造函数，新建一个 Worker 线程
 - worker线程与主线程之间通过postmessage与onmessage完成通信
@@ -84,7 +84,7 @@ html文件逻辑如下（省略部分公共部分）：
 
 在控制台此处可以看到ww.js中的代码（Network中也可以看到ww.js的请求）
 
-![](./4-2.png)
+![](./image/1313638987.png)
 
 
 ## Shared Worker
@@ -128,7 +128,7 @@ html文件逻辑如下（省略部分公共部分）：
       }
 
 执行结果：
-![](./1.gif)
+![](./image/7179824114.gif)
 
 可以发现：
 - 通过构造函数`SharedWorker`来创建Share Worker。
@@ -137,7 +137,7 @@ html文件逻辑如下（省略部分公共部分）：
 - 只有运行Share Worker的所有页面关闭，Share Worker也会自动关闭。
 - share worker的执行可以通过`chrome://inspect/#workers`进行调试，当前页面无法调试（Network中不会出现swk.js文件）
 
-![](./9.png)
+![](./image/1795143954.png)
 
 我们将swk.js文件稍加改造，设置为广播模式，所有页面均可"共享"数据了
 
@@ -170,7 +170,7 @@ html文件逻辑如下（省略部分公共部分）：
       })
 运行结果：
 
-![](./2.gif)
+![](./image/9453104824.gif)
 
 
 ## Service Worker
@@ -224,7 +224,7 @@ Service Worker必须是https协议的（本地服务可以为http），里面大
 
 执行结果为：
 
-![](./4.png)
+![](./image/9518302082.png)
 
 ### 通信
 
@@ -253,13 +253,13 @@ sw.js文件内容为：
 
 我们再次执行，此处有个小插曲，就是sw.js文件的更新，需要在控制台中手动进行Unregister操作，否则无法更新Service Worker中的代码，在sw.js文件后面加时间戳也只会进入waiting状态：
 
-![](./5.png)
+![](./image/0415209602.png)
 
 也可结合业务实现自动更新，参见：[谨慎处理 Service Worker 的更新](https://zhuanlan.zhihu.com/p/51118741)，此处不再赘述。
 
 接着上面的代码，重新执行后，点击按钮向service worker发送消息：
 
-![](./6.png)
+![](./image/4691573944.png)
 
 ### 拦截请求
 
@@ -272,7 +272,7 @@ Service Worker 可以拦截页面的所有的请求（包括图片，静态资�
     
 此时页面发出的请求均会被拦截到：
 
-![](./7.png)
+![](./image/3020451875.png)
 
 ### 应用范围
 

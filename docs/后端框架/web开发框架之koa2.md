@@ -49,7 +49,7 @@ Koa源码非常精简，只有四个文件：
 ## 中间件
 Koa2本身只能算一个极简的HTTP服务器，自身不内置中间件，但是提供中间件内核。我们可以把一个HTTP请求理解为水流，而各种各样的中间件类似各种管道，它会对水流进行处理。每个中间件在HTTP请求过程中会改写请求，响应等数据。koa的中间件模型就是经常被提起的“洋葱模型”
 
-![](2.jpg)
+![](./image/2360903500.jpg)
 
 
 ### 理解中间件
@@ -116,7 +116,7 @@ Koa-router 是 koa 的一个路由中间件，它可以将请求的URL和方法�
 
 但通过查阅koa源码，app.use只接收一个参数，第二个参数是无效的：
 
-![](4.png)
+![](./image/6437834703.png)
 
 也有人在[issue区](https://github.com/i5ting/koa-generator/issues/57)提了同样的问题，然而无人回答。所以本人做了修改。同时根据自己常用的一些中间件，做了一个项目模板：[koa2-template](https://github.com/wangminghuan/koa2-template)
 
@@ -297,7 +297,7 @@ Documents是Model的实例，如果需要新建集合，只需要实例化Model,
 
 具体如截图所示（来源mongoose官网V5.10.16）
 
-   ![](./5.png)
+   ![](./image/8141350100.png)
 
 ## 其他
 

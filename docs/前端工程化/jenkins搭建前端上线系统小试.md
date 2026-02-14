@@ -73,7 +73,7 @@ docker的安装还是比较简单的，参照[阿里云官方文档](https://hel
 
 可以像下面这张图来类比：
 
-![](1.jpg)
+![](./image/4673116758.jpg)
 
 ### docker 安装jenkins
 
@@ -92,19 +92,19 @@ docker的安装还是比较简单的，参照[阿里云官方文档](https://hel
 
 启动服务，输入密码继续(安装过程忘记截图了，以下图收集于网络)；
 
-![](1.png)
+![](./image/6562160645.png)
 
 启动后安装推荐插件:
 
-![](2.png)
-![](3.png)
+![](./image/6570043558.png)
+![](./image/0270453029.png)
 安装插件完成后，进入设置初始账号密码:
 
-![](4.png)
+![](./image/7819047107.png)
 
 设置完毕即可进入jenkins主页：
 
-![](5.png)
+![](.//image/8406076972.png)
 
 可能遇到的问题：
 1.访问接口出现：Error:403 No valid crumb was included in the request   
@@ -115,34 +115,33 @@ docker的安装还是比较简单的，参照[阿里云官方文档](https://hel
 
 进入插件管理，安装Nodejs Plugin: 
 
-![](6.png)
+![](./image/0037040603.png)
 
 进入全局工具配置，配置项目中会用到的nodejs版本，可以配置多个
-
-![](7.png)
+![](./image/7695240934.png)
 
 ### jenkins + github 配置项目
 
 开始创建项目，选择自由风格：
 
-![](8.png)
+![](./image/2826168877.png)
 
 开始配置项目（以github私有项目为例）
 
-![](9.png)
+![](./image/6888926001.png)
 
 此处我们填写完git地址后需要添加凭证，添加其他个人私有密钥不知道为啥一直在下拉菜单中选不到，添加用户名密码则可以，暂时还不知道啥原因~
 
-![](10.png)
+![](./image/4482973390.png)
 
-![](11.png)
+![](./image/0028834360.png)
 
 触发器中我们选择hook，push之后，自动触发构建
 
-![](12.png)
+![](./image/3160711316.png)
 
 此处在github中也要做对应配置才可出发hook功能：
-![](16.png)
+![](./image/3255182552.png)
 
 也可以自定义配置，譬如，push 与 merge时触发，选择Let me select individual events，勾选以下选项：
 
@@ -153,7 +152,7 @@ docker的安装还是比较简单的，参照[阿里云官方文档](https://hel
 
 接下来我们配置拉去完代码后需要执行的脚本，centos上我们选择shell脚本：
 
-![](14.png)
+![](./image/0340823568.png)
 
 至此，一个简单的配置已经完毕，可以进行自动构建测试了！！
 
@@ -337,14 +336,14 @@ nodejs文件夹存在，但执行 `bin/node -v` 报错，提示 : No such file o
 
 得到日志如下：
 
-![](17.png)
+![](./image/4675422398.png)
 
 时间节点与我构建时完全相同！！！！，坑啊！！！查阅资料明白是触发了 [linux 的 OOM killer 机制](https://blog.51cto.com/vaedit/2112627)：
 
 
 于是乎重启服务器，只开启Jenkins，重新构建。我的阿里云服务器可怜的1G内存在构建过程中的内存变化如下：
 
-![](18.png)
+![](./image/6626763550.png)
 
 所以，都是贫穷惹的祸~
 
@@ -382,33 +381,33 @@ nodejs文件夹存在，但执行 `bin/node -v` 报错，提示 : No such file o
 
 首先，进行安装，过程省略。安装完毕后在项目配置页面可以看到多出一个配置：
 
-![](20.png)
+![](./image/3518805407.png)
 
 我们需要拿到webhook的地址，根据官方文档可以知道，我们需要拿到Jenkins管理员的API token, 进入管理用户页面，选择admin生成一个：
 
-![](21.png)
+![](./image/1848517787.png)
 
 最终得到的webhook地址为：`http://xxx:8080/generic-webhook-trigger/invoke?token=11d85c3af55e018axxxxxx`, 这里我们以腾讯云为例，配置下webhook:
 
-![](22.png)
+![](./image/5929535626.png)
 
 我们再回到项目配置页面，需要对该插件做一些配置, 默认我们配置好webhook后，所有配置过该webhook的页面，所有项目与分支的任意一个变动都可以触发所有项目的构建，这显然不是我想要的，我们需要做一些区分，参照[此文章](https://blog.csdn.net/xlgen157387/article/details/76216351)：  
 
 1. 区分分支
 
-![](24.png)
+![](./image/8979991839.png)
 
 2. 区分项目（不同服务提供商字段会有差异，腾讯云是在repository下）
 
-![](25.png)
+![](./image/1623356479.png)
 
 3. 配置token
 
-![](26.png)
+![](./image/8525978790.png)
 
 4. 过滤字段匹配项目（此处为每个项目特有配置，区分好项目与分支）
 
-![](27.png)
+![](./image/6670583487.png)
 
 我们手动构建一次可以看到webhook返回结果如下：
 
@@ -504,20 +503,20 @@ nodejs文件夹存在，但执行 `bin/node -v` 报错，提示 : No such file o
 ## 权限部分配置
 通过插件 `Role-based Authorization Strategy` 配置完成，安装完插件，重启Jenkins，会发现配置页面多一个选项：
 
-![](28.png)
+![](./image/0078238713.png)
 
 首先需要在全局安全配置页面将授权策略改为：Role-Based Strategy
 
-![](31.png)
+![](./image/2954369447.png)
 
 
 进入 Manage Role 选项，配置用户角色与所在组角色权限
 
-![](29.png)
+![](./image/2803849955.png)
 
 进入 Assign Roles 选项，为用户分配角色（首先需要在用户管理板块创建用户）
 
-![](30.png)
+![](./image/1734640956.png)
 
 具体可参考[jenkins配置用户角色权限，根据不同权限显示视图、Job](https://www.cnblogs.com/peng-lan/p/9809644.html)
 
@@ -578,7 +577,7 @@ docker安装方式比较傻瓜，而且整个插件安装的过程都比较快�
 
 再次运用构建命令，查看内存变化，会发现swap区已经得到了利用：
 
-![](32.png)
+![](./image/2448460247.png)
 
 ## 参考
 - [Systemd 入门教程：实战篇](https://www.cnblogs.com/zwcry/p/9602756.html)

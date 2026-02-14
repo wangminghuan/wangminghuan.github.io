@@ -74,7 +74,7 @@ ES5中遍历集合通常都是 for循环，数组还有 forEach 方法，对象�
 	console.log(iter.next())
 	console.log(iter.next())
 	console.log(iter.next())
-![](1.png)
+![](./image/0990292609.png)
 
 对于原生部署 Iterator 接口的数据结构，不用自己写遍历器生成函数，for...of循环会自动遍历它们。
 

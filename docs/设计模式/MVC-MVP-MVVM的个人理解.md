@@ -31,14 +31,14 @@ MVC全名是Model View Controller，它是Xerox PARC在二十世纪八十年代�
 
 首先要明确的一点就是：**MVC只是一个设计上的指导原则，并没有明确的架构**。一个经典的设计模式如下：
 
-![](./6.png)
+![](./image/7015048700.png)
 
 MVC 模型有很多变种和数据流动方式，最传统的 MVC 模型把视图渲染和数据处理做了隔离，通过控制器接收 View 操作，传递给数据模型，数据 ready 后由数据模型驱动视图渲染。但因为 View 的更新由 Model 处理，所以 Model 难免要和 View 的实现耦合，于是就有了改良版MVP的出现。
 
 ## MVP来了
 MVP 是 Model View Presenter 的缩写，相比MVC而言，View与Model没有变化，将Controller换成了Presenter，同时改变了通信方向
 
-![](./3.png)
+![](./image/8987035872.png)
 
 View 和 Model 完全隔离，Model 不再负责业务逻辑和视图变化，只负责底层数据处理。
 
@@ -71,7 +71,7 @@ View 和 Model 完全隔离，Model 不再负责业务逻辑和视图变化，�
 - Service：作为**业务处理层**部分，主要负责收集及对数据进行相应的运算处理，主要行为包含收集控制器请求数据、数据有效性验证、运算、请求数据模型（Model）、接收数据模型（Model）响应消息、响应结果至控制器等；
 -Model：作为**数据模型层**部分，主要用于将数据持久化（OUT）、查询持久化数据（IN），常见行为如对数据库进行操作、缓存数据库数据等；
 
-![](./8.png)
+![](./image/5743815085.png)
 
 可以看出 MVP 相对于 MVC 数据与视图分离做的更为出色，在大部分时候使用 MVC 其实是在使用 MVP。
 
@@ -79,7 +79,7 @@ View 和 Model 完全隔离，Model 不再负责业务逻辑和视图变化，�
 ## MVVM的时代
 MVVM由微软架构师Ken Cooper和Ted Peters开发，它是马丁·福勒的PM（Presentation Model）设计模式的变体
 
-![](./9.png)
+![](./image/8615388563.png)
 
 
 MVVM 也被称为 model-view-binder。MVVM 中，VM 是 ViewModel。View 与 ViewModel 之间采用数据绑定，绑定是双向的，避免了开发人员写一些同步 ViewModel 和 View 的重复逻辑。通过数据绑定，View 发生变化会自动反映到 ViewModel，ViewModel 产生的变化也会自动更新 View。
@@ -92,7 +92,7 @@ MVVM 也被称为 model-view-binder。MVVM 中，VM 是 ViewModel。View 与 Vie
 
 但官网有这么一句话：
 
-![](./1.jpg)
+![](./image/6759843052.jpg)
 
 
 对于这个问题，可以参考这里：[为什么尤雨溪尤大说VUE没有完全遵循MVVM？](https://www.zhihu.com/question/327050991)。

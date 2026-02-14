@@ -38,7 +38,7 @@ node中的模块化规范为commonJs规范，规定:
 ## module全局对象
 每个模块下都有一个module对象，它包含以下几个属性：
 
-![](1.jpg)
+![](./image/8952812304.jpg)
 
 ### exports与module.exports
 

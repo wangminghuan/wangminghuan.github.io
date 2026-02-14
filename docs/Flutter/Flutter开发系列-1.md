@@ -111,7 +111,7 @@ Skia 是一款用 C++ 开发的、性能彪悍的 2D 图像绘制引擎，其前
 
 Flutter 架构采用分层设计，从下到上分为三层，依次为：Embedder、Engine、Framework。
 
-![](2.webp)
+![](./image/0519455319.webp)
 
 - Embedder 是操作系统适配层，实现了渲染 Surface 设置，线程设置，以及平台插件等平台相关特性的适配。从这里我们可以看到，Flutter 平台相关特性并不多，这就使得从框架层面保持跨端一致性的成本相对较低。
 - Engine 层主要包含 Skia、Dart 和 Text，实现了 Flutter 的渲染引擎、文字排版、事件处理和 Dart 运行时等功能。Skia 和 Text 为上层接口提供了调用底层渲染和排版的能力，Dart 则为 Flutter 提供了运行时调用 Dart 和渲染引擎的能力。而 Engine 层的作用，则是将它们组合起来，从它们生成的数据中实现视图渲染。

@@ -77,7 +77,7 @@ remote 模块可以直接获取主进程中的模块。这种方式其实是第�
 
 但打包出来的包依旧有点大，打包后的文件中的node_modules 暂时还未找到合适方案合并到dist/electron/render.js中。
 
-![](1.png)
+![](./image/6446541844.png)
 
 ## 参考
 1. [Electron的应用结构](https://electronjs.org/docs/tutorial/application-architecture#main-and-renderer-processes)

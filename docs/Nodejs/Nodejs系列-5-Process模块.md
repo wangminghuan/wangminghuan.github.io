@@ -16,7 +16,7 @@ process.argv 属性返回一个数组，其中包含当启动 Node.js 进程时�
 
  	node 1.js --test1 -test2
 
-![](1.png)
+![](./image/9238462543.png)
 
 ### process.env
 该属性返回包含用户环境的对象。可以修改此对象，但这些修改不会反映到 Node.js 进程之外。

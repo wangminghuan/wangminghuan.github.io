@@ -19,7 +19,7 @@ categories: Python
 
 运行后会进入一个交互式命令行：
 
-![](1.png)
+![](./image/8624944061.png)
 
 ## print
 

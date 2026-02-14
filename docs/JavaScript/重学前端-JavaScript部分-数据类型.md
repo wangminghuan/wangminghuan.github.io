@@ -112,7 +112,7 @@ JavaScript 中的六个基本类型，有四个都在对象类型中有一个“
       console.log(symbolObject instanceof Symbol); //true
       console.log(symbolObject.constructor == Symbol); //true
 
-![](./1.png)
+![](./image/7817238721.png)
 JavaScript 语言设计上试图模糊对象和基本类型之间的关系，我们日常代码可以把对象的方法在基本类型上使用，比如：
 
     console.log("abc".charAt(0)); //a
@@ -126,7 +126,7 @@ JavaScript 语言设计上试图模糊对象和基本类型之间的关系，我
 
 ## 类型转换
 
-  ![](/3-1.jpg)
+  ![](./image/9777372953.jpg)
 
 ### StringToNumber
 
@@ -203,6 +203,6 @@ JavaScript 语言设计上试图模糊对象和基本类型之间的关系，我
 
 事实上，“类型”在 JavaScript 中是一个有争议的概念。一方面，标准中规定了运行时数据类型； 另一方面，JS 语言中提供了 typeof 这样的运算，用来返回操作数的类型，但 typeof 的运算结果，与运行时类型的规定有很多不一致的地方。我们可以看下表来对照一下。
 
-![](/3-2.png)
+![](./image/3141681300.png)
 
 从一般语言使用者的角度来看，毫无疑问，我们应该按照 typeof 的结果去理解语言的类型系统。但 JS 之父本人也在多个场合表示过，typeof 的设计是有缺陷的，只是现在已经错过了修正它的时机。

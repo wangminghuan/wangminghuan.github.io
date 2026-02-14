@@ -21,14 +21,14 @@ electron中对所有请求是可以做拦截的，但是却没有对返回内容
 
 github上其实有比较成熟的库来实现:[Ajax-hook](https://github.com/wendux/Ajax-hook), 可以参考源码进行学习。
 
-![](./4.png)
+![](./image/3803181110.png)
 
 ## 自动输入
 
 完成请求拦截后，又遇到了另外一个坑，如何触发input标签的oninput监听？
 为input标签赋值很简单：`input.value='123'`，但它只修改了input的value，并没有触发对应事件，我们拿[头条的搜索](https://so.toutiao.com/?need_open_window=1)为例（react构建）
 
-![](./1.png)
+![](./image/1007383186.png)
 
 我们需要做的不仅仅是赋值，还需要手动触发对应的事件，利用`new Event`来模拟input事件
 
@@ -40,7 +40,7 @@ github上其实有比较成熟的库来实现:[Ajax-hook](https://github.com/wen
     }
 
 运行结果如下：
-![](./2.png)
+![](./image/0808879878.png)
 纳尼？？哪里不对？？，于是查阅资料发现有人提到过这个问题：[js动态修改value，触发oninput事件的方法](https://blog.csdn.net/qq_23064433/article/details/112856303)，再次修改函数
 
     function inputVal(targetEle,val){
@@ -55,7 +55,7 @@ github上其实有比较成熟的库来实现:[Ajax-hook](https://github.com/wen
     }
 
 运行结果如下：
-![](./3.png)
+![](./image/6517189236.png)
 
 终于可以了！！！网上也有很多通过`document.createEvent`实现的例子，当然也可以实现，只不过官方不再推荐使用而已：[MDN DOC-Document.createEvent](https://developer.mozilla.org/zh-CN/docs/Web/API/Document/createEvent):
 

@@ -90,14 +90,14 @@ MongoDB在阿里云(`CentOS Linux release 7.6.1810`)的安装流程如下：
 
 此时再通过用户名密码连接，即可正常展示，如果没有开启认证，强烈建议开启 `./mongod --auth`
 
-![](1.png)
+![](./image/4123514815.png)
 
 ### 通过可视化工具连接
 
 本文中使用的可视化工具为[Robo 3T](https://robomongo.org/)，
 
 ### 通过shell连接
-进入mongodb安装目录（如：/usr/local/mongodb/bin), 执行以下命令：
+进入mongodb安装目录（如：/usr/local/mongodb/bin）, 执行以下命令：
 
      ./mongo --port 3001
 
@@ -136,7 +136,7 @@ ps: 如果通过进程守护方式启动，依旧可以通过此方式再次进�
 
       db.createCollection("area")
   
-![](2.png)
+![](./image/0387890742.png)
 
 查询当前数据库下，集合个数：
 
@@ -179,7 +179,7 @@ area集合已经被删除
         isCenter: true
     })
 
-![](3.png)
+![](./image/1022392676.png)
 
 `save()` 方法类似于 `insert()` 方法。如果指定 _id 字段，则会更新该 _id 的数据，不指定话功能同`insert()`方法:
 
@@ -280,7 +280,7 @@ MongoDB 使用 update() 和 save() 方法来更新集合中的文档。save方�
 
 结果为：
 
-![](4.png)
+![](./image/0294243465.png)
 
 `$currentDate`操作符的使用格式是：
 
@@ -648,18 +648,17 @@ MongoDB 的 find() 方法可以传入多个键(key)，每个键(key)以逗号隔
 $type操作符是基于BSON类型来检索集合中匹配的数据类型，并返回结果。具体数值对应的数据类型[参考此处](https://www.runoob.com/mongodb/mongodb-operators-type.html)
 
 例如我们查询所有id为Double类型的文档，结果如下：
-
-![](5.png)
+![](./image/3062444270.png)
 
 ### limit与skip方法
 limit()方法接受一个数字参数，该参数指定从MongoDB中读取的记录条数。skip()方法来跳过指定数量的数据，skip方法同样接受一个数字参数作为跳过的记录条数：
 
-![](6.png)
+![](./image/5396484281.png)
 
 ### sort排序
 sort() 方法可以通过参数指定排序的字段，并使用 1 和 -1 来指定排序的方式，其中 1 为升序排列，而 -1 是用于降序排列。
 
-![](7.png)
+![](./image/3321670279.png)
 
 ## 索引
 MongoDB 在创建集合期间在_id字段上创建了唯一索引。该索引可防止客户端插入两个_id字段值相同的文档。_id字段的索引不能删除。
@@ -718,7 +717,7 @@ mongostat是mongodb自带的状态检测工具，在命令行下使用。它会�
 
 运行结果：
 
-![](8.png)
+![](./image/6699363179.png)
 
 ## 其他操作
 
@@ -751,7 +750,7 @@ mongodb官网有配套的导出工具：`mongoexport`, 语法如下：
 
        ./mongoexport -d manage -c orders -o d:/dbs/manage/order.json  # 进入安装目录bin下执行
 
-![](./9.png)
+![](./image/9258995575.png)
 ### 导入数据
 
 mongodb官网有配套的导出工具：`mongoimport`, 语法如下：
@@ -771,7 +770,7 @@ mongodb官网有配套的导出工具：`mongoimport`, 语法如下：
 
       ./mongoimport --port 7000 -d manage -c orders --file /home/mongodb/dbs/manage/order.json  # 进入安装目录bin下执行
 
-![](./10.png)
+![](./image/9921585262.png)
 
 导入导出过程中需启动mongodb服务，操作过程中无需密码，如果不是默认端口，需要指定端口。window下安装目录若无相关工具，请进入[官网下载页面](https://www.mongodb.com/try/download/database-tools)进行下载安装
 ## 参考

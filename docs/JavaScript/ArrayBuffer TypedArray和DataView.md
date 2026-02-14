@@ -29,7 +29,7 @@ ArrayBuffer对象代表储存二进制数据的一段内存，它不能直接读
 
 ArrayBuffer也是一个构造函数，可以分配一段可以存放数据的连续内存区域。
 
-![](1.png)
+![](./image/181645802.png)
 
 可以看到，ArrayBuffer构造函数的参数是所需要的内存大小（单位字节）。
 
@@ -71,7 +71,7 @@ TypedArray视图一共包括 9 种类型，每一种视图都是一种构造函�
 
 结果如下：
 
-![](2.png)
+![](./image/2733594737.png)
 
 ###  DataView 视图
 
@@ -95,7 +95,7 @@ ArrayBuffer 和字符串的相互转换，使用原生 TextEncoder 和 TextDecod
 
 我们转换上一步得到的文本文件，结果如下：
 
-![](3.png)
+![](./image/9905316627.png)
 
 可以看到通过转换我们可以读取到文件中的内容（文本文件），而对于非utf8编码方式文件，得到的则是乱码。
 
@@ -120,7 +120,7 @@ XHR第一版，服务器通过 AJAX 操作只能返回文本数据，即response
       xhr.send();
 
 运行结果：
-![](4.png)
+![](./image/7631000090.png)
 
 responseType支持以下几个参数：
 
@@ -142,7 +142,7 @@ responseType支持以下几个参数：
 
 运行结果：
 
-![](4.png)
+![](./image/2462867481.png)
 
 #### 扩展
 开发中遇到一个接口上传，不同于常规接受FormData，接口只接受二进制数据，代码如下：
@@ -171,8 +171,8 @@ input表单
           }
 执行成功时的请求与返回截图如下:
 
-![](upload1.jpg)
-![](upload2.jpg)
+![](./image/0416138452.jpg)
+![](./image/9096240931.jpg)
 
 ###  WebSocket
 
@@ -206,7 +206,7 @@ WebSocket可以通过ArrayBuffer，发送或接收二进制数据。
 
 运行结果：
 
-![](5.png)
+![](./image/1230475193.png)
 
 可以看到，它的视图类型是一种针对Canvas元素的专有类型Uint8ClampedArray。这个视图类型的特点，就是专门针对颜色，把每个字节解读为无符号的 8 位整数，即只能取值 0 ～ 255，而且发生运算的时候自动过滤高位溢出。这为图像处理带来了巨大的方便。
 ### File API
@@ -240,7 +240,7 @@ endings，默认值为"transparent"，用于指定包含行结束符\n的字符�
       <input type="file" @change="handleChange">
       <audio :src="blobUrl" controls="controls"></audio>
 
-![](audio1.jpg)
+![](./image/3595771767.jpg)
 
 方式一：通过FileReader读取文件，获取文件二进制数据，传入Blob对象，创建blob实例，创建URL：
 
@@ -265,7 +265,7 @@ endings，默认值为"transparent"，用于指定包含行结束符\n的字符�
         this.blobUrl = URL.createObjectURL(target);
       }
 
-![](audio2.jpg)
+![](./image/4205816288.jpg)
 
 
 ## File对象
@@ -292,7 +292,7 @@ File 对象是特殊类型的 Blob，且可以用在任意的 Blob 类型的 con
       }
 运行结果：
 
-![](6.png) 
+![](./image/8843650688.png) 
 
 ### FileReader
 FileReader对象允许Web应用程序异步读取存储在用户计算机上的文件（或原始数据缓冲区）的内容，使用 File 或 Blob 对象指定要读取的文件或数据。

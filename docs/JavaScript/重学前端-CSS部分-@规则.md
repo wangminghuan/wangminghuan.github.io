@@ -121,7 +121,7 @@ support 检查环境的特性，它与 media 比较类似。
     	- pseudo-element(伪元素)
 
 
-![](/5-1.png)
+![](./image/8945717057.png)
 
 ### 知识点补充：css组合器
 

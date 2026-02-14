@@ -18,14 +18,14 @@ categories: 前端杂烩
 ### Shadow DOM
 shadow DOM并不是一个特别新的概念，html中的video标签就是使用shadow DOM的一个案例。使用它时，你在html只会看到一个video标签，但实际上播放器上还有一系列按钮和其他操作，这些就都是封装到shadow dom中的，对外界是不可见的。所以Shadow DOM天然实现了样式隔离。
 
-![](./2.gif)
+![](./image/2311518694.gif)
 
 更多请访问：[MDN-使用 shadow DOM](https://developer.mozilla.org/zh-CN/docs/Web/Web_Components/Using_shadow_DOM)
 
 ### Dynamic Stylesheet
 动态插入/移除样式DOM, 没错，这是一个及其简单的方式。原理是浏览器会对所有的样式表的插入、移除做整个 CSSOM 的重构，从而达到 插入、卸载 样式的目的：
 
-![](./1.gif)
+![](./image/9709619535.gif)
 
 qiankun采用就是这种方案。但这个方案并非完美，它只解决了子应用之间的样式隔离，对于主应用与子应用之间的样式隔离并未解决，参见：[你可能不需要微前端](https://zhuanlan.zhihu.com/p/392152863)
 

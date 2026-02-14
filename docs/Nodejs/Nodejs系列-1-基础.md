@@ -34,7 +34,7 @@ JavaScript 是一门单线程的语言，这意味着它只有一个调用栈，
 
 当达到调用栈最大的大小的时候就会发生这种情况(chrome中)：
 
-![](2.png)
+![](./image/0416559433.png)
 
 单线程执行代码是无法充分利用CPU资源，使得运行效率低。由于JavaScript只有一个调用栈，为了提高JavaScript的执行效率，解决方案就是采用异步调用，而内部处理执行机制就是利用事件循环-[EventLoop](https://blog.mhwang.club/Nodejs%E7%B3%BB%E5%88%97-2-EventLoop/#more/)
 
@@ -94,7 +94,7 @@ V8使用C++开发, 最主要的工作就是「把 JavaScript 直译成机器码�
 
 V8在NodeJs运行时的整体过程:
 
-![](1.png)
+![](./image/0014544926.png)
 
 Node在启动的时候，就已经把 Native Module，Builtin Module 加载到内存里面了。后来的 JavaScript 代码，就需要通过 V8 进行动态编译解析运行。
 
@@ -111,7 +111,7 @@ REPL（Read-Eval-Print Loop） 中文的话有翻译成：交互式解释器 或
 
 Node.js 自身也使用 repl 模块为执行 JavaScript 代码提供交互接口。
 
-![](4.png)
+![](./image/0888838408.png)
 
 也可以在在一个 Node.js 实例中启动多个 REPL 实例（引入nodejs 内置的repl模块）：
 
@@ -123,7 +123,7 @@ Node.js 自身也使用 repl 模块为执行 JavaScript 代码提供交互接口
 
 运行结果：
 
-![](5.png)
+![](./image/7958518622.png)
 
 ## 参考文章
 - [JavaScript、Node.js与V8的关系](https://segmentfault.com/a/1190000014722508)

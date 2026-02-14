@@ -35,7 +35,7 @@ Unix 及类 Unix 系统下的：sh (Bourne shell)，bash (Bourne-Again shell)，
 
 譬如，我们登录阿里云时用的xshell，就可以理解为这一种终端模拟器:
 
-![](./1.png)
+![](./image/2312482191.png)
 
 我们通过终端向主机发送命令，命令进入shell,shell 与内核交互，返给终端，终端展示出来，基本就是这个流程。  
 

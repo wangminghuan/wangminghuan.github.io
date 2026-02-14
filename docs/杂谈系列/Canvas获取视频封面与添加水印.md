@@ -145,11 +145,11 @@ timeupdate事件触发时将videDom转为Canvas对象，并得到base64（调用
 
 ## 其他：各种转换
 
-![](./1.png)
+![](./image/8842117990.png)
 
 更详细的版本
 
-![](./2.png)
+![](./image/5507778663.png)
 
 更详细的demo可参考[graphics-project:demo1-canvas](https://github.com/wangminghuan/graphics-project/blob/master/demo1-canvas/video.html)
 
