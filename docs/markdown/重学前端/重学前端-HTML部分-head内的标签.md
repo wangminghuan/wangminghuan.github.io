@@ -1,5 +1,5 @@
 ---
-title: 重学前端 - HTML部分-head内的标签
+title: 重学前端-HTML部分-head内的标签
 lastUpdated: 2019-05-20 08:30:00
 ---
 # head 标签本身

@@ -183,9 +183,9 @@ var a = "global";
 foo.call(obj);
 ```
 ## 对象
-JavaScript 中一共有七种主要类型（术语是“语言类型”）: `null/undefined/boolean/string/number/symbol/object`,具体可参见[重学前端系列-数据类型](/重学前端-JavaScript部分-数据类型/)
+JavaScript 中一共有七种主要类型（术语是“语言类型”）: `null/undefined/boolean/string/number/symbol/object`,具体可参见[重学前端系列-数据类型](../重学前端/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-JavaScript%E9%83%A8%E5%88%86-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B)
  
-前面六种称之为基本类型，剩下的都可以归到复杂类型下。同时JavaScript 中还有一些对象子类型，通常被称为内置对象：`String/Number/Boolean/Object/Function/Array/Date/RegExp/Error/Set/Map/Promise`, 更多关于对象部分可参见[重学前端系列-对象](/重学前端-JavaScript部分-对象/)
+前面六种称之为基本类型，剩下的都可以归到复杂类型下。同时JavaScript 中还有一些对象子类型，通常被称为内置对象：`String/Number/Boolean/Object/Function/Array/Date/RegExp/Error/Set/Map/Promise`, 更多关于对象部分可参见[重学前端系列-对象](../重学前端/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-JavaScript%E9%83%A8%E5%88%86-%E5%AF%B9%E8%B1%A1)
 
 这些内置函数可以当作构造函数 （可以通过new调用）来使用，从而可以构造一个对应子类型的新对象。对于这些对象子类型，Object、Array、Function 和 RegExp（正则表达式）来说，无论使用文字形式还是构造形式，它们都是对象(不是字面量)，所以首选更简单的文字形式。建议只在需要那些额外选项时使用构造形式。
 
@@ -242,7 +242,7 @@ ES6 新增了 `Object.assign`方法来实现浅复制(内部也是通过遍历�
 - `Object.freeze`：会创建一个冻结对象（对象上调用seal方法，并把所有“数据访问” 属性标记为 `writable:false`）
 
 ### Getter && Setter
-此部分可参见[重学前端系列-对象](/重学前端-JavaScript部分-对象/#访问器（getter-setter）属性)
+此部分可参见[重学前端系列-对象](../重学前端/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-JavaScript%E9%83%A8%E5%88%86-%E5%AF%B9%E8%B1%A1)
 
 ### 存在性
 
@@ -312,10 +312,10 @@ console.log(arr,newArr) // [1,2,3] [3]
   });
   console.log(arr,newArr) ;//[1,2,3] true
 ```
-如何直接遍历值而不是数组下标（或者对象属性）？ ES6 增加了一种用来遍历数组的`for of`循环语法, 具体可参见[ES6系列:Iterator](/ES6系列-3-Iterator/)
+如何直接遍历值而不是数组下标（或者对象属性）？ ES6 增加了一种用来遍历数组的`for of`循环语法, 具体可参见[ES6系列:Iterator](../ES6/ES6系列-3-Iterator)
 
 几种遍历的执行效率：
 ```
   for > for-of > forEach > filter > map > for-in
 ```
-ES6扩展了数组的方法，新增了entries/keys/values方法，返回的`iterator`对象用于`for of`循环，参见：[ES6系列-新增类型与扩展方法](/ES6系列-2-新增类型与扩展方法/#数组实例的-entries-，keys-和-values)
+ES6扩展了数组的方法，新增了entries/keys/values方法，返回的`iterator`对象用于`for of`循环，参见：[ES6系列-新增类型与扩展方法](../ES6/ES6系列-2-新增类型与扩展方法)

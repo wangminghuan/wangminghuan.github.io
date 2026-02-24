@@ -21,7 +21,7 @@ ES6之前，JS中只有一种源文件，称之为脚本；ES6之后，出现了
 
 ![](./image/4642586522.jpg)
 
-关于import 与 export的用法可以参考[ES6系列-5-Class与Module](/ES6系列-5-Class与Module/)
+关于import 与 export的用法可以参考[ES6系列-5-Class与Module](../ES6/ES6系列-5-Class与Module)
 
 ### 函数体
 宏任务中可能会执行的代码包括“脚本”、“模块”和“函数体”，函数体其实也是一个语句的列表。跟脚本和模块比起来，函数体中的语句列表中多了 return 语句可以用，函数体实际上有四种，下图做了对比

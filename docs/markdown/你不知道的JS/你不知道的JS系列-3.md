@@ -20,7 +20,7 @@ Javascript的基本设计思路如下：
 
 
 ## 面向对象
-与其它的语言相比，JavaScript 中的“对象”总是显得不那么合群。Javascript是面向对象的一门语言（也是一门函数式编程语言，后续再开文介绍），关于对象可以参考之前的博文[重学前端系列-对象](/重学前端-JavaScript部分-对象/)
+与其它的语言相比，JavaScript 中的“对象”总是显得不那么合群。Javascript是面向对象的一门语言（也是一门函数式编程语言，后续再开文介绍），关于对象可以参考之前的博文[重学前端系列-对象](../重学前端/%E9%87%8D%E5%AD%A6%E5%89%8D%E7%AB%AF-JavaScript%E9%83%A8%E5%88%86-%E5%AF%B9%E8%B1%A1)
 
 而面向对象的编程语言中，有两种不同的流派来“抽象”对象，一种是基于类的编写（Java，C++等），一种是基于原型的编写（Self，kevo）；
 
@@ -246,7 +246,7 @@ makeSound(new Chicken());        //咯咯咯
 PS: 面向对象的语言的三大特性：封装，继承和多态，上面已经介绍了继承与多态，关于封装可参考：[JavaScript高级程序设计知识点-封装](https://github.com/wangminghuan/MyNotes/blob/master/JavaScript/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9F%A5%E8%AF%86%E7%82%B9%EF%BC%882%EF%BC%89.md#12-%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1)
 ### ES6中的class
 
-在ES6中，终于提供了更接近传统语言的写法，引入了 Class（类）这个概念，更多详细介绍可参考：[ES6系列-5-Class与Module](/ES6系列-5-Class与Module/)，但是无论怎么修改，class只是现有 [[Prototype]]（委托）机制的一种语法糖。
+在ES6中，终于提供了更接近传统语言的写法，引入了 Class（类）这个概念，更多详细介绍可参考：[ES6系列-5-Class与Module](../ES6/ES6系列-5-Class与Module)，但是无论怎么修改，class只是现有 [[Prototype]]（委托）机制的一种语法糖。
 
 传统语言中的类定义之后就不会进行修改，所以类的设计模式就不支持修改，但是 JavaScript 最强大的特性之一就是它的动态性，任何对象的定义都可以修改（除非你 把它设置成不可变）
 
