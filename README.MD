@@ -5,4 +5,5 @@
 - github不再部署，采用cname文件指向vercel
 
 ## 参考文档
-- https://vitepress-sidebar.cdget.com/introduction
+- https://vitepress-sidebar.cdget.com/zhHans/introduction
+- https://vuejs.github.io/vitepress/v1/zh/

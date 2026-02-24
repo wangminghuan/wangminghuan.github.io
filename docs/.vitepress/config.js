@@ -1,11 +1,15 @@
 import { defineConfig } from 'vitepress';
 import { withSidebar } from 'vitepress-sidebar';
+import featureConfig from './theme/feature.js'
 // 侧边栏配置
 const sidebarConfig = [{
-  documentRootPath: 'docs',
-  basePath: '/',
-  resolvePath: '/',
-  useTitleFromFileHeading: true
+  documentRootPath: 'docs', // 文档根目录
+  scanStartPath:'markdown', // 从 markdown 目录开始扫描
+  resolvePath: '/markdown/',
+  followSymLinks: true,
+  useTitleFromFrontmatter: true,
+  collapsed: true,
+  collapsedDepth: 2,
 }]
 export default defineConfig(withSidebar({
   title: "WMH's Blog",
@@ -20,9 +24,13 @@ export default defineConfig(withSidebar({
   themeConfig: {
     nav: [
       { text: '首页', link: '/' },
-      { text: 'AI系列', link: '/AI/主流大模型概述' },
+      ...featureConfig.map(item => ({ 
+        text: item.title, 
+        link: item.link,
+        activeMatch: item.link.split('/').slice(0, -1).join('/')
+      })),
     ],
-    logo: '/logo.svg',
+    logo: '/favicon.svg',
     outline: "deep",
     outlineTitle: "目录",
     // 社交链接
