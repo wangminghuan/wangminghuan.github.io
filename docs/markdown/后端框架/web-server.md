@@ -29,45 +29,45 @@ Nginx是一款免费开源的高性能 HTTP 代理服务器及反向代理服务
 
 使用yum进行安装（也可以使用源码编译安装，方法自行百度）
 ```
-  yum install nginx
+yum install nginx
 ```
 常用操作：
 ```
-  service nginx start   # 启动Nginx服务
+service nginx start   # 启动Nginx服务
 
-  service nginx stop    # 停止Nginx服务
+service nginx stop    # 停止Nginx服务
 
-  service nginx restart # 重启Nginx服务
+service nginx restart # 重启Nginx服务
 
-  service nginx status  # 查看Nginx运行状态
+service nginx status  # 查看Nginx运行状态
 
-  nginx -s reload       # 服务运行中重新加载配置
+nginx -s reload       # 服务运行中重新加载配置
 
-  nginx -s reopen       #重启Nginx
+nginx -s reopen       #重启Nginx
 
-  nginx -s reload       #重新加载Nginx配置文件，然后以优雅的方式重启Nginx
+nginx -s reload       #重新加载Nginx配置文件，然后以优雅的方式重启Nginx
 
-  nginx -s stop         #强制停止Nginx服务
+nginx -s stop         #强制停止Nginx服务
 
-  nginx -s quit         #优雅地停止Nginx服务（即处理完所有请求后再停止服务）
+nginx -s quit         #优雅地停止Nginx服务（即处理完所有请求后再停止服务）
 
-  nginx -?,-h           #打开帮助信息
+nginx -?,-h           #打开帮助信息
 
-  nginx -v              #显示版本信息并退出
+nginx -v              #显示版本信息并退出
 
-  nginx -V              #显示版本和配置选项信息，然后退出
+nginx -V              #显示版本和配置选项信息，然后退出
 
-  nginx -t              #检测配置文件是否有语法错误，然后退出
+nginx -t              #检测配置文件是否有语法错误，然后退出
 
-  nginx -T              #检测配置文件是否有语法错误，转储并退出
+nginx -T              #检测配置文件是否有语法错误，转储并退出
 
-  nginx -q              #在检测配置文件期间屏蔽非错误信息
+nginx -q              #在检测配置文件期间屏蔽非错误信息
 
-  nginx -p prefix       #设置前缀路径(默认是:/usr/share/nginx/)nginx -c filename #设置配置文件(默认是:/etc/nginx/nginx.conf)
+nginx -p prefix       #设置前缀路径(默认是:/usr/share/nginx/)nginx -c filename #设置配置文件(默认是:/etc/nginx/nginx.conf)
 
-  nginx -g directives   #设置配置文件外的全局指令
-  
-  killall nginx         #杀死所有nginx进程
+nginx -g directives   #设置配置文件外的全局指令
+
+killall nginx         #杀死所有nginx进程
 ```
 ### 使用
 
@@ -98,16 +98,16 @@ Webpack-dev-server的proxy用法就属于正向代理模式。
 Nginx可以通过反向代理来实现负载均衡：
 ```
 
-  upstream myweb {
-    server 192.168.0.111:8080; # 应用服务器1
-    server 192.168.0.112:8080; # 应用服务器2
+upstream myweb {
+  server 192.168.0.111:8080; # 应用服务器1
+  server 192.168.0.112:8080; # 应用服务器2
+}
+server {
+  listen 80;
+  location / {
+    proxy_pass http://myweb;
   }
-  server {
-    listen 80;
-    location / {
-      proxy_pass http://myweb;
-    }
-  }
+}
 ```
 
 ### 虚拟主机
@@ -117,20 +117,20 @@ Nginx可以通过反向代理来实现负载均衡：
 譬如，将www.a.com 代理到本地3000端口，将admin.a.com 代理到本地4000端口（需要确保两个域名都能解析到同一台机器上）
 
 ```
-  server {
-      listen       80;
-      server_name  www.a.com;
-      location / {
-        proxy_pass http://localhost:4001; # 对应端口号4001
-      }
-  }
-  server {
-      listen       80;
-      server_name  admin.a.com;
-      location / {
-        proxy_pass http://localhost:4002; # 对应端口号4002
-      }
-  }
+server {
+    listen       80;
+    server_name  www.a.com;
+    location / {
+      proxy_pass http://localhost:4001; # 对应端口号4001
+    }
+}
+server {
+    listen       80;
+    server_name  admin.a.com;
+    location / {
+      proxy_pass http://localhost:4002; # 对应端口号4002
+    }
+}
 ```
 本人的主站就是通过这种方式进行部署(ps:如果该端口已经被其他服务占用，启动nginx会报错)
 

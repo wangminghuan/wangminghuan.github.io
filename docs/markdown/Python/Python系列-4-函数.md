@@ -14,25 +14,25 @@ lastUpdated: 2020-08-03 10:48:10
 
 Python 定义函数使用 def 关键字，一般格式如下：
 ```
-  def 函数名（参数列表）:
-      函数体
+def 函数名（参数列表）:
+    函数体
 ```
 Python是一种对缩进非常敏感的语言，对代码格式要求非常严格的，这块在函数体中可以更直白的看出来，举个例子：
 ```
-  def fn1(num):
-      "将传入的数字转为正整数，包含0"
-      if num<0:
-        return abs(num)
-      return num
-  print(fn1(10))
-  print(fn1(-10))
-  print(fn1(0))
+def fn1(num):
+    "将传入的数字转为正整数，包含0"
+    if num<0:
+      return abs(num)
+    return num
+print(fn1(10))
+print(fn1(-10))
+print(fn1(0))
 ```
 运行结果：
 ```
-  10
-  10
-  0
+10
+10
+0
 ```
 ## 参数
 
@@ -40,26 +40,26 @@ Python是一种对缩进非常敏感的语言，对代码格式要求非常严�
 
 在 python 中，strings, tuples, 和 numbers 是不可更改的对象，而 list,dict 等则是可以修改的对象。所谓不可更改对象是指，变量只是一个对象的引用（指针），如：
 ```
-  a = "Hello"
-  a = [1,2,3]
+a = "Hello"
+a = [1,2,3]
 ```
 a的重新赋值，并不会修改之前引用对象的值，而是重新创建了一个对象，把a又指向了这个对象。
 ```
-  def change(a):
-    a = 100
+def change(a):
+  a = 100
 
-  b=20
-  change(b)
-  print(b) # b的值并没有被修改
+b=20
+change(b)
+print(b) # b的值并没有被修改
 ```
 但对于列表与字典，则会修改原始数据：
 ```
-  def change(a):
-    a.reverse()
+def change(a):
+  a.reverse()
 
-  b=[1,2,3,4]
-  change(b)
-  print(b) # [4,3,2,1]
+b=[1,2,3,4]
+change(b)
+print(b) # [4,3,2,1]
 ```      
 ### 必需参数
 
@@ -70,55 +70,55 @@ a的重新赋值，并不会修改之前引用对象的值，而是重新创建�
 
 正常情况下，函数参数是按顺序解析的，但使用关键字参数允许函数调用时参数的顺序与声明时不一致：
 ```
-  def printinfo( name, age ):
-    print ("名字: ", name)
-    print ("年龄: ", age)
-    return
+def printinfo( name, age ):
+  print ("名字: ", name)
+  print ("年龄: ", age)
+  return
 
-  printinfo(age=50,name='Tom')
+printinfo(age=50,name='Tom')
 ```
 运行结果：
 ```
-  名字:  Tom
-  年龄:  50
+名字:  Tom
+年龄:  50
 ```
 
 ### 默认参数
 
 这点与ES6语法类似，可以为函数指定默认参数
 ```
-  def printinfo( name, age=20 ):
-    print ("名字: ", name)
-    print ("年龄: ", age)
-    return
+def printinfo( name, age=20 ):
+  print ("名字: ", name)
+  print ("年龄: ", age)
+  return
 
-  printinfo('Tom')
+printinfo('Tom')
 ```
 运行结果：
 ```
-  名字:  Tom
-  年龄:  20
+名字:  Tom
+年龄:  20
 ```    
 
 ### 不定长参数
 某些情况下不确定函数的参数个数，这个时候就需要不定长参数出场了，加了星号 `* `的参数会以元组(tuple)的形式导入，存放所有未命名的变量参数:
 ```
-  def printinfo( arg1, *vartuple ):
+def printinfo( arg1, *vartuple ):
 ```
 举个例子：
 ```
-  def printinfo( arg1, *vartuple ):
-    "打印任何传入的参数"
-    print ("输出: ")
-    print (arg1)
-    print (vartuple)
-    
-  printinfo(1,2,3,4,5)
+def printinfo( arg1, *vartuple ):
+  "打印任何传入的参数"
+  print ("输出: ")
+  print (arg1)
+  print (vartuple)
+  
+printinfo(1,2,3,4,5)
 ```
 运行结果：
 ```
-  1
-  (2, 3, 4, 5)
+1
+(2, 3, 4, 5)
 ```
 ## 匿名函数
 
@@ -126,13 +126,13 @@ python 使用 lambda 来创建匿名函数。
 
 lambda 函数的语法只包含一个语句，如下：
 ```
-  lambda [arg1 [,arg2,.....argn]]:expression
+lambda [arg1 [,arg2,.....argn]]:expression
 ```
 举个例子：
 ```
-  sum = lambda ag1, ag2 : ag1 + ag2
+sum = lambda ag1, ag2 : ag1 + ag2
 
-  print(sum(1,10))
+print(sum(1,10))
 ```
 运行结果为：11。可以看到lambda的主体是一个表达式，而不是一个代码块。仅仅能在lambda表达式中封装有限的逻辑进去。
 
@@ -196,89 +196,89 @@ lambda 函数的语法只包含一个语句，如下：
 迭代是Python最强大的功能之一，是访问集合元素的一种方式。字符串，列表，元组，集合，字典对象都可用于创建迭代器:
 ```
 
-  str="0987"
-  list =  [1,2,'3'] 
-  tup = (10, 20, '30')
-  sites = {'b', 'a', 'b', 'a', 'y'}
-  dict = {'name':'jack','age':12}
+str="0987"
+list =  [1,2,'3'] 
+tup = (10, 20, '30')
+sites = {'b', 'a', 'b', 'a', 'y'}
+dict = {'name':'jack','age':12}
 
-  it0 = iter(str)
-  it1 = iter(list)
-  it2 = iter(tup)
-  it3 = iter(sites)
-  it4 = iter(dict)
+it0 = iter(str)
+it1 = iter(list)
+it2 = iter(tup)
+it3 = iter(sites)
+it4 = iter(dict)
 
-  print(it0)
-  print(it1)
-  print(it2)
-  print(it3)
-  print(it4)
+print(it0)
+print(it1)
+print(it2)
+print(it3)
+print(it4)
 ```
 执行结果：
 ```
-  <str_iterator object at 0x000001C8430F7DC8>
-  <list_iterator object at 0x000001C8430F7E08>
-  <tuple_iterator object at 0x000001C8430F7E48>
-  <set_iterator object at 0x000001C8430D1A98>
-  <dict_keyiterator object at 0x000001C8430D1B88>
+<str_iterator object at 0x000001C8430F7DC8>
+<list_iterator object at 0x000001C8430F7E08>
+<tuple_iterator object at 0x000001C8430F7E48>
+<set_iterator object at 0x000001C8430D1A98>
+<dict_keyiterator object at 0x000001C8430D1B88>
 ```
 迭代就是从迭代器中取元素的过程。比如我们用for循环从列表[1,2,3]中取元素，这种遍历过程就被称作迭代。上述数据类型通过iter函数转成迭代对象（ps:字符串，列表，元组，集合，字典本身都是支持for循环的，因为这些数据结构已经内置了iter函数），此时我们除了for循环外，还可以使用next函数进行迭代：
 ```
-  import sys         # 引入 sys 模块
-  
-  list=[1,2,3,4]
-  it = iter(list)    # 创建迭代器对象
-  
-  while True:
-      try:
-          print (next(it))
-      except StopIteration:
-          sys.exit()
+import sys         # 引入 sys 模块
+
+list=[1,2,3,4]
+it = iter(list)    # 创建迭代器对象
+
+while True:
+    try:
+        print (next(it))
+    except StopIteration:
+        sys.exit()
 ```
 运行结果：
 ```
-  1
-  2
-  3
-  4
+1
+2
+3
+4
 ```
 
 在 Python 中，使用了 yield 的函数被称为生成器（generator）。跟普通函数不同的是，生成器是一个返回迭代器的函数，只能用于迭代操作，更简单点理解生成器就是一个迭代器:
 ```
-  def generate():
-      yield 1
-      yield [1,2,3]
-      yield 'over'
+def generate():
+    yield 1
+    yield [1,2,3]
+    yield 'over'
 
-  p = generate()
-  print(p)
+p = generate()
+print(p)
 ```
 执行结果：
 ```
-  <generator object generate at 0x0000013C5A583648>
+<generator object generate at 0x0000013C5A583648>
 ```
 **它支持for循环**
 ```
-  for x in p:
-    print(x, end=' ')
+for x in p:
+  print(x, end=' ')
 ```
 运行结果：
 ```
-  1 [1, 2, 3] over
+1 [1, 2, 3] over
 ```
 **也支持next方法**
 ```
-  while True:
-      try:
-          print (next(p))
-      except StopIteration:
-          sys.exit()
+while True:
+    try:
+        print (next(p))
+    except StopIteration:
+        sys.exit()
 ```
 运行结果：
 ```
-  1
-  [1, 2, 3]
-  over
+1
+[1, 2, 3]
+over
 ```
 
 ## 参考

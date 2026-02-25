@@ -47,62 +47,62 @@ RGBA 是代表 Red（红色）、Green（绿色）、Blue（蓝色）和 Alpha �
 
 ### 线性渐变
 ```
-    linear-gradient(direction, color-stop1, color-stop2, ...);
+linear-gradient(direction, color-stop1, color-stop2, ...);
 ```
 direction 可以是方向，也可以是具体的角度：
 ```
-    to bottom
-    to top
-    to left
-    to right
-    to bottom left
-    to bottom right
-    to top left
-    to top right
-    120deg
-    3.14rad
+to bottom
+to top
+to left
+to right
+to bottom left
+to bottom right
+to top left
+to top right
+120deg
+3.14rad
 ```
 color-stop 是一个颜色和一个区段：
 ```
-    rgba(255,0,0,0)
-    orange
-    yellow 10%
-    green 20%
-    lime 28px
+rgba(255,0,0,0)
+orange
+yellow 10%
+green 20%
+lime 28px
 ```
 ### 放射性渐变
 ```
-    radial-gradient(shape size at position, start-color, ..., last-color);
+radial-gradient(shape size at position, start-color, ..., last-color);
 ```
 ## 形状
 
 CSS 中的很多属性还会产生形状，比如我们常见的属性：
 ```
-    border
-    box-shadow
-    border-radius
+border
+box-shadow
+border-radius
 ```
 这些产生形状的属性非常有趣，我们也能看到很多利用它们来产生的 CSS 黑魔法。winter建议把它们用于基本的用途，把 border 用于边框、把阴影用于阴影，把圆角用于圆角，所有其它的场景，都有一个更好的替代品：datauri+svg。
 
 ## 补充 svg 作为 dataURI
 举个例子：
 ```
-    <style>
-    .bg {
-      background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30'><circle cx='15' cy='15' r='10' /></svg>")  no-repeat;
-      background-size: 100% 100%;
-      height: 50px;
-      width: 50px;
-     }
-    .img{
-        height: 50px;
-        width: 50px;
-        display: block;
-      }
-      </style>
+<style>
+.bg {
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30'><circle cx='15' cy='15' r='10' /></svg>")  no-repeat;
+  background-size: 100% 100%;
+  height: 50px;
+  width: 50px;
+ }
+.img{
+    height: 50px;
+    width: 50px;
+    display: block;
+  }
+  </style>
 
-      <img class="img" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSczMCcgaGVpZ2h0PSczMCc+PGNpcmNsZSBjeD0nMTUnIGN5PScxNScgcj0nMTAnIC8+PC9zdmc+">
-      <div class="bg"></div>
+  <img class="img" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSczMCcgaGVpZ2h0PSczMCc+PGNpcmNsZSBjeD0nMTUnIGN5PScxNScgcj0nMTAnIC8+PC9zdmc+">
+  <div class="bg"></div>
 ```
 最终个效果：
 

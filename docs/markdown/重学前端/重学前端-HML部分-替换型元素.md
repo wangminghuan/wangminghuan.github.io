@@ -10,9 +10,9 @@ script 标签是为数不多的既可以作为替换型标签，又可以不作�
     
 写法一：
 ```
-	<script type="text/javascript">
-	console.log("Hello world!");	
-	</script>
+<script type="text/javascript">
+console.log("Hello world!");	
+</script>
 ```
 写法二：
 ```	
@@ -101,7 +101,7 @@ metadata：给代码提供的元信息，对普通用户不可见。
 ```
 同时也可以使用src属性，且兼容性要比video标签乐观
 ```
-	<audio controls="controls" src="audio.ogg"></audio>
+<audio controls="controls" src="audio.ogg"></audio>
 ```
 ## iframe标签
 这个标签能够嵌入一个完整的网页：
@@ -110,7 +110,7 @@ metadata：给代码提供的元信息，对普通用户不可见。
 ```
 但同时会带来很多安全问题，html5加入了一些新标准，在新标准中，为 iframe 加入了 sandbox 模式和 srcdoc 属性，这样，给 iframe 带来了一定的新场景：
 ```
-	<iframe sandbox="allow-scripts" src="http://www.b.com/"></iframe>
+<iframe sandbox="allow-scripts" src="http://www.b.com/"></iframe>
 ```
 sandbox模式的加入可以解决跨域问题，同时对加载的页面加入各种限制，如是否允许脚本执行，是否允许表单提交等操作。
 
@@ -120,7 +120,7 @@ sandbox模式下子页面与父页面的交互完全被隔离开，无法进行�
 
 #### 修改http响应头
 ```
-	header(‘X-Frame-Options:Deny');
+header(‘X-Frame-Options:Deny');
 ```
 一劳永逸，非常靠谱
 

@@ -3,5 +3,5 @@ layout: home
 ---
 <Home />
 <script setup>
-  import Home from './components/Home.vue'
+import Home from './components/Home.vue'
 </script>

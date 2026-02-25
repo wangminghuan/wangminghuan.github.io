@@ -24,7 +24,7 @@ npm install -global verdaccio --unsafe-perm
 ```
 运行verdaccio命令（如果提示verdaccio命令不存在请先进行软连配置）
 ```
-  verdaccio
+verdaccio
 ```
 运行结果：
 ```

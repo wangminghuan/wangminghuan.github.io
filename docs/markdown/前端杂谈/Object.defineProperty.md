@@ -42,17 +42,17 @@ js对象中属性描述符号有两种形式： 数据描述符和存取描述�
 
 举个例子：
 ```
-  var a={};
-    Object.defineProperty(a, "b", {
-      configurable: false, // 不可删除
-      enumerable: false,// 不可通过for in 枚举
-      writable: false, // 不可通过等号赋值改写
-      value: 8  //属性值
-    })
-    console.log(a.b);//8
-    console.log(Object.keys(a));// []
-    a.b=1; //报错  Uncaught TypeError: Cannot assign to read only property 'b' of object '#<Object>'
-    delete a.b //报错 Uncaught TypeError: Cannot delete property 'b' of #<Object>
+var a={};
+  Object.defineProperty(a, "b", {
+    configurable: false, // 不可删除
+    enumerable: false,// 不可通过for in 枚举
+    writable: false, // 不可通过等号赋值改写
+    value: 8  //属性值
+  })
+  console.log(a.b);//8
+  console.log(Object.keys(a));// []
+  a.b=1; //报错  Uncaught TypeError: Cannot assign to read only property 'b' of object '#<Object>'
+  delete a.b //报错 Uncaught TypeError: Cannot delete property 'b' of #<Object>
 ```
 ### 存取描述符
 
@@ -65,24 +65,24 @@ js对象中属性描述符号有两种形式： 数据描述符和存取描述�
 
 举个例子：
 ```
-  var b={},val='7';
-  Object.defineProperty(b, "a", {
-    configurable: false, // 不可删除
-    enumerable: false,// 不可通过for in 枚举
-    get: function () {
-      return val
-    },
-    set: function (newVal) {
-      val = newVal
-    }
-  })
-  console.log(b.a);// 7
-  console.log(Object.keys(b));//[]
-  b.a=1;
-  console.log(b.a);// 1
-  delete b.a ;//报错 Uncaught TypeError: Cannot delete property 'a' of #<Object>
+var b={},val='7';
+Object.defineProperty(b, "a", {
+  configurable: false, // 不可删除
+  enumerable: false,// 不可通过for in 枚举
+  get: function () {
+    return val
+  },
+  set: function (newVal) {
+    val = newVal
+  }
+})
+console.log(b.a);// 7
+console.log(Object.keys(b));//[]
+b.a=1;
+console.log(b.a);// 1
+delete b.a ;//报错 Uncaught TypeError: Cannot delete property 'a' of #<Object>
 ```
 因为JS的数据描述符和存取描述符只能选取一种规则，所以在 descriptor 中 如果设置了 set 或 get, 就不能设置 writable 和 value 中的任何一个，否则报如下错误：
 ```
-  Uncaught TypeError: Invalid property descriptor. Cannot both specify accessors and a value or writable attribute, #<Object> at Function.defineProperty 
+Uncaught TypeError: Invalid property descriptor. Cannot both specify accessors and a value or writable attribute, #<Object> at Function.defineProperty 
 ```

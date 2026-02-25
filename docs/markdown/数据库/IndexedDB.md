@@ -32,7 +32,7 @@ IndexedDB 数据库有版本的概念。同一个时刻，只能有一个版本�
 
 对象仓库保存的是数据记录。每条记录类似于关系型数据库的行，但是只有主键和数据体两部分。主键用来建立默认的索引，必须是不同的，否则会报错。主键可以是数据记录里面的一个属性，也可以指定为一个递增的整数编号，一般情况下以id作为主键
 ```
-  { id: 1, text: 'foo' }
+{ id: 1, text: 'foo' }
 ```
 上面的对象中，id属性可以当作主键。数据体可以是任意数据类型，不限于对象。
 
@@ -52,140 +52,140 @@ open方法打开数据库，返回一个 IDBRequest 对象，通过监听error �
 而一般新建数据库之后的第一件事是新建对象仓库（即新建表），因为后续的所有操作都是围绕这对象仓库来进行的，所以代码封装如下：
 ```
 
-  const indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB;//兼容写法
+const indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB;//兼容写法
 
-  const openDB(myDB)=> {
-      //建立或打开数据库，建立对象存储空间(ObjectStore)
-        var request = indexedDB.open(myDB.name, myDB.version || 1);
-          request.onerror = (e)=> {
-            console.log("数据库打开失败");
+const openDB(myDB)=> {
+    //建立或打开数据库，建立对象存储空间(ObjectStore)
+      var request = indexedDB.open(myDB.name, myDB.version || 1);
+        request.onerror = (e)=> {
+          console.log("数据库打开失败");
+        }
+        request.onsuccess=()=> {
+          myDB.db=request.result;
+          console.log('数据库打开成功');
+        };
+        request.onupgradeneeded = (event)=> {
+          myDB.db=event.target.result;
+          console.log('数据库更新成功');
+          var objectStore;
+          //判断表是否存在，不存在则新建
+          if (!myDB.db.objectStoreNames.contains(myDB.table.name)) {
+            objectStore = myDB.db.createObjectStore(myDB.table.name, { keyPath:myDB.table.keyPath });
+            //指定id为主键，默认从主键进行搜索
+            //此处也可以创建其他索引，详见3.5
           }
-          request.onsuccess=()=> {
-            myDB.db=request.result;
-            console.log('数据库打开成功');
-          };
-          request.onupgradeneeded = (event)=> {
-            myDB.db=event.target.result;
-            console.log('数据库更新成功');
-            var objectStore;
-            //判断表是否存在，不存在则新建
-            if (!myDB.db.objectStoreNames.contains(myDB.table.name)) {
-              objectStore = myDB.db.createObjectStore(myDB.table.name, { keyPath:myDB.table.keyPath });
-              //指定id为主键，默认从主键进行搜索
-              //此处也可以创建其他索引，详见3.5
-            }
-      };
-      
-  }
+    };
+    
+}
 ```
 ### 数据的增删改查
 
 仓库对象创建后，我们就可以执行增删改查操作了，代码封装如下（promise写法）：
 ```
-  const indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB;
-  export default {
-        indexedDB:indexedDB?indexedDB:null,
-        openDB(myDB) {
-          //建立或打开数据库，建立对象存储空间(ObjectStore)
-          return new Promise((resolve,reject)=>{
-            var request = this.indexedDB.open(myDB.name, myDB.version || 1);
-              request.onerror = (e)=> {
-                console.log("数据库打开失败");
-                reject(e)
-              }
-              request.onsuccess=()=> {
-                myDB.db=request.result;
-                resolve(request.result);
-                console.log('数据库打开成功');
-              };
-              request.onupgradeneeded = (event)=> {
-                myDB.db=event.target.result;
-                console.log('数据库更新成功');
-                resolve(myDB.db);
-                var objectStore;
-                if (!myDB.db.objectStoreNames.contains(myDB.table.name)) {
-                  objectStore = myDB.db.createObjectStore(myDB.table.name, { keyPath:myDB.table.keyPath });
-                }
-          };
-          })
-          
-      },
-      //添加数据
-      addData(myDB, data) {
+const indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB;
+export default {
+      indexedDB:indexedDB?indexedDB:null,
+      openDB(myDB) {
+        //建立或打开数据库，建立对象存储空间(ObjectStore)
         return new Promise((resolve,reject)=>{
-        const request = myDB.db.transaction([myDB.table.name], 'readwrite').objectStore(myDB.table.name).add(data);
+          var request = this.indexedDB.open(myDB.name, myDB.version || 1);
+            request.onerror = (e)=> {
+              console.log("数据库打开失败");
+              reject(e)
+            }
+            request.onsuccess=()=> {
+              myDB.db=request.result;
+              resolve(request.result);
+              console.log('数据库打开成功');
+            };
+            request.onupgradeneeded = (event)=> {
+              myDB.db=event.target.result;
+              console.log('数据库更新成功');
+              resolve(myDB.db);
+              var objectStore;
+              if (!myDB.db.objectStoreNames.contains(myDB.table.name)) {
+                objectStore = myDB.db.createObjectStore(myDB.table.name, { keyPath:myDB.table.keyPath });
+              }
+        };
+        })
+        
+    },
+    //添加数据
+    addData(myDB, data) {
+      return new Promise((resolve,reject)=>{
+      const request = myDB.db.transaction([myDB.table.name], 'readwrite').objectStore(myDB.table.name).add(data);
 
+      request.onsuccess = (event)=> {
+        console.log('数据写入成功');
+        resolve(event)
+      };
+
+      request.onerror = (event) =>{
+        console.log('数据写入失败');
+        reject(event)
+      }
+      })
+      
+    },
+    //更新数据
+    putData(myDB, data) {
+      return new Promise((resolve,reject)=>{
+        const request = myDB.db.transaction([myDB.table.name], 'readwrite').objectStore(myDB.table.name).put(data);
         request.onsuccess = (event)=> {
-          console.log('数据写入成功');
+          console.log('数据更新成功');
           resolve(event)
         };
 
         request.onerror = (event) =>{
-          console.log('数据写入失败');
+          console.log('数据更新失败');
           reject(event)
-        }
-        })
-        
-      },
-      //更新数据
-      putData(myDB, data) {
-        return new Promise((resolve,reject)=>{
-          const request = myDB.db.transaction([myDB.table.name], 'readwrite').objectStore(myDB.table.name).put(data);
-          request.onsuccess = (event)=> {
-            console.log('数据更新成功');
-            resolve(event)
-          };
-
-          request.onerror = (event) =>{
-            console.log('数据更新失败');
-            reject(event)
-        }
-        })
-        
-      },
-      //读取数据
-      getData(myDB, keyPath) {
-        return new Promise((resolve,reject)=>{
-          const transaction = myDB.db.transaction([myDB.table.name]);
-          const objectStore = transaction.objectStore(myDB.table.name);
-          const request = objectStore.get(keyPath || myDB.table.keyPath);
-          request.onerror = (event)=> {
-            console.log('数据读取失败');
-            reject(event)
-          };
-          request.onsuccess = (event)=> {
-            console.log("数据读取成功")
-            resolve(request.result)
-          };
-        })
-      },
-      //删除数据
-      deleteData(myDB, keyPath) {
-        return new Promise((resolve,reject)=>{
-          const request=myDB.db.transaction(myDB.table.name, 'readwrite').objectStore(myDB.table.name).delete(keyPath || myDB.table.keyPath);
-          request.onerror = (event)=> {
-            console.log('删除数据失败');
-            reject(event)
-          };
-          request.onsuccess = (event)=> {
-            console.log("删除数据成功")
-            resolve(event)
-          };
-        })
-      },
-      clearData(myDB) {
-        //删除指定仓库全部记录
-        const request=myDB.db.transaction(myDB.table.name, 'readwrite').objectStore(myDB.table.name).clear(); 
+      }
+      })
+      
+    },
+    //读取数据
+    getData(myDB, keyPath) {
+      return new Promise((resolve,reject)=>{
+        const transaction = myDB.db.transaction([myDB.table.name]);
+        const objectStore = transaction.objectStore(myDB.table.name);
+        const request = objectStore.get(keyPath || myDB.table.keyPath);
         request.onerror = (event)=> {
-          console.log(`删除${myDB.table.name}仓库失败`);
+          console.log('数据读取失败');
           reject(event)
         };
         request.onsuccess = (event)=> {
-          console.log(`删除${myDB.table.name}仓库成功`)
+          console.log("数据读取成功")
+          resolve(request.result)
+        };
+      })
+    },
+    //删除数据
+    deleteData(myDB, keyPath) {
+      return new Promise((resolve,reject)=>{
+        const request=myDB.db.transaction(myDB.table.name, 'readwrite').objectStore(myDB.table.name).delete(keyPath || myDB.table.keyPath);
+        request.onerror = (event)=> {
+          console.log('删除数据失败');
+          reject(event)
+        };
+        request.onsuccess = (event)=> {
+          console.log("删除数据成功")
           resolve(event)
         };
-      }
+      })
+    },
+    clearData(myDB) {
+      //删除指定仓库全部记录
+      const request=myDB.db.transaction(myDB.table.name, 'readwrite').objectStore(myDB.table.name).clear(); 
+      request.onerror = (event)=> {
+        console.log(`删除${myDB.table.name}仓库失败`);
+        reject(event)
+      };
+      request.onsuccess = (event)=> {
+        console.log(`删除${myDB.table.name}仓库成功`)
+        resolve(event)
+      };
     }
+  }
 ```
 ![](./image/7979648570.png)
 ### 使用索引
@@ -193,55 +193,55 @@ open方法打开数据库，返回一个 IDBRequest 对象，通过监听error �
 
 假定新建表格的时候，对name字段建立了索引(必须在创建的时候就添加，否则无效)。  
 ```
-  objectStore.createIndex('name', 'name', { unique: false });
+objectStore.createIndex('name', 'name', { unique: false });
 ```
 此时，在表打开之后，我们可以通过搜索name来检索数据
 ```
-  this.$db.openDB(this.myDB).then((res)=>{
-      const transaction = this.myDB.db.transaction([this.myDB.table.name]);
-      const objectStore = transaction.objectStore(this.myDB.table.name);
-      const index=objectStore.index('name');
-      const request = index.get("Leo");
-      request.onsuccess = (event)=> {
-        console.log('数据读取成功');
-        console.log(event.target.result)
-      };
+this.$db.openDB(this.myDB).then((res)=>{
+    const transaction = this.myDB.db.transaction([this.myDB.table.name]);
+    const objectStore = transaction.objectStore(this.myDB.table.name);
+    const index=objectStore.index('name');
+    const request = index.get("Leo");
+    request.onsuccess = (event)=> {
+      console.log('数据读取成功');
+      console.log(event.target.result)
+    };
 
-      request.onerror = (event) =>{
-        console.log('数据读取失败');
-      }
-    })
+    request.onerror = (event) =>{
+      console.log('数据读取失败');
+    }
+  })
 ```
 结果为：
 ```  
-  {
-    id: 1
-    name: "Leo"
-    timstap: 1568279789287
-  }
+{
+  id: 1
+  name: "Leo"
+  timstap: 1568279789287
+}
 ```
 ### 遍历仓库
 indexedDB2规范中,在对象存储空间对象上纳入了一个getAll()，但早期规范中需要使用openCursor指针来获取目标仓库下所有的数据列表（数组）
 ```
-  //遍历指定仓库所有对象
-  getAllData(myDB) {
-  
-    return new Promise((resolve,reject)=>{
-      const objectStore = myDB.db.transaction(myDB.table.name, 'readwrite').objectStore(myDB.table.name);
-      // indexedDB2规范中,在对象存储空间对象上纳入了一个getAll()
-      if(objectStore.getAll){
-        objectStore.getAll().onsuccess = (event)=> {
-          console.log("获取所有数据成功1")
-          resolve(event.target.result)
-        }
-      }else{
-        objectStore.openCursor().onsuccess = (event)=> {
-            console.log("获取所有数据成功2")
-            resolve(event.target.result)
-        }
+//遍历指定仓库所有对象
+getAllData(myDB) {
+
+  return new Promise((resolve,reject)=>{
+    const objectStore = myDB.db.transaction(myDB.table.name, 'readwrite').objectStore(myDB.table.name);
+    // indexedDB2规范中,在对象存储空间对象上纳入了一个getAll()
+    if(objectStore.getAll){
+      objectStore.getAll().onsuccess = (event)=> {
+        console.log("获取所有数据成功1")
+        resolve(event.target.result)
       }
-    })
-  }
+    }else{
+      objectStore.openCursor().onsuccess = (event)=> {
+          console.log("获取所有数据成功2")
+          resolve(event.target.result)
+      }
+    }
+  })
+}
 ```
 ## 结语
 indexedDB数据库的相关api并不复杂，本文只是简单介绍了一些常规用法，更深层次的使用需要继续深入研究，最后附上indexedDB在各个浏览器上的实现程度：

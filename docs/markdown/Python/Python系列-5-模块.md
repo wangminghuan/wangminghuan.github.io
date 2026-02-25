@@ -18,17 +18,17 @@ lastUpdated: 2020-10-10 15:43:17
 
 我们先看下如何定义一个模块，不同于nodejs，py中不需要特定的语法。模块内部的作用域是在模块内，如果两个不同的模块如果需要共享变量，只需要通过引入对应变量即可。我们先定义一个模块`hello.py`:
 ```
-    #!/usr/bin/env python3
-    # -*- coding=utf-8 -*-
+#!/usr/bin/env python3
+# -*- coding=utf-8 -*-
 
-    listdata=[1,2,3]
+listdata=[1,2,3]
 
-    def sayHi(name):
-      print("Hello,"+name)
-      listdata.append(name)
+def sayHi(name):
+  print("Hello,"+name)
+  listdata.append(name)
 
-    def foo(name):
-      print("Hi! "+ name + ",I am foo")
+def foo(name):
+  print("Hi! "+ name + ",I am foo")
 ```
 这样，就定义好了一个模块，我们接下来看如何引用模块
 
@@ -38,14 +38,14 @@ Python中引入模块的方式有以下几种:
 
 ### import 语句
 ```
-  import module1[, module2[,... moduleN]
+import module1[, module2[,... moduleN]
 ```
 对于hello.py模块：
 ```
-    import hello
+import hello
 
-    hello.sayHi('main') 
-    print(hello.listdata)
+hello.sayHi('main') 
+print(hello.listdata)
 ```
 我们可以通过模块名称访问模块内部所有的变量与函数。
 
@@ -53,40 +53,40 @@ Python中引入模块的方式有以下几种:
 
  from 语句让你从模块中导入一个指定的部分到当前命名空间中：
 ```
-  from modname import name1[, name2[, ... nameN]]
+from modname import name1[, name2[, ... nameN]]
 ```
 对于hello.py模块：
 ```
-  from hello import listdata, sayHi
+from hello import listdata, sayHi
 
-  sayHi('main') 
-  print(listdata)
+sayHi('main') 
+print(listdata)
 ```
 即可引入变量listdata 与 函数sayHi，可以直接调用，无须再加模块名称。
 
 导入时也支持别名
 ```
-  from modname import name as otherName
+from modname import name as otherName
 ```
 对于hello.py模块：
 ```
-  from hello import sayHi as sayHello, listdata as listArr
+from hello import sayHi as sayHello, listdata as listArr
 
-  sayHello('Tom')
-  print(listArr)
+sayHello('Tom')
+print(listArr)
 ```
 ###  from .. import *
 
 如果需要将模块中所有内容全部导入到当前命名空间中，需要使用：
 ```
-  from modname import *
+from modname import *
 ```
 对于hello.py模块：
 ```
-  from hello import *
+from hello import *
 
-  sayHi('Tom')
-  print(listdata)
+sayHi('Tom')
+print(listdata)
 ```
 但是尽量避免这种引用方式，这样会将引用模块中所有的变量及函数引入到当前模块内，极大概率的会污染当前命名空间。
 
@@ -99,20 +99,20 @@ Python中引入模块的方式有以下几种:
 
 上面提到模块内部的作用域是在模块内，如果模块之前共享数据的话只需要引入对应变量即可：
 ```
-  import hello
+import hello
 
-  # 执行sayHi函数
-  hello.sayHi('Tom')
+# 执行sayHi函数
+hello.sayHi('Tom')
 
-  # 修改listdata
-  hello.listdata.append("main")
+# 修改listdata
+hello.listdata.append("main")
 
-  print(hello.listdata)
+print(hello.listdata)
 ```  
   运行结果：
 ```
-  hello Tom
-  [1, 2, 3, 'Tom', 'main']
+hello Tom
+[1, 2, 3, 'Tom', 'main']
 ```
 可以看到 listdata 数据在hello.py模块中增加一条数据`Tom`,在当前模块内又被追加上数据`main`，相当于两个模块“共享”了这个数据。当然这种方式在nodejs中与ES6中都是通用的。
 
@@ -128,43 +128,43 @@ Python中引入模块的方式有以下几种:
 
 我们定义一个类，放在hi.py中
 ```
-  class Hi(object):
-    def __init__(self):
-        self.__list=[1,2,3]
-        self.list=[-1,-2]
+class Hi(object):
+  def __init__(self):
+      self.__list=[1,2,3]
+      self.list=[-1,-2]
 
-    def add(self,name):
-        self.__list.append(name)
-        self.list.append(name)
-        print("Hello,"+name)
-        print(self.__list)
+  def add(self,name):
+      self.__list.append(name)
+      self.list.append(name)
+      print("Hello,"+name)
+      print(self.__list)
 ```
 然后我们在main.py中执行
 ```
-  from hello import Hi
+from hello import Hi
 
-  p = Hi()
+p = Hi()
 
-  p.add("Tom")
+p.add("Tom")
 
-  print(p.list)
+print(p.list)
 ```
 运行结果为：
 ```
-  Hello,Tom
-  [1, 2, 3, 'Tom']
-  [-1, -2, 'Tom']
+Hello,Tom
+[1, 2, 3, 'Tom']
+[-1, -2, 'Tom']
 ```
 如果我们再打印下内部`__list`属性：
 ```
-  print(p.__list)   
+print(p.__list)   
 ```
 此时就会报错：
 ```
-  Traceback (most recent call last):
-    File "main.py", line 19, in <module>
-      print(p.__list)
-  AttributeError: 'Hi' object has no attribute '__list'
+Traceback (most recent call last):
+  File "main.py", line 19, in <module>
+    print(p.__list)
+AttributeError: 'Hi' object has no attribute '__list'
 ```
 ## 导入模块的搜索路径
 
@@ -173,13 +173,13 @@ Python中引入模块的方式有以下几种:
 - 首先搜寻内置模块是否有hello（所以我们定义的模块名不要和内置模块相同）
 - 如果内置模块没有，则看下面这些目录里有没有(以下结果通过内置`sys`模块的`sys.path`属性获取):
 ```   
-  ['F:\\python-demo',
-    'C:\\Users\\wmh\\AppData\\Local\\Programs\\Python\\Python37\\python37.zip', 
-    'C:\\Users\\wmh\\AppData\\Local\\Programs\\Python\\Python37\\DLLs', 
-    'C:\\Users\\wmh\\AppData\\Local\\Programs\\Python\\Python37\\lib', 
-    'C:\\Users\\wmh\\AppData\\Local\\Programs\\Python\\Python37', 
-    'C:\\Users\\wmh\\AppData\\Roaming\\Python\\Python37\\site-packages', 
-    'C:\\Users\\wmh\\AppData\\Local\\Programs\\Python\\Python37\\lib\\site-packages']
+['F:\\python-demo',
+  'C:\\Users\\wmh\\AppData\\Local\\Programs\\Python\\Python37\\python37.zip', 
+  'C:\\Users\\wmh\\AppData\\Local\\Programs\\Python\\Python37\\DLLs', 
+  'C:\\Users\\wmh\\AppData\\Local\\Programs\\Python\\Python37\\lib', 
+  'C:\\Users\\wmh\\AppData\\Local\\Programs\\Python\\Python37', 
+  'C:\\Users\\wmh\\AppData\\Roaming\\Python\\Python37\\site-packages', 
+  'C:\\Users\\wmh\\AppData\\Local\\Programs\\Python\\Python37\\lib\\site-packages']
 ```
 执行导入模块命令时，会首先检查待导入的模块是否在当前已有模块之中，如果有则跳过import。因此模块之间相互引用不会导致无限循环
 
@@ -188,12 +188,12 @@ python中的import分为绝对引用和相对引用两种。绝对引用就是�
 
 对于如下结构：
 ```
-  home
-  ├─── hello.py
+home
+├─── hello.py
 ```
 我们可以这样引用
 ```
-  from home.hello import Hi
+from home.hello import Hi
 ```
 
 `.`只能放在from后，不能放import后，更多用法请参考：[python模块详解](https://zhuanlan.zhihu.com/p/33913131)
@@ -202,15 +202,15 @@ python中的import分为绝对引用和相对引用两种。绝对引用就是�
 
 经常会在别人的代码中发现`if __name__ == '__main__'`, 我们接着上面的例子，执行如下代码：
 ```
-  import hello 
+import hello 
 
-  print(__name__)
-  print(hello.__name__)
+print(__name__)
+print(hello.__name__)
 ```
 运行结果：
 ```
-  __main__
-  hello
+__main__
+hello
 ```
 其实，`if __name__ == '__main__'`的含义就是：该模块直接执行时运行的代码，如果被引用时则不执行；这算是一种约定俗成的写法。
 

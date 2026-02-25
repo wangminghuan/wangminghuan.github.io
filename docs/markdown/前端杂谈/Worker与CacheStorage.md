@@ -40,36 +40,36 @@ JS是单线程的，并且与 GUI 渲染线程是互斥的([想了解更多请�
 
 html文件逻辑如下（省略部分公共部分）：
 ```  
-  <input type="number" id="ipt">
-  <button id="btns">发送</button>
-  <button id="close">关闭worker</button>
-  <ul class="list">
-    <p>执行结果为：<b></b></p>
-  </ul>
-  <script type="text/javascript">
-  var worker= new Worker('ww.js')
-  worker.onmessage= e=>{
-    $(".list b").text($("#ipt").val()+" x 100 = "+e.data)
-    console.log("worker run result is "+e.data)
-  }
-  $("#btns").click(()=>{
-    var num=$("#ipt").val();
-    console.log("send data is "+num)
-    worker.postMessage(num)
-  })
-  $("#close").click(()=>{
-    console.log("---worker is close---")
-    worker.terminate();
-  })
-  </script>
+<input type="number" id="ipt">
+<button id="btns">发送</button>
+<button id="close">关闭worker</button>
+<ul class="list">
+  <p>执行结果为：<b></b></p>
+</ul>
+<script type="text/javascript">
+var worker= new Worker('ww.js')
+worker.onmessage= e=>{
+  $(".list b").text($("#ipt").val()+" x 100 = "+e.data)
+  console.log("worker run result is "+e.data)
+}
+$("#btns").click(()=>{
+  var num=$("#ipt").val();
+  console.log("send data is "+num)
+  worker.postMessage(num)
+})
+$("#close").click(()=>{
+  console.log("---worker is close---")
+  worker.terminate();
+})
+</script>
 ```
 执行的worker文件ww.js，代码如下：
 ```  
-  this.onmessage=e=>{  //self和this都代表线程本身，也可省略不写
-    const message=e.data;
-    console.log("web worker get message")
-    self.postMessage(message*100)
-  }
+this.onmessage=e=>{  //self和this都代表线程本身，也可省略不写
+  const message=e.data;
+  console.log("web worker get message")
+  self.postMessage(message*100)
+}
 ```  
 得到执行结果为：
 
@@ -90,39 +90,39 @@ html文件逻辑如下（省略部分公共部分）：
 
 依旧创建两个页面进行测试（share 与 share2，代码基本一致）：
 ```
-  <input type="text" id="ipt">
-    <button id="btns">发送消息</button>
-    <button id="close">关闭worker</button>
-    <ul class="list">
-      <p>对话消息列表1：</p>
-    </ul>
-    <script type="text/javascript">
-    var worker= new SharedWorker('swk.js',"share-worker-v1");
-    worker.port.start();
-    worker.port.onmessage= e=>{
-      console.log(e)
-      $(".list").append("<li style='color:red'>worker回："+e.data+"</li>")
-    }
-    $("#btns").click(()=>{
-      const val=$("#ipt").val()
-      $(".list").append("<li style='color:red'>share1问："+val+"</li>")
-      worker.port.postMessage(val)
-    })
-    $("#close").click(()=>{
-      console.log("---worker is close---")
-      worker.port.close()
-    })
-    </script>
+<input type="text" id="ipt">
+  <button id="btns">发送消息</button>
+  <button id="close">关闭worker</button>
+  <ul class="list">
+    <p>对话消息列表1：</p>
+  </ul>
+  <script type="text/javascript">
+  var worker= new SharedWorker('swk.js',"share-worker-v1");
+  worker.port.start();
+  worker.port.onmessage= e=>{
+    console.log(e)
+    $(".list").append("<li style='color:red'>worker回："+e.data+"</li>")
+  }
+  $("#btns").click(()=>{
+    const val=$("#ipt").val()
+    $(".list").append("<li style='color:red'>share1问："+val+"</li>")
+    worker.port.postMessage(val)
+  })
+  $("#close").click(()=>{
+    console.log("---worker is close---")
+    worker.port.close()
+  })
+  </script>
 ```
 执行的 Share Worker文件swk.js，代码如下：
 ```
-  this.onconnect = function(e) {
-      var port = e.ports[0];
-      port.onmessage = function (e) {
-        console.log(e)
-        port.postMessage("Hi! "+e.data)
-    }
+this.onconnect = function(e) {
+    var port = e.ports[0];
+    port.onmessage = function (e) {
+      console.log(e)
+      port.postMessage("Hi! "+e.data)
   }
+}
 ```
 执行结果：
 ![](./image/7179824114.gif)
@@ -138,33 +138,33 @@ html文件逻辑如下（省略部分公共部分）：
 
 我们将swk.js文件稍加改造，设置为广播模式，所有页面均可"共享"数据了
 ```
-  const clients=[]
-  this.onconnect = function(e) {
-      var port = e.ports[0];
-      clients.push(port)
-      port.onmessage = function (e) {
-        clients.map((item)=>{
-          item.postMessage(e.data)
-        })
-    }
+const clients=[]
+this.onconnect = function(e) {
+    var port = e.ports[0];
+    clients.push(port)
+    port.onmessage = function (e) {
+      clients.map((item)=>{
+        item.postMessage(e.data)
+      })
   }
+}
 ```
 此时我们在share页面与share2页面分别根据消息类型做不同的判断，即可获取对方页面的数据，实现"共享"：
 ```
-  // share页面，share2页面与之类似
-  worker.port.onmessage= e=>{
-      if(e.data && e.data.type=='b'){
-        $(".list").append("<li style='color:red'>接受到share2消息："+e.data.msg+"</li>")
-      }
+// share页面，share2页面与之类似
+worker.port.onmessage= e=>{
+    if(e.data && e.data.type=='b'){
+      $(".list").append("<li style='color:red'>接受到share2消息："+e.data.msg+"</li>")
     }
-    $("#btns").click(()=>{
-      const val=$("#ipt").val()
-      $(".list").append("<li style='color:red'>share1发送："+val+"</li>")
-      worker.port.postMessage({
-        type:"a",
-        msg:val
-      })
+  }
+  $("#btns").click(()=>{
+    const val=$("#ipt").val()
+    $(".list").append("<li style='color:red'>share1发送："+val+"</li>")
+    worker.port.postMessage({
+      type:"a",
+      msg:val
     })
+  })
 ```
 运行结果：
 
@@ -194,31 +194,31 @@ Service Worker必须是https协议的（本地服务可以为http），里面大
 
 参照张鑫旭的代码，我们创建一个Service Worker：
 ```
-  if ('serviceWorker' in navigator) {
-      // 开始注册service workers
-      navigator.serviceWorker.register('sw.js').then( (registration)=> {
-          console.log('注册成功');
-          var serviceWorker;
-          if (registration.installing) {
-            serviceWorker = registration.installing;
-            console.log('installing');
-          } else if (registration.waiting) {
-            serviceWorker = registration.waiting;
-            console.log('waiting');
-          } else if (registration.active) {
-            serviceWorker = registration.active;
-            console.log('active');
-          }
-          if (serviceWorker) {
-            $('#swState').text(serviceWorker.state);
-              serviceWorker.addEventListener('statechange', function (e) {
-                $('#swState').append('&emsp;状态变化为' + e.target.state);
-              });
-          }
-      }).catch ((error) =>{
-        console.log('注册失败');
-      });
-  }
+if ('serviceWorker' in navigator) {
+    // 开始注册service workers
+    navigator.serviceWorker.register('sw.js').then( (registration)=> {
+        console.log('注册成功');
+        var serviceWorker;
+        if (registration.installing) {
+          serviceWorker = registration.installing;
+          console.log('installing');
+        } else if (registration.waiting) {
+          serviceWorker = registration.waiting;
+          console.log('waiting');
+        } else if (registration.active) {
+          serviceWorker = registration.active;
+          console.log('active');
+        }
+        if (serviceWorker) {
+          $('#swState').text(serviceWorker.state);
+            serviceWorker.addEventListener('statechange', function (e) {
+              $('#swState').append('&emsp;状态变化为' + e.target.state);
+            });
+        }
+    }).catch ((error) =>{
+      console.log('注册失败');
+    });
+}
 ```
 执行结果为：
 

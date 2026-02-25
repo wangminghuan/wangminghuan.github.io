@@ -44,74 +44,74 @@ Array.prototype.map.call("abc", function(v){
 - [ES6 提供了二进制和八进制数值的新的写法](../ES6/ES6系列-2-新增类型与扩展方法)
 - 几个polyfill写法：
 ```
-  /*
-    @desc 判断两个小数是否相等
-  */
-  
-  if (!Number.EPSILON) {  // Number.EPSILON为指定误差，ES6 下无需添加 
-    Number.EPSILON = Math.pow(2,-52);
-  }
-  function numbersCloseEnoughToEqual(n1,n2) {
-    return Math.abs( n1 - n2 ) < Number.EPSILON;
-  }
-  console.log(numbersCloseEnoughToEqual( 0.1+0.2, 0.3 )); // true
-  console.log(numbersCloseEnoughToEqual( 0.0000001, 0.0000002 )); // false
-  
-  /*
-    @desc 判断是否为-0
-  */
-  function isNegZero(n) {
-    n = Number( n );
-    return (n === 0) && (1 / n === -Infinity);
-  }
-  /*
-    @desc  Number.isInteger ES6之前的polyfill
-  */
-  if (!Number.isInteger) {
-    Number.isInteger = function(num) {
-      return typeof num == "number" && num % 1 == 0;
-    };
-  }
+/*
+  @desc 判断两个小数是否相等
+*/
 
-  /*
-    @desc  Number.isSafeInteger ES6之前的polyfill
-  */
-  if (!Number.isSafeInteger) {
-    Number.isSafeInteger = function(num) {
-      return Number.isInteger( num ) &&
-        Math.abs( num ) <= Number.MAX_SAFE_INTEGER;
-    }; 
-  }
+if (!Number.EPSILON) {  // Number.EPSILON为指定误差，ES6 下无需添加 
+  Number.EPSILON = Math.pow(2,-52);
+}
+function numbersCloseEnoughToEqual(n1,n2) {
+  return Math.abs( n1 - n2 ) < Number.EPSILON;
+}
+console.log(numbersCloseEnoughToEqual( 0.1+0.2, 0.3 )); // true
+console.log(numbersCloseEnoughToEqual( 0.0000001, 0.0000002 )); // false
 
-  /*
-    @desc  Number.isNaN ES6之前的polyfill
-  */
-  if (!Number.isNaN) {
-    Number.isNaN = function(n) {
-      return (
-        typeof n === "number" &&
-        window.isNaN( n )
-      ); 
-    };
-  }
+/*
+  @desc 判断是否为-0
+*/
+function isNegZero(n) {
+  n = Number( n );
+  return (n === 0) && (1 / n === -Infinity);
+}
+/*
+  @desc  Number.isInteger ES6之前的polyfill
+*/
+if (!Number.isInteger) {
+  Number.isInteger = function(num) {
+    return typeof num == "number" && num % 1 == 0;
+  };
+}
 
-  /*
-    @desc  Object.is ES6之前的polyfill
-  */
-  if (!Object.is) {
-    Object.is = function(v1, v2) {
-      // 判断是否是-0
-      if (v1 === 0 && v2 === 0) {
-        return 1 / v1 === 1 / v2;
-      }
-      // 判断是否是NaN
-      if (v1 !== v1) {
-        return v2 !== v2;
-      }
-      // 其他情况
-      return v1 === v2;
-    };
-  }
+/*
+  @desc  Number.isSafeInteger ES6之前的polyfill
+*/
+if (!Number.isSafeInteger) {
+  Number.isSafeInteger = function(num) {
+    return Number.isInteger( num ) &&
+      Math.abs( num ) <= Number.MAX_SAFE_INTEGER;
+  }; 
+}
+
+/*
+  @desc  Number.isNaN ES6之前的polyfill
+*/
+if (!Number.isNaN) {
+  Number.isNaN = function(n) {
+    return (
+      typeof n === "number" &&
+      window.isNaN( n )
+    ); 
+  };
+}
+
+/*
+  @desc  Object.is ES6之前的polyfill
+*/
+if (!Object.is) {
+  Object.is = function(v1, v2) {
+    // 判断是否是-0
+    if (v1 === 0 && v2 === 0) {
+      return 1 / v1 === 1 / v2;
+    }
+    // 判断是否是NaN
+    if (v1 !== v1) {
+      return v2 !== v2;
+    }
+    // 其他情况
+    return v1 === v2;
+  };
+}
 ```
 ## 原生函数
 
@@ -134,12 +134,12 @@ c.valueOf(); // true
 ### Array
 构造函数 `Array()` 不要求必须带 `new` 关键字 `new Array(3)` 与 `Array(3)`是等效的, 返回的都是一个数组；不过构造函数调用时返回的稀疏数组（将包含至少一个“空单元”的数组称为“稀疏数组”）令人有些困惑：
 ```
-  Array(3)  //[empty × 3]
+Array(3)  //[empty × 3]
 ```
 不同浏览器展示的结果有些不同，上面结果为chrome 88 版本下的结果，接下来对这个稀疏数组进行方法调用：
 ```   
-  Array(3).map((item)=>{console.log(item)}) // 不执行
-  Array(3).join("-")  // "--"
+Array(3).map((item)=>{console.log(item)}) // 不执行
+Array(3).join("-")  // "--"
 ```
 map方法对于只有空单元的数据不执行，而join方法却可以。我们可以通过下述方式来创建包含 undefined 单元（而非“空单元”）的数组来避免上述问题的发生：
 ```
@@ -164,17 +164,17 @@ RegExp() instanceof RegExp           // true
 
 Date 与 Error是经常用到的两个内置函数
 ```
-  (new Date()).getTime()     // 获取当前时间戳
-  throw new Error("error")  // 抛出错误
+(new Date()).getTime()     // 获取当前时间戳
+throw new Error("error")  // 抛出错误
 ```
 在chrome 88下测试，`Error('error')` 等同于 `new Error('error')`, 但是Date 加new与不加new调用时，结果不一致：
 ```
-  var d=Date();           // "Mon Feb 22 2021 17:05:10 GMT+0800 (中国标准时间)"
-  d instanceof Date;      // false
-  typeof d;               // string
+var d=Date();           // "Mon Feb 22 2021 17:05:10 GMT+0800 (中国标准时间)"
+d instanceof Date;      // false
+typeof d;               // string
 
-  var _d=new Date();      // Mon Feb 22 2021 17:06:50 GMT+0800 (中国标准时间)
-  _d instanceof Date      // true
+var _d=new Date();      // Mon Feb 22 2021 17:06:50 GMT+0800 (中国标准时间)
+_d instanceof Date      // true
 ```
 所以，如果就是需要进行构造函数调用，建议加上`new`关键字，以免产生意想不到的结果，同时也便于理解。
 ### Symbol
@@ -186,9 +186,9 @@ Date 与 Error是经常用到的两个内置函数
 
 PS: 此处插一个知识点：ES6 允许Symbol到String的显式强制类型转换，隐式强制转换会报错：
 ```
-  var s1 = Symbol( "cool" );
-  String( s1 );  // "Symbol(cool)"
-  s1 + '';       // Uncaught TypeError: Cannot convert a Symbol value to a string
+var s1 = Symbol( "cool" );
+String( s1 );  // "Symbol(cool)"
+s1 + '';       // Uncaught TypeError: Cannot convert a Symbol value to a string
 ```      
 ## 类型转换
 
@@ -198,8 +198,8 @@ PS: 此处插一个知识点：ES6 允许Symbol到String的显式强制类型转
 
 从 ES5 开始，使用 Object.create(null) 创建的对象 [[Prototype]] 属性为 null，并且没有 valueOf() 和 toString() 方法，因此无法进行强制类型转换
 ```
-  String(Object.create(null)) // Cannot convert object to primitive value
-  Number(Object.create(null)) // Cannot convert object to primitive value
+String(Object.create(null)) // Cannot convert object to primitive value
+Number(Object.create(null)) // Cannot convert object to primitive value
 ```
 补充：**JSON 字符串化**
 
@@ -207,15 +207,15 @@ PS: 此处插一个知识点：ES6 允许Symbol到String的显式强制类型转
 
 类似其他类型转化为字符串时调用内部的`toString`方法，JSON转化为字符串时调用内部的`toJSON`方法，不同的是：得到结果后还会再进行一步字符串化操作：
 ```
-  var o={
-    a:1,
-    toJSON: function(){
-      return {
-        b:this.a *10
-      }
+var o={
+  a:1,
+  toJSON: function(){
+    return {
+      b:this.a *10
     }
   }
-  JSON.stringify(o) // "{"b":10}"
+}
+JSON.stringify(o) // "{"b":10}"
 ```
 `toJSON()` 需要“返回一个能够被字符串化的安全的 JSON 值”。
 
@@ -223,21 +223,21 @@ PS: 此处插一个知识点：ES6 允许Symbol到String的显式强制类型转
 
 - replacer: 可选参数，它可以是数组或者函数
 ```
-  var a={
-    b: 42,
-    c: "42",
-    d: [1,2,3]
-  }
-  /*replacer为数组时，只有包含在这个数组中的属性名才会被序列化到最终的 JSON 字符串中*/
-  JSON.stringify(a, ["b","c"]) // "{"b":42,"c":"42"}"
-  
-  /* replacer为函数时，在序列化过程中，被序列化的值的每个属性都会经过该函数的转换和处理
-  在开始时, replacer 函数会被传入一个空字符串作为 key 值，代表着要被 stringify 的这个对象。随后每个对象或数组上的属性会被依次传入
-  */
-  JSON.stringify(a, function(k,v){
-    if(k!=='d') return v
-  })
-  // "{"b":42,"c":"42"}"
+var a={
+  b: 42,
+  c: "42",
+  d: [1,2,3]
+}
+/*replacer为数组时，只有包含在这个数组中的属性名才会被序列化到最终的 JSON 字符串中*/
+JSON.stringify(a, ["b","c"]) // "{"b":42,"c":"42"}"
+
+/* replacer为函数时，在序列化过程中，被序列化的值的每个属性都会经过该函数的转换和处理
+在开始时, replacer 函数会被传入一个空字符串作为 key 值，代表着要被 stringify 的这个对象。随后每个对象或数组上的属性会被依次传入
+*/
+JSON.stringify(a, function(k,v){
+  if(k!=='d') return v
+})
+// "{"b":42,"c":"42"}"
 ```
 - space:可选参数，指定缩进用的空白字符串，用于美化输出
 
@@ -268,9 +268,9 @@ Boolean(document.all)  // false
 
 #### 日期转换为数字
 ```
-  +new Date() === +new Date;
-  +new Date() === Date.now();
-  +new Date() === new Date().getTime();
++new Date() === +new Date;
++new Date() === Date.now();
++new Date() === new Date().getTime();
 ```
 #### 位运算符(~)
 
@@ -278,25 +278,25 @@ Boolean(document.all)  // false
 
 可以记住以下等式：`~x = -(x+1)`，多数情况下都是适用的。在查找索引过程中可以这样改写：
 ```
-  var msg="Hello World"
-  if(!~msg.indexOf("success")){
-    // 只有msg.indexOf("success")==-1的情况下才执行
-    console.log("error")
-  }
+var msg="Hello World"
+if(!~msg.indexOf("success")){
+  // 只有msg.indexOf("success")==-1的情况下才执行
+  console.log("error")
+}
 ```
 PS: 由 -(x+1) 推断 ~-1 的结果应该是 -0，然而实际上结果是 0，因为它是字位操作而非数学运算。
 
 两个波浪线时可用作截除数字值的小数部分：
 ```
-  ~~-49.6; // -49
+~~-49.6; // -49
 ```     
 #### 数字字符串的解析
 
 - 解析允许字符串中含有非数字字符，解析按从左到右的顺序，如果遇到非数字字符就停止
 - 转换不允许出现非数字字符，否则会失败并返回 NaN
 ```
-  parseInt( "40px" ); // 42 直解析数字字符串，其他类型会先强制转换成字符串
-  Number( "40px" ); // NaN
+parseInt( "40px" ); // 42 直解析数字字符串，其他类型会先强制转换成字符串
+Number( "40px" ); // NaN
 ```
 PS: parseInt在ES5之前存在bug，会根据字符串的第一个字符来决定转换基数，避免这个问题需要强制：`parseInt(xxx,10)`
 ### 隐式强制类型转换
@@ -310,7 +310,7 @@ PS: parseInt在ES5之前存在bug，会根据字符串的第一个字符来决�
 
 看个例子：
 ```
-  [1,3] + [5]  // "1,35"
+[1,3] + [5]  // "1,35"
 ```
 数组valueOf操作无法得到基本数据类型，使用toString方法两个数据就转换成对应了字符串
 
@@ -318,7 +318,7 @@ PS: parseInt在ES5之前存在bug，会根据字符串的第一个字符来决�
 
 `- `运算符是数字减法，因此 a - 0 会将 a 强制类型转换为数字，再看一个例子：
 ```
-  [3] - [1]; // 2
+[3] - [1]; // 2
 ```
 数组先转换成字符串，然后再转换成Number进行运算
 #### 其他类型 => 布尔值
@@ -341,8 +341,8 @@ PS: parseInt在ES5之前存在bug，会根据字符串的第一个字符来决�
 - 如果 Type(x) 是数字，Type(y) 是字符串，则返回 x == ToNumber(y) 的结果。
 - 如果 Type(x) 是字符串，Type(y) 是数字，则返回 ToNumber(x) == y 的结果。
 ```
-  0 == ""  // true
-  "42" == 42  // true
+0 == ""  // true
+"42" == 42  // true
 ```     
 也就是说：**在==中，如果两边分别为Number 与 String类型，就将String类型转化为Number类型再比较**
 #### 其他类型与布尔值之间的相等比较
@@ -350,8 +350,8 @@ PS: parseInt在ES5之前存在bug，会根据字符串的第一个字符来决�
 - 如果 Type(y) 是布尔类型，则返回 x == ToNumber(y) 的结果。
 
 ```
-  false == 0    // true
-  "42" == true // false  true先转化为1，再依据上面规则“42”会转化为数字42，故不相等
+false == 0    // true
+"42" == true // false  true先转化为1，再依据上面规则“42”会转化为数字42，故不相等
 ```
 也就是说：**在==中，如果两边分别为Boolean 与其他类型，就将Boolean类型转化为Number类型再比较**
 
@@ -377,21 +377,21 @@ Object(null) == null            // false
 #### 其他少见情况
 先看如下代码：
 ```
-  "0" == false;     // true
-  false == 0;       // true
-  false == "";      // true
-  false == [];      // true  []转化为""  false 转化为 0 即0 == ""
-  "" == 0;          // true  ""转化为数字0
-  "" == [];         // true
-  0 == [];          // true
-  "" == 0;          // true
-  "" == [];         // true
-  0 == [];          // true
+"0" == false;     // true
+false == 0;       // true
+false == "";      // true
+false == [];      // true  []转化为""  false 转化为 0 即0 == ""
+"" == 0;          // true  ""转化为数字0
+"" == [];         // true
+0 == [];          // true
+"" == 0;          // true
+"" == [];         // true
+0 == [];          // true
 
-  [] == ![];         // true  ![]转化为false  即 [] == false
-  [] == [];          // false  两个都是引用类型，直接比较引用对象
+[] == ![];         // true  ![]转化为false  即 [] == false
+[] == [];          // false  两个都是引用类型，直接比较引用对象
 
-  0 == "\n"          // true  Number("\n")==0
+0 == "\n"          // true  Number("\n")==0
 ```
 其实，只要按上面的规则进行对照，都能迎刃而解，不过为了避免出错，可以遵循以下两个原则：
 
@@ -440,9 +440,9 @@ js中同样的语法上下文不同，则会导致不同的结果：
 
 我们看一个例子：
 ```
-  var a = {
-    foo : bar()  //假设bar已经定义过
-  }
+var a = {
+  foo : bar()  //假设bar已经定义过
+}
 ```
 去掉 var声明后，代码扔不会报错：
 ```
@@ -471,36 +471,36 @@ js中同样的语法上下文不同，则会导致不同的结果：
 #### 对象解构
 `{ .. }` 也可用于“解构赋值”
 ```
-  var obj={
-    a:1,
-    b:2
-  }
-  var {a,b}=obj
-  console.log(a,b)  // 1,2
+var obj={
+  a:1,
+  b:2
+}
+var {a,b}=obj
+console.log(a,b)  // 1,2
 
-  function add({a,b}){
-    return a+b
-  }
-  console.log(add(obj)) // 3
+function add({a,b}){
+  return a+b
+}
+console.log(add(obj)) // 3
 ```
 #### 不存在的else if语法
 事实上 JavaScript 没有 else if, 只存在 if else
 ```
-  if(a==1){
-    console.log("if")
-  }else if(a==2){
-    console.log("else")
-  }
+if(a==1){
+  console.log("if")
+}else if(a==2){
+  console.log("else")
+}
 ``` 
 等同于：
 ```
-  if(a==1){
-    console.log("if)
-  }else {
-      if(a==2){
-          console.log("else)
-      }
-  }
+if(a==1){
+  console.log("if)
+}else {
+    if(a==2){
+        console.log("else)
+    }
+}
 ```
 ### 自动分号
 
@@ -523,9 +523,9 @@ ASI本质上更像一种“纠错机制”，所以能加分号的地方还是�
 - 对原生对象添加扩展功能时，注意向上兼容
 - 内联代码中不可以出现 `</script`> 字符串，一旦出现即被视为代码块结束：
 ```
-  <script>
-    var code = "<script>alert('Hello World')</scr" + "ipt>";  // 规避报错
-  </script>
+<script>
+  var code = "<script>alert('Hello World')</scr" + "ipt>";  // 规避报错
+</script>
 ```
 ## 参考
 - [ECMAScript 位运算符](https://www.w3school.com.cn/js/pro_js_operators_bitwise.asp)

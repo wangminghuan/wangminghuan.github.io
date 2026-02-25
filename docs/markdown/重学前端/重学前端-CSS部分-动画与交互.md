@@ -11,16 +11,16 @@ CSS 中跟动画相关的属性有两个：animation 和 transition。
 
 基本用法：
 ```
-	@keyframes mykf
-	{
-	  from {background: red;}
-	  to {background: yellow;}
-	}
-	
-	div
-	{
-	    animation:mykf 5s infinite;
-	}
+@keyframes mykf
+{
+  from {background: red;}
+  to {background: yellow;}
+}
+
+div
+{
+    animation:mykf 5s infinite;
+}
 ```
 实际上 animation 分成六个部分：
 ```
@@ -42,19 +42,19 @@ CSS 中跟动画相关的属性有两个：animation 和 transition。
 ```
 实际上，有时候我们会把 transition 和 animation 组合，抛弃 animation 的 timing-function，以编排不同段用不同的曲线。
 ```
+
+@keyframes mykf {
+
 	
-	@keyframes mykf {
+  0% { top: 0; transition:top ease}
 	
-		
-	  0% { top: 0; transition:top ease}
-		
-	  50% { top: 30px;transition:top ease-in }
+  50% { top: 30px;transition:top ease-in }
+
+  75% { top: 10px;transition:top ease-out }
+
+  100% { top: 0; transition:top linear}
 	
-	  75% { top: 10px;transition:top ease-out }
-	
-	  100% { top: 0; transition:top linear}
-		
-	}
+}
 ```
 ###  timing-function-动画的时间曲线
 

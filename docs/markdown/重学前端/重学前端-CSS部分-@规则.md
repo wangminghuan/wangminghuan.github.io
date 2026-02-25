@@ -15,63 +15,63 @@ at-rule 由一个 @ 关键字和后续的一个区块组成，如果没有区块
 
 @charset 用于提示 CSS 文件使用的字符编码方式，它如果被使用，必须出现在最前面。这个规则只在给出语法解析阶段前使用，并不影响页面上的展示效果。
 ```
-	@charset "utf-8";
+@charset "utf-8";
 ```
 ### @import
 @import 用于引入一个 CSS 文件，除了 @charset 规则不会被引入，@import 可以引入另一个文件的全部内容。
 ```
-	@import "mystyle.css";
-	@import url("mystyle.css");
+@import "mystyle.css";
+@import url("mystyle.css");
 ```
 ### @media
 media 就是大名鼎鼎的 media query 使用的规则了，它能够对设备的类型进行一些判断。在 media 的区块内，是普通规则列表。
 ```
-	@media print {
-	    body { font-size: 10pt }
-	}
+@media print {
+    body { font-size: 10pt }
+}
 ```
 ### @page
 @page 规则用于在打印文档时修改某些CSS属性。页面是一种特殊的盒模型结构，除了页面本身，还可以设置它周围的盒。
 ```
-	@page:first{margin:100px;}
+@page:first{margin:100px;}
 ```
 ### @counter-style
 counter-style 产生一种数据，用于定义列表项的表现。
 ```
 
-  @counter-style triangle {
-    system: cyclic;
-    symbols: ‣;
-    suffix: " ";
-  }
+@counter-style triangle {
+  system: cyclic;
+  symbols: ‣;
+  suffix: " ";
+}
 ```
 ### @key-frames
 
 keyframes 产生一种数据，用于定义动画关键帧。
 ```
-	@keyframes diagonal-slide {
-	
-	  from {
-	    left: 0;
-	    top: 0;
-	  }
-	
-	  to {
-	    left: 100px;
-	    top: 100px;
-	  }
-	
-	}
+@keyframes diagonal-slide {
+
+  from {
+    left: 0;
+    top: 0;
+  }
+
+  to {
+    left: 100px;
+    top: 100px;
+  }
+
+}
 ```
 ### @fontface
 fontface 用于定义一种字体，icon font 技术就是利用这个特性来实现的。
 ```
-	@font-face {
-	  font-family: Gentium;
-	  src: url(http://example.com/fonts/Gentium.woff);
-	}
-	
-	p { font-family: Gentium, serif; }
+@font-face {
+  font-family: Gentium;
+  src: url(http://example.com/fonts/Gentium.woff);
+}
+
+p { font-family: Gentium, serif; }
 ```
 PS: 关于字体文件，因为没有一个字体格式可以支持所有浏览器，常见做法是加载先加载woff（压缩率较高），不支持的话加载备用tff格式。且字体加载存在跨域情况，或利用webpack将字体直接转成base64。
 ### @support
@@ -127,55 +127,55 @@ support 检查环境的特性，它与 media 比较类似。
 
 1. 空格，后代选择器，选中它的子节点和所有子节点的后代节点。
 ```
-	    div p{
-	      color: red;
-	    }
-	    <div>
-	    <p>我是红色</p>
-	    <p>我是红色</p>
-	    <section><p>我也是红色</p></section>
-	    </div>
+div p{
+  color: red;
+}
+<div>
+<p>我是红色</p>
+<p>我是红色</p>
+<section><p>我也是红色</p></section>
+</div>
 ```
 2. `>` ,子代选择器，选中它的子节点，只选中符合条件的子节点，不包含后代节点
 ```
-		div > p{
-	      color: red;
-	    }
-	    <div>
-	    <p>我是红色</p>
-	    <p>我是红色</p>
-	    <section><p>我不是</p></section>
-	    </div>
+div > p{
+     color: red;
+   }
+   <div>
+   <p>我是红色</p>
+   <p>我是红色</p>
+   <section><p>我不是</p></section>
+   </div>
 ```
 3. `+` ,直接后继选择器，选中它的下一个相邻节点。
 ```
-		div + p{
-	      color: red;
-	    }
+div + p{
+     color: red;
+   }
 
-		  div>
-		    <p>我不是</p>
-		    <p>我不是</p>
-		    <section><p>我不是</p></section>
-		  </div>
-		  <p>我是红色</p>
-		  <p>我不是</p>
-		  <section><p>我不是</p></section>
+  div>
+    <p>我不是</p>
+    <p>我不是</p>
+    <section><p>我不是</p></section>
+  </div>
+  <p>我是红色</p>
+  <p>我不是</p>
+  <section><p>我不是</p></section>
 ```
 4. `~` ,后继选择器，选中它之后所有的相邻节点。
 ```
 
-		div ~ p{
-	      color: red;
-	    }
-		  <div>
-		    <p>我不是</p>
-		    <p>我不是</p>
-		    <section><p>我不是</p></section>
-		  </div>
-		  <p>我是红色</p>
-		  <p>我是红色</p>
-		  <section><p>我不是</p></section>
+div ~ p{
+     color: red;
+   }
+  <div>
+    <p>我不是</p>
+    <p>我不是</p>
+    <section><p>我不是</p></section>
+  </div>
+  <p>我是红色</p>
+  <p>我是红色</p>
+  <section><p>我不是</p></section>
 ```
 5. `||`：列，选中表格中的一列。不太重要，可以忽略
 
@@ -185,15 +185,15 @@ support 检查环境的特性，它与 media 比较类似。
 
 **属性**是由中划线、下划线、字母等组成的标识符，CSS 还支持使用反斜杠转义。我们需要注意的是：属性不允许使用连续的两个中划线开头，这样的属性会被认为是 CSS 变量。
 ```
-        //以双中划线开头的属性被当作变量，与之配合的则是 var 函数
-		:root {
-        --main-color: #06c;
-        --accent-color: #006;
-        }
-        /* The rest of the CSS file */
-        #foo h1 {
-        color: var(--main-color);
-        }
+      //以双中划线开头的属性被当作变量，与之配合的则是 var 函数
+:root {
+      --main-color: #06c;
+      --accent-color: #006;
+      }
+      /* The rest of the CSS file */
+      #foo h1 {
+      color: var(--main-color);
+      }
 ```
 **值**：根据每个 CSS 属性可以取到不同的值，这里的值可能是字符串、标识符。  
 
@@ -214,69 +214,69 @@ CSS 支持一批特定的计算型函数：
 
 ### 图片
 ```
-    * filter
-        * blur()
-        * brightness()
-        * contrast()
-        * drop-shadow()
-        * grayscale()
-        * hue_rotate()
-        * invert()
-        * opacity()
-        * saturate()
-        * sepia()
-    * cross-fade()
-    * element()
-    * image-set()
-    * imagefunction()
+* filter
+    * blur()
+    * brightness()
+    * contrast()
+    * drop-shadow()
+    * grayscale()
+    * hue_rotate()
+    * invert()
+    * opacity()
+    * saturate()
+    * sepia()
+* cross-fade()
+* element()
+* image-set()
+* imagefunction()
 ```
 ### 图形绘制
 ```
-    * conic-gradient()
-    * linear-gradient()
-    * radial-gradient()
-    * repeating-linear-gradient()
-    * repeating-radial-gradient()
-    * shape()
+* conic-gradient()
+* linear-gradient()
+* radial-gradient()
+* repeating-linear-gradient()
+* repeating-radial-gradient()
+* shape()
 ```
 ### 布局
 ```
-    * calc()
-    * clamp()
-    * fit-content()
-    * max()
-    * min()
-    * minmax()
-    * repeat()
+* calc()
+* clamp()
+* fit-content()
+* max()
+* min()
+* minmax()
+* repeat()
 ```
 ### 变形/动画
 ```
-    * transform
-      * matrix()
-      * matrix3d()
-      * perspective()
-      * rotate()
-      * rotate3d()
-      * rotateX()
-      * rotateY()
-      * rotateZ()
-      * scale()
-      * scale3d()
-      * scaleX()
-      * scaleY()
-      * scaleZ()
-      * skew()
-      * skewX()
-      * skewY()
-      * translate()
-      * translate3d()
-      * translateX()
-      * translateY()
-      * translateZ()
+* transform
+  * matrix()
+  * matrix3d()
+  * perspective()
+  * rotate()
+  * rotate3d()
+  * rotateX()
+  * rotateY()
+  * rotateZ()
+  * scale()
+  * scale3d()
+  * scaleX()
+  * scaleY()
+  * scaleZ()
+  * skew()
+  * skewX()
+  * skewY()
+  * translate()
+  * translate3d()
+  * translateX()
+  * translateY()
+  * translateZ()
 ```
 ### 环境与元素
 ```
-    * var()
-    * env()
-    * attr()
+* var()
+* env()
+* attr()
 ```

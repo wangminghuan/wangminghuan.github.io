@@ -103,16 +103,16 @@ function stringToArrayBuffer(input){
 ### Ajax
 XHR第一版，服务器通过 AJAX 操作只能返回文本数据，即responseType属性默认为text。XMLHttpRequest第二版XHR2允许服务器返回二进制数据，这时分成两种情况。如果明确知道返回的二进制数据类型，可以把返回类型（responseType）设为arraybuffer：
 ```
-  let xhr = new XMLHttpRequest();
-  xhr.open('GET', "http://minghuan-image.test.upcdn.net/test/zeus-3.0.txt");
-  xhr.responseType = 'arraybuffer';
+let xhr = new XMLHttpRequest();
+xhr.open('GET', "http://minghuan-image.test.upcdn.net/test/zeus-3.0.txt");
+xhr.responseType = 'arraybuffer';
 
-  xhr.onload = function () {
-    let arrayBuffer = xhr.response;
-    console.log(arrayBuffer)
-  };
+xhr.onload = function () {
+  let arrayBuffer = xhr.response;
+  console.log(arrayBuffer)
+};
 
-  xhr.send();
+xhr.send();
 ```
 运行结果：
 ![](./image/7631000090.png)
@@ -225,9 +225,9 @@ Blob() 构造函数返回一个新的 Blob 对象：
 type，默认值为 ""，它代表了将会被放入到blob中的数组内容的MIME类型。
 endings，默认值为"transparent"，用于指定包含行结束符\n的字符串如何被写入。它是以下两个值中的一个："native"，代表行结束符会被更改为适合宿主操作系统文件系统的换行符，或者 "transparent"，代表会保持blob中保存的结束符不变。
 ```
-  var debug = {hello: "world"};
-  var blob = new Blob([JSON.stringify(debug, null, 2)], {type : 'application/json'});
-  console.log(blob)
+var debug = {hello: "world"};
+var blob = new Blob([JSON.stringify(debug, null, 2)], {type : 'application/json'});
+console.log(blob)
 ```
 我们也可以将本地选取的音频，直接转化为url在页面中播放
 ```

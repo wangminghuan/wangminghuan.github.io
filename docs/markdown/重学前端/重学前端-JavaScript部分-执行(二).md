@@ -39,9 +39,9 @@ function foo(){
 ###  箭头函数
 用 `=>` 运算符定义的函数。
 ```
-	const foo = () => {
-	    // code
-	}
+const foo = () => {
+    // code
+}
 ```
 ###  方法
 在 class 中定义的函数。
@@ -106,17 +106,17 @@ this 是执行上下文中很重要的一个组成部分。同一个函数调用
 
 代码一：
 ```
-	function foo(){
-	  try{
-	    return 0;
-	  } catch(err) {
-	
-	  } finally {
-	    console.log("a")
-	  }
-	}
-	
-	console.log(foo()); 
+function foo(){
+  try{
+    return 0;
+  } catch(err) {
+
+  } finally {
+    console.log("a")
+  }
+}
+
+console.log(foo()); 
 ```
 finally执行了，并且函数有返回值
 
@@ -154,21 +154,21 @@ Completion Record 表示一个语句执行完之后的结果，它有三个字�
 
 实际上，任何 JavaScript 语句是可以加标签的，在语句前加冒号即可：
 ```
- 	firstStatement: var i = 1;
+firstStatement: var i = 1;
 ```
 一般情况下没什么用，break/continue 语句如果后跟了lable语句，就会跳到对应的label位置，一般用于多层嵌套循环的跳出
 ```
-	var num=0;
-	outter:
-	for(var i=0;i<10;i++){
-	    for(var j=0;j<10;j++){
-	        if(i==5&&j==5){
-	            break outter;    //退出内部循环，指向outter，即外循环，同时退出外循环
-	        }
-	        num++;
-	    }
-	}
-	document.write(num);   //55
+var num=0;
+outter:
+for(var i=0;i<10;i++){
+    for(var j=0;j<10;j++){
+        if(i==5&&j==5){
+            break outter;    //退出内部循环，指向outter，即外循环，同时退出外循环
+        }
+        num++;
+    }
+}
+document.write(num);   //55
 ```
 
 

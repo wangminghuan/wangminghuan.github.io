@@ -11,26 +11,26 @@ lastUpdated: 2019-05-25 13:10:00
 
 ### 类型选择器
 ```
-    span {display:block}
+span {display:block}
 ```
 **命名空间**：如果svg 和 html 中都有 a 元素，我们若要想区分选择 svg 中的 a 和 html 中的 a，就必须用带命名空间的类型选择器。
 ```
 
-	@namespace svg url(http://www.w3.org/2000/svg);
-	@namespace html url(http://www.w3.org/1999/xhtml);
-	
-	html|a {
-	  color: red;
-	}
-	
-	svg|a {
-	  stroke:blue;
-	  stroke-width:1;
-	}
+@namespace svg url(http://www.w3.org/2000/svg);
+@namespace html url(http://www.w3.org/1999/xhtml);
+
+html|a {
+  color: red;
+}
+
+svg|a {
+  stroke:blue;
+  stroke-width:1;
+}
 ```
 ### 全体选择器
 ```
-	* {margin:0}
+* {margin:0}
 ```
 ### id 选择器与 class 选择器
 
@@ -54,10 +54,10 @@ lastUpdated: 2019-05-25 13:10:00
 
 	在声明全局 CSS 变量时 :root 会很有用：
 ```
-		:root {
-		  --main-color: hotpink;
-		  --pane-padding: 5px 42px;
-		}
+:root {
+  --main-color: hotpink;
+  --pane-padding: 5px 42px;
+}
 ```
 - `:empty` 伪类表示没有子节点的元素，选择每个没有任何子级的元素（包括文本节点）。
 ```
@@ -94,7 +94,4 @@ lastUpdated: 2019-05-25 13:10:00
 	:not(.cls){
 	  color: aqua
 	}
-```
-css3 级标准中，not 只支持简单选择器，CSS4功能更强大，但目前还没有浏览器实现它。
-## 参考文献
-1. [CSS 变量教程](http://www.ruanyifeng.com/blog/2017/05/css-variables.html)
+```

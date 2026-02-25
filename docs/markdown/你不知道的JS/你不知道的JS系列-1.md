@@ -39,13 +39,13 @@ JavaScript 中有两种机制可以“欺骗词法作用域”：
 
 看下面的例子:
 ```
-  var a=1;
-  function foo(str,b){
-  eval(str);
-  console.log(a,b)
-  }
-  var str="var a=2";
-  foo(str,4) // 运行结果为：2,4  
+var a=1;
+function foo(str,b){
+eval(str);
+console.log(a,b)
+}
+var str="var a=2";
+foo(str,4) // 运行结果为：2,4  
 ```
 在执行eval之后，引擎并不知道eval是以动态的方式进入的，并对词法环境进行修改。所以这个时候词法作用域就会被破坏。
 
@@ -82,11 +82,11 @@ with在严格模式下已经无法使用。最重要的时，由于eval 和 with
 
 JS的词法作用域是基于函数的，在ES6语法中的块级作用域出现之前，我们创建作用域通常都是基于函数的，也经常看到如下代码：
 ```
-  (function(){
-    var a=1;
-    console.log(a)
-  })();
-  console.log(a); //ReferenceError 引用报错
+(function(){
+  var a=1;
+  console.log(a)
+})();
+console.log(a); //ReferenceError 引用报错
 ```
 ### IIFE
 
@@ -99,12 +99,12 @@ JS的词法作用域是基于函数的，在ES6语法中的块级作用域出现
 ```
 两种写法是一致的，不过第一种经常出现在一些第三方库中，将全局对象的引用作为函数参数传递进去：
 ```
-  var a=2;
-  (function ( global ) {
-  var a = 3;
-  console.log( a ); // 3
-  console.log( global.a ); // 2
-  })( window );
+var a=2;
+(function ( global ) {
+var a = 3;
+console.log( a ); // 3
+console.log( global.a ); // 2
+})( window );
 ```
 这种写法使得函数对全局对象的引用更清晰直观。
 
@@ -125,9 +125,9 @@ foo();
 ```
 也可以合并为：
 ```
-  var foo = function(){
-    console.log("foo")
-  }();
+var foo = function(){
+  console.log("foo")
+}();
 ```
 我们来进一步简化：
 ```
@@ -144,29 +144,29 @@ function foo(){
 
 所以，如何让解析器将代码直接解析成表达式，而非函数声明才是关键，因为javascript中的圆括号不能包含语句，都会被解析为表达式，所以：
 ```
-  (function foo(){
-    console.log("foo")
-  }())
+(function foo(){
+  console.log("foo")
+}())
 ```
 函数名称多数情况下基本无用，可以省略，这样就变成了我们经常看到的形式：
 ```
-  (function(){
-    console.log("foo")
-  }())
+(function(){
+  console.log("foo")
+}())
 ```
 当然，我们可以直接左侧部分强制解析为函数表达式，然后加上括号直接调用，就变成了另外一种常见方式：
 ```
-  (function(){
-    console.log("foo")
-  })()
+(function(){
+  console.log("foo")
+})()
 ```
 当然，除了圆括号，其他运算符也能达到目的（强制引擎解析为函数表达式）：
 ```
-  !function(){ /* code */ }();
-  ~function(){ /* code */ }();
-  -function(){ /* code */ }();
-  +function(){ /* code */ }();
-  true && function(){ /* code */ }();
+!function(){ /* code */ }();
+~function(){ /* code */ }();
+-function(){ /* code */ }();
++function(){ /* code */ }();
+true && function(){ /* code */ }();
 ```
 但以上写法多多少少都存在一些副作用(如：修改函数返回值)，更推荐的写法依旧是圆括号。
 ## 块级作用域
@@ -180,13 +180,13 @@ with会创建一个块级作用域，但他会引发其他问题，因为不再�
 
 没错，try/catch的catch分句会创建一个块级作用域：
 ```
-  try {
-    throw 1;
-  } catch (a) {
-    a = 2;
-    console.log( a );
-  }
-  console.log(a) ; //ReferenceError: a is not defined
+try {
+  throw 1;
+} catch (a) {
+  a = 2;
+  console.log( a );
+}
+console.log(a) ; //ReferenceError: a is not defined
 ```
 但是try/catch在chrome中有性能问题（虽然从语法上看不应该运行缓慢）
 
@@ -194,12 +194,12 @@ with会创建一个块级作用域，但他会引发其他问题，因为不再�
 
 let 关键字可以将变量绑定到所在的任意作用域中。 换句话说， let为其声明的变量隐式地了所在的块作用域。
 ```
-  var foo = true;
-  if (foo) {
-    let bar = foo * 2;
-    console.log( bar );
-  }
-  console.log( bar ); // ReferenceError
+var foo = true;
+if (foo) {
+  let bar = foo * 2;
+  console.log( bar );
+}
+console.log( bar ); // ReferenceError
 ```
 const 与 let基本等同，只是其定义的值无法修改。
 
@@ -209,14 +209,14 @@ const 与 let基本等同，只是其定义的值无法修改。
 
 先看两个例子：
 ```
-  console.log(a)
-  var a=1;
+console.log(a)
+var a=1;
 ```
 对，没有报错，运行结果是 undefined
 ```
-  a = 2;
-  var a;
-  console.log(a);
+a = 2;
+var a;
+console.log(a);
 ```
 大多数会认为a又被赋值了，所以输出应该是undefined, 但输出结果是2。
 
@@ -226,31 +226,31 @@ const 与 let基本等同，只是其定义的值无法修改。
 
 譬如：var a=1; 引擎会将它分成两个部分，var a 和 a=1; 第一个定义声明是在编译阶段进行的。第二个赋值声明会被留在原地等待执行阶段，也就是说，所有的声明（变量与函数）都会在编译阶段先被处理。
 ```
-  foo();
-  function foo() { 
-    console.log( a ); // undefined
-    var a = 2;
-  }
+foo();
+function foo() { 
+  console.log( a ); // undefined
+  var a = 2;
+}
 ```
 上面的代码中函数foo 会被提升到当前作用域中，foo中的变量a也被提升到了函数作用域内的顶部，值得注意的是，函数表达式(包括具名函数)的作用域并不会提升。
 ```
-  foo(); // TypeError 
-  bar(); // ReferenceError
-  var foo = function bar() { 
-    // ... 
-  }
+foo(); // TypeError 
+bar(); // ReferenceError
+var foo = function bar() { 
+  // ... 
+}
 ```
 如果多处“重复声明”，函数声明的优先级最高，其次才是变量。
 ```
-  foo(); // 1
-  var foo;
-  function foo() { 
-    console.log( 1 ); 
-  }
-  foo = function() { 
-    console.log( 2 );
-  };
-  foo();//2  
+foo(); // 1
+var foo;
+function foo() { 
+  console.log( 1 ); 
+}
+foo = function() { 
+  console.log( 2 );
+};
+foo();//2  
 ```
 后面出现的函数声明可以覆盖前面的，也可以这样理解，foo执行时，引擎其实已经把`function foo{...}` 提升到最顶部，后面再次调用foo时，后面的函数表达式覆盖了函数声明，此时变输出2
 
@@ -265,15 +265,15 @@ const 与 let基本等同，只是其定义的值无法修改。
 
 当函数可以记住并访问所在的词法作用域，即使函数是在当前词法作用域之外执行，这时就产生了闭包；通俗理解的闭包就是：能够读取其他函数内部变量的函数。对，闭包的直观判断就是函数。
 ```
-  function foo() {
-    var a = 2;
-    function bar() { 
-      console.log( a ); 
-    }
-    return bar; 
+function foo() {
+  var a = 2;
+  function bar() { 
+    console.log( a ); 
   }
-  var baz = foo(); 
-  baz(); // 2 在函数外部访问到了其他函数内部的变量
+  return bar; 
+}
+var baz = foo(); 
+baz(); // 2 在函数外部访问到了其他函数内部的变量
 ```
 当然，也可以使用其他方式对函数的值进行传递:
 ```
@@ -380,43 +380,43 @@ foo.identify(); // FOO MOD
 
 创建一个模块依赖加载器，这里只是介绍下核心逻辑：
 ```
-  var MyModules = (function Manager() {
-    var modules = {};
-    function define(name, deps, impl) {
-      for (var i = 0; i < deps.length; i++) { 
-        deps[i] = modules[deps[i]]; 
-      } 
-      modules[name] = impl.apply(impl, deps); 
-      // 核心逻辑，将定义的模块函数挂载到内部modules对象下，并对外暴露API
-      // apply 用法回忆：function fn(a,b){return a+b}; fn.apply(fn,[1,2]);
-    }
-    function get(name) {
-      return modules[name];
-    }
-    return {
-      define: define,
-      get: get
-    }
-  })();
+var MyModules = (function Manager() {
+  var modules = {};
+  function define(name, deps, impl) {
+    for (var i = 0; i < deps.length; i++) { 
+      deps[i] = modules[deps[i]]; 
+    } 
+    modules[name] = impl.apply(impl, deps); 
+    // 核心逻辑，将定义的模块函数挂载到内部modules对象下，并对外暴露API
+    // apply 用法回忆：function fn(a,b){return a+b}; fn.apply(fn,[1,2]);
+  }
+  function get(name) {
+    return modules[name];
+  }
+  return {
+    define: define,
+    get: get
+  }
+})();
 ```
 可以看到闭包的写法，下面开始定义一个模块`bar`
 ```
-  MyModules.define( "bar", [], function() {
-    function hello(who) {
-      return "Let me introduce: " + who;
-    }
-    return { hello: hello }; 
-  });
+MyModules.define( "bar", [], function() {
+  function hello(who) {
+    return "Let me introduce: " + who;
+  }
+  return { hello: hello }; 
+});
 ```
 `bar`模块不依赖任何内容，同时对外暴露`hello`方法；
 再定义一个`foo`模块，他依赖bar模块：
 ```
-  MyModules.define( "foo", ["bar"], function(bar) { 
-    function awesome(name) { 
-      console.log(bar.hello( name ).toUpperCase()); 
-    }
-  return { awesome: awesome }; 
-  });
+MyModules.define( "foo", ["bar"], function(bar) { 
+  function awesome(name) { 
+    console.log(bar.hello( name ).toUpperCase()); 
+  }
+return { awesome: awesome }; 
+});
 ```
 可以看到`foo`模块的`awesome`方法依赖`bar`的`hello`方法，我们执行下两个模块，并调用下foo模块对外暴露的`awesome`方法
 ```

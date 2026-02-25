@@ -14,10 +14,10 @@ JavaScript 引擎等待宿主环境分配宏观任务，在操作系统中，通
 
 在底层的 C/C++ 代码中，这个事件循环是一个跑在独立线程中的循环，我们用伪代码来表示，大概是这样的：
 ```
-	while(TRUE) {
-	    r = wait();
-	    execute(r);
-	}
+while(TRUE) {
+    r = wait();
+    execute(r);
+}
 ```
 可以看到，整个循环做的事情基本上就是反复“等待 - 执行”  
 
@@ -32,38 +32,38 @@ JavaScript 引擎等待宿主环境分配宏观任务，在操作系统中，通
 Promise 永远在队列尾部添加微观任务。setTimeout 等宿主 API，则会添加宏观任务。
 
 ```
-  var r = new Promise(function (resolve, reject) {
-    console.log("a");
-    resolve()
-  });
-  setTimeout(()=>{
-    console.log("d")
-  })
-  r.then(() => console.log("c"));
-  console.log("b")
-  //运行结果依次为：a,b,c,d
+var r = new Promise(function (resolve, reject) {
+  console.log("a");
+  resolve()
+});
+setTimeout(()=>{
+  console.log("d")
+})
+r.then(() => console.log("c"));
+console.log("b")
+//运行结果依次为：a,b,c,d
 ```
 我们再看下面的代码
 ```
-  var r = new Promise(function (resolve, reject) {
-    console.log("a");
-    resolve()
-  });
+var r = new Promise(function (resolve, reject) {
+  console.log("a");
+  resolve()
+});
 
-  setTimeout(() => console.log("d"), 0)
-  var r1 = new Promise(function (resolve, reject) {
-    resolve()
-  });
+setTimeout(() => console.log("d"), 0)
+var r1 = new Promise(function (resolve, reject) {
+  resolve()
+});
 
-  r.then(() => {
-    var begin = Date.now();
-    while (Date.now() - begin < 1000);
-    console.log("c1")
-    new Promise(function (resolve, reject) {
-      resolve()
-    }).then(() => console.log("c2"))
-  });
-  //执行结果：a, c1, c2 ,d
+r.then(() => {
+  var begin = Date.now();
+  while (Date.now() - begin < 1000);
+  console.log("c1")
+  new Promise(function (resolve, reject) {
+    resolve()
+  }).then(() => console.log("c2"))
+});
+//执行结果：a, c1, c2 ,d
 ```
 这里我们强制了 1 秒的执行耗时，这样，我们可以确保任务 c2 是在 d 之后被添加到任务队列。可以看到，即使耗时一秒的 c1 执行完毕，再 创建的 c2，仍然先于 d 执行了，这很好地解释了微任务优先的原理。
 

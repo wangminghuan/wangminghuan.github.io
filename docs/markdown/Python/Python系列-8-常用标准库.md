@@ -26,64 +26,64 @@ Python提供了一个强大的标准库，内置了许多非常有用的模块�
 ## 常用标准库示例
 ### re
 ```
-  import re
+import re
 
-  p = re.compile(r'(\d+)')
-  print(p.match('123abc').groups())    # ('123',)
-  print(p.search('abc'))               # None
+p = re.compile(r'(\d+)')
+print(p.match('123abc').groups())    # ('123',)
+print(p.search('abc'))               # None
 ```
 ### datatime / time 
 注意Python的timestamp是一个浮点数，整数位表示秒, 而nodejs是以整数来表示的
 ```
-  import time 
-  print (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))  #  获取当前时间：2020-10-14 14:16:31
+import time 
+print (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))  #  获取当前时间：2020-10-14 14:16:31
 
-  import datetime
-  now = datetime.datetime.now() # 获取当前datetime
-  print(now)              # 当前时间  2020-10-14 14:22:21.735610
-  print(now.timestamp())  # 时间戳 浮点型  1602656541.73561
+import datetime
+now = datetime.datetime.now() # 获取当前datetime
+print(now)              # 当前时间  2020-10-14 14:22:21.735610
+print(now.timestamp())  # 时间戳 浮点型  1602656541.73561
 ```
 ### math && random
 ```
-  import math
-  import random
+import math
+import random
 
-  rand = random.randrange(10)   # 获取0-10内的随机数
-  print(rand)                   # 6
-  print(math.pow(2,rand))       # 计算2的n次方 64
+rand = random.randrange(10)   # 获取0-10内的随机数
+print(rand)                   # 6
+print(math.pow(2,rand))       # 计算2的n次方 64
 ```
 ### sys && os
 ```
-  import os
-  print(os.getcwd())  # 获取当前运行目录 F:\python-demo
-  
-  import sys
-  print(sys.argv)    # 获取命令行参数 ['main.py']
+import os
+print(os.getcwd())  # 获取当前运行目录 F:\python-demo
+
+import sys
+print(sys.argv)    # 获取命令行参数 ['main.py']
 ```
 ### argparse
 ```
-  import argparse
+import argparse
 
-  def main():
-      parser = argparse.ArgumentParser(description="Demo of argparse")
-      parser.add_argument('-n','--name', default=' Li ')
-      parser.add_argument('-y','--year', default='20')
-      parser.add_argument('-s','--sex', default='man')
-      args = parser.parse_args()
-      print(args)
-      name = args.name
-      year = args.year
-      sex = args.sex
-      print('Hello {} {} {}'.format(name,year,sex))
+def main():
+    parser = argparse.ArgumentParser(description="Demo of argparse")
+    parser.add_argument('-n','--name', default=' Li ')
+    parser.add_argument('-y','--year', default='20')
+    parser.add_argument('-s','--sex', default='man')
+    args = parser.parse_args()
+    print(args)
+    name = args.name
+    year = args.year
+    sex = args.sex
+    print('Hello {} {} {}'.format(name,year,sex))
 
-  if __name__ == '__main__':
-    main()
+if __name__ == '__main__':
+  main()
 ```
 执行`python main.py -n Tom --year 40`
 ```
 
-  Namespace(name='Tom', sex='man', year='40')
-  Hello Tom 40 man
+Namespace(name='Tom', sex='man', year='40')
+Hello Tom 40 man
 ```
  `-n`,`--name`表示同一个参数，default参数表示在运行命令时的缺省参数
 
@@ -91,24 +91,24 @@ Python提供了一个强大的标准库，内置了许多非常有用的模块�
 
 该模块可根据 Unix 终端所用规则找出所有匹配特定模式的路径名
 ```
-  import glob
+import glob
 
-  print(glob.glob('*.py'))  # 找出当前目录下的所有的py文件（不含子目录） ['hello.py', 'index.py', 'io.py', 'main.py', 'main2.py']
+print(glob.glob('*.py'))  # 找出当前目录下的所有的py文件（不含子目录） ['hello.py', 'index.py', 'io.py', 'main.py', 'main2.py']
 ```
 ### zlib
 
 此模块为需要数据压缩的程序提供了一系列函数，且与gzip兼容
 ```
-  import zlib
+import zlib
 
-  s = b'witch which has which witches wrist watch'
-  print(len(s))                # 41
+s = b'witch which has which witches wrist watch'
+print(len(s))                # 41
 
-  t = zlib.compress(s)    
-  print(t)                     # b'x\x9c+\xcf,I\xceP(\xcf\xc8\x04\x92\x19\x89\xc5PV9H4\x15\xc8+\xca,.Q(O\x04\xf2\x00D?\x0f\x89'
-  print(len(t))                # 37
+t = zlib.compress(s)    
+print(t)                     # b'x\x9c+\xcf,I\xceP(\xcf\xc8\x04\x92\x19\x89\xc5PV9H4\x15\xc8+\xca,.Q(O\x04\xf2\x00D?\x0f\x89'
+print(len(t))                # 37
 
-  print(zlib.decompress(t))    # b'witch which has which witches wrist watch'
+print(zlib.decompress(t))    # b'witch which has which witches wrist watch'
 ```
 ### json && urllib
 
@@ -123,62 +123,62 @@ urllib 是一个收集了多个用到 URL 的模块的包（写爬虫会经常�
 - urllib.robotparser 用于解析 robots.txt 文件
 ```
 
-  import urllib.request
-  import urllib.parse
+import urllib.request
+import urllib.parse
 
-  url = 'https://www.baidu.com/'
+url = 'https://www.baidu.com/'
 
-  # 解析url参数
-  print(urllib.parse.urlparse(url))  
+# 解析url参数
+print(urllib.parse.urlparse(url))  
 
-  # 定义一个请求头的User-Agent字段
-  headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36'}
+# 定义一个请求头的User-Agent字段
+headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36'}
 
-  # 自定义请求头信息，返回一个请求的对象request，Request()参数，还可以接收data参数，表示请求体
-  request = urllib.request.Request(url,headers = headers)
+# 自定义请求头信息，返回一个请求的对象request，Request()参数，还可以接收data参数，表示请求体
+request = urllib.request.Request(url,headers = headers)
 
-  # 通过urlopen访问url，服务器返回response对象
-  response = urllib.request.urlopen(request)
+# 通过urlopen访问url，服务器返回response对象
+response = urllib.request.urlopen(request)
 
-  # 读取返回结果
-  result = response.read()
+# 读取返回结果
+result = response.read()
 
-  with open('baidu.html','wb') as f:
-      f.write(result)
+with open('baidu.html','wb') as f:
+    f.write(result)
 ```
 运行结果：
 ```
-  ParseResult(scheme='https', netloc='www.baidu.com', path='/', params='', query='', fragment='')
-  # 本地出现baidu.html文件，跟正常访问时返回的源码一样
+ParseResult(scheme='https', netloc='www.baidu.com', path='/', params='', query='', fragment='')
+# 本地出现baidu.html文件，跟正常访问时返回的源码一样
 ```  
 ### json 
 
 json 模块提供了一种很简单的方式来编码和解码JSON数据。 其中两个主要的函数是 json.dumps() 和 json.loads()
 ```
-  import json
+import json
 
-  data={"status":"1","notice":{"title":"测试"}}
+data={"status":"1","notice":{"title":"测试"}}
 
-  # 将一个Python数据结构转换为JSON 类似js中的JSON.stringify
-  # 只对Number,String,List,Dict 有效，其他类型如Tuple会报错
-  obj=json.dumps(data)
-  print(obj)                   # {"status": "1", "notice": {"title": "\u6d4b\u8bd5"}}
-  print(isinstance(obj,str))   # True
+# 将一个Python数据结构转换为JSON 类似js中的JSON.stringify
+# 只对Number,String,List,Dict 有效，其他类型如Tuple会报错
+obj=json.dumps(data)
+print(obj)                   # {"status": "1", "notice": {"title": "\u6d4b\u8bd5"}}
+print(isinstance(obj,str))   # True
 
 
-  # 将一个JSON编码的字符串转换回一个Python数据结构,类似js中的JSON.parse
-  strs=json.loads(obj)
-  print(strs)                   # {'status': '1', 'notice': {'title': '测试'}}
-  print(isinstance(strs,dict))  # True
+# 将一个JSON编码的字符串转换回一个Python数据结构,类似js中的JSON.parse
+strs=json.loads(obj)
+print(strs)                   # {'status': '1', 'notice': {'title': '测试'}}
+print(isinstance(strs,dict))  # True
 ```
 而 `json.dump()` 和 `json.load()` 来编码和解码JSON数据,用于处理文件:
 ```
 
-  with open('test.json', 'w') as f:
-      json.dump(data, f)
-  
-  with open('test.json', 'r') as f:
-      data = json.load(f)
+with open('test.json', 'w') as f:
+    json.dump(data, f)
+
+with open('test.json', 'r') as f:
+    data = json.load(f)
 ```
 ### base64
 

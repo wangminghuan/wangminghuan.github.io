@@ -40,9 +40,9 @@ var o = {
 
 **在实现了对象基本特征的基础上, winter认为，JavaScript 中对象独有的特色是：对象具有高度的动态性，这是因为 JavaScript 赋予了使用者在运行时为对象添改状态和行为的能力。**
 ```
-  var o = { a: 1 };
-  o.b = 2;
-  console.log(o.a, o.b); //1 2
+var o = { a: 1 };
+o.b = 2;
+console.log(o.a, o.b); //1 2
 ```
 JavaScript 允许运行时向对象添加属性，这就跟绝大多数基于类的、静态的对象设计完全不同(如Java)。
 
@@ -94,17 +94,17 @@ Object.defineProperty(o, "b", {
 
 访问器属性使得属性在读和写时执行代码，它允许使用者在写和读属性时，得到完全不同的值，它可以视为一种函数的语法糖。
 ```
-    const k={
-	  get age(){
-	   console.log("get")
-	   return 5
-	  },
-	  set age(val){
-	    console.log("set:"+val)
-	  }
-	}
-	k.age=2;// set:2
-	k.age;// 5
+   const k={
+  get age(){
+   console.log("get")
+   return 5
+  },
+  set age(val){
+    console.log("set:"+val)
+  }
+}
+k.age=2;// set:2
+k.age;// 5
 ```
 访问器属性跟数据属性不同，每次访问属性都会执行 getter 或者 setter 函数。
 
@@ -143,16 +143,16 @@ JavaScript 并非第一个使用原型的语言，在它之前，self、kevo 等
 
 1. Object.create 根据指定的原型创建新对象，原型可以是 null；
 ```		
-		//关于Object.create的补充
-		ECMAScript 5 通过新增 Object.create() 方法规范化了原型式继承。
-        这个方法接收两个参数：一个用作新对象原型的对象和（可选的）一个为新对象定义额外属性的对象。
-		在传入一个参数的情况下，Object.create() 与 object() 方法的行为相同。
-        //object 方法如下：
-		function object(o){
-			function F(){}
-			F.prototype = o;
-			return new F();
-		}
+//关于Object.create的补充
+ECMAScript 5 通过新增 Object.create() 方法规范化了原型式继承。
+      这个方法接收两个参数：一个用作新对象原型的对象和（可选的）一个为新对象定义额外属性的对象。
+在传入一个参数的情况下，Object.create() 与 object() 方法的行为相同。
+      //object 方法如下：
+function object(o){
+	function F(){}
+	F.prototype = o;
+	return new F();
+}
 ```
 2. Object.getPrototypeOf 获得一个对象的原型；
 3. Object.setPrototypeOf 设置一个对象的原型。
@@ -160,56 +160,56 @@ JavaScript 并非第一个使用原型的语言，在它之前，self、kevo 等
 		
 利用这三个方法，可以安全抛开类的思想，利用原型链来实现抽象和复用：
 ```
-	var cat = {
-	  say(){
-	      console.log("meow~");
-	  },
-	  jump(){
-	      console.log("jump");
-	  }
-	}
-		
-	var tiger = Object.create(cat,  {
-	  say:{
-	      writable:true,
-	      configurable:true,
-	      enumerable:true,
-	      value:function(){
-	          console.log("roar!");
-	      }
-	  }
-	})
+var cat = {
+  say(){
+      console.log("meow~");
+  },
+  jump(){
+      console.log("jump");
+  }
+}
 	
-	
-	var anotherCat = Object.create(cat);
-	
-	anotherCat.say();//"meow~"
-	var anotherTiger = Object.create(tiger);
-	
-	anotherTiger.say();//"roar!"
+var tiger = Object.create(cat,  {
+  say:{
+      writable:true,
+      configurable:true,
+      enumerable:true,
+      value:function(){
+          console.log("roar!");
+      }
+  }
+})
+
+
+var anotherCat = Object.create(cat);
+
+anotherCat.say();//"meow~"
+var anotherTiger = Object.create(tiger);
+
+anotherTiger.say();//"roar!"
 ```
 ### 早期版本中的类与原型
 在早期版本的 JavaScript 中，“类”的定义是一个私有属性 [[class]]，语言标准为内置类型诸如 Number、String、Date 等指定了 [[class]] 属性，以表示它们的类。语言使用者唯一可以访问 [[class]] 属性的方式是 Object.prototype.toString。  
 ```
-	var o = new Object;
-	var n = new Number;
-	var s = new String;
-	var b = new Boolean;
-	var d = new Date;
-	var arg = function(){ return arguments }();
-	var r = new RegExp;
-	var f = new Function;
-	var arr = new Array;
-	var e = new Error;
-	console.log([o, n, s, b, d, arg, r, f, arr, e].map(v => Object.prototype.toString.call(v))); 
-	//运行结果：
-	//["[object Object]", "[object Number]", "[object String]", "[object Boolean]", "[object Date]", "[object Arguments]", "[object RegExp]", "[object Function]", "[object Array]", "[object Error]"]
+var o = new Object;
+var n = new Number;
+var s = new String;
+var b = new Boolean;
+var d = new Date;
+var arg = function(){ return arguments }();
+var r = new RegExp;
+var f = new Function;
+var arr = new Array;
+var e = new Error;
+console.log([o, n, s, b, d, arg, r, f, arr, e].map(v => Object.prototype.toString.call(v))); 
+//运行结果：
+//["[object Object]", "[object Number]", "[object String]", "[object Boolean]", "[object Date]", "[object Arguments]", "[object RegExp]", "[object Function]", "[object Array]", "[object Error]"]
 ```
 在 ES3 和之前的版本，JS 中类的概念是相当弱的，它仅仅是运行时的一个字符串属性。在 ES5 开始，[[class]] 私有属性被 Symbol.toStringTag 代替，Object.prototype.toString 的意义从命名上不再跟 class 相关。我们甚至可以自定义 Object.prototype.toString 的行为:
 ```
-	var o = { [Symbol.toStringTag]: "MyObject" };
-	console.log(Object.prototype.toString.call(o));//[object MyObject]
-    console.log(o + "");//[object MyObject] 对于Object类型,如果toString方法没有被改写过（如Number类型），通过加法也可以触发；
+var o = { [Symbol.toStringTag]: "MyObject" };
+console.log(Object.prototype.toString.call(o));//[object MyObject]
+   console.log(o + "");//[object MyObject] 对于Object类型,如果toString方法没有被改写过（如Number类型），通过加法也可以触发；
 ```
 对于new运算符：它接受一个构造器和一组调用参数，实际上做了几件事：
 
@@ -219,11 +219,11 @@ JavaScript 并非第一个使用原型的语言，在它之前，self、kevo 等
 
 没有 Object.create、Object.setPrototypeOf 的早期版本中，new 运算是唯一一个可以指定 [[prototype]] 的方法，我们甚至可以用它来实现一个 Object.create 的不完整的 pollyfill，见以下代码（同上面object方法）：
 ```
-	function object(o){
-		function F(){}
-		F.prototype = o;
-		return new F();
-	}
+function object(o){
+	function F(){}
+	F.prototype = o;
+	return new F();
+}
 ```
 但是这个函数无法做到与原生的 Object.create 一致，一个是不支持第二个参数，另一个是不支持 null 作为原型，所以意义已经不大了。
 
@@ -292,19 +292,19 @@ JavaScript 宿主对象千奇百怪，但是前端最熟悉的无疑是浏览器
 
 对于宿主和内置对象来说，它们实现 [[call]]（作为函数被调用）和 [[construct]]（作为构造器被调用）不总是一致的。比如内置对象 Date 在作为构造器调用时产生新的对象，作为函数时，则产生字符串，见以下代码：
 ```
-  console.log(new Date,typeof new Date); // Tue Mar 05 2019 18:09:07 GMT+0800 (中国标准时间) "object"
-  console.log( Date(),typeof Date()); // Tue Mar 05 2019 18:09:07 GMT+0800 (中国标准时间) string
+console.log(new Date,typeof new Date); // Tue Mar 05 2019 18:09:07 GMT+0800 (中国标准时间) "object"
+console.log( Date(),typeof Date()); // Tue Mar 05 2019 18:09:07 GMT+0800 (中国标准时间) string
 ```
 而浏览器宿主环境中，提供的 Image 构造器，则根本不允许被作为函数调用。
 ```
-	console.log(new Image); 
-	console.log(Image());// 抛出错误
+console.log(new Image); 
+console.log(Image());// 抛出错误
 ```
 再比如基本类型（String、Number、Boolean），它们的构造器被当作函数调用，则产生类型转换的效果。
 
 在 ES6 之后 => 语法创建的函数仅仅是函数，它们无法被当作构造器使用，见以下代码：
 ```
-    new (a => 0) // error
+new (a => 0) // error
 ```
 
 对于用户使用 function 语法或者 Function 构造器创建的对象来说，[[call]] 和 [[construct]] 行为总是相似的，它们执行同一段代码。我们大致可以认为，它们 [[construct]] 的执行过程如下：
@@ -315,15 +315,15 @@ JavaScript 宿主对象千奇百怪，但是前端最熟悉的无疑是浏览器
 
 这样的规则造成了个有趣的现象，如果我们的构造器返回了一个新的对象，那么 new 创建的新对象就变成了一个构造函数之外完全无法访问的对象，这一定程度上可以实现“私有”。
 ```
-	function cls(){
-	  this.a = 100;
-	  return {
-	      getValue:() => this.a
-	  }
-	}
-	var o = new cls();
-	o.getValue(); //100
-	//a 在外面永远无法访问到
+function cls(){
+  this.a = 100;
+  return {
+      getValue:() => this.a
+  }
+}
+var o = new cls();
+o.getValue(); //100
+//a 在外面永远无法访问到
 ```
 ### JavaScript 全局对象的属性
 
@@ -333,17 +333,17 @@ Infinity、NaN、undefined。
 ```
 2. 九个函数：
 ```
- eval、isFinite、isNaN、parseFloat、parseInt、decodeURI、decodeURIComponent、
- encodeURI、encodeURIComponent
+eval、isFinite、isNaN、parseFloat、parseInt、decodeURI、decodeURIComponent、
+encodeURI、encodeURIComponent
 ```
 3. 一些构造器：  
 ```
-	Array、Date、RegExp、Promise、Proxy、Map、WeakMap、Set、WeapSet、
-	Function、Boolean、String、Number、Symbol、Object、Error、EvalError、
-	RangeError、ReferenceError、SyntaxError、TypeError、URIError
+Array、Date、RegExp、Promise、Proxy、Map、WeakMap、Set、WeapSet、
+Function、Boolean、String、Number、Symbol、Object、Error、EvalError、
+RangeError、ReferenceError、SyntaxError、TypeError、URIError
 ```
 4. 四个用于当作命名空间的对象：
 ```
-	Atomics、JSON、Math、Reflect
+Atomics、JSON、Math、Reflect
 ```
 

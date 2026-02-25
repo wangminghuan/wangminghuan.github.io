@@ -13,31 +13,31 @@ Fetch API不同于XMLHttpRequest,他是一种全新设计的api用于发起获�
 
 ### 基本用法
 ```
-  fetch("http://api.k780.com/?app=weather.today&weaid=1&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=json").then((res)=>{
-        return  res.json()
-      }).then((data)=> {
-      console.log(data);
-    }).catch((e)=> {
-      console.log(e)
-    });
+fetch("http://api.k780.com/?app=weather.today&weaid=1&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=json").then((res)=>{
+      return  res.json()
+    }).then((data)=> {
+    console.log(data);
+  }).catch((e)=> {
+    console.log(e)
+  });
 ```
 用es7 中的async/await 改写后
 ```
-  async function $fetch(url,params){
-    try {
-      let response = await fetch(url,{
-        body:JSON.stringify(data),
-        method: 'POST', 
-      });
-      let data = response.json();
-      return data;
-    } catch(e) {
-      return e
-    }
+async function $fetch(url,params){
+  try {
+    let response = await fetch(url,{
+      body:JSON.stringify(data),
+      method: 'POST', 
+    });
+    let data = response.json();
+    return data;
+  } catch(e) {
+    return e
   }
-  $fetch("http://api.k780.com/?app=weather.today&weaid=1&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=json").then((res)=>{
-    console.log(res)
-  })
+}
+$fetch("http://api.k780.com/?app=weather.today&weaid=1&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=json").then((res)=>{
+  console.log(res)
+})
 ```
 对比XMLHttpRequest可以看出来fetch的语法简洁，更加语义化，且基于标准 Promise 实现，支持 async/await
 
@@ -45,17 +45,17 @@ Fetch API不同于XMLHttpRequest,他是一种全新设计的api用于发起获�
 
 #### 请求配置
 ``` 
-  const myHeaders = new Headers(); //header的具体配置见参考3
-  fetch(url, {
-      body: JSON.stringify(data), // must match 'Content-Type' header
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'same-origin', // 为了让浏览器发送包含凭据的请求(chrome测试默认是包含的), include, same-origin, *omit
-      headers: myHeaders,
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      mode: 'cors', // 跨域请求是否发送 no-cors, cors, *same-origin
-      redirect: 'follow', // manual, *follow, error
-      referrer: 'no-referrer', // *client, no-referrer
-    })
+const myHeaders = new Headers(); //header的具体配置见参考3
+fetch(url, {
+    body: JSON.stringify(data), // must match 'Content-Type' header
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // 为了让浏览器发送包含凭据的请求(chrome测试默认是包含的), include, same-origin, *omit
+    headers: myHeaders,
+    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    mode: 'cors', // 跨域请求是否发送 no-cors, cors, *same-origin
+    redirect: 'follow', // manual, *follow, error
+    referrer: 'no-referrer', // *client, no-referrer
+  })
 ```
 ### 返回内容·
 - Response.status — 整数(默认值为200) 为response的状态码.

@@ -62,9 +62,9 @@ docker的安装还是比较简单的，参照[阿里云官方文档](https://hel
 
 ####  Docker 中的三个概念
 ```
-  Container - 容器
-  Image - 镜像
-  Registry - 仓库
+Container - 容器
+Image - 镜像
+Registry - 仓库
 ```
 可以像下面这张图来类比：
 
@@ -169,11 +169,11 @@ nodejs文件夹存在，但执行 `bin/node -v` 报错，提示 : No such file o
 
 解决：终于在[stackoverflow](https://stackoverflow.com/questions/43307107/jenkins-nodejsplugin-node-command-not-found) 翻到一个大佬的回答，原因如下：
 ```
-  This happens because the image doesn't contain libstdc++.so.6 as needed by nodejs
+This happens because the image doesn't contain libstdc++.so.6 as needed by nodejs
+    
+In other words, node: not found does not mean node is not installed (it is, it is executable and found in the $PATH).  
       
-  In other words, node: not found does not mean node is not installed (it is, it is executable and found in the $PATH).  
-        
-  It means one of node dependencies is not found.
+It means one of node dependencies is not found.
 ```
 我们通过，手动安装：
 ```
@@ -234,18 +234,18 @@ sudo systemctl start jenkins.service
 
 其实主要就是shell脚本的编写，项目中配置如下(新建了另外一个项目vue-build-project)：
 ```
-    node -v 
-    echo "开始安装依赖..."
-    npm install
-    echo "开始打包..."
-    npm run build
-    
-    base="/home/upload-upyun"
-    dest="vue-build-project"
-    cp -r ./dist  ${base}/${dest}
-    echo "开始上传..."
-    node  ${base}/index.js ${dest}
-    rm -rf ${base}/${dest}
+node -v 
+echo "开始安装依赖..."
+npm install
+echo "开始打包..."
+npm run build
+
+base="/home/upload-upyun"
+dest="vue-build-project"
+cp -r ./dist  ${base}/${dest}
+echo "开始上传..."
+node  ${base}/index.js ${dest}
+rm -rf ${base}/${dest}
 ```
 `/home/upload-upyun/index.js` 内容如下：
 ```
@@ -304,28 +304,28 @@ localFileArr.map((item)=>{
 ```
 ### 最终构建效果
 ```
-    16:21:48 [vue-build-project] $ /bin/sh -xe /tmp/jenkins8111626610056806132.sh
-    16:21:48 + node -v
-    16:21:48 v10.15.3
-    16:21:48 + echo 开始安装依赖...
-    16:21:48 开始安装依赖...
-    16:21:48 + echo 开始打包...
-    16:21:48 开始打包...
-    16:21:48 [vue-build-project] $ /bin/sh -xe /tmp/jenkins6507915611034625552.sh
-    16:21:48 + cd /var/lib/jenkins/workspace
-    16:21:48 + cd vue-build-project
-    16:21:48 + cp -r ./dist /home/upload-upyun/vue-build-project
-    16:21:48 + echo 开始上传...
-    16:21:48 开始上传...
-    16:21:48 + node /home/upload-upyun/index.js vue-build-project
-    16:21:48 /test/vue-build-project/favicon.ico:上传成功
-    16:21:48 /test/vue-build-project/index.html:上传成功
-    16:21:48 /test/vue-build-project/static/js/app.6e3674b9.js:上传成功
-    16:21:48 /test/vue-build-project/static/css/app.e2713bb0.css:上传成功
-    16:21:48 /test/vue-build-project/static/img/logo.82b9c7a5.png:上传成功
-    16:21:48 /test/vue-build-project/static/js/chunk-vendors.a1771d7d.js:上传成功
-    16:21:48 + rm -rf /home/upload-upyun/vue-build-project
-    16:21:48 Finished: SUCCESS
+16:21:48 [vue-build-project] $ /bin/sh -xe /tmp/jenkins8111626610056806132.sh
+16:21:48 + node -v
+16:21:48 v10.15.3
+16:21:48 + echo 开始安装依赖...
+16:21:48 开始安装依赖...
+16:21:48 + echo 开始打包...
+16:21:48 开始打包...
+16:21:48 [vue-build-project] $ /bin/sh -xe /tmp/jenkins6507915611034625552.sh
+16:21:48 + cd /var/lib/jenkins/workspace
+16:21:48 + cd vue-build-project
+16:21:48 + cp -r ./dist /home/upload-upyun/vue-build-project
+16:21:48 + echo 开始上传...
+16:21:48 开始上传...
+16:21:48 + node /home/upload-upyun/index.js vue-build-project
+16:21:48 /test/vue-build-project/favicon.ico:上传成功
+16:21:48 /test/vue-build-project/index.html:上传成功
+16:21:48 /test/vue-build-project/static/js/app.6e3674b9.js:上传成功
+16:21:48 /test/vue-build-project/static/css/app.e2713bb0.css:上传成功
+16:21:48 /test/vue-build-project/static/img/logo.82b9c7a5.png:上传成功
+16:21:48 /test/vue-build-project/static/js/chunk-vendors.a1771d7d.js:上传成功
+16:21:48 + rm -rf /home/upload-upyun/vue-build-project
+16:21:48 Finished: SUCCESS
 ```
 ## 遇到的问题
 在npm install 这一步出现了一个问题困扰了我两天，执行过程中jenkins进程会忽然挂掉,一直以为是配置的问题，后来忽然意识到可能是被centos给干掉了，查看日志：

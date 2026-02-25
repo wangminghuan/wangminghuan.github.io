@@ -15,7 +15,7 @@ ES6之前，JS中只有一种源文件，称之为脚本；ES6之后，出现了
 
 我们可以在script标签中加入`type="module"` 属性，这时候加载的文件就是模块，反之则为脚本
 ```
- <script type="module" src="xxxxx.js"></script>
+<script type="module" src="xxxxx.js"></script>
 ```
 在脚本文件中我们可以使用import声明与export声明
 
@@ -64,12 +64,12 @@ class c{}
 ```
 但下面这种情况仍然会报错
 ```
-  var c = 1;
-  function foo(){
-      console.log(c); // ReferenceError: Cannot access 'c' before initialization
-      class c {}
-  }
-  foo();
+var c = 1;
+function foo(){
+    console.log(c); // ReferenceError: Cannot access 'c' before initialization
+    class c {}
+}
+foo();
 ```
 这说明，class 声明也是会被预处理的，它会在作用域中创建变量，并且要求访问它时抛出错误。class 的声明作用不会穿透 if 等语句结构，所以只有写在全局环境才会有声明作用
 ### 指令序列
@@ -103,30 +103,30 @@ foo(); // undefined;
 
 - 以括号开头的语句
 ```
-  (function(a){
-      console.log(a);
-  })()/*这里没有被自动插入分号*/
-  (function(a){
-      console.log(a);
-  })()
+(function(a){
+    console.log(a);
+})()/*这里没有被自动插入分号*/
+(function(a){
+    console.log(a);
+})()
 ```
 - 以数组开头的语句
 ```
-  var a = [[]]/*这里没有被自动插入分号*/
-  [3, 2, 1, 0].forEach(e => console.log(e))
+var a = [[]]/*这里没有被自动插入分号*/
+[3, 2, 1, 0].forEach(e => console.log(e))
 ```
 - 以正则表达式开头的语句
 ```
-  var x = 1, g = {test:()=>0}, b = 1/*这里没有被自动插入分号*/
-  /(a)/g.test("abc")
-  console.log(RegExp.$1)
+var x = 1, g = {test:()=>0}, b = 1/*这里没有被自动插入分号*/
+/(a)/g.test("abc")
+console.log(RegExp.$1)
 ```
 - 以模板字符串开头的语句
 ```
-  var f = function(){
-    return "";
-  }
-  var g = f/*这里没有被自动插入分号*/
-  `Template`.match(/(a)/);
-  console.log(RegExp.$1)
+var f = function(){
+  return "";
+}
+var g = f/*这里没有被自动插入分号*/
+`Template`.match(/(a)/);
+console.log(RegExp.$1)
 ```

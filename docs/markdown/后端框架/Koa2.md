@@ -10,20 +10,20 @@ Nodejs天生就是异步操作，非阻塞I/O操作，使得它在服务端有�
 
 框架只是nodejs底层api的再封装，我们使用nodejs的api可以很简单的实现一个web server:
 ```
-  const http=require("http")
-  var url = require('url');
-  http.createServer((req,res)=>{
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-    var pathname = url.parse(req.url, true).pathname;
-    if(pathname=="/list"){
-      res.write('I am list')
-    }else{
-      res.write('I am home')
-    }
-    res.end()
-  }).listen(8008,()=>{
-    console.log('web server started at port 8008')
-  })
+const http=require("http")
+var url = require('url');
+http.createServer((req,res)=>{
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  var pathname = url.parse(req.url, true).pathname;
+  if(pathname=="/list"){
+    res.write('I am list')
+  }else{
+    res.write('I am home')
+  }
+  res.end()
+}).listen(8008,()=>{
+  console.log('web server started at port 8008')
+})
 ```
 运行一下，访问`http://localhost:8008/` 与 `http://localhost:8008/list` 分别返回不用的内容。
 
@@ -51,37 +51,37 @@ Koa2本身只能算一个极简的HTTP服务器，自身不内置中间件，但
 ### 理解中间件
 中间件是按顺序执行, 从第一个中间件开始执行，遇到`next`进入下一个中间件，一直执行到最后一个中间件，在逆序，执行上一个中间件`next`之后的代码，一直到第一个中间件执行结束才发出响应。以下面代码为例，会更容易理解：
 ```
-  // app.js
-  const Koa = require('koa')
-  const app = new Koa()
-  app.use(async (ctx, next) => {
-    console.log(1);
-    await next();
-    console.log(1.1);
-  });
+// app.js
+const Koa = require('koa')
+const app = new Koa()
+app.use(async (ctx, next) => {
+  console.log(1);
+  await next();
+  console.log(1.1);
+});
 
-  app.use(async (ctx, next) => {
-    console.log(2);
-    await next();
-    console.log(2.2);
-  });
+app.use(async (ctx, next) => {
+  console.log(2);
+  await next();
+  console.log(2.2);
+});
 
-  app.use(async (ctx, next) => {
-    console.log(3);
-    await next();
-    console.log(3.3);
-  });
+app.use(async (ctx, next) => {
+  console.log(3);
+  await next();
+  console.log(3.3);
+});
 
-  module.exports = app
+module.exports = app
 ```
 启动后，通过浏览器访问 `http://localhost:3000/`, 控制台会出现如下结果（其实会发出2个请求，因为加载首页html时，也会加载一次favicon.ico文件）
 ```
-  1
-  2
-  3
-  3.3
-  2.2
-  1.1
+1
+2
+3
+3.3
+2.2
+1.1
 ```
 中间件包含两个参数 ctx, next。
 
@@ -89,21 +89,21 @@ Koa2本身只能算一个极简的HTTP服务器，自身不内置中间件，但
 
 Koa-router 是 koa 的一个路由中间件，它可以将请求的URL和方法（如：GET 、 POST 、 PUT 、 DELETE 等） 匹配到对应的响应程序或页面。
 ```   
-  // routes/index.js
+// routes/index.js
 
-  const router = require('koa-router')()
+const router = require('koa-router')()
 
-  router.get('/', async (ctx, next) => {
-    await ctx.render('index', {
-      title: 'Hello Koa 2!'
-    })
+router.get('/', async (ctx, next) => {
+  await ctx.render('index', {
+    title: 'Hello Koa 2!'
   })
-  module.exports = router
+})
+module.exports = router
 ```
 接着还需要分别调用 router.routes() 和 router.allowedMethods() 来得到两个中间件，并且调用 app.use() 使用这两个中间件：
 ```
-  const index = require('./routes/index') 
-  app.use(index.routes()).use(index.allowedMethods())
+const index = require('./routes/index') 
+app.use(index.routes()).use(index.allowedMethods())
 ```
 注意，此处关于路由的调用，[koa-generator](https://github.com/i5ting/koa-generator) 中的代码如下:
 
@@ -123,34 +123,34 @@ Koa Context 将 node 的 request 和 response 对象封装到单个对象中，c
 
 我们打印下上面例子中的第一个中间件：
 ```
-  app.use(async (ctx, next) => {
-    console.log(1);
-    console.log([ctx.request.url,ctx.response])
-    await next();
-    console.log([ctx.request.url,ctx.response])
-    console.log(1.1);
-  });
+app.use(async (ctx, next) => {
+  console.log(1);
+  console.log([ctx.request.url,ctx.response])
+  await next();
+  console.log([ctx.request.url,ctx.response])
+  console.log(1.1);
+});
 ```
 启动后，通过浏览器访问 `http://localhost:3000/`, 控制台会出现如下结果:
 ```
 
-  1
-  [ '/json',
-    { status: 404,
-      message: 'Not Found',
-      header: [Object: null prototype] {},
-      body: undefined } ]
-  2
-  3
-  3.3
-  2.2
-  [ '/json',
-    { status: 200,
-      message: 'OK',
-      header:
-      [Object: null prototype] { 'content-type': 'application/json; charset=utf-8' },
-      body: { code: 0, data: {} } } ]
-  1.1
+1
+[ '/json',
+  { status: 404,
+    message: 'Not Found',
+    header: [Object: null prototype] {},
+    body: undefined } ]
+2
+3
+3.3
+2.2
+[ '/json',
+  { status: 200,
+    message: 'OK',
+    header:
+    [Object: null prototype] { 'content-type': 'application/json; charset=utf-8' },
+    body: { code: 0, data: {} } } ]
+1.1
 ```
 结合“洋葱图”可以看到，在中间件中都是可以访问到ctx对象的，在创建 context 的时候，还会同时创建 request 和 response 。只不过进入“洋葱”时只有request数据内容；在穿出“洋葱”时，ctx对象的response才有了相关数据。
 
@@ -185,31 +185,31 @@ jwt的大体流程如下：
 ### jsonwebtoken
 koa中我们使用`jsonwebtoken`模块, 并将其作为中间件来运行,先定义一个check_token方法：
 ```    
-  // config/token.js
+// config/token.js
 
-  const check_token=async (ctx,next)=>{
-    const url = ctx.url;
-    if(ctx.method != 'GET'  && !URL_PASS_LOGIN.includes(url)){
-    let token= ctx.get("Authorization");
-    if(!token){
-      return ctx.response.body={
-        code:2001,
-        message:"未登录，请登录！"
-      }
+const check_token=async (ctx,next)=>{
+  const url = ctx.url;
+  if(ctx.method != 'GET'  && !URL_PASS_LOGIN.includes(url)){
+  let token= ctx.get("Authorization");
+  if(!token){
+    return ctx.response.body={
+      code:2001,
+      message:"未登录，请登录！"
     }
-    let {name = ''} = await jwt.verify(token,TOKEN_ENCODE_STR);
-    // do something...
   }
-    await next();
-  }
+  let {name = ''} = await jwt.verify(token,TOKEN_ENCODE_STR);
+  // do something...
+}
+  await next();
+}
 ``` 
 在app.js中进行调用，注意执行顺序(router注册之前)
 ```      
-  // checkToken
-  app.use(check_token);
+// checkToken
+app.use(check_token);
 
-  // routes
-  app.use(index.routes(), index.allowedMethods())
+// routes
+app.use(index.routes(), index.allowedMethods())
 ```
 ## Mongoose
 
@@ -217,24 +217,24 @@ koa中我们使用Mongoose来连接数据库
 
 ### 连接
 ```
-  const mongoose = require('mongoose');
-  // 此处链接的是数据库，如果不存在会自动创建,有则直接连接
-  mongoose.connect('mongodb://localhost:27017/mall',{ useNewUrlParser: true }).then(
-    () => { 
-      console.log("Connection success~")
-    },
-    err => { 
-      console.log(err)
-    }
-  );
+const mongoose = require('mongoose');
+// 此处链接的是数据库，如果不存在会自动创建,有则直接连接
+mongoose.connect('mongodb://localhost:27017/mall',{ useNewUrlParser: true }).then(
+  () => { 
+    console.log("Connection success~")
+  },
+  err => { 
+    console.log(err)
+  }
+);
 ```
 如果需要用户名密码登陆，则连接地址为：
 ```
-  mongodb://username:password@localhost:27017/mall
+mongodb://username:password@localhost:27017/mall
 ```
 如果mall数据库没有设置管理员，需要使用admin数据库的管理员进行间接操作，则连接地址为
 ```
-  mongodb://username:password@localhost:27017/mall?authSource=admin
+mongodb://username:password@localhost:27017/mall?authSource=admin
 ```  
 ### Shema
 
@@ -242,55 +242,55 @@ Shema即XML Schema，XSD (XML Schema Definition)是W3C于2001年5月发布的推
 
 Mongoose 的一切始于 Schema。每个 schema 都会映射到一个 MongoDB collection，创建集合之前，需要先实例化一个Shema
 ``` 
-  // db/index.js
-  const Schema = mongoose.Schema; 
-  let userSchema = new Schema({
-    u_name: String,
-    u_pwd: String,
-    u_code: String,
-    token: {
-      type: String,
-      default: ""
-    }
-  })
+// db/index.js
+const Schema = mongoose.Schema; 
+let userSchema = new Schema({
+  u_name: String,
+  u_pwd: String,
+  u_code: String,
+  token: {
+    type: String,
+    default: ""
+  }
+})
 ```
 
 ### Model
 
 将上一步的schema，通过`mongoose.model(modelName, schema)` 函数转换为一个 Model
 ```
-    // db/index.js
-  // 第一个参数是跟 model 对应的集合（ collection ）名字的 单数 形式，
-  mongoose.model('User', userSchema); // 会自动创建一张users集合（表）
+  // db/index.js
+// 第一个参数是跟 model 对应的集合（ collection ）名字的 单数 形式，
+mongoose.model('User', userSchema); // 会自动创建一张users集合（表）
 ```
 ### Documents
 Documents是Model的实例，如果需要新建集合，只需要实例化Model, 并调用save即可：
 ``` 
-  // service/user.js
+// service/user.js
 
-  const User = require('../db').User;
+const User = require('../db').User;
 
-  let user = new User({u_name,u_pwd,u_code,token});
-  let resp = await user.save();
+let user = new User({u_name,u_pwd,u_code,token});
+let resp = await user.save();
 ```
 ### CURD
 
 常用的增删改查方法有些是挂载在`Model.prototype`下，有些是挂载在`Model`下的，类似这样（代码仅为示意图，不代表Model的具体实现）
 ```
-  class Model{
-    constructor() {
-    }
-    save() {
-      return 'save';
-    }
+class Model{
+  constructor() {
   }
-  Model.update=function(){
-    return 'update'
+  save() {
+    return 'save';
   }
-  const m=new Model();
-  console.log(m.save()); //'save'
-  console.log(Model.prototype.save());//'save'
-  console.log(Model.update()); //'update'
+}
+Model.update=function(){
+  return 'update'
+}
+const m=new Model();
+console.log(m.save()); //'save'
+console.log(Model.prototype.save());//'save'
+console.log(Model.update()); //'update'
 ```
 具体如截图所示（来源mongoose官网V5.10.16）
 
@@ -301,26 +301,26 @@ Documents是Model的实例，如果需要新建集合，只需要实例化Model,
 ### koa-views
 在koa2中使用模板机制必须依靠中间件，最常用的便是koa-views
 ```
-  // 加载模板引擎
-  const views = require('koa-views')
-  app.use(views(path.join(__dirname, './views'), {
-      extension: 'ejs'
-  }))
+// 加载模板引擎
+const views = require('koa-views')
+app.use(views(path.join(__dirname, './views'), {
+    extension: 'ejs'
+}))
 ```   
 如果需要模板引擎则需要额外安装ejs,或pug,在extension声明即可
 ### koa-static
 koa-static是静态资源请求中间件，不涉及其他的处理过程，只是单纯的读取文件
 ```
 
-  app.use(require('koa-static')(__dirname + '/source/dist'))
+app.use(require('koa-static')(__dirname + '/source/dist'))
 ```
 ### koa-body
 服务端收到请求时，需要对参数做对应解析（query，form, multipart）等，koa-body就是出来处理这些的：
 ```
-  const koaBody = require('koa-body')
-  app.use(koaBody({
-    multipart:true
-  }))
+const koaBody = require('koa-body')
+app.use(koaBody({
+  multipart:true
+}))
 ```
 koa-generator 中推荐的是 koa-bodyparser 但其不支持文件上传，koa-body用法与koa-bodyparser基本一致，且支持文件类型解析
 
@@ -328,21 +328,21 @@ koa-generator 中推荐的是 koa-bodyparser 但其不支持文件上传，koa-b
 
 顾名思义，这是koa的路由中间件，也是非常重要的一部分，有兴趣的可以详细去了解，此处我们只简单介绍下使用方式：
 ```
-    
-  // routes/index.js
+  
+// routes/index.js
 
-  const router = require('koa-router')()
-  const controller = require('../controller')
-  router.get('/', async (ctx, next) => {
-    await ctx.render('index')
-  })
-  .post("/api/user/login",controller.user.login)
-  .post("/api/common/upload",controller.common.upload)
+const router = require('koa-router')()
+const controller = require('../controller')
+router.get('/', async (ctx, next) => {
+  await ctx.render('index')
+})
+.post("/api/user/login",controller.user.login)
+.post("/api/common/upload",controller.common.upload)
 ```
 在app.js中注册，注意执行顺序（一般在最后）
 ```
-  const index = require('./routes/index')
-  app.use(index.routes(), index.allowedMethods())
+const index = require('./routes/index')
+app.use(index.routes(), index.allowedMethods())
 ```    
 ## 参考
 

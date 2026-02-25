@@ -45,15 +45,15 @@ console.log(myObject.foo);// 2
 
 JavaScript 中的对象具有高度的动态性：允许运行时向对象添加属性，这点与其他语言是完全不同的。我们为`myObject`添加属性
 ```   
-  myObject.foo='bar'
-  console.log(myObject.foo, anotherObject.foo) ;// bar, 2
+myObject.foo='bar'
+console.log(myObject.foo, anotherObject.foo) ;// bar, 2
 ```
 这个过程发生了“属性屏蔽”，也就是说，myObject 中包含的 foo 属性会屏蔽原型链上层的所有 foo 属性。
 我们都习以为常，但是这个过程 其实存在三种情况，“属性屏蔽”不是一定发生的：
 ```
-  1. 如果在 `[[Prototype]]` 链上层存在名为 foo 的普通数据访问属性并且没 有被标记为只读（writable:false），那就会直接在 myObject 中添加一个名为 foo 的新 属性，它是屏蔽属性。 
-  2. 如果在 `[[Prototype]]` 链上层存在 foo，但是它被标记为只读（writable:false），那么 无法修改已有属性或者在 myObject 上创建屏蔽属性。如果运行在严格模式下，代码会 抛出一个错误。否则，这条赋值语句会被忽略。总之，不会发生屏蔽。 
-  3. 如果在 `[[Prototype]]` 链上层存在 foo 并且它是一个 setter（参见第 3 章），那就一定会 调用这个 setter。foo 不会被添加到（或者说屏蔽于）myObject，也不会重新定义 foo 这 个 setter。
+1. 如果在 `[[Prototype]]` 链上层存在名为 foo 的普通数据访问属性并且没 有被标记为只读（writable:false），那就会直接在 myObject 中添加一个名为 foo 的新 属性，它是屏蔽属性。 
+2. 如果在 `[[Prototype]]` 链上层存在 foo，但是它被标记为只读（writable:false），那么 无法修改已有属性或者在 myObject 上创建屏蔽属性。如果运行在严格模式下，代码会 抛出一个错误。否则，这条赋值语句会被忽略。总之，不会发生屏蔽。 
+3. 如果在 `[[Prototype]]` 链上层存在 foo 并且它是一个 setter（参见第 3 章），那就一定会 调用这个 setter。foo 不会被添加到（或者说屏蔽于）myObject，也不会重新定义 foo 这 个 setter。
 ```
 与我们常规认知不同，属性屏蔽只有在第一种情况下才发生。如果想要第二、三种也发生属性屏蔽，就需要使用`Object.defineProperty`方法来添加属性
 
@@ -90,13 +90,13 @@ console.log(f.constructor===Foo)                       // true
 
 `Object.prototype`对象下有一个公有并且不可枚举的属性`constructor`，这个属性引用的是对象关联的函数(本例为Foo)，而调用`f.constructor`跟过程其实也只是通过委托访问到了`Foo.prototype.constructor`，这点一定要明白：这个属性并不是表示`f`由`Foo`“构造”而成的：
 ```
-  function Foo(name){
-    this.name=name
-  }
-  Foo.prototype={};
-  var f=new Foo("Tom")
-  console.log(f.constructor===Foo)     // false
-  console.log(f.constructor===Object)  // true
+function Foo(name){
+  this.name=name
+}
+Foo.prototype={};
+var f=new Foo("Tom")
+console.log(f.constructor===Foo)     // false
+console.log(f.constructor===Object)  // true
 ```
 从上面可以看到：执行`f.constructor`时f下并没有这个属性，此时会依据原型链进行查找，因为`Foo.prototype`被进行了重写操作，所以`Foo.prototype`下也没有这个属性，接着往上找到了`Object.prototype`，发现`constructor`属性下有值且为Object，这表明`f`并不是通过`Foo`“构造”而来，一切都是`new`调用时将产生的对象`[[prototype]]`关联到了调用函数的`.prototype`下。并且`.constructor` 是一个不可枚举但是可写的属性，所以，这个属性很多情况下是靠不住的。
 
@@ -109,23 +109,23 @@ Foo 和其他函数没有任何区别。函数本身并不是构造函数，当�
 在Javascript中虽然不存在“类”但是它存在“继承”机制，这也是导致那么多“模拟类”行为的存在，因为如果没有“继承”的话，“模拟类”根本就没有存在的意义了。
 首先上代码，一个经典的继承（借用构造函数继承模式）设计：
 ```
-  function Foo(name){
-    this.name=name
-  }
-  Foo.prototype.sayHi=function(){
-    console.log("Hi,"+this.name)
-  }
-  function Bar(name,job){
-    Foo.apply(this,arguments)
-    this.job=job
-  }
-  Bar.prototype=Object.create(Foo.prototype)
-  Bar.prototype.doJob=function(){
-    console.log(this.name+" job is "+this.job)
-  }
-  var b1=new Bar("Jack","teacher")
-  b1.sayHi();                       // Hi,Jack
-  b1.doJob();                       // Jack job is teacher
+function Foo(name){
+  this.name=name
+}
+Foo.prototype.sayHi=function(){
+  console.log("Hi,"+this.name)
+}
+function Bar(name,job){
+  Foo.apply(this,arguments)
+  this.job=job
+}
+Bar.prototype=Object.create(Foo.prototype)
+Bar.prototype.doJob=function(){
+  console.log(this.name+" job is "+this.job)
+}
+var b1=new Bar("Jack","teacher")
+b1.sayHi();                       // Hi,Jack
+b1.doJob();                       // Jack job is teacher
 ```
 里面关键的一行代码：`Bar.prototype=Object.create(Foo.prototype)`，功能就是创建一个新的 `Bar.prototype` 对象并把它关联到 `Foo. prototype`,原型链关联起来后，就可以通过委托的方式使用Foo对象的`.sayHi`方法。
 
@@ -152,22 +152,22 @@ f instanceof Foo // 通常用于检测一个“实例”是否通过指定“构
 - isPrototypeOf：`prototypeObj.isPrototypeOf(object)`
 由于`instanceof`只能处理理对象和函数之间的关系，而两个对象之间是否通过`[[Prototype]]`进行关联，则需要使用`isPrototypeOf`。它表示：在x的整条`[[Prototype]]`链中是否出现过y
 ```   
-  function Foo(){};
-  var f=new Foo("Tom")
-  console.log(Foo.prototype.isPrototypeOf(f))      // true  在f的原型链中是否出现过Foo.prototype
-  console.log(Object.prototype.isPrototypeOf(f))   // true  在f的原型链中是否出现过Object.prototype
-  console.log(Foo.prototype.isPrototypeOf(Bar.prototype)) // true  在Bar.prototype的原型链中是否出现过Foo.prototype
+function Foo(){};
+var f=new Foo("Tom")
+console.log(Foo.prototype.isPrototypeOf(f))      // true  在f的原型链中是否出现过Foo.prototype
+console.log(Object.prototype.isPrototypeOf(f))   // true  在f的原型链中是否出现过Object.prototype
+console.log(Foo.prototype.isPrototypeOf(Bar.prototype)) // true  在Bar.prototype的原型链中是否出现过Foo.prototype
 ```
 因为Object.create()方法可以创建一个新对象，且第一个参数为新创建对象的原型对象：
 ```
-  var a={};
-  var b= Object.create(a)
-  console.log(a.isPrototypeOf(b)) // true  a是否出现在b的原型链中
+var a={};
+var b= Object.create(a)
+console.log(a.isPrototypeOf(b)) // true  a是否出现在b的原型链中
 ```
 - getPrototypeOf：`Object.getPrototypeOf(object)`
 直接获取一个对象的`[[Prototype]]`链（ES5新增）
 ```
-  Object.getPrototypeOf(f)===Foo.prototype // true  3.2的例子中已展示过
+Object.getPrototypeOf(f)===Foo.prototype // true  3.2的例子中已展示过
 ```
 ## 面向类的设计
 上面已经反复提及到一点：在Javascript的世界中，“模拟类”不是必须的（这点不同于Java，Java没有给你选择的机会，因为Java中万物都是类），因为Javascript无需通过类就可以直接创建对象。
@@ -190,29 +190,29 @@ ES6之前继承常用的几种模式及其存在的缺陷（更多内容可参�
 - 借用构造函数继承：上面3.3的例子就属于此模式；所有的属性和方法都在父类构造函数中定义，函数复用率低
 - 寄生继承”：这是ES6之前普遍认为最理想的继承范式：
 ```
-  function inheritPrototype(son, father){
-    var prototype = Object.create(father.prototype); //创建对象
-    prototype.constructor = son; //增强对象 将子类原型的构造函数指向自身
-    son.prototype = prototype; //指定对象  将子类原型指向通过父类原型创造出来的新的原型对象
-  }
-  function Animal(){
-    this.species = "mammals";
-    this.color = ["white","grey"];        
-  }
-  Animal.prototype.sayHi=function(){
-    console.log("Hi!");
-  }          
-  function Cat(name){
-    Animal.apply(this);
-    this.name = name;
-  } 
-  inheritPrototype(Cat, Animal);//通过寄生函数来为父类创建出一个子类（唯一区别）
-  var cat1 = new Cat("Tom");
-  var cat2 = new Cat("Jack");
-  cat1.color.push("black");
-  console.log(cat1.color);//["white", "grey", "black"]
-  console.log(cat2.color);//["white", "grey"]
-  cat1.sayHi();//"Hi!"
+function inheritPrototype(son, father){
+  var prototype = Object.create(father.prototype); //创建对象
+  prototype.constructor = son; //增强对象 将子类原型的构造函数指向自身
+  son.prototype = prototype; //指定对象  将子类原型指向通过父类原型创造出来的新的原型对象
+}
+function Animal(){
+  this.species = "mammals";
+  this.color = ["white","grey"];        
+}
+Animal.prototype.sayHi=function(){
+  console.log("Hi!");
+}          
+function Cat(name){
+  Animal.apply(this);
+  this.name = name;
+} 
+inheritPrototype(Cat, Animal);//通过寄生函数来为父类创建出一个子类（唯一区别）
+var cat1 = new Cat("Tom");
+var cat2 = new Cat("Jack");
+cat1.color.push("black");
+console.log(cat1.color);//["white", "grey", "black"]
+console.log(cat2.color);//["white", "grey"]
+cat1.sayHi();//"Hi!"
 
 ```
 
@@ -255,71 +255,71 @@ Class在解决了部分问题的同时又引入了其他问题：
 - 字面语法不能声明属性(只能声明方法)，constructor方法是类的默认方法，通过new命令生成对象实例时，自动会调用该方法。如果需要所有实例之前进行属性共享时，只能通过丑陋`.prototype`来进行定义。我们通过Python语法进行一个对比：
 Python实现一个类：
 ```
-  class People:
-      #定义基本属性
-      sex = 'man'
-      name = ''
-      def __init__(self,n):
-          self.name = n
-      def toSayHi(self):
-          print("Hello %s" %(self.name))
+class People:
+    #定义基本属性
+    sex = 'man'
+    name = ''
+    def __init__(self,n):
+        self.name = n
+    def toSayHi(self):
+        print("Hello %s" %(self.name))
 
-  # 实例化类
-  p1 = People('Tom')
-  p2 = People('Jack')
-  p1.toSayHi()            # Hello Tom
-  p2.toSayHi()            # Hello Jack
-  People.sex='woman'
-  print(p1.sex)           # woman
-  print(p2.sex)           # woman
-  print(People.sex)       # woman
+# 实例化类
+p1 = People('Tom')
+p2 = People('Jack')
+p1.toSayHi()            # Hello Tom
+p2.toSayHi()            # Hello Jack
+People.sex='woman'
+print(p1.sex)           # woman
+print(p2.sex)           # woman
+print(People.sex)       # woman
 ```
 ES6实现一个类：
 ```
-  class People{
-    sex="man"
-    constructor(x) {
-      this.name = x;
-    }
-    toSayHi() {
-      console.log('Hello '+this.name)
-    }
+class People{
+  sex="man"
+  constructor(x) {
+    this.name = x;
   }
-  // 实例化类
-  var p1=new People("Tom")
-  var p2=new People("Jack")
-  p1.toSayHi();               // Hello Tom
-  p2.toSayHi();               // Hello Jack
-  console.log(People.sex)     // undefined People类下没有属性sex
-  p1.sex="woman"
-  console.log(p1.sex)         // woman
-  console.log(p2.sex)         // man
+  toSayHi() {
+    console.log('Hello '+this.name)
+  }
+}
+// 实例化类
+var p1=new People("Tom")
+var p2=new People("Jack")
+p1.toSayHi();               // Hello Tom
+p2.toSayHi();               // Hello Jack
+console.log(People.sex)     // undefined People类下没有属性sex
+p1.sex="woman"
+console.log(p1.sex)         // woman
+console.log(p2.sex)         // man
 ```
 ## 面向委托的设计
 本书最后介绍了一种“对象关联”（OLOO:objects linked to other objects）的代码风格。这种设计模式下，对象并不是按照父类到子类的关系垂直组织的，而是通过任意方向的委托关联并排组织的。
 
 通过委托的方式对3.3中的例子进行改写（注意对比）：
 ```
-  var Foo={
-      init(name){
-        this.name=name
-      },
-      sayHi(){
-      console.log("Hi,"+this.name)
-      }
-  }
-  var Bar=Object.create(Foo)
-  Bar.inits=function(name,job){  // 必须定义不同名称的函数，以防循环调用
-    this.init(name)
-    this.job=job;
-  }
-  Bar.doJob=function(){
-    console.log(this.name+" job is "+this.job)
-  }
-  var b1=Object.create(Bar)
-  b1.inits("Jack","teacher");
-  b1.sayHi();                       // Hi,Jack
-  b1.doJob();                       // Jack job is teacher
+var Foo={
+    init(name){
+      this.name=name
+    },
+    sayHi(){
+    console.log("Hi,"+this.name)
+    }
+}
+var Bar=Object.create(Foo)
+Bar.inits=function(name,job){  // 必须定义不同名称的函数，以防循环调用
+  this.init(name)
+  this.job=job;
+}
+Bar.doJob=function(){
+  console.log(this.name+" job is "+this.job)
+}
+var b1=Object.create(Bar)
+b1.inits("Jack","teacher");
+b1.sayHi();                       // Hi,Jack
+b1.doJob();                       // Jack job is teacher
 ```
 这种模式下没有出现任何构造函数、`.prototype` 或 `new`，相比“模拟类”的写法：
 - 对象的构造和初始化分开了（也没有什么不好）

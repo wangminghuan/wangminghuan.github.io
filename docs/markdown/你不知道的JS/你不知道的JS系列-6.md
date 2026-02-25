@@ -20,10 +20,10 @@ lastUpdated: 2021-05-07 15:39:53
 
 对象的结构赋值，与常见的赋值逻辑相反：
 ```
-  const { a: X, b: Y }={a:10,b:20}
-  const {M,N}={M:1,N:2}
-  console.log([X,Y])  // [10,20]
-  console.log([M,N])  // [1,2]
+const { a: X, b: Y }={a:10,b:20}
+const {M,N}={M:1,N:2}
+console.log([X,Y])  // [10,20]
+console.log([M,N])  // [1,2]
 ```
 常规赋值是，`target:source` 模式，从上面例子可以看到他是反转的，将`:`左侧的值赋值给右侧，即`source:target` 模式
 

@@ -24,7 +24,7 @@ Fiddler 或 Charles充当的就是中间人（MITM）。但随着爬虫在手机
 
 总所周知，http协议作为应用层协议，在各端都有自己的实现，也就是说开发人员可以自己实现自己的http客户端，如android上最有名的okhttp 就是一个http客户端的实现。所以app中的http协议也可以不使用系统代理，在okhttp中我们可以这样设置：
 ```
-    builder.proxy(Proxy.NO_PROXY);
+builder.proxy(Proxy.NO_PROXY);
 ```
 Flutter中也默认不会主动使用系统代理，需要单独设置，这样就绕开了系统代理，如何破局？
 
